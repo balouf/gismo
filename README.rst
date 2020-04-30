@@ -32,7 +32,7 @@ GISMO is a NLP tool to rank and organize a corpus of documents according to a qu
 Features
 --------
 
-* TODO
+* TF-IDTF
 
 Credits
 -------
