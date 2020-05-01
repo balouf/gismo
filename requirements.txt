@@ -3,6 +3,6 @@ scikit-learn
 dill
 numpy
 numba
-pytest
+pytest==5.4.1
 setuptools
 gismo
