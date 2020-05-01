@@ -1,8 +1,8 @@
-scipy
-scikit-learn
-dill
-numpy==1.18.3
-numba
-pytest
-setuptools
 gismo
+scipy==1.4.1
+scikit-learn==0.22.2.post1
+dill==0.3.1.1
+numpy==1.18.3
+numba==0.49.0
+pytest==5.4.1
+setuptools==46.1.3
