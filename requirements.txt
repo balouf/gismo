@@ -2,7 +2,7 @@ scipy
 scikit-learn
 dill
 numpy
-numba
+numba==0.49.0
 pytest
 setuptools
 gismo
