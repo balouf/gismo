@@ -1,7 +1,7 @@
 scipy
 scikit-learn
 dill
-numpy
+numpy==1.18.3
 numba
 pytest
 setuptools
