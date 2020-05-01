@@ -2,17 +2,38 @@
 Reference
 =========
 
-A Nice Section
+Corpus
 --------------
 
-.. autoclass:: gismo.MyClass1
+.. autoclass:: gismo.corpus.Corpus
+    :members:
+.. autoclass:: gismo.corpus.CorpusList
     :members:
 
-Another Nice Section
+Embedding
 --------------------
 
-.. autoclass:: gismo.MyClass2
+.. autoclass:: gismo.embedding.Embedding
     :members:
 
-.. autoclass:: gismo.MyClass3
+DIteration
+------------------
+
+.. autoclass:: gismo.diteration.DIteration
+    :members:
+
+
+Gismo
+--------------
+.. autoclass:: gismo.gismo.Gismo
+    :members:
+
+PostProcessors
+-----------------
+.. automodule:: gismo.post_processing
+    :members:
+
+FileSource
+----------------
+.. autoclass:: gismo.filesource.FileSource
     :members:
