@@ -4,5 +4,5 @@ dill
 numpy
 numba
 pytest
-setuptools
+setuptools==46.1.3
 gismo
