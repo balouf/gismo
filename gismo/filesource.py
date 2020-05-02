@@ -2,7 +2,39 @@ import zlib
 import json
 import io
 import dill as pickle
+import numpy as np
 from pathlib import Path
+from gismo.corpus import toy_source_dict
+
+
+def create_file_source(source=None, source_name='mysource', source_dir='.'):
+    """"
+    Write a source (list of dict) to files in the same format used by FileSource. Only useful
+    to transfer from a computer with a lot of RAM to a computer with less RAM. For more complex cases,
+    e.g. when the initial source itself is a very large file, a dedicated converter has to be provided.
+
+    Parameters
+    ----------
+    source: list of dict
+        The source to write
+    source_name: str
+        Stem of the file. Two files will be created, with suffixes *.index* and *.data*.
+    source_dir: str or Path
+        Destination directory
+    """
+    if source is None:
+        source = toy_source_dict
+    if isinstance(source_dir, str):
+        source_dir = Path(source_dir)
+    data_file = source_dir / Path(f"{source_name}.data")
+    index_file = source_dir / Path(f"{source_name}.index")
+    indices = [0]
+    with open(data_file, "wb") as f:
+        for item in source:
+            f.write(zlib.compress(json.dumps(item).encode('utf8')))
+            indices.append(f.tell())
+    with open(index_file, "wb") as f:
+        pickle.dump(np.array(indices), f)
 
 
 class FileSource:
@@ -13,18 +45,29 @@ class FileSource:
 
     Parameters
     ----------
-    corpus_dir: str
+    source_dir: str
                 Location of the files
-    corpus_name: str
+    source_name: str
                 Stem of the file
     load_corpus: bool
                 Should the data be loaded in RAM
+
+    Examples
+    ---------
+    >>> import tempfile
+    >>> with tempfile.TemporaryDirectory() as dirname:
+    ...    create_file_source(source_name='mysource', source_dir=dirname)
+    ...    source = FileSource(source_name='mysource', source_dir=dirname)
+    ...    content = [e['content'] for e in source]
+    ...    source.close()
+    >>> content[:3]
+    ['Gizmo is a Mogwaï.', 'This is a sentence about Blade.', 'This is a sentence about Shadoks.']
     """
-    def __init__(self, corpus_dir='.', corpus_name="dblp", load_corpus=False):
-        if isinstance(corpus_dir, str):
-            corpus_dir = Path(corpus_dir)
-        index = corpus_dir / Path(f"{corpus_name}.index")
-        data = corpus_dir / Path(f"{corpus_name}.data")
+    def __init__(self, source_name="mysource", source_dir='.', load_corpus=False):
+        if isinstance(source_dir, str):
+            source_dir = Path(source_dir)
+        index = source_dir / Path(f"{source_name}.index")
+        data = source_dir / Path(f"{source_name}.data")
         # load index
         with open(index, "rb") as f:
             self.index = pickle.load(f)
