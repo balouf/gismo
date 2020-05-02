@@ -6,3 +6,9 @@ History
 ------------------
 
 * First release on PyPI.
+
+0.2.1 (2020-05-03)
+------------------
+
+* Actual code
+* Coverage badge
