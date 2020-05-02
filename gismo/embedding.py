@@ -13,7 +13,7 @@ from gismo.common import MixInIO, toy_source_text
 from gismo.corpus import Corpus
 
 # 1-norm for diffusion (input is X or Y indptr and data, inplace modification)
-@njit(cache=True)
+@njit
 def l1_normalize(indptr, data):
     """
     Normalize inplace the embedding (X or Y)
@@ -33,7 +33,7 @@ def l1_normalize(indptr, data):
 # Note: the use of external embedding breaks a symmetry between X and Y. IDF needs to be stored if one wants to switch.
 
 # ITF transformation
-@njit(cache=True)
+@njit
 def itf_fit_transform(indptr, data, m):
     """
     Apply ITF transformation on embedding X.
@@ -49,7 +49,7 @@ def itf_fit_transform(indptr, data, m):
 
 
 # IDF computation
-@njit(cache=True)
+@njit
 def idf_fit(indptr, n):
     """
     Computes idf vector based on embedding Y
@@ -65,7 +65,7 @@ def idf_fit(indptr, n):
 
 
 # IDF transformation
-@njit(cache=True)
+@njit
 def idf_transform(indptr, data, idf_vector):
     """
     Applies IDF on embedding Y
