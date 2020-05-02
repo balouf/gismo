@@ -37,12 +37,11 @@ class Gismo(MixInIO):
     ['mogwaï', 'gizmo', 'is', 'chinese', 'demon']
     >>> gismo.post_document_cluster = print_document_cluster
     >>> gismo.get_clustered_ranked_documents() # doctest: +NORMALIZE_WHITESPACE
-    F: 0.05. R: 1.85. S: 0.99.
+     F: 0.05. R: 1.85. S: 0.99.
     - F: 0.68. R: 1.76. S: 0.98.
     -- Gizmo is a Mogwaï. (R: 1.25; S: 0.98)
     -- In chinese folklore, a Mogwaï is a demon. (R: 0.28; S: 0.72)
-    -- This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to
-    the Gremlins movie by comparing Gizmo and Yoda. (R: 0.24; S: 0.67)
+    -- This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda. (R: 0.24; S: 0.67)
     - F: 0.71. R: 0.09. S: 0.19.
     -- This is a sentence about Shadoks. (R: 0.04; S: 0.17)
     -- This is a sentence about Blade. (R: 0.04; S: 0.17)
