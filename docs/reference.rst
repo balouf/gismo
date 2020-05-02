@@ -18,10 +18,13 @@ Embedding
 
 DIteration
 ------------------
-
 .. autoclass:: gismo.diteration.DIteration
     :members:
 
+Clustering
+-----------------
+.. automodule:: gismo.clustering
+    :members:
 
 Gismo
 --------------

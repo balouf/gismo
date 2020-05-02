@@ -1,13 +1,61 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from scipy.sparse import vstack
+from sklearn.feature_extraction.text import CountVectorizer
+from scipy.sparse import vstack, csr_matrix
 
+from gismo.corpus import Corpus, toy_source_text
+from gismo.embedding import Embedding
 
 class Cluster:
+    """
+    The 'Cluster' class is used for internal representation of hierarchical cluster. It stores
+    the attributes that describe a clustering structure and provides cluster addition (e.g. merge).
+    Parameters
+    ----------
+    indice: int
+        Index of the head (main element) of the cluster.
+    rank: int
+        The ranking order of a cluster.
+    vector: csr_matrix
+        The vector representation of the cluster
+
+    Attributes
+    ----------
+    indice: int
+        Index of the head (main element) of the cluster.
+    rank: int
+        The ranking order of a cluster.
+    vector: csr_matrix
+        The vector representation of the cluster.
+    intersection_vector: csr_matrix (deprecated)
+        The vector representation of the common points of a cluster.
+    members: list of int
+        The indices of the cluster elements.
+    focus: float in range [0.0, 1.0]
+        The consistency of the cluster (higher focus means that elements are more similar).
+    children: list of Cluster
+        The subclusters.
+
+    Examples
+    ---------
+    >>> c1 = Cluster(indice=0, rank=1, vector=csr_matrix([1.0, 0.0, 1.0]))
+    >>> c2 = Cluster(indice=5, rank=0, vector=csr_matrix([1.0, 1.0, 0.0]))
+    >>> c3 = c1+c2
+    >>> c3.members
+    [0, 5]
+    >>> c3.indice
+    5
+    >>> c3.vector.toarray()
+    array([[2., 1., 1.]])
+    >>> c3.intersection_vector.toarray()
+    array([[1., 0., 0.]])
+    >>> c1 == sum([c1])
+    True
+    """
+
     def __init__(self, indice=None, rank=None, vector=None):
         self.indice = indice
         self.rank = rank
-        self.sim = None
         self.members = [indice] if indice is not None else []
         self.focus = 1.0
         self.vector = vector
@@ -81,6 +129,40 @@ def rec_clusterize(cluster_list, resolution):
 
 
 def subspace_clusterize(subspace, resolution=.9, indices=None):
+    '''
+    Converts a subspace (matrix seen as a list of vectors) to a Cluster object (hierarchical clustering).
+
+    Parameters
+    ----------
+    subspace: ndarray, csr_matrix
+        A ``k x m`` matrix seen as a list of ``k`` ``m``-dimensional vectors sorted by importance order.
+    resolution: float in range [0.0, 1.0]
+        Sets the lazyness of aggregation. A 'resolution' set to 0.0 yields a one-step clustering
+        (*star* structure), while a 'resolution ' set to 1.0 yields, up to tie similarities, a binary tree
+        (*dendrogram*).
+    indices: list, optional
+        Indicates the index for each element of the subspace. Used when 'subspace'
+        is extracted from a larger space (e.g. X or Y). If not set, indices are set to ``range(k)``.
+
+    Returns
+    -------
+    Cluster
+        A cluster whose leaves are the `k` vectors from 'subspace'.
+
+    Example
+    _________
+    >>> corpus = Corpus(toy_source_text)
+    >>> vectorizer = CountVectorizer(dtype=float)
+    >>> embedding = Embedding(vectorizer=vectorizer)
+    >>> embedding.fit_transform(corpus)
+    >>> subspace = embedding.x[1:, :]
+    >>> cluster = subspace_clusterize(subspace)
+    >>> len(cluster.children)
+    2
+    >>> cluster = subspace_clusterize(subspace, resolution=.02)
+    >>> len(cluster.children)
+    4
+    '''
     if indices is None:
         n, _ = subspace.shape
         indices = range(n)
