@@ -68,6 +68,7 @@ class FileSource:
 
     Note: when source is read from file (``load_source=True``), you need to close the source afterwards
     to avoid pending file handles.
+
     >>> with tempfile.TemporaryDirectory() as dirname:
     ...    create_file_source(source_name='mysource', source_dir=dirname)
     ...    source = FileSource(source_name='mysource', source_dir=dirname)
