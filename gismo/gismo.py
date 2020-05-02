@@ -33,6 +33,8 @@ class Gismo(MixInIO):
     >>> gismo.rank("Gizmo")
     >>> gismo.get_ranked_documents(3)
     ['Gizmo is a Mogwaï.', 'In chinese folklore, a Mogwaï is a demon.', 'This very long sentence, with a lot of stu']
+    >>> gismo.get_ranked_features(5)
+    ['mogwaï', 'gizmo', 'is', 'chinese', 'demon']
     >>> gismo.post_document_cluster = print_document_cluster
     >>> gismo.get_clustered_ranked_documents() # doctest: +NORMALIZE_WHITESPACE
     F: 0.05. R: 1.85. S: 0.99.
