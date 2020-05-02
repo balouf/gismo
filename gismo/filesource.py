@@ -34,7 +34,7 @@ def create_file_source(source=None, source_name='mysource', source_dir='.'):
             f.write(zlib.compress(json.dumps(item).encode('utf8')))
             indices.append(f.tell())
     with open(index_file, "wb") as f:
-        pickle.dump(np.array(indices), f)
+        pickle.dump(indices, f)
 
 
 class FileSource:
