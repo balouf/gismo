@@ -61,6 +61,8 @@ class MixInIO:
         ...     v1.save(filename='myfile', compress=True, path=tmpdirname)
         ...     dir_content = [f.name for f in Path(tmpdirname).glob('*')]
         ...     v2.load(filename='myfile', path=Path(tmpdirname))
+        ...     v1.save(filename='myfile', compress=True, path=tmpdirname) # doctest.ELLIPSIS
+        File ...myfile.pkl.gz already exists!
         >>> dir_content
         ['myfile.pkl.gz']
         >>> v2.value
