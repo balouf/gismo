@@ -40,3 +40,8 @@ FileSource
 ----------------
 .. autoclass:: gismo.filesource.FileSource
     :members:
+
+IO
+--------
+.. autoclass:: gismo.common.MixInIO
+    :members:

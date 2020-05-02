@@ -26,16 +26,57 @@ from pathlib import Path
 
 class MixInIO:
     """
-    Provide basic save/load capacities
+    Provide basic save/load capacities to other classes.
     """
     def save(self, filename: str, path='.', erase=False, compress=False):
         """
-        Save object to file
-        :param filename: Name of the file (sufix will be ignored)
-        :param path: File location
-        :param erase: Authorize overwrite of previous file
-        :param compress: use gzip to save space
-        :return: None
+        Save instance to file.
+
+        Parameters
+        ----------
+        filename: str
+            The stem of the filename.
+        path: str or Path
+            The location path.
+        erase:
+            Should existing file be erased if it exists?
+        compress:
+            Should gzip compression be used?
+
+        Returns
+        -------
+        None        >>> class MyValue(MixInIO):
+        ...     def __init__(self, v=0):
+        ...        self.value = v
+
+
+        Examples
+        ----------
+        >>> import tempfile
+        >>> v1 = ToyClass(42)
+        >>> v2 = ToyClass()
+        >>> v2.value
+        0
+        >>> with tempfile.TemporaryDirectory() as tmpdirname:
+        ...     v1.save(filename='myfile', compress=True, path=tmpdirname)
+        ...     dir_content = [f.name for f in Path(tmpdirname).glob('*')]
+        ...     v2.load(filename='myfile', path=Path(tmpdirname))
+        >>> dir_content
+        ['myfile.pkl.gz']
+        >>> v2.value
+        42
+
+        >>> with tempfile.TemporaryDirectory() as tmpdirname:
+        ...     v1.save(filename='myfile', path=tmpdirname)
+        ...     v1.save(filename='myfile', path=tmpdirname) # doctest.ELLIPSIS
+        File ...myfile.pkl already exists!
+
+        >>> with tempfile.TemporaryDirectory() as tmpdirname:
+        ...     v1.save(filename='myfile', path=tmpdirname)
+        ...     v1.save(filename='myfile', path=tmpdirname, erase=True)
+        ...     dir_content = [f.name for f in Path(tmpdirname).glob('*')]
+        >>> dir_content
+        ['myfile.pkl']
         """
         if isinstance(path, str):
             path = Path(path)
@@ -57,10 +98,18 @@ class MixInIO:
 
     def load(self, filename: str, path='.'):
         """
-        Load object from file
-        :param filename: Name of the file (suffix will be ignored)
-        :param path: File location
-        :return: None
+        Load instance from file.
+
+        Parameters
+        ----------
+        filename: str
+            The stem of the filename.
+        path: str or Path
+            The location path.
+
+        Returns
+        -------
+        None
         """
         if isinstance(path, str):
             path = Path(path)
@@ -76,6 +125,19 @@ class MixInIO:
             else:
                 raise FileNotFoundError(
                     errno.ENOENT, os.strerror(errno.ENOENT), dest)
+
+
+class ToyClass(MixInIO):
+    def __init__(self, v=0):
+        """
+        A minimal class to demonstrate the use of the MixInIO MixIN.
+
+        Parameters
+        ----------
+        v: object
+            A value to store.
+        """
+        self.value = v
 
 
 toy_source_text = ['Gizmo is a Mogwaï.',
