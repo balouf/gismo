@@ -7,6 +7,10 @@ python:
 env:
     global:
         -NUMBA_DISABLE_JIT="1"
+matrix:
+  include:
+    - python: "3.7"
+      env: TOXENV="py37" NUMBA_DISABLE_JIT="1"
 
 install:
 - pip install -U tox-travis
