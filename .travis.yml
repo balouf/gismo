@@ -4,15 +4,12 @@ python:
 - 3.7
 - 3.6
 
-env:
-    NUMBA_DISABLE_JIT="1"
-
 install:
 - pip install -U tox-travis
 - pip install codecov
 after_success:
 - codecov
-script: tox
+script: NUMBA_DISABLE_JIT=1 tox
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
