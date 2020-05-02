@@ -71,12 +71,22 @@ class MixInIO:
         ...     v1.save(filename='myfile', path=tmpdirname) # doctest.ELLIPSIS
         File ...myfile.pkl already exists!
 
+        >>> v1.value = 51
         >>> with tempfile.TemporaryDirectory() as tmpdirname:
         ...     v1.save(filename='myfile', path=tmpdirname)
         ...     v1.save(filename='myfile', path=tmpdirname, erase=True)
+        ...     v2.load(filename='myfile', path=tmpdirname)
         ...     dir_content = [f.name for f in Path(tmpdirname).glob('*')]
         >>> dir_content
         ['myfile.pkl']
+        >>> v2.value
+        51
+
+        >>> with tempfile.TemporaryDirectory() as tmpdirname:
+        ...    v2.load(filename='thisfilenamedoesnotexist') # doctest.ELLIPSIS
+        Traceback (most recent call last):
+         ...
+        FileNotFoundError: [Errno 2] No such file or directory: ...
         """
         if isinstance(path, str):
             path = Path(path)
