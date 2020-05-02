@@ -1,4 +1,4 @@
-gismo
+gismo==0.2.0
 scipy==1.4.1
 scikit-learn==0.22.2.post1
 dill==0.3.1.1
