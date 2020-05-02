@@ -3,6 +3,11 @@ python:
 - 3.8
 - 3.7
 - 3.6
+
+env:
+    global:
+        -NUMBA_DISABLE_JIT="1"
+
 install:
 - pip install -U tox-travis
 - pip install codecov

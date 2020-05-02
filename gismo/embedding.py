@@ -127,11 +127,11 @@ class Embedding(MixInIO):
     def __init__(
             self,
             vectorizer: CountVectorizer = None,
-#            document_to_str=lambda document: document,
-            filename=None
+            filename=None,
+            path='.'
     ):
         if filename is not None:
-            self.load(filename)
+            self.load(filename=filename, path=path)
         else:
             self.vect = vectorizer
 #            self.document_to_str = document_to_str
