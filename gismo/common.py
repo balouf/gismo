@@ -154,13 +154,13 @@ class ToyClass(MixInIO):
 
 toy_source_text = ['Gizmo is a Mogwaï.',
                    'This is a sentence about Blade.',
-                   'This is a sentence about Shadoks.',
+                   'This is another sentence about Shadoks.',
                    'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.',
                    'In chinese folklore, a Mogwaï is a demon.']
 
 toy_source_dict = [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'},
                    {'title': 'Second Document', 'content': 'This is a sentence about Blade.'},
-                   {'title': 'Third Document', 'content': 'This is a sentence about Shadoks.'},
+                   {'title': 'Third Document', 'content': 'This is another sentence about Shadoks.'},
                    {'title': 'Fourth Document',
                     'content': 'This very long sentence, with a lot of stuff about Star Wars inside, '
                                'makes at some point a side reference to the Gremlins movie by '

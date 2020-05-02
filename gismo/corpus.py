@@ -32,7 +32,7 @@ class Corpus(MixInIO):
         ...    print(c)
         Gizmo is a Mogwaï.
         This is a sentence about Blade.
-        This is a sentence about Shadoks.
+        This is another sentence about Shadoks.
         This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.
         In chinese folklore, a Mogwaï is a demon.
 
@@ -40,7 +40,7 @@ class Corpus(MixInIO):
         ...    print(c)
         Gizmo is a Mogw...
         This is a sente...
-        This is a sente...
+        This is another...
         This very long ...
         In chinese folk...
 
@@ -106,7 +106,7 @@ class Corpus(MixInIO):
         ...    print(c)
         Gizmo is a Mog
         This is a sent
-        This is a sent
+        This is anothe
         This very long
         In chinese fol
         I don't know w
@@ -132,12 +132,12 @@ class CorpusList(MixInIO):
     >>> len(multi_corp)
     10
     >>> multi_corp[7]
-    {'title': 'Third Document', 'content': 'This is a sentence about Shadoks.'}
+    {'title': 'Third Document', 'content': 'This is another sentence about Shadoks.'}
     >>> for c in multi_corp.iterate_text():
     ...    print(c)
     Gizmo is a Mogw...
     This is a sente...
-    This is a sente...
+    This is another...
     This very long ...
     In chinese folk...
     First Document

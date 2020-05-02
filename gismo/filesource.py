@@ -64,7 +64,7 @@ class FileSource:
     ...    source = FileSource(source_name='mysource', source_dir=dirname, load_source=True)
     ...    content = [e['content'] for e in source]
     >>> content[:3]
-    ['Gizmo is a Mogwaï.', 'This is a sentence about Blade.', 'This is a sentence about Shadoks.']
+    ['Gizmo is a Mogwaï.', 'This is a sentence about Blade.', 'This is another sentence about Shadoks.']
 
     Note: when source is read from file (``load_source=True``), you need to close the source afterwards
     to avoid pending file handles.
