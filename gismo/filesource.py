@@ -8,7 +8,7 @@ from gismo.corpus import toy_source_dict
 
 
 def create_file_source(source=None, source_name='mysource', source_dir='.'):
-    """"
+    """
     Write a source (list of dict) to files in the same format used by FileSource. Only useful
     to transfer from a computer with a lot of RAM to a computer with less RAM. For more complex cases,
     e.g. when the initial source itself is a very large file, a dedicated converter has to be provided.
@@ -39,9 +39,13 @@ def create_file_source(source=None, source_name='mysource', source_dir='.'):
 
 class FileSource:
     """
-    Yield a file corpus as a list. File corpus is made of two files:
+    Yield a file source as a list. File corpus is made of two files:
     The *corpus*.data file contains the stacked items. Each item is compressed with zlib;
     The  *corpus*.index files contains the list of pointers to seek items in the data file
+
+    The resulting source object can be iterated (``[item for item in source]``),
+    can yield single items (``source[i]``), and has a length (``len(source)``). Slices are not
+    implemented.
 
     Parameters
     ----------
@@ -49,7 +53,7 @@ class FileSource:
                 Location of the files
     source_name: str
                 Stem of the file
-    load_corpus: bool
+    load_source: bool
                 Should the data be loaded in RAM
 
     Examples
@@ -57,13 +61,25 @@ class FileSource:
     >>> import tempfile
     >>> with tempfile.TemporaryDirectory() as dirname:
     ...    create_file_source(source_name='mysource', source_dir=dirname)
-    ...    source = FileSource(source_name='mysource', source_dir=dirname)
+    ...    source = FileSource(source_name='mysource', source_dir=dirname, load_source=True)
     ...    content = [e['content'] for e in source]
-    ...    source.close()
     >>> content[:3]
     ['Gizmo is a Mogwaï.', 'This is a sentence about Blade.', 'This is a sentence about Shadoks.']
+
+    Note: when source is read from file (``load_source=True``), you need to close the source afterwards
+    to avoid pending file handles.
+    >>> with tempfile.TemporaryDirectory() as dirname:
+    ...    create_file_source(source_name='mysource', source_dir=dirname)
+    ...    source = FileSource(source_name='mysource', source_dir=dirname)
+    ...    size = len(source)
+    ...    item = source[0]
+    ...    source.close()
+    >>> size
+    5
+    >>> item
+    {'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}
     """
-    def __init__(self, source_name="mysource", source_dir='.', load_corpus=False):
+    def __init__(self, source_name="mysource", source_dir='.', load_source=False):
         if isinstance(source_dir, str):
             source_dir = Path(source_dir)
         index = source_dir / Path(f"{source_name}.index")
@@ -72,7 +88,7 @@ class FileSource:
         with open(index, "rb") as f:
             self.index = pickle.load(f)
         self.n = len(self.index) - 1
-        if load_corpus:
+        if load_source:
             with open(data, "rb") as f:
                 self.f = io.BytesIO(f.read())
         else:

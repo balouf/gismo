@@ -38,7 +38,7 @@ PostProcessors
 
 FileSource
 ----------------
-.. autoclass:: gismo.filesource.FileSource
+.. automodule:: gismo.filesource
     :members:
 
 IO
