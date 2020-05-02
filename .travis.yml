@@ -7,9 +7,10 @@ python:
 install:
 - pip install -U tox-travis
 - pip install codecov
+- export NUMBA_DISABLE_JIT=1
 after_success:
 - codecov
-script: NUMBA_DISABLE_JIT=1 tox
+script: tox
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
