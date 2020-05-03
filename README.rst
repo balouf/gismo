@@ -24,18 +24,40 @@ GISMO
 
 GISMO is a NLP tool to rank and organize a corpus of documents according to a query.
 
+Gismo stands for Generic Information Search... with a Mind of its Own.
 
 * Free software: GNU General Public License v3
+* Github: https://github.com/balouf/gismo.
 * Documentation: https://gismo.readthedocs.io.
 
 
 Features
 --------
 
-* TF-IDTF
+Gismo combines three main ideas:
+
+* **TF-IDTF**: a symmetric version of the TF-IDF embedding.
+* **DI-Iteration**: a fast, push-based, variant of the PageRank algorithm.
+* **Fuzzy dendrogram**: a variant of the Louvain clustring algorithm.
+
+Quickstart
+----------
+
+Install gismo:
+
+.. code-block:: console
+
+    $ pip install gismo
+
+Import gismo in a Python project::
+
+    import gismo as gs
+
 
 Credits
 -------
+
+Thomas Bonald, Anne Bouillard, Marc-Olivier Buob, Dohy Hong.
 
 This package was created with Cookiecutter_ and the `francois-durand/package_helper`_ project template.
 
