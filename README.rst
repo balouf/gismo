@@ -38,7 +38,7 @@ Gismo combines three main ideas:
 
 * **TF-IDTF**: a symmetric version of the TF-IDF embedding.
 * **DI-Iteration**: a fast, push-based, variant of the PageRank algorithm.
-* **Fuzzy dendrogram**: a variant of the Louvain clustring algorithm.
+* **Fuzzy dendrogram**: a variant of the Louvain clustering algorithm.
 
 Quickstart
 ----------
