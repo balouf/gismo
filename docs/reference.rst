@@ -45,3 +45,11 @@ IO
 --------
 .. autoclass:: gismo.common.MixInIO
     :members:
+
+Datasets
+--------
+.. automodule:: gismo.datasets.acm
+    :members:
+
+.. automodule:: gismo.datasets.dblp
+    :members:
