@@ -10,4 +10,4 @@ nbsphinx==0.6.1
 requests>=2.23.0
 beautifulsoup4>=4.9.0
 lxml
-xmltodict
+xmltodict==0.12.0
