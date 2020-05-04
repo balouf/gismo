@@ -11,4 +11,4 @@ requests>=2.23.0
 beautifulsoup4>=4.9.0
 lxml
 xmltodict
-bs4
+beautifulsoup4
