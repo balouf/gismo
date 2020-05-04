@@ -302,7 +302,7 @@ class Embedding(MixInIO):
         self.y_norm = l1_normalize(indptr=self.y.indptr, data=self.y.data)
 
 
-    def query_projection(self, query, return_success=False):
+    def query_projection(self, query):
         """
         Project a query in the feature space
 
@@ -311,20 +311,27 @@ class Embedding(MixInIO):
         query: str
                Text to project to the feature space
 
+        Returns
+        --------
+        z: csr_matrix
+            result of the query projection (uniform distribution if projection fails)
+        success: bool
+            projection success (has at least one feature been found)
+
         Example
         -------
         >>> corpus=Corpus(toy_source_text)
         >>> embedding = Embedding()
         >>> embedding.fit_transform(corpus)
-        >>> z = embedding.query_projection("Gizmo is not Yoda but he rocks!")
+        >>> z, success = embedding.query_projection("Gizmo is not Yoda but he rocks!")
         >>> for i in range(len(z.data)):
         ...    print(f"{embedding.features[z.indices[i]]}: {z.data[i]}")
         gizmo: 0.3868528072345416
         yoda: 0.6131471927654585
-        >>> embedding._result_found
+        >>> success
         True
-        >>> z = embedding.query_projection("That content does not intersect toy corpus")
-        >>> embedding._result_found
+        >>> z, success = embedding.query_projection("That content does not intersect toy corpus")
+        >>> success
         False
         """
         z = self.vect.transform([query])
@@ -334,7 +341,4 @@ class Embedding(MixInIO):
             self._result_found = False
         else:
             self._result_found = True
-        if return_success:
-            return z, self._result_found
-        else:
-            return z
+        return z, self._result_found

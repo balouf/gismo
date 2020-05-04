@@ -26,11 +26,11 @@ class Gismo(MixInIO):
     36
     >>> gismo.post_document = partial(post_document_content, max_size=42)
     >>> gismo.diteration.alpha = .7
-    >>> gismo.rank("Gizmo")
+    >>> success = gismo.rank("Gizmo")
     >>> gismo.get_ranked_documents(3)
     ['Gizmo is a Mogwaï.', 'This very long sentence, with a lot of stu', 'In chinese folklore, a Mogwaï is a demon.']
     >>> gismo.diteration.alpha = .8
-    >>> gismo.rank("Gizmo")
+    >>> success = gismo.rank("Gizmo")
     >>> gismo.get_ranked_documents(3)
     ['Gizmo is a Mogwaï.', 'In chinese folklore, a Mogwaï is a demon.', 'This very long sentence, with a lot of stu']
     >>> gismo.get_ranked_features(5)
@@ -84,9 +84,15 @@ class Gismo(MixInIO):
         ----------
         query: str
                Text that starts DIteration
+
+        Returns
+        -------
+        success: bool
+            success of the query projection. If projection fails, a default ranking on uniform distribution is performed.
         """
-        z = self.embedding.query_projection(query)
+        z, success = self.embedding.query_projection(query)
         self.diteration(self.embedding.x, self.embedding.y, z)
+        return success
 
     def get_ranked_documents(self, k=10):
         return [self.post_document(self, i) for i in self.diteration.x_order[:k]]
