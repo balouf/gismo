@@ -47,6 +47,9 @@ class Gismo(MixInIO):
 
     >>> gismo.get_ranked_features(5)
     ['mogwaï', 'gizmo', 'is', 'in', 'demon']
+
+    Clustering organizes results can provide additional hints on their relationships.
+
     >>> gismo.post_document_cluster = print_document_cluster
     >>> gismo.get_clustered_ranked_documents() # doctest: +NORMALIZE_WHITESPACE
      F: 0.05. R: 0.66. S: 0.99.
