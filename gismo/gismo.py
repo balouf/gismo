@@ -17,52 +17,63 @@ class Gismo(MixInIO):
     """
     Example
     -------
+
+    The Corpus class defines how documents of a source should be converted to plain text.
+
     >>> corpus = Corpus(toy_source_dict, lambda x: x['content'])
+
+    The Embedding class extracts features (e.g. words) and computes weights between documents and features.
+
     >>> vectorizer = CountVectorizer(dtype=float)
     >>> embedding = Embedding(vectorizer=vectorizer)
     >>> embedding.fit_transform(corpus)
-    >>> gismo = Gismo(corpus, embedding)
-    >>> gismo.embedding.m
+    >>> embedding.m # number of features
     36
-    >>> gismo.post_document = partial(post_document_content, max_size=42)
-    >>> gismo.diteration.alpha = .7
+
+    The Gismo class combines them for performing queries.
+
+    >>> gismo = Gismo(corpus, embedding)
     >>> success = gismo.rank("Gizmo")
+    >>> gismo.get_ranked_documents(3)
+    [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}, {'title': 'Fourth Document', 'content': 'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.'}, {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
+
+    Post processing functions can be used to tweak the returned object (the underlying ranking is unchanged)
+
+    >>> gismo.post_document = partial(post_document_content, max_size=42)
     >>> gismo.get_ranked_documents(3)
     ['Gizmo is a Mogwaï.', 'This very long sentence, with a lot of stu', 'In chinese folklore, a Mogwaï is a demon.']
-    >>> gismo.diteration.alpha = .8
-    >>> success = gismo.rank("Gizmo")
-    >>> gismo.get_ranked_documents(3)
-    ['Gizmo is a Mogwaï.', 'In chinese folklore, a Mogwaï is a demon.', 'This very long sentence, with a lot of stu']
+
+    Ranking also works on features.
+
     >>> gismo.get_ranked_features(5)
-    ['mogwaï', 'gizmo', 'is', 'in', 'chinese']
+    ['mogwaï', 'gizmo', 'is', 'in', 'demon']
     >>> gismo.post_document_cluster = print_document_cluster
     >>> gismo.get_clustered_ranked_documents() # doctest: +NORMALIZE_WHITESPACE
-     F: 0.05. R: 1.85. S: 0.99.
-    - F: 0.68. R: 1.77. S: 0.98.
-    -- Gizmo is a Mogwaï. (R: 1.23; S: 0.98)
-    -- In chinese folklore, a Mogwaï is a demon. (R: 0.27; S: 0.72)
-    -- This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda. (R: 0.26; S: 0.67)
-    - F: 0.70. R: 0.08. S: 0.19.
-    -- This is a sentence about Blade. (R: 0.04; S: 0.17)
-    -- This is another sentence about Shadoks. (R: 0.04; S: 0.17)
+     F: 0.05. R: 0.66. S: 0.99.
+    - F: 0.70. R: 0.65. S: 0.98.
+    -- Gizmo is a Mogwaï. (R: 0.54; S: 0.99)
+    -- This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda. (R: 0.08; S: 0.69)
+    -- In chinese folklore, a Mogwaï is a demon. (R: 0.04; S: 0.71)
+    - F: 0.96. R: 0.01. S: 0.18.
+    -- This is a sentence about Blade. (R: 0.01; S: 0.18)
+    -- This is another sentence about Shadoks. (R: 0.01; S: 0.18)
     >>> gismo.post_feature_cluster = print_feature_cluster
     >>> gismo.get_clustered_ranked_features() # doctest: +NORMALIZE_WHITESPACE
-     F: 0.01. R: 1.25. S: 0.94.
-    - F: 0.08. R: 1.22. S: 0.93.
-    -- F: 0.99. R: 1.03. S: 0.97.
-    --- mogwaï (R: 0.46; S: 0.98)
-    --- gizmo (R: 0.44; S: 0.96)
-    --- is (R: 0.13; S: 0.98)
-    -- F: 1.00. R: 0.18. S: 0.21.
-    --- in (R: 0.05; S: 0.21)
-    --- chinese (R: 0.05; S: 0.21)
-    --- folklore (R: 0.05; S: 0.21)
-    --- demon (R: 0.05; S: 0.21)
-    - F: 0.60. R: 0.04. S: 0.12.
-    -- blade (R: 0.01; S: 0.03)
-    -- F: 1.00. R: 0.02. S: 0.15.
-    --- sentence (R: 0.01; S: 0.15)
-    --- about (R: 0.01; S: 0.15)
+     F: 0.01. R: 0.29. S: 0.99.
+    - F: 0.03. R: 0.29. S: 0.98.
+    -- F: 1.00. R: 0.27. S: 0.99.
+    --- mogwaï (R: 0.12; S: 0.99)
+    --- gizmo (R: 0.12; S: 0.99)
+    --- is (R: 0.03; S: 0.99)
+    -- F: 1.00. R: 0.02. S: 0.07.
+    --- in (R: 0.00; S: 0.07)
+    --- demon (R: 0.00; S: 0.07)
+    --- chinese (R: 0.00; S: 0.07)
+    --- folklore (R: 0.00; S: 0.07)
+    - F: 1.00. R: 0.00. S: 0.15.
+    -- star (R: 0.00; S: 0.15)
+    -- the (R: 0.00; S: 0.15)
+    -- of (R: 0.00; S: 0.15)
     """
 
     def __init__(self, corpus, embedding):
