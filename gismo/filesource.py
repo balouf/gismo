@@ -7,7 +7,7 @@ from pathlib import Path
 from gismo.corpus import toy_source_dict
 
 
-def create_file_source(source=None, source_name='mysource', source_dir='.'):
+def create_file_source(source=None, filename='mysource', path='.'):
     """
     Write a source (list of dict) to files in the same format used by FileSource. Only useful
     to transfer from a computer with a lot of RAM to a computer with less RAM. For more complex cases,
@@ -17,17 +17,17 @@ def create_file_source(source=None, source_name='mysource', source_dir='.'):
     ----------
     source: list of dict
         The source to write
-    source_name: str
+    filename: str
         Stem of the file. Two files will be created, with suffixes *.index* and *.data*.
-    source_dir: str or Path
+    path: str or Path
         Destination directory
     """
     if source is None:
         source = toy_source_dict
-    if isinstance(source_dir, str):
-        source_dir = Path(source_dir)
-    data_file = source_dir / Path(f"{source_name}.data")
-    index_file = source_dir / Path(f"{source_name}.index")
+    if isinstance(path, str):
+        path = Path(path)
+    data_file = path / Path(f"{filename}.data")
+    index_file = path / Path(f"{filename}.index")
     indices = [0]
     with open(data_file, "wb") as f:
         for item in source:
@@ -49,9 +49,9 @@ class FileSource:
 
     Parameters
     ----------
-    source_dir: str
+    path: str
                 Location of the files
-    source_name: str
+    filename: str
                 Stem of the file
     load_source: bool
                 Should the data be loaded in RAM
@@ -60,18 +60,18 @@ class FileSource:
     ---------
     >>> import tempfile
     >>> with tempfile.TemporaryDirectory() as dirname:
-    ...    create_file_source(source_name='mysource', source_dir=dirname)
-    ...    source = FileSource(source_name='mysource', source_dir=dirname, load_source=True)
+    ...    create_file_source(filename='mysource', path=dirname)
+    ...    source = FileSource(filename='mysource', path=dirname, load_source=True)
     ...    content = [e['content'] for e in source]
     >>> content[:3]
     ['Gizmo is a Mogwaï.', 'This is a sentence about Blade.', 'This is another sentence about Shadoks.']
 
-    Note: when source is read from file (``load_source=True``), you need to close the source afterwards
+    Note: when source is read from file (``load_source=False``, default behavior), you need to close the source afterwards
     to avoid pending file handles.
 
     >>> with tempfile.TemporaryDirectory() as dirname:
-    ...    create_file_source(source_name='mysource', source_dir=dirname)
-    ...    source = FileSource(source_name='mysource', source_dir=dirname)
+    ...    create_file_source(filename='mysource', path=dirname)
+    ...    source = FileSource(filename='mysource', path=dirname)
     ...    size = len(source)
     ...    item = source[0]
     ...    source.close()
@@ -80,11 +80,11 @@ class FileSource:
     >>> item
     {'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}
     """
-    def __init__(self, source_name="mysource", source_dir='.', load_source=False):
-        if isinstance(source_dir, str):
-            source_dir = Path(source_dir)
-        index = source_dir / Path(f"{source_name}.index")
-        data = source_dir / Path(f"{source_name}.data")
+    def __init__(self, filename="mysource", path='.', load_source=False):
+        if isinstance(path, str):
+            path = Path(path)
+        index = path / Path(f"{filename}.index")
+        data = path / Path(f"{filename}.data")
         # load index
         with open(index, "rb") as f:
             self.index = pickle.load(f)
