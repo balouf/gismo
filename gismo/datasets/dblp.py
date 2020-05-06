@@ -18,7 +18,7 @@ with StringIO(r.text) as g:
     dtd = etree.DTD(file=g)
 
 
-def fast_iter(context, func, *args, **kwargs):
+def fast_iter(context, func, d=2, **kwargs):
     """
     Applies ``func`` to all xml elements of depth 1 of the xml parser ``context``. ``*args`` and ``**kwargs`` are passed to ``func``.
 
@@ -32,6 +32,8 @@ def fast_iter(context, func, *args, **kwargs):
         A parser obtained from etree.iterparse
     func: function
         How to process the elements
+    d: int, optional
+        Depth to process elements.
     """
     depth = 0
     for event, elem in context:
@@ -39,8 +41,8 @@ def fast_iter(context, func, *args, **kwargs):
             depth += 1
         if event=='end':
             depth -= 1
-            if depth < 2:
-                func(elem, *args, **kwargs)
+            if depth < d:
+                func(elem, **kwargs)
                 # It's safe to call clear() here because no descendants will be
                 # accessed
                 elem.clear()
@@ -110,8 +112,6 @@ class Dblp:
             self.path = Path(path)
         elif isinstance(path, Path):
             self.path = path
-        else:
-            self.path = Path(".")
         self.dblp_xml = self.path / Path(f"{filename}.xml.gz")
         self.dblp_data = self.path / Path(f"{filename}.data")
         self.dblp_index = self.path / Path(f"{filename}.index")
@@ -133,7 +133,7 @@ class Dblp:
                         f.write(chunk)
         print(f"DBLP database downloaded to {self.dblp_xml}.")
 
-    def build(self, refresh=False):
+    def build(self, refresh=False, d=2):
         """
         Main class method. Create the data and index files.
 
@@ -146,13 +146,13 @@ class Dblp:
         -------
         By default, the class downloads the full dataset. Here we will limit to one entry.
 
-        >>> toy_url = "https://dblp.org/rec/xml/conf/teletraffic/BouillardCPM18.xml"
+        >>> toy_url = "https://dblp.org/pers/xx/m/Mathieu:Fabien.xml"
         >>> import tempfile
         >>> from gismo.filesource import FileSource
         >>> tmp = tempfile.TemporaryDirectory()
         >>> dblp = Dblp(dblp_url=toy_url, path=tmp.name)
         >>> dblp.build() # doctest.ELLIPSIS
-        Retrieve https://dblp.org/rec/xml/conf/teletraffic/BouillardCPM18.xml from the Internet.
+        Retrieve https://dblp.org/pers/xx/m/Mathieu:Fabien.xml from the Internet.
         DBLP database downloaded to ...xml.gz.
         Converting DBLP database from ...xml.gz (may take a while).
         Building Index.
@@ -164,10 +164,10 @@ class Dblp:
         File ...xml.gz already exists.
         File ...data already exists.
 
-        The refresh parameter can be used to ignore existing files
+        The refresh parameter can be used to ignore existing files.
 
-        >>> dblp.build(refresh=True) # doctest.ELLIPSIS
-        Retrieve https://dblp.org/rec/xml/conf/teletraffic/BouillardCPM18.xml from the Internet.
+        >>> dblp.build(d=3, refresh=True) # doctest.ELLIPSIS
+        Retrieve https://dblp.org/pers/xx/m/Mathieu:Fabien.xml from the Internet.
         DBLP database downloaded to ...xml.gz.
         Converting DBLP database from ...xml.gz (may take a while).
         Building Index.
@@ -176,8 +176,9 @@ class Dblp:
         The resulting files can be used to create a FileSource.
 
         >>> source = FileSource(filename="dblp", path=tmp.name)
-        >>> print(source[0]['authors']) # doctest.ELLIPSIS
-        ['Anne Bouillard', 'Céline Comte', 'Elie de Panafieu', 'Fabien Mathieu']
+        >>> art = [s for s in source if s['title']=="Can P2P networks be super-scalable?"][0]
+        >>> art['authors'] # doctest.ELLIPSIS
+        ['François Baccelli', 'Fabien Mathieu', 'Ilkka Norros', 'Rémi Varloot']
 
         Don't forget to close source after use.
 
@@ -198,7 +199,7 @@ class Dblp:
                 index = [0]
                 with open(self.dblp_data, "wb") as g:
                     context=etree.iterparse(f, events=('start', 'end',), load_dtd=True)
-                    elem=fast_iter(context, process_element, data_handler=g, index=index)
+                    fast_iter(context, process_element, d=d, data_handler=g, index=index)
                 print(f"Building Index.")
                 with open(self.dblp_index, "wb") as g:
                     pickle.dump(np.array(index), g)
