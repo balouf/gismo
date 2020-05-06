@@ -14,6 +14,7 @@ def test_corpus_merge_border_cases():
 
 
 def test_corpuslist_io():
+    assert type(CorpusList()) == CorpusList
     multi_corp = CorpusList([Corpus(toy_source_text, lambda x: x[:15]+"..."),
                              Corpus(toy_source_dict, lambda e: e['title'])])
     with tempfile.TemporaryDirectory() as tmp:
