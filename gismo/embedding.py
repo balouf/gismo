@@ -274,8 +274,6 @@ class Embedding(MixInIO):
         """
         # The fit part
         assert corpus
-        if self.vect is None:
-            self.vect = auto_vect(corpus)
 
         # THE FIT PART
         # Start with a simple CountVectorizer X
