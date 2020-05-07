@@ -61,7 +61,8 @@ class Corpus(MixInIO):
         else:
             self.source = source
             self.i = 0
-            self.n = 0 if source is None else len(source)
+            self.n = 0 if source is None or not hasattr(source, '__len__') else len(source)
+            self.iter = None
             if to_text is None:
                 self.to_text = lambda x: x
             else:
@@ -70,7 +71,7 @@ class Corpus(MixInIO):
     def iterate_text(self, to_text=None):
         if to_text is None:
             to_text = self.to_text
-        return (to_text(entry) for entry in self)
+        return (to_text(entry) for entry in self.source)
 
     def iterate(self):
         return (entry for entry in self.source)

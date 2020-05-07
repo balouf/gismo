@@ -2,6 +2,15 @@
 History
 =======
 
+0.2.4 (2020-05-07)
+------------------
+
+* Tutorials for ACM and DBLP added. After cleaning, there is currently 3 tutorials:
+    * Toy model, to get the hang of Gismo on a tiny example,
+    * ACM, to play with Gismo on a small example,
+    * DBLP, to play with a large dataset.
+
+
 0.2.3 (2020-05-04)
 ------------------
 
