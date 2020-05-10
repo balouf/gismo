@@ -3,6 +3,15 @@
 #
 # GISMO: a Generic Information Search with a Mind of its Own
 
+import gzip
+import errno
+import os
+import dill as pickle
+import numpy as np
+
+from pathlib import Path
+
+
 # DIteration parameters
 ALPHA = .25  # diffusion attenuation
 N_ITER = 4  # Number of round-trip diffusions
@@ -16,18 +25,13 @@ STRETCH = 2  # Stretch factor that determines the coverage/relevance trade-off
 C_MAX = 3  # Maximum depth of concepts
 P_MAX = 4  # Maximum depth of document partitions
 
-import gzip
-import errno
-import os
-import dill as pickle
-
-from pathlib import Path
 
 
 class MixInIO:
     """
     Provide basic save/load capacities to other classes.
     """
+
     def save(self, filename: str, path='.', erase=False, compress=False):
         """
         Save instance to file.
@@ -152,10 +156,42 @@ class ToyClass(MixInIO):
         self.value = v
 
 
+def auto_k(data, order=None, max_k=100, target=1.0):
+    """
+    Proposes a threshold k of significant values according to a relevance vector.
+
+    Parameters
+    ----------
+    data: np.array
+        Vector with positive relevance values.
+    order: list of int, optional
+        Ordered indices of ``data``
+    max_k: int
+        Maximal number of entries to return; also number of entries used to determine threshold.
+    target: float
+        Threshold modulation. Higher target means less result.
+        A target set to 1.0 corresponds to using the average of the max_k top values as threshold.
+
+    Returns
+    -------
+    k: int
+        Recommended number of values.
+
+    """
+    if order is None:
+        order = np.argsort(-data)
+    ordered_data = data[order[:max_k]]
+    max_k = min(max_k, len(data))
+    threshold = np.sum(ordered_data)*target/max_k
+    k = int(np.sum(ordered_data >= threshold))
+    return max(1, k)
+
+
 toy_source_text = ['Gizmo is a Mogwaï.',
                    'This is a sentence about Blade.',
                    'This is another sentence about Shadoks.',
-                   'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.',
+                   'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side '
+                   'reference to the Gremlins movie by comparing Gizmo and Yoda.',
                    'In chinese folklore, a Mogwaï is a demon.']
 
 toy_source_dict = [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'},

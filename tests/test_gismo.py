@@ -24,12 +24,12 @@ def my_gismo():
 
 
 def test_default_cluster_document_post(my_gismo):
-    cluster = my_gismo.get_clustered_ranked_documents()
+    cluster = my_gismo.get_clustered_ranked_documents(k=5)
     assert f"{cluster['focus']:.2f}" == "0.05"
     assert len(cluster["children"]) == 2
 
 
 def test_default_cluster_features_post(my_gismo):
-    cluster = my_gismo.get_clustered_ranked_features()
+    cluster = my_gismo.get_clustered_ranked_features(k=10)
     assert cluster['feature'] == "mogwaï"
     assert len(cluster["children"]) == 2
