@@ -10,6 +10,6 @@ sphinx_rtd_theme==0.4.3
 nbsphinx==0.7.0
 twine==3.1.1
 
-pytest==5.4.1
+pytest==5.4.2
 pytest-runner==5.2
 pytest-cov==2.8.1
