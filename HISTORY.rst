@@ -2,6 +2,12 @@
 History
 =======
 
+0.2.5 (2020-05-10)
+------------------
+
+* auto_k feature: if not specified, a query-dependent, reasonable, number of results k is estimated.
+
+
 0.2.4 (2020-05-07)
 ------------------
 
