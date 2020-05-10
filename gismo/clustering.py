@@ -93,7 +93,9 @@ def merge_clusters(cluster_list, focus=1.0):
     return result
 
 
-def subspace_partition(subspace, resolution=.9):
+def subspace_partition(subspace, resolution=.7):
+    # Resolution square distortion
+    resolution=2*resolution-resolution**2
     n, _ = subspace.shape
     similarity_matrix = cosine_similarity(subspace, subspace) - 2 * np.identity(n)
     similarity = np.max(similarity_matrix, axis=0)
@@ -128,7 +130,7 @@ def rec_clusterize(cluster_list, resolution):
                               resolution)
 
 
-def subspace_clusterize(subspace, resolution=.9, indices=None):
+def subspace_clusterize(subspace, resolution=.7, indices=None):
     '''
     Converts a subspace (matrix seen as a list of vectors) to a Cluster object (hierarchical clustering).
 

@@ -54,32 +54,24 @@ class Gismo(MixInIO):
     Clustering organizes results can provide additional hints on their relationships.
 
     >>> gismo.post_document_cluster = print_document_cluster
-    >>> gismo.get_clustered_ranked_documents(k=5) # doctest: +NORMALIZE_WHITESPACE
-     F: 0.05. R: 0.66. S: 0.99.
-    - F: 0.70. R: 0.65. S: 0.98.
+    >>> gismo.get_clustered_ranked_documents(resolution=.9) # doctest: +NORMALIZE_WHITESPACE
+     F: 0.60. R: 0.65. S: 0.98.
+    - F: 0.71. R: 0.57. S: 0.98.
     -- Gizmo is a Mogwaï. (R: 0.54; S: 0.99)
-    -- This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda. (R: 0.08; S: 0.69)
     -- In chinese folklore, a Mogwaï is a demon. (R: 0.04; S: 0.71)
-    - F: 0.96. R: 0.01. S: 0.18.
-    -- This is a sentence about Blade. (R: 0.01; S: 0.18)
-    -- This is another sentence about Shadoks. (R: 0.01; S: 0.18)
+    - This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda. (R: 0.08; S: 0.69)
     >>> gismo.post_feature_cluster = print_feature_cluster
-    >>> gismo.get_clustered_ranked_features(k=10) # doctest: +NORMALIZE_WHITESPACE
-     F: 0.01. R: 0.29. S: 0.99.
-    - F: 0.03. R: 0.29. S: 0.98.
-    -- F: 1.00. R: 0.27. S: 0.99.
-    --- mogwaï (R: 0.12; S: 0.99)
-    --- gizmo (R: 0.12; S: 0.99)
-    --- is (R: 0.03; S: 0.99)
-    -- F: 1.00. R: 0.02. S: 0.07.
-    --- in (R: 0.00; S: 0.07)
-    --- demon (R: 0.00; S: 0.07)
-    --- chinese (R: 0.00; S: 0.07)
-    --- folklore (R: 0.00; S: 0.07)
-    - F: 1.00. R: 0.00. S: 0.15.
-    -- star (R: 0.00; S: 0.15)
-    -- the (R: 0.00; S: 0.15)
-    -- of (R: 0.00; S: 0.15)
+    >>> gismo.get_clustered_ranked_features() # doctest: +NORMALIZE_WHITESPACE
+     F: 0.03. R: 0.29. S: 0.98.
+    - F: 1.00. R: 0.27. S: 0.99.
+    -- mogwaï (R: 0.12; S: 0.99)
+    -- gizmo (R: 0.12; S: 0.99)
+    -- is (R: 0.03; S: 0.99)
+    - F: 1.00. R: 0.02. S: 0.07.
+    -- in (R: 0.00; S: 0.07)
+    -- demon (R: 0.00; S: 0.07)
+    -- chinese (R: 0.00; S: 0.07)
+    -- folklore (R: 0.00; S: 0.07)
     """
 
     def __init__(self, corpus, embedding):
