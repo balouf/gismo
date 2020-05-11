@@ -63,6 +63,23 @@ def post_feature(gismo, i):
 
 
 # Clusters
+def post_cluster(gismo, cluster):
+    """
+    Returns raw cluster object, without any gismo post_processing
+    Parameters
+    ----------
+    gismo: Gismo
+
+    cluster: Cluster
+
+    Returns
+    -------
+    cluster: Cluster
+    """
+    assert isinstance(gismo.diteration.alpha, float)
+    return cluster
+
+
 def post_document_cluster(gismo, cluster):
     """
     Convert cluster of documents into basic json

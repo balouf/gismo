@@ -123,29 +123,33 @@ class Gismo(MixInIO):
         return [self.post_feature(self, i) for i in self.diteration.y_order[:k]]
 
     # Cluster part
-    def get_clustered_documents(self, indices, resolution=.9):
+    def get_clustered_documents(self, indices, resolution=.9, post=True):
         subspace = csr_matrix(vstack([self.embedding.x[i, :].multiply(self.diteration.y_relevance) for i in indices]))
         cluster = subspace_clusterize(subspace, resolution, indices)
-        return self.post_document_cluster(self, cluster)
+        if post:
+            return self.post_document_cluster(self, cluster)
+        return cluster
 
-    def get_clustered_ranked_documents(self, k=None, resolution=.9):
+    def get_clustered_ranked_documents(self, k=None, resolution=.9, post=True):
         if k is None:
             k = auto_k(data=self.diteration.x_relevance,
                        order=self.diteration.x_order,
                        max_k=self.auto_k_max_k,
                        target=self.auto_k_target)
-        return self.get_clustered_documents(self.diteration.x_order[:k], resolution)
+        return self.get_clustered_documents(self.diteration.x_order[:k], resolution, post)
 
-    def get_clustered_features(self, indices, resolution=.9):
+    def get_clustered_features(self, indices, resolution=.9, post=True):
         subspace = csr_matrix(vstack([self.embedding.y[i, :].multiply(self.diteration.x_relevance) for i in indices]))
         cluster = subspace_clusterize(subspace, resolution, indices)
-        return self.post_feature_cluster(self, cluster)
+        if post:
+            return self.post_feature_cluster(self, cluster)
+        return cluster
 
-    def get_clustered_ranked_features(self, k=None, resolution=.9):
+    def get_clustered_ranked_features(self, k=None, resolution=.9, post=True):
         if k is None:
             k = auto_k(data=self.diteration.y_relevance,
                        order=self.diteration.y_order,
                        max_k=self.auto_k_max_k,
                        target=self.auto_k_target)
-        return self.get_clustered_features(self.diteration.y_order[:k], resolution)
+        return self.get_clustered_features(self.diteration.y_order[:k], resolution, post)
 

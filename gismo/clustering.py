@@ -1,3 +1,4 @@
+import heapq
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
@@ -5,6 +6,7 @@ from scipy.sparse import vstack, csr_matrix
 
 from gismo.corpus import Corpus, toy_source_text
 from gismo.embedding import Embedding
+
 
 class Cluster:
     """
@@ -89,7 +91,7 @@ def merge_clusters(cluster_list, focus=1.0):
         return cluster_list[0]
     result = sum(cluster_list)
     result.focus = min(result.focus, focus)
-    result.children = sorted(cluster_list, key = lambda c: c.rank)
+    result.children = sorted(cluster_list, key=lambda c: c.rank)
     return result
 
 
@@ -131,7 +133,7 @@ def rec_clusterize(cluster_list, resolution):
 
 
 def subspace_clusterize(subspace, resolution=.7, indices=None):
-    '''
+    """
     Converts a subspace (matrix seen as a list of vectors) to a Cluster object (hierarchical clustering).
 
     Parameters
@@ -164,9 +166,54 @@ def subspace_clusterize(subspace, resolution=.7, indices=None):
     >>> cluster = subspace_clusterize(subspace, resolution=.02)
     >>> len(cluster.children)
     4
-    '''
+    """
     if indices is None:
         n, _ = subspace.shape
         indices = range(n)
     return rec_clusterize([Cluster(indice=r, rank=i, vector=subspace[i, :]) for i, r in enumerate(indices)],
                           resolution)
+
+
+class BFS:
+    """
+    Turns a ranked cluster into a list of indices.
+    """
+    def __init__(self):
+        self.result = []
+        self.heap = []
+        self.used = set()
+
+    def set(self, cluster):
+        self.result = []
+        self.heap = []
+        self.used = set()
+        self.push(cluster)
+
+    def push(self, cluster):
+        heapq.heappush(self.heap, (cluster.focus, cluster.rank, cluster))
+
+    def update(self, item):
+        if item not in self.used:
+            self.used.add(item)
+            self.result.append(item)
+
+    def pop(self):
+        return heapq.heappop(self.heap)[2]
+
+    def core(self, cluster):
+        self.set(cluster)
+        while len(self.heap) > 0:
+            c = self.pop()
+            self.update(c.indice)
+            for child in c.children:
+                self.push(child)
+        return self.result
+
+    def wide(self, cluster):
+        self.set(cluster)
+        while len(self.heap) > 0:
+            c = self.pop()
+            for child in c.children:
+                self.push(child)
+                self.update(child.indice)
+        return self.result
