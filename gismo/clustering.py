@@ -97,7 +97,7 @@ def merge_clusters(cluster_list, focus=1.0):
 
 def subspace_partition(subspace, resolution=.7):
     # Resolution square distortion
-    resolution=2*resolution-resolution**2
+    resolution = 2 * resolution - resolution ** 2
     n, _ = subspace.shape
     similarity_matrix = cosine_similarity(subspace, subspace) - 2 * np.identity(n)
     similarity = np.max(similarity_matrix, axis=0)
@@ -175,9 +175,6 @@ def subspace_clusterize(subspace, resolution=.7, indices=None):
 
 
 class BFS:
-    """
-    Turns a ranked cluster into a list of indices.
-    """
     def __init__(self):
         self.result = []
         self.heap = []
@@ -217,3 +214,10 @@ class BFS:
                 self.push(child)
                 self.update(child.indice)
         return self.result
+
+
+def bfs(cluster, wide=True):
+    if wide:
+        return BFS().wide(cluster)
+    else:
+        return BFS().core(cluster)
