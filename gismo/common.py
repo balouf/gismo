@@ -177,6 +177,11 @@ def auto_k(data, order=None, max_k=100, target=1.0):
     k: int
         Recommended number of values.
 
+    Example
+    --------
+    >>> data = np.array([30, 1, 2, .3, 4, 50, 80])
+    >>> auto_k(data)
+    3
     """
     if order is None:
         order = np.argsort(-data)
