@@ -2,10 +2,11 @@
 History
 =======
 
-0.2.5 (2020-05-10)
+0.2.5 (2020-05-11)
 ------------------
 
 * auto_k feature: if not specified, a query-dependent, reasonable, number of results k is estimated.
+* covering methods added to gismo. It is now possible to use get_covering_* instead of get_ranked_* to maximize coverage and/or eliminate redundancy.
 
 
 0.2.4 (2020-05-07)
