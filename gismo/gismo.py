@@ -298,7 +298,7 @@ class Gismo(MixInIO):
 
     # Covering part
 
-    def get_covering_documents(self, k=None, resolution=.7, strech=2.0, wide=True):
+    def get_covering_documents(self, k=None, resolution=.7, stretch=2.0, wide=True):
         """
         Returns a list of top covering documents.
         The documents are post_processed through the post_document method.
@@ -310,7 +310,7 @@ class Gismo(MixInIO):
             using the auto_k_max_k and auto_k_target attributes.
         resolution: float in range [0.0, 1.0]
             Depth of the cluster. Use 0.0 to a star, 1.0 for a pseudo-dendrogram.
-        strech: float >= 1.0
+        stretch: float >= 1.0
             The list if build by traversing a cluster of size ``int(k*stretch)``.
             High stretch will more easily eliminate redundant results, but increases
             the odds of returning less relevant entries.
@@ -327,13 +327,13 @@ class Gismo(MixInIO):
                        order=self.diteration.x_order,
                        max_k=self.auto_k_max_k,
                        target=self.auto_k_target)
-        cluster = self.get_clustered_ranked_documents(k=int(k * strech),
+        cluster = self.get_clustered_ranked_documents(k=int(k * stretch),
                                                       resolution=resolution,
                                                       post=False)
         indices = bfs(cluster, wide=wide)[:k]
         return [self.post_document(self, i) for i in indices]
 
-    def get_covering_features(self, k=None, resolution=.7, strech=2.0, wide=True):
+    def get_covering_features(self, k=None, resolution=.7, stretch=2.0, wide=True):
         """
         Returns a list of top covering features.
         The features are post_processed through the post_feature method.
@@ -345,7 +345,7 @@ class Gismo(MixInIO):
             using the auto_k_max_k and auto_k_target attributes.
         resolution: float in range [0.0, 1.0]
             Depth of the cluster. Use 0.0 to a star, 1.0 for a pseudo-dendrogram.
-        strech: float >= 1.0
+        stretch: float >= 1.0
             The list if build by traversing a cluster of size ``int(k*stretch)``.
             High stretch will more easily eliminate redundant results, but increases
             the odds of returning less relevant entries.
@@ -362,7 +362,7 @@ class Gismo(MixInIO):
                        order=self.diteration.y_order,
                        max_k=self.auto_k_max_k,
                        target=self.auto_k_target)
-        cluster = self.get_clustered_ranked_features(k=int(k * strech),
+        cluster = self.get_clustered_ranked_features(k=int(k * stretch),
                                                      resolution=resolution,
                                                      post=False)
         indices = bfs(cluster, wide=wide)[:k]
@@ -370,64 +370,64 @@ class Gismo(MixInIO):
 
 
 class XGismo(Gismo):
+    """
+    Given two distinct embeddings base on the same set of documents, builds a new gismo.
+    The features of ``x_embedding`` are the corpus of this new gismo.
+    The features of ``y_embedding`` are the features of this new gismo.
+    The dual embedding of the new gismo is obtained by crossing the two input dual embeddings.
+
+    xgismo behaves essentially as a gismo object. The main difference is an additional parameter ``y`` for the
+    rank method, to control if the query projection should be performed on the ``y_embedding`` or on the
+    ``x_embedding``.
+
+    Parameters
+    ----------
+    x_embedding: Embedding
+        The *left* embedding, which defines the documents of the xgismo.
+    y_embedding: Embedding
+        The *right* embedding, which defines the features of the xgismo.
+
+    Examples
+    ---------
+    One the main use case for XGismo consists in transforming a list of articles into a Gismo that relates authors
+    and the words they use. Let's start by retrieving a few articles.
+
+    >>> toy_url = "https://dblp.org/pers/xx/m/Mathieu:Fabien.xml"
+    >>> source = [a for a in url2source(toy_url) if int(a['year'])<2020]
+
+    Then we build the embedding of words.
+
+    >>> corpus = Corpus(source, to_text=lambda x: x['title'])
+    >>> w_count = CountVectorizer(dtype=float, stop_words='english')
+    >>> w_embedding = Embedding(w_count)
+    >>> w_embedding.fit_transform(corpus)
+
+    And the embedding of authors.
+
+    >>> to_authors_text = lambda dic: " ".join([a.replace(' ', '_') for a in dic['authors']])
+    >>> corpus.to_text = to_authors_text
+    >>> a_count = CountVectorizer(dtype=float, preprocessor=lambda x:x, tokenizer=lambda x: x.split(' '))
+    >>> a_embedding = Embedding(a_count)
+    >>> a_embedding.fit_transform(corpus)
+
+    We can now combine the two embeddings in one xgismo.
+
+    >>> xgismo = XGismo(a_embedding, w_embedding)
+    >>> xgismo.post_document = lambda g, i: g.corpus[i].replace('_', ' ')
+
+    We can use xgismo to query keyword(s).
+
+    >>> success = xgismo.rank("Pagerank")
+    >>> xgismo.get_ranked_documents()
+    ['Mohamed Bouklit', 'Dohy Hong', 'The Dang Huynh']
+
+    We can use it to query researcher(s).
+
+    >>> success = xgismo.rank("Anne_Bouillard", y=False)
+    >>> xgismo.get_ranked_documents()
+    ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiss', 'Dmitry Lebedev']
+    """
     def __init__(self, x_embedding, y_embedding):
-        """
-        Given two distinct embeddings base on the same set of documents, builds a new gismo.
-        The features of ``x_embedding`` are the corpus of this new gismo.
-        The features of ``y_embedding`` are the features of this new gismo.
-        The dual embedding of the new gismo is obtained by crossing the two input dual embeddings.
-
-        xgismo behaves essentially as a gismo object. The main difference is an additional parameter ``y`` for the
-        rank method, to control if the query projection should be performed on the ``y_embedding`` or on the
-        ``x_embedding``.
-
-        Parameters
-        ----------
-        x_embedding: Embedding
-            The *left* embedding, which defines the documents of the xgismo.
-        y_embedding: Embedding
-            The *right* embedding, which defines the features of the xgismo.
-
-        Examples
-        ---------
-        One the main use case for XGismo consists in transforming a list of articles into a Gismo that relates authors
-        and the words they use. Let's start by retrieving a few articles.
-
-        >>> toy_url = "https://dblp.org/pers/xx/m/Mathieu:Fabien.xml"
-        >>> source = [a for a in url2source(toy_url) if int(a['year'])<2020]
-
-        Then we build the embedding of words.
-
-        >>> corpus = Corpus(source, to_text=lambda x: x['title'])
-        >>> w_count = CountVectorizer(dtype=float, stop_words='english')
-        >>> w_embedding = Embedding(w_count)
-        >>> w_embedding.fit_transform(corpus)
-
-        And the embedding of authors.
-
-        >>> to_authors_text = lambda dic: " ".join([a.replace(' ', '_') for a in dic['authors']])
-        >>> corpus.to_text = to_authors_text
-        >>> a_count = CountVectorizer(dtype=float, preprocessor=lambda x:x, tokenizer=lambda x: x.split(' '))
-        >>> a_embedding = Embedding(a_count)
-        >>> a_embedding.fit_transform(corpus)
-
-        We can now combine the two embeddings in one xgismo.
-
-        >>> xgismo = XGismo(a_embedding, w_embedding)
-        >>> xgismo.post_document = lambda g, i: g.corpus[i].replace('_', ' ')
-
-        We can use xgismo to query keyword(s).
-
-        >>> success = xgismo.rank("Pagerank")
-        >>> xgismo.get_ranked_documents()
-        ['Mohamed Bouklit', 'Dohy Hong', 'The Dang Huynh']
-
-        We can use it to query researcher(s).
-
-        >>> success = xgismo.rank("Anne_Bouillard", y=False)
-        >>> xgismo.get_ranked_documents()
-        ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiss', 'Dmitry Lebedev']
-        """
         embedding = Embedding()
         embedding.n = x_embedding.m
         embedding.m = y_embedding.m
@@ -443,6 +443,22 @@ class XGismo(Gismo):
         self.y_projection = y_embedding.query_projection
 
     def rank(self, query="", y=True):
+        """
+        Runs the DIteration using query as starting point.
+        ``query`` can be evaluated on features (``y=True``) or documents (``y=False``).
+
+        Parameters
+        ----------
+        query: str
+           Text that starts DIteration
+        y: bool
+           Determines if query should be evaluated on features (``True``) or documents (``False``).
+
+        Returns
+        -------
+        success: bool
+            success of the query projection. If projection fails, a ranking on uniform distribution is performed.
+        """
         if y:
             z, found = self.y_projection(query)
             self.diteration.offset = 1.0
