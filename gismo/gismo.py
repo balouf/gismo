@@ -1,10 +1,11 @@
 """Main module."""
-
+import numpy as np
 from scipy.sparse import vstack, csr_matrix
 from sklearn.feature_extraction.text import CountVectorizer
 from functools import partial
 
 from gismo.common import MixInIO, toy_source_dict, auto_k
+from gismo.datasets.dblp import url2source
 from gismo.corpus import Corpus
 from gismo.embedding import Embedding
 from gismo.diteration import DIteration
@@ -366,3 +367,89 @@ class Gismo(MixInIO):
                                                      post=False)
         indices = bfs(cluster, wide=wide)[:k]
         return [self.post_feature(self, i) for i in indices]
+
+
+class XGismo(Gismo):
+    def __init__(self, x_embedding, y_embedding):
+        """
+        Given two distinct embeddings base on the same set of documents, builds a new gismo.
+        The features of ``x_embedding`` are the corpus of this new gismo.
+        The features of ``y_embedding`` are the features of this new gismo.
+        The dual embedding of the new gismo is obtained by crossing the two input dual embeddings.
+
+        xgismo behaves essentially as a gismo object. The main difference is an additional parameter ``y`` for the
+        rank method, to control if the query projection should be performed on the ``y_embedding`` or on the
+        ``x_embedding``.
+
+        Parameters
+        ----------
+        x_embedding: Embedding
+            The *left* embedding, which defines the documents of the xgismo.
+        y_embedding: Embedding
+            The *right* embedding, which defines the features of the xgismo.
+
+        Examples
+        ---------
+        One the main use case for XGismo consists in transforming a list of articles into a Gismo that relates authors
+        and the words they use. Let's start by retrieving a few articles.
+
+        >>> toy_url = "https://dblp.org/pers/xx/m/Mathieu:Fabien.xml"
+        >>> source = [a for a in url2source(toy_url) if int(a['year'])<2020]
+
+        Then we build the embedding of words.
+
+        >>> corpus = Corpus(source, to_text=lambda x: x['title'])
+        >>> w_count = CountVectorizer(dtype=float, stop_words='english')
+        >>> w_embedding = Embedding(w_count)
+        >>> w_embedding.fit_transform(corpus)
+
+        And the embedding of authors.
+
+        >>> to_authors_text = lambda dic: " ".join([a.replace(' ', '_') for a in dic['authors']])
+        >>> corpus.to_text = to_authors_text
+        >>> a_count = CountVectorizer(dtype=float, preprocessor=lambda x:x, tokenizer=lambda x: x.split(' '))
+        >>> a_embedding = Embedding(a_count)
+        >>> a_embedding.fit_transform(corpus)
+
+        We can now combine the two embeddings in one xgismo.
+
+        >>> xgismo = XGismo(a_embedding, w_embedding)
+        >>> xgismo.post_document = lambda g, i: g.corpus[i].replace('_', ' ')
+
+        We can use xgismo to query keyword(s).
+
+        >>> success = xgismo.rank("Pagerank")
+        >>> xgismo.get_ranked_documents()
+        ['Mohamed Bouklit', 'Dohy Hong', 'The Dang Huynh']
+
+        We can use it to query researcher(s).
+
+        >>> success = xgismo.rank("Anne_Bouillard", y=False)
+        >>> xgismo.get_ranked_documents()
+        ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiss', 'Dmitry Lebedev']
+        """
+        embedding = Embedding()
+        embedding.n = x_embedding.m
+        embedding.m = y_embedding.m
+        embedding.features = y_embedding.features
+        embedding.x = np.dot(x_embedding.y, y_embedding.x)
+        embedding.x_norm = np.ones(embedding.n)
+        embedding.y = np.dot(y_embedding.y, x_embedding.x)
+        embedding.y_norm = np.ones(embedding.m)
+        embedding.idf = y_embedding.idf
+        super().__init__(corpus=Corpus(x_embedding.features, to_text=lambda x: x), embedding=embedding)
+
+        self.x_projection = x_embedding.query_projection
+        self.y_projection = y_embedding.query_projection
+
+    def rank(self, query="", y=True):
+        if y:
+            z, found = self.y_projection(query)
+            self.diteration.offset = 1.0
+        else:
+            z, found = self.x_projection(query)
+            z = np.dot(z, self.embedding.x)
+            self.diteration.offset = 0.0
+        self.embedding._result_found = found
+        self.diteration(self.embedding.x, self.embedding.y, z)
+        return found

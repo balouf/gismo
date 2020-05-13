@@ -31,6 +31,10 @@ Gismo
 .. autoclass:: gismo.gismo.Gismo
     :members:
 
+.. autoclass:: gismo.gismo.XGismo
+    :members:
+
+
 PostProcessors
 -----------------
 .. automodule:: gismo.post_processing
