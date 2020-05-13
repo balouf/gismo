@@ -122,6 +122,8 @@ class Gismo(MixInIO):
         self.auto_k_max_k = 100
         self.auto_k_target = 1.0
 
+        self.query_distortion = True
+
         self.post_document = post_document
         self.post_feature = post_feature
         self.post_document_cluster = post_document_cluster
@@ -211,7 +213,11 @@ class Gismo(MixInIO):
         Object
 
         """
-        subspace = csr_matrix(vstack([self.embedding.x[i, :].multiply(self.diteration.y_relevance) for i in indices]))
+        if self.query_distortion:
+            subspace = [self.embedding.x[i, :].multiply(self.diteration.y_relevance) for i in indices]
+        else:
+            subspace = [self.embedding.x[i, :] for i in indices]
+        subspace = csr_matrix(vstack(subspace))
         cluster = subspace_clusterize(subspace, resolution, indices)
         if post:
             return self.post_document_cluster(self, cluster)
@@ -264,7 +270,11 @@ class Gismo(MixInIO):
         Object
 
         """
-        subspace = csr_matrix(vstack([self.embedding.y[i, :].multiply(self.diteration.x_relevance) for i in indices]))
+        if self.query_distortion:
+            subspace = [self.embedding.y[i, :].multiply(self.diteration.x_relevance) for i in indices]
+        else:
+            subspace = [self.embedding.y[i, :] for i in indices]
+        subspace = csr_matrix(vstack(subspace))
         cluster = subspace_clusterize(subspace, resolution, indices)
         if post:
             return self.post_feature_cluster(self, cluster)

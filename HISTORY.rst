@@ -6,6 +6,8 @@ History
 ------------------
 
 * dblp module: url2source function added to directly load a small dblp source in memory instead of using a FileSource approach.
+* Possibility to disable query distortion in gismo.
+* XGismo class to cross analyze embeddings.
 
 0.2.5 (2020-05-11)
 ------------------

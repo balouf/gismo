@@ -19,13 +19,14 @@ def my_gismo():
     embedding = Embedding(vectorizer=vectorizer)
     embedding.fit_transform(corpus)
     gismo = Gismo(corpus, embedding)
+    gismo.query_distortion = False
     gismo.rank("Gizmo")
     return gismo
 
 
 def test_default_cluster_document_post(my_gismo):
     cluster = my_gismo.get_clustered_ranked_documents(k=5)
-    assert f"{cluster['focus']:.2f}" == "0.05"
+    assert f"{cluster['focus']:.2f}" == "0.04"
     assert len(cluster["children"]) == 2
 
 
