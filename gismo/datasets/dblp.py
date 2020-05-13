@@ -1,3 +1,4 @@
+import io
 from pathlib import Path
 import requests
 import zlib
@@ -48,12 +49,92 @@ def fast_iter(context, func, d=2, **kwargs):
     del context
 
 
-def process_element(elt, data_handler, index):
+def xml_element_to_dict(elt):
     """
-    Converts the xml element ``elt`` into a dict.
-    If it is a paper (at least one author, a venue, a year, a title):
-        * Compress and write the dict in ``data_handler``
-        * Append file position in ``data_handler`` to ``index``.
+    Converts the xml element ``elt`` into a dict if it is a paper.
+
+    Parameters
+    ----------
+    elt: Any
+        a XML element.
+
+    Returns
+    -------
+    dict or None
+        Article dictionary if element contains the attributes of an article, None otherwise.
+    """
+    children = elt.getchildren()
+    if not children:
+        return None
+    dic = {"type": elt.tag}
+    authors = []
+    for c in children:
+        if not isinstance(c.text, str):
+            continue
+        if c.tag == "author":
+            authors.append(c.text)
+        elif c.tag in {"journal", "booktitle"}:
+            dic["venue"] = c.text
+        elif c.tag in {"year", "title"}:
+            dic[c.tag] = c.text
+    dic['authors'] = authors
+    if dic['authors'] == [] or not all(key in dic for key in ['year', 'title', 'venue']):
+        return None
+    return dic
+
+
+def element_to_source(elt, source):
+    """
+    Test if elt is an article, converts it to dictionary and appends to source
+
+    Parameters
+    ----------
+    elt: Any
+        a XML element
+    source: list
+        the source in construction
+    """
+    dic = xml_element_to_dict(elt)
+    if dic is not None:
+        source.append(dic)
+
+
+def url2source(url):
+    """
+    Directly transform URL of a dblp xml into a list of dictionnary.
+    Only use for datasets that fit into memory (e.g. articles from one author).
+    If the dataset does not fit, consider using the Dblp class instead.
+
+    Parameters
+    ----------
+    url: str
+        the URL to fetch
+
+    Returns
+    -------
+    source: list of dict
+        Articles retrieved from the URL
+
+    Example
+    -------
+    >>> source = url2source("https://dblp.org/pers/xx/t/Tixeuil:S=eacute=bastien.xml")
+    >>> art = [s for s in source if s['title']=="Distributed Computing with Mobile Robots: An Introductory Survey."][0]
+    >>> art['authors']
+    ['Maria Potop-Butucaru', 'Michel Raynal', 'Sébastien Tixeuil']
+    """
+    r = requests.get(url)
+    source = []
+    with io.BytesIO(r.content) as f:
+        context = etree.iterparse(f, events=('start', 'end',))
+        fast_iter(context, element_to_source, d=3, source=source)
+    return source
+
+
+def element_to_filesource(elt, data_handler, index):
+    """
+    * Converts the xml element ``elt`` into a dict if it is an article.
+    * Compress and write the dict in ``data_handler``
+    * Append file position in ``data_handler`` to ``index``.
 
     Parameters
     ----------
@@ -68,22 +149,8 @@ def process_element(elt, data_handler, index):
     -------
     True
     """
-    children = elt.getchildren()
-    if not children:
-        return True
-    dic = {"type": elt.tag}
-    authors = []
-    for c in children:
-        if not isinstance(c.text, str):
-            continue
-        if c.tag == "author":
-            authors.append(c.text)
-        elif c.tag in {"journal", "booktitle"}:
-            dic["venue"] = c.text
-        elif c.tag in {"year", "title"}:
-            dic[c.tag] = c.text
-    dic['authors'] = authors
-    if dic['authors'] == [] or not all(key in dic for key in ['year', 'title', 'venue']):
+    dic = xml_element_to_dict(elt=elt)
+    if dic is None:
         return True
     data_handler.write(zlib.compress(json.dumps(dic).encode('utf8')))
     index.append(data_handler.tell())
@@ -203,7 +270,7 @@ class Dblp:
                 index = [0]
                 with open(self.dblp_data, "wb") as g:
                     context = etree.iterparse(f, events=('start', 'end',), load_dtd=True)
-                    fast_iter(context, process_element, d=d, data_handler=g, index=index)
+                    fast_iter(context, element_to_filesource, d=d, data_handler=g, index=index)
                 print(f"Building Index.")
                 with open(self.dblp_index, "wb") as g:
                     pickle.dump(np.array(index), g)
