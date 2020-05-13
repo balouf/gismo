@@ -2,6 +2,11 @@
 History
 =======
 
+0.3.0 (2020-05-13)
+------------------
+
+* dblp module: urltosource function added to directly load a small dblp source in memory instead of using a FileSource approach.
+
 0.2.5 (2020-05-11)
 ------------------
 
