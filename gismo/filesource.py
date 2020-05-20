@@ -24,8 +24,7 @@ def create_file_source(source=None, filename='mysource', path='.'):
     """
     if source is None:
         source = toy_source_dict
-    if isinstance(path, str):
-        path = Path(path)
+    path = Path(path)
     data_file = path / Path(f"{filename}.data")
     index_file = path / Path(f"{filename}.index")
     indices = [0]
@@ -81,8 +80,7 @@ class FileSource:
     {'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}
     """
     def __init__(self, filename="mysource", path='.', load_source=False):
-        if isinstance(path, str):
-            path = Path(path)
+        path = Path(path)
         index = path / Path(f"{filename}.index")
         data = path / Path(f"{filename}.data")
         # load index
