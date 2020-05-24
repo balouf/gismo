@@ -173,10 +173,7 @@ class Dblp:
     def __init__(self, dblp_url=URL, filename="dblp",
                  path="."):
         self.dblp_url = dblp_url
-        if isinstance(path, str):
-            self.path = Path(path)
-        elif isinstance(path, Path):
-            self.path = path
+        self.path = Path(path)
         self.dblp_xml = self.path / Path(f"{filename}.xml.gz")
         self.dblp_data = self.path / Path(f"{filename}.data")
         self.dblp_index = self.path / Path(f"{filename}.index")

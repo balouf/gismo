@@ -50,6 +50,10 @@ IO
 .. autoclass:: gismo.common.MixInIO
     :members:
 
+.. autoclass:: gismo.common.ToyClass
+    :members:
+
+
 Datasets
 --------
 .. automodule:: gismo.datasets.acm

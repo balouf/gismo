@@ -26,7 +26,6 @@ C_MAX = 3  # Maximum depth of concepts
 P_MAX = 4  # Maximum depth of document partitions
 
 
-
 class MixInIO:
     """
     Provide basic save/load capacities to other classes.
@@ -49,10 +48,7 @@ class MixInIO:
 
         Returns
         -------
-        None        >>> class MyValue(MixInIO):
-        ...     def __init__(self, v=0):
-        ...        self.value = v
-
+        None
 
         Examples
         ----------
@@ -94,8 +90,7 @@ class MixInIO:
          ...
         FileNotFoundError: [Errno 2] No such file or directory: ...
         """
-        if isinstance(path, str):
-            path = Path(path)
+        path = Path(path)
         destination = path / Path(filename).stem
         if compress:
             destination = destination.with_suffix(".pkl.gz")
@@ -127,8 +122,7 @@ class MixInIO:
         -------
         None
         """
-        if isinstance(path, str):
-            path = Path(path)
+        path = Path(path)
         dest = path / Path(filename).with_suffix(".pkl")
         if dest.exists():
             with open(dest, 'rb') as f:
@@ -144,15 +138,17 @@ class MixInIO:
 
 
 class ToyClass(MixInIO):
-    def __init__(self, v=0):
-        """
-        A minimal class to demonstrate the use of the MixInIO MixIN.
+    """
+    A minimal class to demonstrate the use of the MixInIO MixIN.
 
-        Parameters
-        ----------
-        v: object
-            A value to store.
-        """
+    The class itself just stores one value, but the MixIn provides save/load capabilities for free.
+
+    Parameters
+    ----------
+    v: object
+        A value to store.
+    """
+    def __init__(self, v=0):
         self.value = v
 
 
