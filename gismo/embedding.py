@@ -145,6 +145,7 @@ class Embedding(MixInIO):
             self.idf = None  # idf vector
             self.features = None # vocabulary list
             self._result_found = True # keep track of projection successes
+            self._query = "" # keep track of projection query
 
 
     def fit_transform(self, corpus: Corpus):
@@ -332,6 +333,7 @@ class Embedding(MixInIO):
         >>> success
         False
         """
+        self._query = query
         z = self.vect.transform([query])
         norm = query_shape(indices=z.indices, data=z.data, idf=self.idf)
         if norm == 0:
