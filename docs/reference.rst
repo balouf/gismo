@@ -61,3 +61,6 @@ Datasets
 
 .. automodule:: gismo.datasets.dblp
     :members:
+
+.. automodule:: gismo.datasets.reuters
+    :members:
