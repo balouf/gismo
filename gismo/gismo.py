@@ -148,7 +148,7 @@ class Gismo(MixInIO):
         self.diteration(self.embedding.x, self.embedding.y, z)
         return success
 
-    def get_ranked_documents(self, k=None):
+    def get_ranked_documents(self, k=None, post=True):
         """
         Returns a list of top documents according to the current ranking.
         The documents are post_processed through the post_document method.
@@ -158,6 +158,9 @@ class Gismo(MixInIO):
         k: int, optional
             Number of documents to output. If not set, k is automatically computed
             using the auto_k_max_k and auto_k_target attributes.
+        post: bool
+            Set to False to disable post-processing and return a list of indices.
+
 
         Returns
         -------
@@ -168,9 +171,12 @@ class Gismo(MixInIO):
                        order=self.diteration.x_order,
                        max_k=self.auto_k_max_k,
                        target=self.auto_k_target)
-        return [self.post_document(self, i) for i in self.diteration.x_order[:k]]
+        if post:
+            return [self.post_document(self, i) for i in self.diteration.x_order[:k]]
+        else:
+            return self.diteration.x_order[:k]
 
-    def get_ranked_features(self, k=None):
+    def get_ranked_features(self, k=None, post=True):
         """
         Returns a list of top features according to the current ranking.
         The features are post_processed through the post_feature method.
@@ -180,6 +186,8 @@ class Gismo(MixInIO):
         k: int, optional
             Number of features to output. If not set, k is automatically computed
             using the auto_k_max_k and auto_k_target attributes.
+        post: bool
+            Set to False to disable post-processing and return a list of indices.
 
         Returns
         -------
@@ -190,7 +198,10 @@ class Gismo(MixInIO):
                        order=self.diteration.y_order,
                        max_k=self.auto_k_max_k,
                        target=self.auto_k_target)
-        return [self.post_feature(self, i) for i in self.diteration.y_order[:k]]
+        if post:
+            return [self.post_feature(self, i) for i in self.diteration.y_order[:k]]
+        else:
+            return self.diteration.y_order[:k]
 
     # Cluster part
     def get_clustered_documents(self, indices, resolution=.7, post=True):
@@ -308,7 +319,7 @@ class Gismo(MixInIO):
 
     # Covering part
 
-    def get_covering_documents(self, k=None, resolution=.7, stretch=2.0, wide=True):
+    def get_covering_documents(self, k=None, resolution=.7, stretch=2.0, wide=True, post=True):
         """
         Returns a list of top covering documents.
         The documents are post_processed through the post_document method.
@@ -326,6 +337,8 @@ class Gismo(MixInIO):
             the odds of returning less relevant entries.
         wide: bool
             If True, uses a traversal that gives an advantage to results not similar to others.
+        post: bool
+            Set to False to disable post-processing and return a list of indices.
 
         Returns
         -------
@@ -341,9 +354,12 @@ class Gismo(MixInIO):
                                                       resolution=resolution,
                                                       post=False)
         indices = bfs(cluster, wide=wide)[:k]
-        return [self.post_document(self, i) for i in indices]
+        if post:
+            return [self.post_document(self, i) for i in indices]
+        else:
+            return indices
 
-    def get_covering_features(self, k=None, resolution=.7, stretch=2.0, wide=True):
+    def get_covering_features(self, k=None, resolution=.7, stretch=2.0, wide=True, post=True):
         """
         Returns a list of top covering features.
         The features are post_processed through the post_feature method.
@@ -361,6 +377,8 @@ class Gismo(MixInIO):
             the odds of returning less relevant entries.
         wide: bool
             If True, uses a traversal that gives an advantage to results not similar to others.
+        post: bool
+            Set to False to disable post-processing and return a list of indices.
 
         Returns
         -------
@@ -376,7 +394,10 @@ class Gismo(MixInIO):
                                                      resolution=resolution,
                                                      post=False)
         indices = bfs(cluster, wide=wide)[:k]
-        return [self.post_feature(self, i) for i in indices]
+        if post:
+            return [self.post_feature(self, i) for i in indices]
+        else:
+            return indices
 
 
 class XGismo(Gismo):
