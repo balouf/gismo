@@ -2,6 +2,13 @@
 History
 =======
 
+0.3.1 (2020-06-12)
+------------------
+
+* New dataset: Reuters C50
+* New module: sentencizer
+
+
 0.3.0 (2020-05-13)
 ------------------
 
