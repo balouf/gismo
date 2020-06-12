@@ -34,3 +34,14 @@ def test_default_cluster_features_post(my_gismo):
     cluster = my_gismo.get_clustered_ranked_features(k=10)
     assert cluster['feature'] == "mogwaï"
     assert len(cluster["children"]) == 2
+
+
+def test_default_no_post(my_gismo):
+    indices = my_gismo.get_ranked_documents(k=3, post=False)
+    assert list(indices) == [0, 3, 4]
+    indices = my_gismo.get_ranked_features(post=False)
+    assert list(indices) == [18, 10, 14]
+    indices = my_gismo.get_covering_documents(k=3, post=False)
+    assert list(indices) == [0, 3, 1]
+    indices = my_gismo.get_covering_features(post=False)
+    assert list(indices) == [18, 12, 10]
