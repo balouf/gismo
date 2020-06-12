@@ -45,12 +45,10 @@ FileSource
 .. automodule:: gismo.filesource
     :members:
 
-IO
---------
-.. autoclass:: gismo.common.MixInIO
-    :members:
 
-.. autoclass:: gismo.common.ToyClass
+Sentencizer
+----------------
+.. automodule:: gismo.sentencizer
     :members:
 
 
@@ -63,4 +61,10 @@ Datasets
     :members:
 
 .. automodule:: gismo.datasets.reuters
+    :members:
+
+Common
+------
+
+.. automodule:: gismo.common
     :members:

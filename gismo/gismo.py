@@ -151,7 +151,7 @@ class Gismo(MixInIO):
     def get_ranked_documents(self, k=None, post=True):
         """
         Returns a list of top documents according to the current ranking.
-        The documents are post_processed through the post_document method.
+        By default, the documents are post_processed through the post_document method.
 
         Parameters
         ----------
@@ -179,7 +179,7 @@ class Gismo(MixInIO):
     def get_ranked_features(self, k=None, post=True):
         """
         Returns a list of top features according to the current ranking.
-        The features are post_processed through the post_feature method.
+        By default, the features are post_processed through the post_feature method.
 
         Parameters
         ----------
@@ -322,7 +322,7 @@ class Gismo(MixInIO):
     def get_covering_documents(self, k=None, resolution=.7, stretch=2.0, wide=True, post=True):
         """
         Returns a list of top covering documents.
-        The documents are post_processed through the post_document method.
+        By default, the documents are post_processed through the post_document method.
 
         Parameters
         ----------
@@ -362,7 +362,7 @@ class Gismo(MixInIO):
     def get_covering_features(self, k=None, resolution=.7, stretch=2.0, wide=True, post=True):
         """
         Returns a list of top covering features.
-        The features are post_processed through the post_feature method.
+        By default, the features are post_processed through the post_feature method.
 
         Parameters
         ----------

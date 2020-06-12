@@ -51,13 +51,9 @@ def get_reuters_news(url=URL):
     list
         The C50 news as a list of dict
 
-    Examples
+    Example
     ---------
-    >>> source = get_reuters_news()
-    >>> source[1000]['author']
-    'KarlPenhaul'
-    >>> source[1977]['content'].split('.')[0]
-    'Fast-growing Republic Industries Inc'
+    Cf :py:class:`~gismo.sentencizer.Sentencizer`
     """
     r=requests.get(url)
     with ZipFile(io.BytesIO(r.content)) as z:
