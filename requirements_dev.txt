@@ -6,11 +6,11 @@ flake8==3.8.3
 tox==3.15.2
 coverage==5.1
 Sphinx==3.1.1
-sphinx_rtd_theme==0.4.3
+sphinx_rtd_theme==0.5.0
 IPython==7.15.0
-nbsphinx==0.7.0
+nbsphinx==0.7.1
 twine==3.1.1
 
 pytest==5.4.3
 pytest-runner==5.2
-pytest-cov==2.9.0
+pytest-cov==2.10.0
