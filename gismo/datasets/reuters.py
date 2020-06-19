@@ -7,7 +7,7 @@ URL = "https://archive.ics.uci.edu/ml/machine-learning-databases/00217/C50.zip"
 
 def get_reuters_entry(name, z):
     """
-    Read the Reuters news referenced by `name` in the zip archive `z` ande returns it as a dict.
+    Read the Reuters news referenced by `name` in the zip archive `z` and returns it as a dict.
 
     Parameters
     ----------

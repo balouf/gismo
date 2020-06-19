@@ -114,20 +114,23 @@ class Gismo(MixInIO):
     ['mogwaï', 'this', 'in', 'by', 'gizmo', 'is', 'chinese']
     """
 
-    def __init__(self, corpus, embedding):
-        self.corpus = corpus
-        self.embedding = embedding
-        self.diteration = DIteration(n=embedding.n, m=embedding.m)
+    def __init__(self, corpus=None, embedding=None, filename=None, path="."):
+        if filename is not None:
+            self.load(filename=filename, path=path)
+        else:
+            self.corpus = corpus
+            self.embedding = embedding
+            self.diteration = DIteration(n=embedding.n, m=embedding.m)
 
-        self.auto_k_max_k = 100
-        self.auto_k_target = 1.0
+            self.auto_k_max_k = 100
+            self.auto_k_target = 1.0
 
-        self.query_distortion = True
+            self.query_distortion = True
 
-        self.post_document = post_document
-        self.post_feature = post_feature
-        self.post_document_cluster = post_document_cluster
-        self.post_feature_cluster = post_feature_cluster
+            self.post_document = post_document
+            self.post_feature = post_feature
+            self.post_document_cluster = post_document_cluster
+            self.post_feature_cluster = post_feature_cluster
 
     # Ranking Part
     def rank(self, query=""):
@@ -458,20 +461,23 @@ class XGismo(Gismo):
     >>> xgismo.get_ranked_documents()
     ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiss', 'Dmitry Lebedev']
     """
-    def __init__(self, x_embedding, y_embedding):
-        embedding = Embedding()
-        embedding.n = x_embedding.m
-        embedding.m = y_embedding.m
-        embedding.features = y_embedding.features
-        embedding.x = np.dot(x_embedding.y, y_embedding.x)
-        embedding.x_norm = np.ones(embedding.n)
-        embedding.y = np.dot(y_embedding.y, x_embedding.x)
-        embedding.y_norm = np.ones(embedding.m)
-        embedding.idf = y_embedding.idf
-        super().__init__(corpus=Corpus(x_embedding.features, to_text=lambda x: x), embedding=embedding)
+    def __init__(self, x_embedding=None, y_embedding=None, filename=None, path="."):
+        if filename is not None:
+            self.load(filename=filename, path=path)
+        else:
+            embedding = Embedding()
+            embedding.n = x_embedding.m
+            embedding.m = y_embedding.m
+            embedding.features = y_embedding.features
+            embedding.x = np.dot(x_embedding.y, y_embedding.x)
+            embedding.x_norm = np.ones(embedding.n)
+            embedding.y = np.dot(y_embedding.y, x_embedding.x)
+            embedding.y_norm = np.ones(embedding.m)
+            embedding.idf = y_embedding.idf
+            super().__init__(corpus=Corpus(x_embedding.features, to_text=lambda x: x), embedding=embedding)
 
-        self.x_projection = x_embedding.query_projection
-        self.y_projection = y_embedding.query_projection
+            self.x_projection = x_embedding.query_projection
+            self.y_projection = y_embedding.query_projection
 
     def rank(self, query="", y=True):
         """
