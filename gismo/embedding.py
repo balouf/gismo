@@ -123,6 +123,8 @@ class Embedding(MixInIO):
                 Having a vectorizer adapted to the corpus is good practice
     filename: str, optional
                 If set, will load embedder from file
+    path: str or Path, optional
+        Directory where the Embedding is to be loaded from.
     """
     def __init__(
             self,

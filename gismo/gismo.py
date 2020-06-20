@@ -16,6 +16,19 @@ from gismo.post_processing import post_document, post_document_content, post_doc
 
 class Gismo(MixInIO):
     """
+    Gismo mixes a corpus and its embedding to provide search and structure methods.
+
+    Parameters
+    ----------
+    corpus: Corpus
+        Defines the documents of the gismo.
+    embedding: Embedding
+        Defines the embedding of the gismo.
+    filename: str, optional
+                If set, will load gismo from file.
+    path: str or Path, optional
+        Directory where the gismo is to be loaded from.
+
     Example
     -------
 
@@ -420,6 +433,10 @@ class XGismo(Gismo):
         The *left* embedding, which defines the documents of the xgismo.
     y_embedding: Embedding
         The *right* embedding, which defines the features of the xgismo.
+    filename: str, optional
+                If set, will load xgismo from file.
+    path: str or Path, optional
+        Directory where the xgismo is to be loaded from.
 
     Examples
     ---------
