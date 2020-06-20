@@ -11,7 +11,6 @@ import numpy as np
 
 from pathlib import Path
 
-
 # DIteration parameters
 ALPHA = .25  # diffusion attenuation
 N_ITER = 4  # Number of round-trip diffusions
@@ -62,7 +61,7 @@ class MixInIO:
         ...     dir_content = [f.name for f in Path(tmpdirname).glob('*')]
         ...     v2.load(filename='myfile', path=Path(tmpdirname))
         ...     v1.save(filename='myfile', compress=True, path=tmpdirname) # doctest.ELLIPSIS
-        File ...myfile.pkl.gz already exists!
+        File ...myfile.pkl.gz already exists! Use erase option to overwrite.
         >>> dir_content
         ['myfile.pkl.gz']
         >>> v2.value
@@ -71,7 +70,7 @@ class MixInIO:
         >>> with tempfile.TemporaryDirectory() as tmpdirname:
         ...     v1.save(filename='myfile', path=tmpdirname)
         ...     v1.save(filename='myfile', path=tmpdirname) # doctest.ELLIPSIS
-        File ...myfile.pkl already exists!
+        File ...myfile.pkl already exists! Use erase option to overwrite.
 
         >>> v1.value = 51
         >>> with tempfile.TemporaryDirectory() as tmpdirname:
@@ -95,14 +94,14 @@ class MixInIO:
         if compress:
             destination = destination.with_suffix(".pkl.gz")
             if destination.exists() and not erase:
-                print(f"File {destination} already exists!")
+                print(f"File {destination} already exists! Use erase option to overwrite.")
             else:
                 with gzip.open(destination, "wb") as f:
                     pickle.dump(self, f)
         else:
             destination = destination.with_suffix(".pkl")
             if destination.exists() and not erase:
-                print(f"File {destination} already exists!")
+                print(f"File {destination} already exists! Use erase option to overwrite.")
             else:
                 with open(destination, "wb") as f:
                     pickle.dump(self, f)

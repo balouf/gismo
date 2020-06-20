@@ -12,6 +12,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from gismo.common import MixInIO, toy_source_text
 from gismo.corpus import Corpus
 
+
 # 1-norm for diffusion (input is X or Y indptr and data, inplace modification)
 @njit
 def l1_normalize(indptr, data):
@@ -22,12 +23,12 @@ def l1_normalize(indptr, data):
     :return: the l1 norm. Data is normalized in place
     """
     n = len(indptr) - 1
-    l = np.zeros(n)
+    l1_norms = np.zeros(n)
     for i in range(n):
-        l[i] = np.sum(data[indptr[i]:indptr[i + 1]])
-        if l[i] > 0:
-            data[indptr[i]:indptr[i + 1]] /= l[i]
-    return l
+        l1_norms[i] = np.sum(data[indptr[i]:indptr[i + 1]])
+        if l1_norms[i] > 0:
+            data[indptr[i]:indptr[i + 1]] /= l1_norms[i]
+    return l1_norms
 
 
 # Note: the use of external embedding breaks a symmetry between X and Y. IDF needs to be stored if one wants to switch.
@@ -92,6 +93,7 @@ def query_shape(indices, data, idf):
         data[:] /= norm
     return norm
 
+
 def auto_vect(corpus):
     """
     Creates a default vectorizer according to corpus size.
@@ -126,17 +128,18 @@ class Embedding(MixInIO):
     path: str or Path, optional
         Directory where the Embedding is to be loaded from.
     """
+
     def __init__(
-            self,
-            vectorizer: CountVectorizer = None,
-            filename=None,
-            path='.'
+        self,
+        vectorizer: CountVectorizer = None,
+        filename=None,
+        path='.'
     ):
         if filename is not None:
             self.load(filename=filename, path=path)
         else:
             self.vect = vectorizer
-#            self.document_to_str = document_to_str
+            #            self.document_to_str = document_to_str
 
             self.n = 0  # Number of documents
             self.m = 0  # Number of features
@@ -145,10 +148,9 @@ class Embedding(MixInIO):
             self.y = None  # Y embedding of features into documents
             self.y_norm = None  # memory of Y norm for hierarchical merge
             self.idf = None  # idf vector
-            self.features = None # vocabulary list
-            self._result_found = True # keep track of projection successes
-            self._query = "" # keep track of projection query
-
+            self.features = None  # vocabulary list
+            self._result_found = True  # keep track of projection successes
+            self._query = ""  # keep track of projection query
 
     def fit_transform(self, corpus: Corpus):
         """
@@ -166,9 +168,9 @@ class Embedding(MixInIO):
         >>> embedding.fit_transform(corpus)
         >>> embedding.x  # doctest: +NORMALIZE_WHITESPACE
         <5x21 sparse matrix of type '<class 'numpy.float64'>'
-    	    with 25 stored elements in Compressed Sparse Row format>
-    	>>> embedding.features[:8]
-    	['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
+            with 25 stored elements in Compressed Sparse Row format>
+        >>> embedding.features[:8]
+        ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
         if self.vect is None:
             self.vect = auto_vect(corpus)
@@ -212,8 +214,8 @@ class Embedding(MixInIO):
         >>> embedding.fit(corpus)
         >>> len(embedding.idf)
         21
-    	>>> embedding.features[:8]
-    	['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
+        >>> embedding.features[:8]
+        ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
         assert corpus
         if self.vect is None:
@@ -251,8 +253,8 @@ class Embedding(MixInIO):
         >>> embedding.fit_ext(other_embedding)
         >>> len(embedding.idf)
         21
-    	>>> embedding.features[:8]
-    	['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
+        >>> embedding.features[:8]
+        ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
         self.m = embedder.m
         self.vect = embedder.vect
@@ -302,7 +304,6 @@ class Embedding(MixInIO):
         self.x_norm = l1_normalize(indptr=self.x.indptr, data=self.x.data)
         self.y_norm = l1_normalize(indptr=self.y.indptr, data=self.y.data)
 
-
     def query_projection(self, query):
         """
         Project a query in the feature space
@@ -339,7 +340,7 @@ class Embedding(MixInIO):
         z = self.vect.transform([query])
         norm = query_shape(indices=z.indices, data=z.data, idf=self.idf)
         if norm == 0:
-            z = csr_matrix(self.idf) /  np.sum(self.idf)
+            z = csr_matrix(self.idf) / np.sum(self.idf)
             self._result_found = False
         else:
             self._result_found = True

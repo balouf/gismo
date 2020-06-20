@@ -3,11 +3,10 @@
 #
 # GISMO: a Generic Information Search with a Mind of its Own
 
+from gismo.common import MixInIO, toy_source_text, toy_source_dict
 
 import numpy as np
 from itertools import chain
-
-from gismo.common import MixInIO, toy_source_text, toy_source_dict
 
 
 class Corpus(MixInIO):
@@ -55,6 +54,7 @@ class Corpus(MixInIO):
         >>> corpus2[0]
         'Gizmo is a Mogwaï.'
     """
+
     def __init__(self, source=None, to_text=None, filename=None, path='.'):
         if filename is not None:
             self.load(filename=filename, path=path)

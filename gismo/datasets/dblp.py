@@ -225,8 +225,8 @@ class Dblp:
         By default, build uses existing files.
 
         >>> dblp.build() # doctest.ELLIPSIS
-        File ...xml.gz already exists.
-        File ...data already exists.
+        File ...xml.gz already exists. Use refresh option to overwrite.
+        File ...data already exists. Use refresh option to overwrite.
 
         The refresh parameter can be used to ignore existing files.
 
@@ -250,12 +250,12 @@ class Dblp:
         >>> tmp.cleanup()
         """
         if self.dblp_xml.exists() and not refresh:
-            print(f"File {self.dblp_xml} already exists.")
+            print(f"File {self.dblp_xml} already exists. Use refresh option to overwrite.")
         else:
             print(f"Retrieve {self.dblp_url} from the Internet.")
             self.download()
         if self.dblp_data.exists() and not refresh:
-            print(f"File {self.dblp_data} already exists.")
+            print(f"File {self.dblp_data} already exists. Use refresh option to overwrite.")
         else:
             print(f"Converting DBLP database from {self.dblp_xml} (may take a while).")
             # Download the DTD parser
