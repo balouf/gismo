@@ -34,6 +34,11 @@ Gismo
 .. autoclass:: gismo.gismo.XGismo
     :members:
 
+Landmarks
+--------------
+
+.. automodule:: gismo.landmarks
+    :members:
 
 PostProcessors
 -----------------

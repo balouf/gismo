@@ -95,7 +95,7 @@ def merge_clusters(cluster_list, focus=1.0):
     return result
 
 
-def subspace_partition(subspace, resolution=.7):
+def subspace_partition(subspace, resolution: float = .7):
     # Resolution square distortion
     resolution = 2 * resolution - resolution ** 2
     n, _ = subspace.shape
@@ -123,16 +123,33 @@ def subspace_partition(subspace, resolution=.7):
     return [(c, d) for c, d in zip(partition, cluster_similarity) if c]
 
 
-def rec_clusterize(cluster_list, resolution):
+def rec_clusterize(cluster_list: list, resolution: float = .7):
+    """
+    Auxiliary recursive function for clustering.
+
+    Parameters
+    ----------
+    cluster_list: list of Cluster
+        Current aggregation state.
+    resolution: float in range [0.0, 1.0]
+        Sets the lazyness of aggregation. A 'resolution' set to 0.0 yields a one-step clustering
+        (*star* structure), while a 'resolution ' set to 1.0 yields, up to tie similarities, a binary tree
+        (*dendrogram*).
+
+    Returns
+    -------
+    list of Cluster
+
+    """
     if len(cluster_list) == 1:
-        return cluster_list[0]
+        return cluster_list
     else:
         partition = subspace_partition(vstack([c.vector for c in cluster_list]), resolution)
         return rec_clusterize([merge_clusters([cluster_list[i] for i in p[0]], p[1]) for p in partition],
                               resolution)
 
 
-def subspace_clusterize(subspace, resolution=.7, indices=None):
+def subspace_clusterize(subspace, resolution: float = .7, indices=None):
     """
     Converts a subspace (matrix seen as a list of vectors) to a Cluster object (hierarchical clustering).
 
@@ -171,7 +188,7 @@ def subspace_clusterize(subspace, resolution=.7, indices=None):
         n, _ = subspace.shape
         indices = range(n)
     return rec_clusterize([Cluster(indice=r, rank=i, vector=subspace[i, :]) for i, r in enumerate(indices)],
-                          resolution)
+                          resolution)[0]
 
 
 class BFS:
