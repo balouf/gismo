@@ -12,7 +12,7 @@ logging.basicConfig()
 log = logging.getLogger("Gismo")
 
 
-def post_rank_default(landmark, i):
+def post_landmarks_item_default(landmark, i):
     """
     Default post processor for individual landmarks.
 
@@ -31,7 +31,7 @@ def post_rank_default(landmark, i):
     return landmark[i]
 
 
-def post_cluster_default(landmark, cluster):
+def post_landmarks_cluster_default(landmark, cluster):
     """
     Default post processor for a cluster of landmarks.
 
@@ -49,7 +49,7 @@ def post_cluster_default(landmark, cluster):
     """
     return {'landmark': landmark[cluster.indice],
             'focus': cluster.focus,
-            'children': [post_cluster_default(landmark, child) for child in cluster.children]}
+            'children': [post_landmarks_cluster_default(landmark, child) for child in cluster.children]}
 
 
 def get_direction(reference, balance):
@@ -87,6 +87,9 @@ class Landmarks(Corpus):
     After it has been processed, a `Landmarks` can be used to analyze/classify
     :py:class:`~gismo.gismo.Gismo` queries, :py:class:`~gismo.clustering.Cluster`,
     or :py:class:`~gismo.landmarks.Landmarks`.
+
+    Landmarks also offers the possibility to reduce a source or a gismo to its neighborhood.
+    This can be useful if the source is huge and one wants something smaller for performance.
 
     Parameters
     ------------
@@ -134,15 +137,19 @@ class Landmarks(Corpus):
 
     >>> landmarks.fit(gismo)
 
-    We set the item post_processing to return the `name` of a landmark item.
-
-    >>> landmarks.post_rank = lambda lmk, i: lmk[i]['name']
-
     We run the request *Yoda* and look at the key landmarks.
     Note that *Gremlins* comes before *Star Wars*. This is actually *correct* in this small dataset:
     the word `Yoda` only exists in one sentence, which contains the words `Gremlins` and `Gizmo`.
 
     >>> success = gismo.rank('yoda')
+    >>> landmarks.get_ranked_landmarks(gismo) # doctest: +NORMALIZE_WHITESPACE
+    [{'name': 'Gremlins', 'content': 'The Gremlins movie features a Mogwai.'},
+    {'name': 'Star Wars', 'content': 'The Star Wars movies feature Yoda.'},
+    {'name': 'Movies', 'content': 'Star Wars, Gremlins, and Blade are movies.'}]
+
+    For better readibility, we set the item post_processing to return the `name` of a landmark item.
+
+    >>> landmarks.post_rank = lambda lmk, i: lmk[i]['name']
     >>> landmarks.get_ranked_landmarks(gismo)
     ['Gremlins', 'Star Wars', 'Movies']
 
@@ -171,6 +178,19 @@ class Landmarks(Corpus):
     ['Shadoks']
 
     Like for :py:class:`~gismo.gismo.Gismo`, landmarks can provide clusters.
+
+    >>> success = gismo.rank('gizmo')
+    >>> landmarks.get_clustered_landmarks(gismo) # doctest: +NORMALIZE_WHITESPACE
+    {'landmark': {'name': 'Gremlins',
+                  'content': 'The Gremlins movie features a Mogwai.'},
+                  'focus': 0.9999983623793101,
+                  'children': [{'landmark': {'name': 'Gremlins', 'content': 'The Gremlins movie features a Mogwai.'},
+                                'focus': 1.0, 'children': []},
+                             {'landmark': {'name': 'Star Wars', 'content': 'The Star Wars movies feature Yoda.'},
+                              'focus': 1.0, 'children': []},
+                             {'landmark': {'name': 'Movies', 'content': 'Star Wars, Gremlins, and Blade are movies.'},
+                              'focus': 1.0, 'children': []}]}
+
     We can set the `post_cluster` attribute to customize the output.
 
     >>> def post_cluster(lmk, cluster, depth=0):
@@ -181,9 +201,6 @@ class Landmarks(Corpus):
     ...     for c in cluster.children:
     ...         post_cluster(lmk, c, depth=depth+1)
     >>> landmarks.post_cluster = post_cluster
-
-
-    >>> success = gismo.rank('gizmo')
     >>> landmarks.get_clustered_landmarks(gismo)
     |
     |- Gremlins
@@ -200,6 +217,25 @@ class Landmarks(Corpus):
     |--- Star Wars
     |-- Movies
     |- Shadoks
+
+    Note that a :py:class:`~gismo.clustering.Cluster` can also be used as reference for the
+    :func:`~gismo.landmarks.Landmarks.get_ranked_landmarks` and
+    :func:`~gismo.landmarks.Landmarks.get_clustered_landmarks` methods.
+
+    >>> cluster = landmarks.get_clustered_landmarks(gismo, post=False)
+    >>> landmarks.get_ranked_landmarks(cluster)
+    ['Gremlins', 'Star Wars', 'Movies']
+
+    Last but not least, landmarks can be used to reduce the size of a source or a :py:class:`~gismo.gismo.Gismo`.
+    The reduction is controlled by the `x_density` attribute that tells the number of documents each landmark will
+    allow to keep.
+
+    >>> landmarks.x_density = 1
+    >>> reduced_gismo = landmarks.get_reduced_gismo(gismo)
+    >>> reduced_gismo.corpus.source # doctest: +NORMALIZE_WHITESPACE
+    ['This is another sentence about Shadoks.',
+    'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the
+    Gremlins movie by comparing Gizmo and Yoda.']
     """
 
     def __init__(self, source=None, to_text=None, filename=None, path='.',
@@ -222,8 +258,8 @@ class Landmarks(Corpus):
         self.x_len = None
         self.y_len = None
 
-        self.post_rank = post_rank_default
-        self.post_cluster = post_cluster_default
+        self.post_rank = post_landmarks_item_default
+        self.post_cluster = post_landmarks_cluster_default
 
     def embed_entry(self, gismo, entry):
         log.debug(f"Processing {entry}.")
