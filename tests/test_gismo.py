@@ -3,13 +3,14 @@
 """Tests for `gismo` package."""
 
 from pytest import fixture
+import tempfile
 
 from sklearn.feature_extraction.text import CountVectorizer
 
 from gismo.common import toy_source_dict
 from gismo.corpus import Corpus
 from gismo.embedding import Embedding
-from gismo.gismo import Gismo
+from gismo.gismo import Gismo, XGismo
 
 
 @fixture()
@@ -45,3 +46,21 @@ def test_default_no_post(my_gismo):
     assert list(indices) == [0, 3, 1]
     indices = my_gismo.get_covering_features(post=False)
     assert list(indices) == [18, 12, 10]
+
+
+def test_io_gismo(my_gismo):
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        my_gismo.save(filename="mygismo", path=tmpdirname)
+        gismo2 = Gismo(filename="mygismo", path=tmpdirname)
+    gismo2.rank("sentence")
+    assert len(gismo2.get_ranked_documents()) == 2
+
+
+def test_io_xgismo(my_gismo):
+    xgismo = XGismo(my_gismo.embedding, my_gismo.embedding)
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        xgismo.save(filename="mygismo", path=tmpdirname)
+        xgismo2 = XGismo(filename="mygismo", path=tmpdirname)
+    xgismo2.rank("gizmo")
+    assert xgismo2.get_ranked_documents() == ['mogwaï', 'gizmo', 'is']
+

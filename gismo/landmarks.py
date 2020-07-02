@@ -240,7 +240,6 @@ class Landmarks(Corpus):
 
     def __init__(self, source=None, to_text=None, filename=None, path='.',
                  x_density=1000, y_density=1000, ranking_function=None):
-        super().__init__(source=source, to_text=to_text, filename=filename, path=path)
         if ranking_function is None:
             self.rank = lambda g, q: g.rank(q)
         else:
@@ -260,6 +259,8 @@ class Landmarks(Corpus):
 
         self.post_rank = post_landmarks_item_default
         self.post_cluster = post_landmarks_cluster_default
+
+        super().__init__(source=source, to_text=to_text, filename=filename, path=path)
 
     def embed_entry(self, gismo, entry):
         log.debug(f"Processing {entry}.")

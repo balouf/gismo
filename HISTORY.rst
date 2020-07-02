@@ -2,6 +2,14 @@
 History
 =======
 
+0.4.0 (2020-07-09)
+------------------
+* Landmarks! Half corpus, half gismo, the landmarks are a new multi-purpose analysis tools.
+    * Landmarks are (small) corpus where we add to each entry the computation of an associated gismo query;
+    * Landmarks can be used to refine the analysis around a part of your data
+    * They can be used as soft and fast classifiers
+
+
 0.3.1 (2020-06-12)
 ------------------
 
