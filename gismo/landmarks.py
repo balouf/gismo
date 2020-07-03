@@ -107,7 +107,9 @@ class Landmarks(Corpus):
     y_density: int
         nnz entries to keep on the features space.
     ranking_function: function, optional
-        Function that uses a gismo and a query as inputs and runs the query on the gismo.
+        Function that uses a gismo and a query as inputs and runs the query on the gismo. This is useful for
+        :py:class:`~gismo.gismo.Gismo` subclasses like :py:class:`~gismo.gismo.XGismo`, which have multiple ways
+        to run queries.
 
     Examples
     --------
@@ -130,7 +132,7 @@ class Landmarks(Corpus):
     >>> landmarks_source = [{'name': 'Movies', 'content': 'Star Wars, Gremlins, and Blade are movies.'},
     ... {'name': 'Gremlins', 'content': 'The Gremlins movie features a Mogwai.'},
     ... {'name': 'Star Wars', 'content': 'The Star Wars movies feature Yoda.'},
-    ... {'name': 'Shadoks', 'content': 'Shadoks is a French sarcastic show.'}]
+    ... {'name': 'Shadoks', 'content': 'Shadoks is a French sarcastic show.'},]
     >>> landmarks = Landmarks(landmarks_source, to_text=lambda e: e['content'])
 
     The :func:`~gismo.landmarks.Landmarks.fit` method compute gismo queries for all landmarks and retain the results.
@@ -226,6 +228,13 @@ class Landmarks(Corpus):
     >>> landmarks.get_ranked_landmarks(cluster)
     ['Gremlins', 'Star Wars', 'Movies']
 
+    Yet, you cannot use anything as reference. For example, you cannot use a string as such.
+
+    >>> landmarks.get_ranked_landmarks("Landmarks do not use external queries (pass them to a gismo")  # doctest.ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    TypeError: bad operand type for unary -: 'NoneType'
+
     Last but not least, landmarks can be used to reduce the size of a source or a :py:class:`~gismo.gismo.Gismo`.
     The reduction is controlled by the `x_density` attribute that tells the number of documents each landmark will
     allow to keep.
@@ -236,6 +245,33 @@ class Landmarks(Corpus):
     ['This is another sentence about Shadoks.',
     'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the
     Gremlins movie by comparing Gizmo and Yoda.']
+
+    Side remark #1: in the constructor, `to_text` indicates how to convert an item to `str`, while `ranking_function`
+    specifies how to run a query on a :py:class:`~gismo.gismo.Gismo`. Yet, it is possible to construct the example
+    above with the text conversion handled by the `ranking_function`.
+
+    >>> landmarks = Landmarks(landmarks_source, ranking_function=lambda g, q: g.rank(q['content']))
+    >>> landmarks.fit(gismo)
+    >>> success = gismo.rank('yoda')
+    >>> landmarks.post_rank = lambda lmk, i: lmk[i]['name']
+    >>> landmarks.get_ranked_landmarks(gismo)
+    ['Star Wars', 'Movies', 'Gremlins']
+
+    However, this is bad practice. When you only need to customize the way an item is converted to text, you should
+    stick to `to_text`. `ranking_function` is for more elaborated filters that require to change the default way
+    gismo does queries.
+
+    Side remark #2: if a landmark item query fails (its text does not intersect the gismo features),
+    the default uniform projection will be used and a warning will be issued. This may yield to
+    undesired results.
+
+    >>> landmarks_source.append({'name': 'unrelated', 'content': 'unrelated.'})
+    >>> landmarks = Landmarks(landmarks_source, to_text=lambda e: e['content'])
+    >>> landmarks.fit(gismo)
+    >>> success = gismo.rank('gizmo')
+    >>> landmarks.post_rank = lambda lmk, i: lmk[i]['name']
+    >>> landmarks.get_ranked_landmarks(gismo)
+    ['Shadoks', 'unrelated']
     """
 
     def __init__(self, source=None, to_text=None, filename=None, path='.',
