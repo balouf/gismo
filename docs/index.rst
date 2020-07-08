@@ -7,7 +7,6 @@ Welcome to GISMO's documentation!
 
    readme
    installation
-   usage
    tutorials/index
    reference
    contributing
