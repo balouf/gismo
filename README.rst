@@ -54,6 +54,11 @@ Import gismo in a Python project::
     import gismo as gs
 
 
+To get the hang of a typical Gismo workflow, you can check the `Toy Example`_ notebook. For more advanced uses,
+look at the other tutorials_ or directly the reference_ section.
+
+
+
 Credits
 -------
 
@@ -61,5 +66,8 @@ Thomas Bonald, Anne Bouillard, Marc-Olivier Buob, Dohy Hong.
 
 This package was created with Cookiecutter_ and the `francois-durand/package_helper`_ project template.
 
+.. _reference: https://gismo.readthedocs.io/en/latest/reference.html
+.. _`Toy Example`: https://gismo.readthedocs.io/en/latest/tutorials/tutorial_toy_example.html
+.. _tutorials: https://gismo.readthedocs.io/en/latest/tutorials/index.html#
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`francois-durand/package_helper`: https://github.com/francois-durand/package_helper

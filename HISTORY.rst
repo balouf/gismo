@@ -8,6 +8,7 @@ History
     * Landmarks are (small) corpus where each entry is augmented with the computation of an associated gismo query;
     * Landmarks can be used to refine the analysis around a part of your data;
     * They can be used as soft and fast classifiers.
+* Documentation summer cleaning.
 
 
 0.3.1 (2020-06-12)
