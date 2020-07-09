@@ -11,48 +11,65 @@ from itertools import chain
 
 class Corpus(MixInIO):
     """
-    Corpus class, to feed to Embedding
+    The Corpus class is the starting point of any Gismo workflow. It abstracts dataset pre-processing.
+    It is just a list of items (called documents in Gismo) augmented with a method that describes
+    how to convert a document to a string object. It is used to build an :py:class:`~gismo.embedding.Embedding`.
 
     Parameters
     ----------
     source: list
-        The list of items that make the corpus
-    to_text: function
-        The function that transforms an item into text
+        The list of items that constitutes the dataset to analyze. Actually, any iterable object with :func:`__len__`
+        and :func:`__getitem__` methods can potentially be used as a source
+        (see :py:class:`~gismo.filesource.FileSource` for an example).
+    to_text: function, optional
+        The function that transforms an item from the source into plain text (:py:class:`str`). If not set, it will
+        default to the identity function ``lambda x: x``.
     filename: str, optional
-        Load corpus from filename
-    path: str or Path, optional
-        Directory where the corpus is to be loaded from.
+        If set, load corpus from corresponding file.
+    path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
+        If set, specify the directory where the corpus is located.
 
     Examples
     --------
-        >>> corpus = Corpus(toy_source_text, to_text=lambda x: f"{x[:15]}...")
-        >>> for c in corpus.iterate():
-        ...    print(c)
-        Gizmo is a Mogwaï.
-        This is a sentence about Blade.
-        This is another sentence about Shadoks.
-        This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.
-        In chinese folklore, a Mogwaï is a demon.
 
-        >>> for c in corpus.iterate_text():
-        ...    print(c)
-        Gizmo is a Mogw...
-        This is a sente...
-        This is another...
-        This very long ...
-        In chinese folk...
+    The following code uses the :py:obj:`~gismo.common.toy_source_text` list as source and specify that the text
+    extraction method should be: take the 15 first characters and add `...`.
 
-        A corpus object can be saved/loaded with save and load methods. The load method can be called directly
-        from the constructor by providing a filename.
+    When we iterate with the :py:meth:`~gismo.corpus.Corpus.iterate` method, observe that the extraction is **not**
+    applied.
 
-        >>> import tempfile
-        >>> corpus1 = Corpus(toy_source_text)
-        >>> with tempfile.TemporaryDirectory() as tmpdirname:
-        ...    corpus1.save(filename="myfile", path=tmpdirname)
-        ...    corpus2 = Corpus(filename="myfile", path=tmpdirname)
-        >>> corpus2[0]
-        'Gizmo is a Mogwaï.'
+    >>> corpus = Corpus(toy_source_text, to_text=lambda x: f"{x[:15]}...")
+    >>> for c in corpus.iterate():
+    ...    print(c)
+    Gizmo is a Mogwaï.
+    This is a sentence about Blade.
+    This is another sentence about Shadoks.
+    This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.
+    In chinese folklore, a Mogwaï is a demon.
+
+    When we iterate with the :py:meth:`~gismo.corpus.Corpus.iterate_text` method, observe that the extraction **is**
+    applied.
+
+
+    >>> for c in corpus.iterate_text():
+    ...    print(c)
+    Gizmo is a Mogw...
+    This is a sente...
+    This is another...
+    This very long ...
+    In chinese folk...
+
+    A corpus object can be saved/loaded with the :py:meth:`~gismo.corpus.Corpus.save` and
+    :py:meth:`~gismo.corpus.Corpus.load` methods inherited from the ancestor :py:class:`~gismo.common.MixInIO` class.
+    The :py:meth:`~gismo.corpus.Corpus.load` method can be called at construction by providing a filename.
+
+    >>> import tempfile
+    >>> corpus1 = Corpus(toy_source_text)
+    >>> with tempfile.TemporaryDirectory() as tmpdirname:
+    ...    corpus1.save(filename="myfile", path=tmpdirname)
+    ...    corpus2 = Corpus(filename="myfile", path=tmpdirname)
+    >>> corpus2[0]
+    'Gizmo is a Mogwaï.'
     """
 
     def __init__(self, source=None, to_text=None, filename=None, path='.'):
@@ -84,17 +101,22 @@ class Corpus(MixInIO):
 
     def merge_new_source(self, new_source, doc2key=None):
         """
-        Incorporate new entries from a source
+        Incorporate new entries while avoiding the creation of duplicates. This method is typically used when you have
+        a dynamic source like a RSS feed and you want to periodically update your corpus.
 
         Parameters
         ----------
         new_source: list
-                    source of the same type (same to_text mostly) that the current source
+                 Source compatible (e.g. similar item type) with the current source.
         doc2key: function
-                 callback  that provides unique hashable Id for documents
+                 Callback that provides items with unique hashable keys, used to avoid duplicates.
 
         Examples
         --------
+
+        The following code uses the :py:obj:`~gismo.common.toy_source_dict` list as source and add two new items,
+        including a redundant one.
+
         >>> corpus = Corpus(toy_source_dict.copy(), to_text=lambda x: x['content'][:14])
         >>> len(corpus)
         5
@@ -124,7 +146,18 @@ class Corpus(MixInIO):
 
 class CorpusList(MixInIO):
     """
-    To concatenate a list of corpi with distinct shapes and to_text
+    This class makes a list of corpi behave like one single virtual corpus. This is useful to glue together corpi with
+    distinct shapes and :py:meth:`to_text` methods.
+
+    Parameters
+    ----------
+    corpus_list: list of :py:class:`.Corpus`
+        The list of corpi to glue.
+    filename: str, optional
+        If set, load CorpusList from corresponding file.
+    path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
+        If set, specify the directory where the CorpusList is located.
+
 
     Example
     -------

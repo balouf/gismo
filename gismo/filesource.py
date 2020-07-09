@@ -39,7 +39,7 @@ def create_file_source(source=None, filename='mysource', path='.'):
 class FileSource:
     """
     Yield a file source as a list. File corpus is made of two files:
-    The *corpus*.data file contains the stacked items. Each item is compressed with zlib;
+    The *corpus*.data file contains the stacked items. Each item is compressed with :py:mod:`zlib`;
     The  *corpus*.index files contains the list of pointers to seek items in the data file
 
     The resulting source object can be iterated (``[item for item in source]``),
