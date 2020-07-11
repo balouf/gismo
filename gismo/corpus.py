@@ -24,7 +24,7 @@ class Corpus(MixInIO):
     to_text: function, optional
         The function that transforms an item from the source into plain text (:py:class:`str`). If not set, it will
         default to the identity function ``lambda x: x``.
-    filename: str, optional
+    filename: :py:class:`str`, optional
         If set, load corpus from corresponding file.
     path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
         If set, specify the directory where the corpus is located.
@@ -32,7 +32,7 @@ class Corpus(MixInIO):
     Examples
     --------
 
-    The following code uses the :py:obj:`~gismo.common.toy_source_text` list as source and specify that the text
+    The following code uses the :py:obj:`~gismo.common.toy_source_text` list as source and specifies that the text
     extraction method should be: take the 15 first characters and add `...`.
 
     When we iterate with the :py:meth:`~gismo.corpus.Corpus.iterate` method, observe that the extraction is **not**
@@ -59,9 +59,9 @@ class Corpus(MixInIO):
     This very long ...
     In chinese folk...
 
-    A corpus object can be saved/loaded with the :py:meth:`~gismo.corpus.Corpus.save` and
-    :py:meth:`~gismo.corpus.Corpus.load` methods inherited from the ancestor :py:class:`~gismo.common.MixInIO` class.
-    The :py:meth:`~gismo.corpus.Corpus.load` method can be called at construction by providing a filename.
+    A corpus object can be saved/loaded with the :py:meth:`~gismo.common.MixInIO.save` and
+    :py:meth:`~gismo.common.MixInIO.load` methods inherited from the MixIn :py:class:`~gismo.common.MixInIO` class.
+    The :py:meth:`~gismo.common.MixInIO.load` method can be called directly at construction by providing a filename.
 
     >>> import tempfile
     >>> corpus1 = Corpus(toy_source_text)

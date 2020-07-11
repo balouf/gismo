@@ -29,7 +29,7 @@ Corpus
 Embedding
 --------------------
 
-.. autoclass:: gismo.embedding.Embedding
+.. automodule:: gismo.embedding
     :members:
 
 DIteration

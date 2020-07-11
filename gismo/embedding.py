@@ -17,6 +17,22 @@ from gismo.corpus import Corpus
 @njit
 def l1_normalize(indptr, data):
     """
+    Computes L1 norm on sparse embedding (x or y) and applies inplace normalization.
+
+    Parameters
+    ----------
+    indptr: :class:`~numpy.ndarray`
+        Pointers of the embedding (e.g. x.indptr).
+    data: :class:`~numpy.ndarray`
+        Values of the embedding  (e.g. x.data).
+
+    Returns
+    -------
+    l1_norm: :class:`~numpy.ndarray`
+        L1 norms of all vectors of the embedding before normalization.
+    """
+
+    """
     Normalize inplace the embedding (X or Y)
     :param indptr: the pointers of the vector
     :param data:  the data of the vector
@@ -37,11 +53,16 @@ def l1_normalize(indptr, data):
 @njit
 def itf_fit_transform(indptr, data, m):
     """
-    Apply ITF transformation on embedding X.
-    :param indptr: pointers of X
-    :param data: data of X
-    :param m: Number of features
-    :return: None (inplace)
+    Applies inplace Inverse-Term-Frequency transformation on sparse embedding x.
+
+    Parameters
+    ----------
+    indptr: :class:`~numpy.ndarray`
+        Pointers of the embedding (e.g. x.indptr).
+    data: :class:`~numpy.ndarray`
+        Values of the embedding  (e.g. x.data).
+    m: int
+        Number of features
     """
     n = len(indptr) - 1
     log_m = np.log(1 + m)
@@ -53,10 +74,19 @@ def itf_fit_transform(indptr, data, m):
 @njit
 def idf_fit(indptr, n):
     """
-    Computes idf vector based on embedding Y
-    :param indptr: pointers of Y
-    :param n: Number of documents
-    :return: IDF vector of size m
+    Computes the Inverse-Document-Frequency vector on sparse embedding y.
+
+    Parameters
+    ----------
+    indptr: :class:`~numpy.ndarray`
+        Pointers of the embedding y (e.g. y.indptr).
+    n: int
+        Number of documents.
+
+    Returns
+    -------
+    idf_vector: :class:`~numpy.ndarray`
+        IDF vector of size `m`.
     """
     m = len(indptr) - 1
     idf_vector = np.log(1 + n) * np.ones(m)
@@ -69,11 +99,16 @@ def idf_fit(indptr, n):
 @njit
 def idf_transform(indptr, data, idf_vector):
     """
-    Applies IDF on embedding Y
-    :param indptr:
-    :param data:
-    :param idf_vector:
-    :return: None (inplace)
+    Applies inplace Inverse-Document-Frequency transformation on sparse embedding y.
+
+    Parameters
+    ----------
+    indptr: :class:`~numpy.ndarray`
+        Pointers of the embedding y (e.g. y.indptr).
+    data: :class:`~numpy.ndarray`
+        Values of the embedding y (e.g. y.data).
+    idf_vector: :class:`~numpy.ndarray`
+        IDF vector of the embedding, obtained from :func:`~gismo.embedding.idf_fit`.
     """
     m = len(indptr) - 1
     for i in range(m):
@@ -82,6 +117,28 @@ def idf_transform(indptr, data, idf_vector):
 
 @njit
 def query_shape(indices, data, idf):
+    """
+    Applies inplace logarithmic smoothing, IDF weighting, and normalization
+    to the output of the
+    :class:`~sklearn.feature_extraction.text.CountVectorizer`
+    :meth:`~sklearn.feature_extraction.text.CountVectorizer.transform` method.
+
+    Parameters
+    ----------
+    indices: :class:`~numpy.ndarray`
+        Indice attribute of the :class:`~scipy.sparse.csr_matrix` obtained from
+        :meth:`~sklearn.feature_extraction.text.CountVectorizer.transform`.
+    data: :class:`~numpy.ndarray`
+        Data attribute of the :class:`~scipy.sparse.csr_matrix` obtained from
+        :meth:`~sklearn.feature_extraction.text.CountVectorizer.transform`.
+    idf: :class:`~numpy.ndarray`
+        IDF vector of the embedding, obtained from :func:`~gismo.embedding.idf_fit`.
+
+    Returns
+    -------
+    norm: float
+        The norm of the vector before normalization.
+    """
     # log normalization
     data[:] = 1 + np.log(data)
     # IdF
@@ -94,16 +151,28 @@ def query_shape(indices, data, idf):
     return norm
 
 
-def auto_vect(corpus):
+def auto_vect(corpus=None):
     """
-    Creates a default vectorizer according to corpus size.
-    Filter words based on their word frequency.
-    Keep only word having a frequency in [min_df, max_df].
-    You may pass an int (#occurences) or [0, 1] float (frequency).
-    :param corpus:
-    :return: a CountVectorizer object
+    Creates a default :class:`~sklearn.feature_extraction.text.CountVectorizer`
+    compatible with the
+    :class:`~gismo.embedding.Embedding` constructor.
+    For not-too-small corpi, a slight frequency-filter is applied.
+
+    Parameters
+    ----------
+    corpus: :class:`~gismo.corpus.Corpus`, optional
+        The corpus for which the
+        :class:`~sklearn.feature_extraction.text.CountVectorizer`
+        is intended.
+
+    Returns
+    -------
+    :class:`~sklearn.feature_extraction.text.CountVectorizer`
+        A :class:`~sklearn.feature_extraction.text.CountVectorizer`
+        object compatible with the
+        :class:`~gismo.embedding.Embedding` constructor.
     """
-    n = len(corpus)
+    n = len(corpus) if corpus is not None else 1
     (min_df, max_df) = (3, .15) if n > 100 else (1, 1.0)
     return CountVectorizer(
         min_df=min_df,
@@ -116,31 +185,37 @@ def auto_vect(corpus):
 
 class Embedding(MixInIO):
     """
-    Use vectorizer to compute forward and backward embeddings in a sklearn fashion
+    This class leverages the :class:`~sklearn.feature_extraction.text.CountVectorizer`
+    class to build the dual embedding of a :class:`~gismo.corpus.Corpus`.
+
+    * Documents are embedded in the space of features;
+    * Features are embedded in the space of documents.
+
+    See the examples and methods below for all usages of the class.
 
     Parameters
     ----------
-    vectorizer: CountVectorizer, optional
-                Custom vectorizer to override default behavior (recommended).
-                Having a vectorizer adapted to the corpus is good practice
-    filename: str, optional
-                If set, will load embedder from file
-    path: str or Path, optional
-        Directory where the Embedding is to be loaded from.
+    vectorizer: :class:`~sklearn.feature_extraction.text.CountVectorizer`, optional
+                Custom :class:`~sklearn.feature_extraction.text.CountVectorizer`
+                to override default behavior (recommended).
+                Having a :class:`~sklearn.feature_extraction.text.CountVectorizer`
+                adapted to the :class:`~gismo.corpus.Corpus` is good practice.
+    filename: :py:class:`str`, optional
+        If set, load embedding from corresponding file.
+    path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
+        If set, specify the directory where the embedding is located.
     """
 
     def __init__(
         self,
-        vectorizer: CountVectorizer = None,
+        vectorizer=None,
         filename=None,
         path='.'
     ):
         if filename is not None:
             self.load(filename=filename, path=path)
         else:
-            self.vect = vectorizer
-            #            self.document_to_str = document_to_str
-
+            self.vectorizer = vectorizer
             self.n = 0  # Number of documents
             self.m = 0  # Number of features
             self.x = None  # TF-IDTF X embedding of documents into features, normalized
@@ -152,14 +227,20 @@ class Embedding(MixInIO):
             self._result_found = True  # keep track of projection successes
             self._query = ""  # keep track of projection query
 
-    def fit_transform(self, corpus: Corpus):
+    def fit_transform(self, corpus):
         """
         Ingest a corpus of documents.
-        If not yet set, a default vectorizer is created.
-        Maps each word with an index.
-        Compute for each word its IDF weights (fit).
-        For each document, deduce its TF-IDF weights (coordinates in the embedding) (transform) (self.x).
-        The transposed matrix is explicitely built because we use sparse matrices (self.y).
+
+        * If not yet set, a default :class:`~sklearn.feature_extraction.text.CountVectorizer` is created.
+        * Features are computed and stored (fit).
+        * Inverse-Document-Frequency weights of features are computed (fit).
+        * TF-IDF embedding of documents is computed and stored (transform).
+        * TF-ITF embedding of features is computed and stored (transform).
+
+        Parameters
+        ----------
+        corpus: :class:`~gismo.corpus.Corpus`
+            The corpus to ingest.
 
         Example
         -------
@@ -172,16 +253,16 @@ class Embedding(MixInIO):
         >>> embedding.features[:8]
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
-        if self.vect is None:
-            self.vect = auto_vect(corpus)
+        if self.vectorizer is None:
+            self.vectorizer = auto_vect(corpus)
 
         # THE FIT PART
         # Start with a simple CountVectorizer X
-        x = self.vect.fit_transform(corpus.iterate_text())
+        x = self.vectorizer.fit_transform(corpus.iterate_text())
         # Release stop_words_ from vectorizer
-        self.vect.stop_words_ = None
+        self.vectorizer.stop_words_ = None
         # Populate vocabulary
-        self.features = self.vect.get_feature_names()
+        self.features = self.vectorizer.get_feature_names()
         # Extract number of documents and features
         (self.n, self.m) = x.shape
         # PART OF TRANSFORM, MUTUALIZED: Apply sublinear smoothing
@@ -203,9 +284,18 @@ class Embedding(MixInIO):
         self.x_norm = l1_normalize(indptr=self.x.indptr, data=self.x.data)
         self.y_norm = l1_normalize(indptr=self.y.indptr, data=self.y.data)
 
-    def fit(self, corpus: Corpus):
+    def fit(self, corpus):
         """
-        Use a corpus to shape the vectorizer
+        Learn features from a corpus of documents.
+
+        * If not yet set, a default :class:`~sklearn.feature_extraction.text.CountVectorizer` is created.
+        * Features are computed and stored.
+        * Inverse-Document-Frequency weights of features are computed.
+
+        Parameters
+        ----------
+        corpus: :class:`~gismo.corpus.Corpus`
+            The corpus to ingest.
 
         Example
         -------
@@ -218,16 +308,16 @@ class Embedding(MixInIO):
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
         assert corpus
-        if self.vect is None:
-            self.vect = auto_vect(corpus)
+        if self.vectorizer is None:
+            self.vectorizer = auto_vect(corpus)
 
         # THE FIT PART
         # Start with a simple CountVectorizer X
-        x = self.vect.fit_transform(corpus.iterate_text())
+        x = self.vectorizer.fit_transform(corpus.iterate_text())
         # Release stop_words_ from vectorizer
-        self.vect.stop_words_ = None
+        self.vectorizer.stop_words_ = None
         # Populate vocabulary
-        self.features = self.vect.get_feature_names()
+        self.features = self.vectorizer.get_feature_names()
         # Extract number of documents (required for idf) and features (required in fit)
         (self.n, self.m) = x.shape
         # Compute transposed CountVectorizer Y
@@ -235,14 +325,16 @@ class Embedding(MixInIO):
         # Compute IDF
         self.idf = idf_fit(self.y.indptr, self.n)
 
-    def fit_ext(self, embedder):
+    def fit_ext(self, embedding):
         """
-        Use fit from existing embedder. Useful to launch mini-gismos at sentence level.
+        Use learned features from another :class:`~gismo.embedding.Embedding`.
+        This is useful for the fast creation of local embeddings
+        (e.g. at sentence level) out of a global embedding.
 
         Parameters
         ----------
-        embedder: Embedding
-                  the (external) embedding to copy
+        embedding: :class:`~gismo.embedding.Embedding`
+                  External embedding to copy.
 
         Examples
         --------
@@ -256,14 +348,23 @@ class Embedding(MixInIO):
         >>> embedding.features[:8]
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
-        self.m = embedder.m
-        self.vect = embedder.vect
-        self.idf = embedder.idf
-        self.features = self.vect.get_feature_names()
+        self.m = embedding.m
+        self.vectorizer = embedding.vectorizer
+        self.idf = embedding.idf
+        self.features = embedding.features
 
-    def transform(self, corpus: Corpus):
+    def transform(self, corpus):
         """
-        Ingest a corpus of documents, assuming the fit has already been done.
+        Ingest a corpus of documents using existing features.
+        Requires that the embedding has been fitted beforehand.
+
+        * TF-IDF embedding of documents is computed and stored (transform).
+        * TF-ITF embedding of features is computed and stored (transform).
+
+        Parameters
+        ----------
+        corpus: :class:`~gismo.corpus.Corpus`
+            The corpus to ingest.
 
         Example
         -------
@@ -282,9 +383,9 @@ class Embedding(MixInIO):
 
         # THE FIT PART
         # Start with a simple CountVectorizer X
-        x = self.vect.transform(corpus.iterate_text())
+        x = self.vectorizer.transform(corpus.iterate_text())
         # Release stop_words_ from vectorizer
-        self.vect.stop_words_ = None
+        self.vectorizer.stop_words_ = None
         # Extract number of documents and features
         (self.n, _) = x.shape
         # PART OF TRANSFORM, MUTUALIZED: Apply sublinear smoothing
@@ -337,7 +438,7 @@ class Embedding(MixInIO):
         False
         """
         self._query = query
-        z = self.vect.transform([query])
+        z = self.vectorizer.transform([query])
         norm = query_shape(indices=z.indices, data=z.data, idf=self.idf)
         if norm == 0:
             z = csr_matrix(self.idf) / np.sum(self.idf)

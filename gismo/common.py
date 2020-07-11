@@ -193,6 +193,7 @@ toy_source_text = ['Gizmo is a Mogwaï.',
                    'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side '
                    'reference to the Gremlins movie by comparing Gizmo and Yoda.',
                    'In chinese folklore, a Mogwaï is a demon.']
+"""A minimal source example where items are :py:obj:`str`."""
 
 toy_source_dict = [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'},
                    {'title': 'Second Document', 'content': 'This is a sentence about Blade.'},
@@ -202,3 +203,4 @@ toy_source_dict = [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}
                                'makes at some point a side reference to the Gremlins movie by '
                                'comparing Gizmo and Yoda.'},
                    {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
+"""A minimal source example where items are :py:obj:`dict` with keys `title` and `content`."""

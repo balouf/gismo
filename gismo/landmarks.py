@@ -393,6 +393,6 @@ class Landmarks(Corpus):
     def get_reduced_gismo(self, gismo, rebuild=True):
         reduced_corpus = Corpus(self.get_reduced_source(gismo, rebuild=rebuild),
                                 to_text=gismo.corpus.to_text)
-        reduced_embedding = Embedding(vectorizer=gismo.embedding.vect)
+        reduced_embedding = Embedding(vectorizer=gismo.embedding.vectorizer)
         reduced_embedding.fit_transform(reduced_corpus)
         return Gismo(reduced_corpus, reduced_embedding)
