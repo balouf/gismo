@@ -1,6 +1,23 @@
 from numba import njit
 import numpy as np
 
+ALPHA = .5
+"""Default value for damping factor.
+Controls the trade-off between closeness and centrality."""
+
+N_ITER = 4
+"""Default value for the number of round-trip diffusions to perform.
+Higher value means better precision but longer execution time."""
+
+OFFSET = 1.0
+"""Default offset value.
+Controls how much of the initial fluid should be deduced form the relevance."""
+
+MEMORY = 0.0
+"""Default memory value.
+Controls how much of previous computation is kept
+when performing a new diffusion.
+"""
 
 # diffusion: starting point is on the feature (words) space
 # provides ranking on features (X) and documents (Y)
@@ -125,7 +142,8 @@ class DIteration:
         Indices of features sorted by relevance.
     """
 
-    def __init__(self, n, m, alpha=.5, n_iter=4, offset=1.0, memory=0.0):
+    def __init__(self, n, m, alpha=ALPHA, n_iter=N_ITER,
+                             offset=OFFSET, memory=MEMORY):
         self.x_relevance = np.zeros(n)
         self.y_relevance = np.zeros(m)
         self.x_order = None
@@ -137,14 +155,24 @@ class DIteration:
         self._x_fluid = np.zeros(n)
         self._y_fluid = np.zeros(m)
 
-    def __call__(self, x, y, z):
-        self.x_relevance[:] *= self.memory
-        self.y_relevance[:] *= self.memory
+    def __call__(self, x, y, z,
+                 alpha=None, n_iter=None,
+                 offset=None, memory=None):
+        if alpha is None:
+            alpha = self.alpha
+        if n_iter is None:
+            n_iter = self.n_iter
+        if offset is None:
+            offset = self.offset
+        if memory is None:
+            memory = self.memory
+        self.x_relevance[:] *= memory
+        self.y_relevance[:] *= memory
         jit_diffusion(x_pointers=x.indptr, x_indices=x.indices, x_data=x.data,
                       y_pointers=y.indptr, y_indices=y.indices, y_data=y.data,
                       z_indices=z.indices, z_data=z.data,
                       x_relevance=self.x_relevance, y_relevance=self.y_relevance,
-                      alpha=self.alpha, n_iter=self.n_iter, offset=self.offset,
+                      alpha=alpha, n_iter=n_iter, offset=offset,
                       x_fluid=self._x_fluid, y_fluid=self._y_fluid)
         self.x_order = np.argsort(-self.x_relevance)
         self.y_order = np.argsort(-self.y_relevance)

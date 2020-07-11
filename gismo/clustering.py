@@ -11,15 +11,17 @@ from gismo.embedding import Embedding
 class Cluster:
     """
     The 'Cluster' class is used for internal representation of hierarchical cluster. It stores
-    the attributes that describe a clustering structure and provides cluster addition (e.g. merge).
+    the attributes that describe a clustering structure and provides cluster basic addition
+    for merge operations.
+
     Parameters
     ----------
     indice: int
         Index of the head (main element) of the cluster.
     rank: int
         The ranking order of a cluster.
-    vector: csr_matrix
-        The vector representation of the cluster
+    vector: :class:`~scipy.sparse.csr_matrix`
+        The vector representation of the cluster.
 
     Attributes
     ----------
@@ -35,7 +37,7 @@ class Cluster:
         The indices of the cluster elements.
     focus: float in range [0.0, 1.0]
         The consistency of the cluster (higher focus means that elements are more similar).
-    children: list of Cluster
+    children: list of :class:`~gismo.clustering.Cluster`
         The subclusters.
 
     Examples
