@@ -358,8 +358,8 @@ class Embedding(MixInIO):
         Ingest a corpus of documents using existing features.
         Requires that the embedding has been fitted beforehand.
 
-        * TF-IDF embedding of documents is computed and stored (transform).
-        * TF-ITF embedding of features is computed and stored (transform).
+        * TF-IDF embedding of documents is computed and stored.
+        * TF-ITF embedding of features is computed and stored.
 
         Parameters
         ----------
@@ -407,19 +407,19 @@ class Embedding(MixInIO):
 
     def query_projection(self, query):
         """
-        Project a query in the feature space
+        Project a query in the feature space.
 
         Parameters
         ----------
-        query: str
-               Text to project to the feature space
+        query: :class:`str`
+               Text to project.
 
         Returns
         --------
-        z: csr_matrix
-            result of the query projection (uniform distribution if projection fails)
-        success: bool
-            projection success (has at least one feature been found)
+        z: :class:`~scipy.sparse.csr_matrix`
+            result of the query projection (IDF distribution if query does not match any feature).
+        success: :class:`bool`
+            projection success (``True`` if at least one feature been found).
 
         Example
         -------
