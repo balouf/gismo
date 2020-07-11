@@ -34,7 +34,7 @@ Embedding
 
 DIteration
 ------------------
-.. autoclass:: gismo.diteration.DIteration
+.. automodule:: gismo.diteration
     :members:
 
 Clustering

@@ -11,6 +11,45 @@ def jit_diffusion(x_pointers, x_indices, x_data,
                   x_relevance, y_relevance,
                   alpha, n_iter, offset,
                   x_fluid, y_fluid):
+    """
+    Core diffusion engine written to be compatible with `Numba <https://numba.pydata.org/>`_.
+    This is where the `DIteration <https://arxiv.org/pdf/1501.06350.pdf>`_
+    algorithm is applied inline.
+
+    Parameters
+    ----------
+    x_pointers: :class:`~numpy.ndarray`
+        Pointers of the :class:`~scipy.sparse.csr_matrix` embedding of documents.
+    x_indices: :class:`~numpy.ndarray`
+        Indices of the :class:`~scipy.sparse.csr_matrix` embedding of documents.
+    x_data: :class:`~numpy.ndarray`
+        Data of the :class:`~scipy.sparse.csr_matrix` embedding of documents.
+    y_pointers: :class:`~numpy.ndarray`
+        Pointers of the :class:`~scipy.sparse.csr_matrix` embedding of features.
+    y_indices: :class:`~numpy.ndarray`
+        Indices of the :class:`~scipy.sparse.csr_matrix` embedding of features.
+    y_data: :class:`~numpy.ndarray`
+        Data of the :class:`~scipy.sparse.csr_matrix` embedding of features.
+    z_indices: :class:`~numpy.ndarray`
+        Indices of the :class:`~scipy.sparse.csr_matrix` embedding of the query projection.
+    z_data: :class:`~numpy.ndarray`
+        Data of the :class:`~scipy.sparse.csr_matrix` embedding of the query_projection.
+    x_relevance: :class:`~numpy.ndarray`
+        Placeholder for relevance of documents.
+    y_relevance: :class:`~numpy.ndarray`
+        Placeholder for relevance of features.
+    alpha: float in range [0.0, 1.0]
+        Damping factor. Controls the trade-off between closeness and centrality.
+    n_iter: int
+        Number of round-trip diffusions to perform. Higher value means better precision
+        but longer execution time.
+    offset: float in range [0.0, 1.0]
+        Controls how much of the initial fluid should be deduced form the relevance.
+    x_fluid: :class:`~numpy.ndarray`
+        Placeholder for fluid on the side of documents.
+    y_fluid: :class:`~numpy.ndarray`
+        Placeholder for fluid on the side of features.
+    """
     n = len(x_pointers) - 1
     m = len(y_pointers) - 1
 
@@ -42,7 +81,51 @@ def jit_diffusion(x_pointers, x_indices, x_data,
 
 
 class DIteration:
-    def __init__(self, n, m, alpha=.5, n_iter=4, offset=1.0, memory=0):
+    """
+    This class is in charge of performing the
+    `DIteration <https://arxiv.org/pdf/1501.06350.pdf>`_
+    algorithm.
+
+    Parameters
+    ----------
+    n: int
+        Number of documents.
+    m: int
+        Number of features.
+    alpha: float in range [0.0, 1.0]
+        Damping factor. Controls the trade-off between closeness and centrality.
+    n_iter: int
+        Number of round-trip diffusions to perform. Higher value means better precision
+        but longer execution time.
+    offset: float in range [0.0, 1.0]
+        Controls how much of the initial fluid should be deduced form the relevance.
+    memory: float in range [0.0, 1.0]
+        Controls how much of previous computation is kept
+        when performing a new diffusion.
+
+    Attributes
+    ----------
+    alpha: float in range [0.0, 1.0]
+        Damping factor. Controls the trade-off between closeness and centrality.
+    n_iter: int
+        Number of round-trip diffusions to perform. Higher value means better precision
+        but longer execution time.
+    offset: float in range [0.0, 1.0]
+        Controls how much of the initial fluid should be deduced form the relevance.
+    memory: float in range [0.0, 1.0]
+        Controls how much of previous computation is kept
+        when performing a new diffusion.
+    x_relevance: :class:`~numpy.ndarray`
+        Relevance of documents.
+    y_relevance: :class:`~numpy.ndarray`
+        Relevance of features.
+    x_order: :class:`~numpy.ndarray`
+        Indices of documents sorted by relevance.
+    y_order: :class:`~numpy.ndarray`
+        Indices of features sorted by relevance.
+    """
+
+    def __init__(self, n, m, alpha=.5, n_iter=4, offset=1.0, memory=0.0):
         self.x_relevance = np.zeros(n)
         self.y_relevance = np.zeros(m)
         self.x_order = None
