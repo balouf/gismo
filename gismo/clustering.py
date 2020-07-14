@@ -29,9 +29,9 @@ class Cluster:
         Index of the head (main element) of the cluster.
     rank: int
         The ranking order of a cluster.
-    vector: csr_matrix
+    vector: :class:`~scipy.sparse.csr_matrix`
         The vector representation of the cluster.
-    intersection_vector: csr_matrix (deprecated)
+    intersection_vector: :class:`~scipy.sparse.csr_matrix` (deprecated)
         The vector representation of the common points of a cluster.
     members: list of int
         The indices of the cluster elements.
@@ -89,6 +89,25 @@ class Cluster:
 
 
 def merge_clusters(cluster_list, focus=1.0):
+    """
+    Complete merge operation. In addition to the basic merge provided by
+    :class:`~gismo.clustering.Cluster`, ensures the following:
+
+    * Consistency of focus by integrating the extra-focus (typically given by :func:`~gismo.clustering.subspace_partition`).
+    * Children (the members of the list) are sorted according to their respective rank.
+
+    Parameters
+    ----------
+    cluster_list: list of :class:`~gismo.clustering.Cluster`
+        The clusters to merge into one cluster.
+    focus: float
+        Evaluation of the focus (similarity) between clusters.
+
+    Returns
+    -------
+    :class:`~gismo.clustering.Cluster`
+        The cluster merging the list.
+    """
     if len(cluster_list) < 2:
         return cluster_list[0]
     result = sum(cluster_list)

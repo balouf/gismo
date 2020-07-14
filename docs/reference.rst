@@ -15,6 +15,7 @@ Gismo is made of multiple small modules designed to be mixed together.
 * sentencizer_: This module can leverage a document-level gismo to provide sentence-level analysis. Can be used to extract key phrases (headlines).
 * datasets_: Collection of access to small or less small datasets.
 * common_: Multi-purpose module of things that can be used in more than one other module.
+* parameters_: Management of runtime parameters.
 
 Corpus
 -------
@@ -88,4 +89,11 @@ Common
 ------
 
 .. automodule:: gismo.common
+    :members:
+
+
+Parameters
+----------
+
+.. automodule:: gismo.parameters
     :members:
