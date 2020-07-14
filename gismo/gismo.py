@@ -9,6 +9,7 @@ from gismo.datasets.dblp import url2source
 from gismo.corpus import Corpus
 from gismo.embedding import Embedding
 from gismo.diteration import DIteration
+from gismo.parameters import Parameters
 from gismo.clustering import subspace_clusterize, bfs
 from gismo.post_processing import post_document, post_document_content, post_document_cluster, \
     post_feature, post_feature_cluster, print_document_cluster, print_feature_cluster
@@ -28,6 +29,10 @@ class Gismo(MixInIO):
                 If set, will load gismo from file.
     path: str or Path, optional
         Directory where the gismo is to be loaded from.
+    kwargs: dict
+        Runtime parameters that need to be distinct from default values
+        (cf :class:`~gismo.parameters.Parameters`).
+
 
     Example
     -------
@@ -127,13 +132,15 @@ class Gismo(MixInIO):
     ['mogwaï', 'this', 'in', 'by', 'gizmo', 'is', 'chinese']
     """
 
-    def __init__(self, corpus=None, embedding=None, filename=None, path="."):
+    def __init__(self, corpus=None, embedding=None, filename=None, path=".", **kwargs):
         if filename is not None:
             self.load(filename=filename, path=path)
         else:
             self.corpus = corpus
             self.embedding = embedding
             self.diteration = DIteration(n=embedding.n, m=embedding.m)
+
+            self.parameters = Parameters(**kwargs)
 
             self.auto_k_max_k = 100
             self.auto_k_target = 1.0
@@ -146,7 +153,7 @@ class Gismo(MixInIO):
             self.post_feature_cluster = post_feature_cluster
 
     # Ranking Part
-    def rank(self, query=""):
+    def rank(self, query="", **kwargs):
         """
         Runs the Diteration using query as starting point
 
@@ -160,8 +167,11 @@ class Gismo(MixInIO):
         success: bool
             success of the query projection. If projection fails, a ranking on uniform distribution is performed.
         """
+        p = self.parameters(**kwargs)
         z, success = self.embedding.query_projection(query)
-        self.diteration(self.embedding.x, self.embedding.y, z)
+        self.diteration(self.embedding.x, self.embedding.y, z,
+                        alpha=p['alpha'], n_iter=p['n_iter'],
+                        offset=p['offset'], memory=p['memory'])
         return success
 
     def get_ranked_documents(self, k=None, post=True):
@@ -478,7 +488,7 @@ class XGismo(Gismo):
     >>> xgismo.get_ranked_documents()
     ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiss', 'Dmitry Lebedev']
     """
-    def __init__(self, x_embedding=None, y_embedding=None, filename=None, path="."):
+    def __init__(self, x_embedding=None, y_embedding=None, filename=None, path=".", **kwargs):
         if filename is not None:
             self.load(filename=filename, path=path)
         else:
@@ -491,12 +501,12 @@ class XGismo(Gismo):
             embedding.y = np.dot(y_embedding.y, x_embedding.x)
             embedding.y_norm = np.ones(embedding.m)
             embedding.idf = y_embedding.idf
-            super().__init__(corpus=Corpus(x_embedding.features, to_text=lambda x: x), embedding=embedding)
+            super().__init__(corpus=Corpus(x_embedding.features, to_text=lambda x: x), embedding=embedding, **kwargs)
 
             self.x_projection = x_embedding.query_projection
             self.y_projection = y_embedding.query_projection
 
-    def rank(self, query="", y=True):
+    def rank(self, query="", y=True, **kwargs):
         """
         Runs the DIteration using query as starting point.
         ``query`` can be evaluated on features (``y=True``) or documents (``y=False``).
@@ -513,6 +523,7 @@ class XGismo(Gismo):
         success: bool
             success of the query projection. If projection fails, a ranking on uniform distribution is performed.
         """
+        p = self.parameters(**kwargs)
         if y:
             z, found = self.y_projection(query)
             self.diteration.offset = 1.0
@@ -521,5 +532,7 @@ class XGismo(Gismo):
             z = np.dot(z, self.embedding.x)
             self.diteration.offset = 0.0
         self.embedding._result_found = found
-        self.diteration(self.embedding.x, self.embedding.y, z)
+        self.diteration(self.embedding.x, self.embedding.y, z,
+                        alpha=p['alpha'], n_iter=p['n_iter'],
+                        offset=p['offset'], memory=p['memory'])
         return found

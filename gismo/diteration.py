@@ -1,23 +1,8 @@
 from numba import njit
 import numpy as np
 
-ALPHA = .5
-"""Default value for damping factor.
-Controls the trade-off between closeness and centrality."""
+from gismo.parameters import ALPHA, N_ITER, OFFSET, MEMORY
 
-N_ITER = 4
-"""Default value for the number of round-trip diffusions to perform.
-Higher value means better precision but longer execution time."""
-
-OFFSET = 1.0
-"""Default offset value.
-Controls how much of the initial fluid should be deduced form the relevance."""
-
-MEMORY = 0.0
-"""Default memory value.
-Controls how much of previous computation is kept
-when performing a new diffusion.
-"""
 
 # diffusion: starting point is on the feature (words) space
 # provides ranking on features (X) and documents (Y)
@@ -109,29 +94,9 @@ class DIteration:
         Number of documents.
     m: int
         Number of features.
-    alpha: float in range [0.0, 1.0]
-        Damping factor. Controls the trade-off between closeness and centrality.
-    n_iter: int
-        Number of round-trip diffusions to perform. Higher value means better precision
-        but longer execution time.
-    offset: float in range [0.0, 1.0]
-        Controls how much of the initial fluid should be deduced form the relevance.
-    memory: float in range [0.0, 1.0]
-        Controls how much of previous computation is kept
-        when performing a new diffusion.
 
     Attributes
     ----------
-    alpha: float in range [0.0, 1.0]
-        Damping factor. Controls the trade-off between closeness and centrality.
-    n_iter: int
-        Number of round-trip diffusions to perform. Higher value means better precision
-        but longer execution time.
-    offset: float in range [0.0, 1.0]
-        Controls how much of the initial fluid should be deduced form the relevance.
-    memory: float in range [0.0, 1.0]
-        Controls how much of previous computation is kept
-        when performing a new diffusion.
     x_relevance: :class:`~numpy.ndarray`
         Relevance of documents.
     y_relevance: :class:`~numpy.ndarray`
@@ -142,30 +107,38 @@ class DIteration:
         Indices of features sorted by relevance.
     """
 
-    def __init__(self, n, m, alpha=ALPHA, n_iter=N_ITER,
-                             offset=OFFSET, memory=MEMORY):
+    def __init__(self, n, m):
         self.x_relevance = np.zeros(n)
         self.y_relevance = np.zeros(m)
         self.x_order = None
         self.y_order = None
-        self.alpha = alpha
-        self.n_iter = n_iter
-        self.offset = offset
-        self.memory = memory
         self._x_fluid = np.zeros(n)
         self._y_fluid = np.zeros(m)
 
     def __call__(self, x, y, z,
-                 alpha=None, n_iter=None,
-                 offset=None, memory=None):
-        if alpha is None:
-            alpha = self.alpha
-        if n_iter is None:
-            n_iter = self.n_iter
-        if offset is None:
-            offset = self.offset
-        if memory is None:
-            memory = self.memory
+                 alpha=ALPHA, n_iter=N_ITER, offset=OFFSET, memory=MEMORY):
+        """
+        Performs DIteration algorithm and populate relevance / order vectors.
+
+        Parameters
+        ----------
+        x: :class:`~scipy.sparse.csr_matrix`
+            Embedding of documents in feature space.
+        y: :class:`~scipy.sparse.csr_matrix`
+            Embedding of features in document space.
+        z:  class:`~scipy.sparse.csr_matrix`
+            Embedding of query in feature space.
+        alpha: float in range [0.0, 1.0]
+            Damping factor. Controls the trade-off between closeness and centrality.
+        n_iter: int
+            Number of round-trip diffusions to perform. Higher value means better precision
+            but longer execution time.
+        offset: float in range [0.0, 1.0]
+            Controls how much of the initial fluid should be deduced form the relevance.
+        memory: float in range [0.0, 1.0]
+            Controls how much of previous computation is kept
+            when performing a new diffusion.
+            """
         self.x_relevance[:] *= memory
         self.y_relevance[:] *= memory
         jit_diffusion(x_pointers=x.indptr, x_indices=x.indices, x_data=x.data,
