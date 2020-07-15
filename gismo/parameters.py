@@ -18,7 +18,7 @@ Higher value means better precision but longer execution time.
 OFFSET = 1.0
 """
 Default offset value.
-Controls how much of the initial fluid should be deduced form the relevance.
+Controls how much of the initial fluid should be deduced from the relevance.
 """
 
 MEMORY = 0.0
@@ -53,7 +53,7 @@ Default threshold for estimating k.
 
 WIDE = True
 """
-Default BFS behavior for covering.
+Default Covering behavior for covering.
 True for wide variant, false for core variant.
 """
 

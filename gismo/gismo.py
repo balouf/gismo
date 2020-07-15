@@ -10,7 +10,7 @@ from gismo.corpus import Corpus
 from gismo.embedding import Embedding
 from gismo.diteration import DIteration
 from gismo.parameters import Parameters
-from gismo.clustering import subspace_clusterize, bfs
+from gismo.clustering import subspace_clusterize, covering_order
 from gismo.post_processing import post_document, post_document_content, post_document_cluster, \
     post_feature, post_feature_cluster, print_document_cluster, print_feature_cluster
 
@@ -93,7 +93,7 @@ class Gismo(MixInIO):
     -- folklore (R: 0.00; S: 0.07)
 
     The class also offers ``get_covering_documents`` and ``get_covering_features`` that yield
-    a list of results obtained from a BFS-like traversal of the ranked cluster.
+    a list of results obtained from a Covering-like traversal of the ranked cluster.
 
     To demonstrate it, we first add an outsider document to the corpus and rebuild Gismo.
 
@@ -379,7 +379,7 @@ class Gismo(MixInIO):
         cluster = self.get_clustered_ranked_documents(k=int(k * stretch),
                                                       resolution=resolution,
                                                       post=False)
-        indices = bfs(cluster, wide=wide)[:k]
+        indices = covering_order(cluster, wide=wide)[:k]
         if post:
             return [self.post_document(self, i) for i in indices]
         else:
@@ -419,7 +419,7 @@ class Gismo(MixInIO):
         cluster = self.get_clustered_ranked_features(k=int(k * stretch),
                                                      resolution=resolution,
                                                      post=False)
-        indices = bfs(cluster, wide=wide)[:k]
+        indices = covering_order(cluster, wide=wide)[:k]
         if post:
             return [self.post_feature(self, i) for i in indices]
         else:

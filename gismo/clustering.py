@@ -6,6 +6,7 @@ from scipy.sparse import vstack, csr_matrix
 
 from gismo.corpus import Corpus, toy_source_text
 from gismo.embedding import Embedding
+from gismo.parameters import RESOLUTION, WIDE
 
 
 class Cluster:
@@ -88,10 +89,10 @@ class Cluster:
             return self.__add__(other)
 
 
-def merge_clusters(cluster_list, focus=1.0):
+def merge_clusters(cluster_list: list, focus=1.0):
     """
     Complete merge operation. In addition to the basic merge provided by
-    :class:`~gismo.clustering.Cluster`, ensures the following:
+    :class:`~gismo.clustering.Cluster`, it ensures the following:
 
     * Consistency of focus by integrating the extra-focus (typically given by :func:`~gismo.clustering.subspace_partition`).
     * Children (the members of the list) are sorted according to their respective rank.
@@ -116,8 +117,25 @@ def merge_clusters(cluster_list, focus=1.0):
     return result
 
 
-def subspace_partition(subspace, resolution: float = .7):
-    # Resolution square distortion
+def subspace_partition(subspace, resolution=RESOLUTION):
+    """
+    Proposes a partition of the subspace that merges together vectors with a similar direction.
+
+    Parameters
+    ----------
+    subspace: :class:`~numpy.ndarray`, :class:`~scipy.sparse.csr_matrix`
+        A ``k x m`` matrix seen as a list of ``k`` ``m``-dimensional vectors sorted by importance order.
+    resolution: float in range [0.0, 1.0]
+        How strict the merging should be. ``0.0`` will merge all items together, while ``1.0``
+        will only merge mutually closest items.
+
+    Returns
+    -------
+    list
+        A list of subsets that form a partition. Each subset is represented by a pair ``(p, f)``. ``p``
+        is the set of indices of the subset, ``f`` is the typical similarity of the partition (called `focus`).
+    """
+    # Applying a square distortion to resolution gives a more linear behavior in practice.
     resolution = 2 * resolution - resolution ** 2
     n, _ = subspace.shape
     similarity_matrix = cosine_similarity(subspace, subspace) - 2 * np.identity(n)
@@ -144,13 +162,13 @@ def subspace_partition(subspace, resolution: float = .7):
     return [(c, d) for c, d in zip(partition, cluster_similarity) if c]
 
 
-def rec_clusterize(cluster_list: list, resolution: float = .7):
+def rec_clusterize(cluster_list: list, resolution=RESOLUTION):
     """
     Auxiliary recursive function for clustering.
 
     Parameters
     ----------
-    cluster_list: list of Cluster
+    cluster_list: list of :class:`~gismo.clustering.Cluster`
         Current aggregation state.
     resolution: float in range [0.0, 1.0]
         Sets the lazyness of aggregation. A 'resolution' set to 0.0 yields a one-step clustering
@@ -159,7 +177,7 @@ def rec_clusterize(cluster_list: list, resolution: float = .7):
 
     Returns
     -------
-    list of Cluster
+    list of :class:`~gismo.clustering.Cluster`
 
     """
     if len(cluster_list) == 1:
@@ -170,13 +188,13 @@ def rec_clusterize(cluster_list: list, resolution: float = .7):
                               resolution)
 
 
-def subspace_clusterize(subspace, resolution: float = .7, indices=None):
+def subspace_clusterize(subspace, resolution=RESOLUTION, indices=None):
     """
     Converts a subspace (matrix seen as a list of vectors) to a Cluster object (hierarchical clustering).
 
     Parameters
     ----------
-    subspace: ndarray, csr_matrix
+    subspace: :class:`~numpy.ndarray`, :class:`~scipy.sparse.csr_matrix`
         A ``k x m`` matrix seen as a list of ``k`` ``m``-dimensional vectors sorted by importance order.
     resolution: float in range [0.0, 1.0]
         Sets the lazyness of aggregation. A 'resolution' set to 0.0 yields a one-step clustering
@@ -212,7 +230,7 @@ def subspace_clusterize(subspace, resolution: float = .7, indices=None):
                           resolution)[0]
 
 
-class BFS:
+class Covering:
     def __init__(self):
         self.result = []
         self.heap = []
@@ -254,8 +272,29 @@ class BFS:
         return self.result
 
 
-def bfs(cluster, wide=True):
+def covering_order(cluster, wide=WIDE):
+    """
+    Uses a hierarchical cluster to provide an ordering of the items that mixes rank and coverage.
+
+    This is done by exploring all cluster and subclusters by increasing similarity and rank (lexicographic order).
+    Two variants are proposed:
+
+    * `Core`: for each cluster, append its representant to the list if new. Central items tend to have better rank.
+    * `Wide`: for each cluster, append its children representants to the list if new. Marginal items tend to have better rank.
+
+    Parameters
+    ----------
+    cluster: :class:`~gismo.clustering.Cluster`
+        The cluster to explore.
+    wide: :class:`bool`
+        Use Wide (``True``) or Core (``False``) variant.
+
+    Returns
+    -------
+    list of int
+        Sorted indices of the items of the cluster.
+    """
     if wide:
-        return BFS().wide(cluster)
+        return Covering().wide(cluster)
     else:
-        return BFS().core(cluster)
+        return Covering().core(cluster)
