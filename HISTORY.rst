@@ -9,7 +9,11 @@ History
     * Landmarks can be used to refine the analysis around a part of your data;
     * They can be used as soft and fast classifiers.
 * Documentation summer cleaning.
-
+* New API for Gismo runtime parameters (see new parameters module for details). Short version:
+    * ``gismo = Gismo(corpus, embedding, alpha=0.85)``: create a gismo with damping factor set to 0.85 instead of default value.
+    * ``gismo.parameters.alpha = 0.85``: set the damping factor of the gismo to 0.85.
+    * ``gismo.rank(query, alpha=0.85)``: makes a query with damping factor temporarily set to 0.85.
+* ``query_distortion`` parameter (reshape subspace for clustering) is renamed ``distortion`` and is now a float instead of a bool (e.g. you can apply distortion in a non-binary way).
 
 0.3.1 (2020-06-12)
 ------------------

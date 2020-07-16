@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 from scipy.sparse import vstack, csr_matrix
+from numba import njit
 
 from gismo.corpus import Corpus, toy_source_text
 from gismo.embedding import Embedding
@@ -298,3 +299,23 @@ def covering_order(cluster, wide=WIDE):
         return Covering().wide(cluster)
     else:
         return Covering().core(cluster)
+
+
+@njit
+def subspace_distortion(indices, data, relevance, distortion: float):
+    """
+    Apply inplace distortion of a subspace with relevance.
+
+    Parameters
+    ----------
+    indices: :class:`~numpy.ndarray`
+        Indice attribute of the subspace :class:`~scipy.sparse.csr_matrix`.
+    data: :class:`~numpy.ndarray`
+        Data attribute of the subspace :class:`~scipy.sparse.csr_matrix`.
+    relevance: :class:`~numpy.ndarray`
+        Relevance values in the embedding space.
+    distortion: float in [0.0, 1.0]
+        Power applied to relevance for distortion.
+    """
+    for i, indice in enumerate(indices):
+        data[i] *= relevance[indice] ** distortion

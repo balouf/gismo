@@ -10,7 +10,7 @@ from gismo.corpus import Corpus
 from gismo.embedding import Embedding
 from gismo.diteration import DIteration
 from gismo.parameters import Parameters
-from gismo.clustering import subspace_clusterize, covering_order
+from gismo.clustering import subspace_clusterize, covering_order, subspace_distortion
 from gismo.post_processing import post_document, post_document_content, post_document_cluster, \
     post_feature, post_feature_cluster, print_document_cluster, print_feature_cluster
 
@@ -30,8 +30,8 @@ class Gismo(MixInIO):
     path: str or Path, optional
         Directory where the gismo is to be loaded from.
     kwargs: dict
-        Runtime parameters that need to be distinct from default values
-        (cf :class:`~gismo.parameters.Parameters`).
+        Custom default runtime parameters.
+        You just need to specify the parameters that differ from :class:`~gismo.parameters.DEFAULT_PARAMETERS`.
 
 
     Example
@@ -55,7 +55,7 @@ class Gismo(MixInIO):
 
     >>> gismo = Gismo(corpus, embedding)
     >>> success = gismo.rank("Gizmo")
-    >>> gismo.auto_k_target = .2 # The toy dataset is very small, so we lower the auto_k parameter.
+    >>> gismo.parameters.target_k = .2 # The toy dataset is very small, so we lower the auto_k parameter.
     >>> gismo.get_ranked_documents()
     [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}, {'title': 'Fourth Document', 'content': 'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.'}, {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
 
@@ -105,7 +105,7 @@ class Gismo(MixInIO):
     >>> gismo = Gismo(corpus, embedding)
     >>> gismo.post_document = post_document_content
     >>> success = gismo.rank("Gizmo")
-    >>> gismo.auto_k_target=.3
+    >>> gismo.parameters.target_k = .3
 
     Remind the classical rank-based result.
 
@@ -142,9 +142,6 @@ class Gismo(MixInIO):
 
             self.parameters = Parameters(**kwargs)
 
-            self.auto_k_max_k = 100
-            self.auto_k_target = 1.0
-
             self.query_distortion = True
 
             self.post_document = post_document
@@ -161,6 +158,8 @@ class Gismo(MixInIO):
         ----------
         query: str
                Text that starts DIteration
+        kwargs: dict, optional
+            Custom runtime parameters.
 
         Returns
         -------
@@ -174,7 +173,7 @@ class Gismo(MixInIO):
                         offset=p['offset'], memory=p['memory'])
         return success
 
-    def get_ranked_documents(self, k=None, post=True):
+    def get_ranked_documents(self, k=None, **kwargs):
         """
         Returns a list of top documents according to the current ranking.
         By default, the documents are post_processed through the post_document method.
@@ -183,26 +182,27 @@ class Gismo(MixInIO):
         ----------
         k: int, optional
             Number of documents to output. If not set, k is automatically computed
-            using the auto_k_max_k and auto_k_target attributes.
-        post: bool
-            Set to False to disable post-processing and return a list of indices.
+            using the max_k and target_k runtime parameters.
+        kwargs: dict, optional
+            Custom runtime parameters.
 
 
         Returns
         -------
         list
         """
+        p = self.parameters(**kwargs)
         if k is None:
             k = auto_k(data=self.diteration.x_relevance,
                        order=self.diteration.x_order,
-                       max_k=self.auto_k_max_k,
-                       target=self.auto_k_target)
-        if post:
+                       max_k=p['max_k'],
+                       target=p['target_k'])
+        if p['post']:
             return [self.post_document(self, i) for i in self.diteration.x_order[:k]]
         else:
             return self.diteration.x_order[:k]
 
-    def get_ranked_features(self, k=None, post=True):
+    def get_ranked_features(self, k=None, **kwargs):
         """
         Returns a list of top features according to the current ranking.
         By default, the features are post_processed through the post_feature method.
@@ -210,27 +210,28 @@ class Gismo(MixInIO):
         Parameters
         ----------
         k: int, optional
-            Number of features to output. If not set, k is automatically computed
-            using the auto_k_max_k and auto_k_target attributes.
-        post: bool
-            Set to False to disable post-processing and return a list of indices.
+            Number of documents to output. If not set, k is automatically computed
+            using the max_k and target_k runtime parameters.
+        kwargs: dict, optional
+            Custom runtime parameters.
 
         Returns
         -------
         list
         """
+        p = self.parameters(**kwargs)
         if k is None:
             k = auto_k(data=self.diteration.y_relevance,
                        order=self.diteration.y_order,
-                       max_k=self.auto_k_max_k,
-                       target=self.auto_k_target)
-        if post:
+                       max_k=p['max_k'],
+                       target=p['target_k'])
+        if p['post']:
             return [self.post_feature(self, i) for i in self.diteration.y_order[:k]]
         else:
             return self.diteration.y_order[:k]
 
     # Cluster part
-    def get_clustered_documents(self, indices, resolution=.7, post=True):
+    def get_clustered_documents(self, indices, **kwargs):
         """
         Returns a cluster of documents.
         The cluster is by default post_processed through the post_document_cluster method.
@@ -240,27 +241,25 @@ class Gismo(MixInIO):
         indices: list of int
             The indices of documents to be processed. It is assumed that the documents
             are sorted by importance.
-        resolution: float in range [0.0, 1.0]
-            Depth of the cluster. Use 0.0 to a star, 1.0 for a pseudo-dendrogram.
-        post: bool
-            Set to False to disable post-processing and return a raw Cluster object.
+        kwargs: dict, optional
+            Custom runtime parameters.
 
         Returns
         -------
         Object
 
         """
-        if self.query_distortion:
-            subspace = [self.embedding.x[i, :].multiply(self.diteration.y_relevance) for i in indices]
-        else:
-            subspace = [self.embedding.x[i, :] for i in indices]
-        subspace = csr_matrix(vstack(subspace))
-        cluster = subspace_clusterize(subspace, resolution, indices)
-        if post:
+        p = self.parameters(**kwargs)
+        subspace = vstack([self.embedding.x[i, :] for i in indices])
+        if p['distortion']>0:
+            subspace_distortion(indices=subspace.indices, data=subspace.data,
+                                relevance=self.diteration.y_relevance, distortion=p['distortion'])
+        cluster = subspace_clusterize(subspace, p['resolution'], indices)
+        if p['post']:
             return self.post_document_cluster(self, cluster)
         return cluster
 
-    def get_clustered_ranked_documents(self, k=None, resolution=.7, post=True):
+    def get_clustered_ranked_documents(self, k=None, **kwargs):
         """
         Returns a cluster of the best ranked documents.
         The cluster is by default post_processed through the post_document_cluster method.
@@ -268,26 +267,25 @@ class Gismo(MixInIO):
         Parameters
         ----------
         k: int, optional
-            Number of top documents to use. If not set, k is automatically computed
-            using the auto_k_max_k and auto_k_target attributes.
-        resolution: float in range [0.0, 1.0]
-            Depth of the cluster. Use 0.0 to a star, 1.0 for a pseudo-dendrogram.
-        post: bool
-            Set to False to disable post-processing and return a raw Cluster object.
+            Number of documents to output. If not set, k is automatically computed
+            using the max_k and target_k runtime parameters.
+        kwargs: dict, optional
+            Custom runtime parameters.
 
         Returns
         -------
         Object
 
         """
+        p = self.parameters(**kwargs)
         if k is None:
             k = auto_k(data=self.diteration.x_relevance,
                        order=self.diteration.x_order,
-                       max_k=self.auto_k_max_k,
-                       target=self.auto_k_target)
-        return self.get_clustered_documents(self.diteration.x_order[:k], resolution, post)
+                       max_k=p['max_k'],
+                       target=p['target_k'])
+        return self.get_clustered_documents(self.diteration.x_order[:k], **kwargs)
 
-    def get_clustered_features(self, indices, resolution=.7, post=True):
+    def get_clustered_features(self, indices, **kwargs):
         """
         Returns a cluster of features.
         The cluster is by default post_processed through the post_feature_cluster method.
@@ -297,27 +295,25 @@ class Gismo(MixInIO):
         indices: list of int
             The indices of features to be processed. It is assumed that the features
             are sorted by importance.
-        resolution: float in range [0.0, 1.0]
-            Depth of the cluster. Use 0.0 to a star, 1.0 for a pseudo-dendrogram.
-        post: bool
-            Set to False to disable post-processing and return a raw Cluster object.
+        kwargs: dict, optional
+            Custom runtime parameters
 
         Returns
         -------
         Object
 
         """
-        if self.query_distortion:
-            subspace = [self.embedding.y[i, :].multiply(self.diteration.x_relevance) for i in indices]
-        else:
-            subspace = [self.embedding.y[i, :] for i in indices]
-        subspace = csr_matrix(vstack(subspace))
-        cluster = subspace_clusterize(subspace, resolution, indices)
-        if post:
+        p = self.parameters(**kwargs)
+        subspace = vstack([self.embedding.y[i, :] for i in indices])
+        if p['distortion']>0:
+            subspace_distortion(indices=subspace.indices, data=subspace.data,
+                                relevance=self.diteration.x_relevance, distortion=p['distortion'])
+        cluster = subspace_clusterize(subspace, p['resolution'], indices)
+        if p['post']:
             return self.post_feature_cluster(self, cluster)
         return cluster
 
-    def get_clustered_ranked_features(self, k=None, resolution=.7, post=True):
+    def get_clustered_ranked_features(self, k=None, **kwargs):
         """
         Returns a cluster of the best ranked features.
         The cluster is by default post_processed through the post_feature_cluster method.
@@ -325,27 +321,26 @@ class Gismo(MixInIO):
         Parameters
         ----------
         k: int, optional
-            Number of top features to use. If not set, k is automatically computed
-            using the auto_k_max_k and auto_k_target attributes.
-        resolution: float in range [0.0, 1.0]
-            Depth of the cluster. Use 0.0 to a star, 1.0 for a pseudo-dendrogram.
-        post: bool
-            Set to False to disable post-processing and return a raw Cluster object.
+            Number of documents to output. If not set, k is automatically computed
+            using the max_k and target_k runtime parameters.
+        kwargs: dict, optional
+            Custom runtime parameters.
 
         Returns
         -------
         Object
         """
+        p = self.parameters(**kwargs)
         if k is None:
             k = auto_k(data=self.diteration.y_relevance,
                        order=self.diteration.y_order,
-                       max_k=self.auto_k_max_k,
-                       target=self.auto_k_target)
-        return self.get_clustered_features(self.diteration.y_order[:k], resolution, post)
+                       max_k=p['max_k'],
+                       target=p['target_k'])
+        return self.get_clustered_features(self.diteration.y_order[:k], **kwargs)
 
     # Covering part
 
-    def get_covering_documents(self, k=None, resolution=.7, stretch=2.0, wide=True, post=True):
+    def get_covering_documents(self, k=None, **kwargs):
         """
         Returns a list of top covering documents.
         By default, the documents are post_processed through the post_document method.
@@ -353,39 +348,32 @@ class Gismo(MixInIO):
         Parameters
         ----------
         k: int, optional
-            Number of documents to return. If not set, k is automatically computed
-            using the auto_k_max_k and auto_k_target attributes.
-        resolution: float in range [0.0, 1.0]
-            Depth of the cluster. Use 0.0 to a star, 1.0 for a pseudo-dendrogram.
-        stretch: float >= 1.0
-            The list if build by traversing a cluster of size ``int(k*stretch)``.
-            High stretch will more easily eliminate redundant results, but increases
-            the odds of returning less relevant entries.
-        wide: bool
-            If True, uses a traversal that gives an advantage to results not similar to others.
-        post: bool
-            Set to False to disable post-processing and return a list of indices.
+            Number of documents to output. If not set, k is automatically computed
+            using the max_k and target_k runtime parameters.
+        kwargs: dict, optional
+            Custom runtime parameters.
 
         Returns
         -------
         list
 
         """
+        p = self.parameters(**kwargs)
         if k is None:
             k = auto_k(data=self.diteration.x_relevance,
                        order=self.diteration.x_order,
-                       max_k=self.auto_k_max_k,
-                       target=self.auto_k_target)
-        cluster = self.get_clustered_ranked_documents(k=int(k * stretch),
-                                                      resolution=resolution,
+                       max_k=p['max_k'],
+                       target=p['target_k'])
+        cluster = self.get_clustered_ranked_documents(k=int(k * p['stretch']),
+                                                      resolution=p['resolution'],
                                                       post=False)
-        indices = covering_order(cluster, wide=wide)[:k]
-        if post:
+        indices = covering_order(cluster, wide=p['wide'])[:k]
+        if p['post']:
             return [self.post_document(self, i) for i in indices]
         else:
             return indices
 
-    def get_covering_features(self, k=None, resolution=.7, stretch=2.0, wide=True, post=True):
+    def get_covering_features(self, k=None, **kwargs):
         """
         Returns a list of top covering features.
         By default, the features are post_processed through the post_feature method.
@@ -393,34 +381,27 @@ class Gismo(MixInIO):
         Parameters
         ----------
         k: int, optional
-            Number of features to return. If not set, k is automatically computed
-            using the auto_k_max_k and auto_k_target attributes.
-        resolution: float in range [0.0, 1.0]
-            Depth of the cluster. Use 0.0 to a star, 1.0 for a pseudo-dendrogram.
-        stretch: float >= 1.0
-            The list if build by traversing a cluster of size ``int(k*stretch)``.
-            High stretch will more easily eliminate redundant results, but increases
-            the odds of returning less relevant entries.
-        wide: bool
-            If True, uses a traversal that gives an advantage to results not similar to others.
-        post: bool
-            Set to False to disable post-processing and return a list of indices.
+            Number of documents to output. If not set, k is automatically computed
+            using the max_k and target_k runtime parameters.
+        kwargs: dict, optional
+            Custom runtime parameters.
 
         Returns
         -------
         list
 
         """
+        p = self.parameters(**kwargs)
         if k is None:
             k = auto_k(data=self.diteration.y_relevance,
                        order=self.diteration.y_order,
-                       max_k=self.auto_k_max_k,
-                       target=self.auto_k_target)
-        cluster = self.get_clustered_ranked_features(k=int(k * stretch),
-                                                     resolution=resolution,
+                       max_k=p['max_k'],
+                       target=p['target_k'])
+        cluster = self.get_clustered_ranked_features(k=int(k * p['stretch']),
+                                                     resolution=p['resolution'],
                                                      post=False)
-        indices = covering_order(cluster, wide=wide)[:k]
-        if post:
+        indices = covering_order(cluster, wide=p['wide'])[:k]
+        if p['post']:
             return [self.post_feature(self, i) for i in indices]
         else:
             return indices
@@ -447,6 +428,9 @@ class XGismo(Gismo):
                 If set, will load xgismo from file.
     path: str or Path, optional
         Directory where the xgismo is to be loaded from.
+    kwargs: dict
+        Custom default runtime parameters.
+        You just need to specify the parameters that differ from :class:`~gismo.parameters.DEFAULT_PARAMETERS`.
 
     Examples
     ---------
@@ -517,6 +501,9 @@ class XGismo(Gismo):
            Text that starts DIteration
         y: bool
            Determines if query should be evaluated on features (``True``) or documents (``False``).
+        kwargs: dict, optional
+            Custom runtime parameters.
+
 
         Returns
         -------
@@ -526,13 +513,13 @@ class XGismo(Gismo):
         p = self.parameters(**kwargs)
         if y:
             z, found = self.y_projection(query)
-            self.diteration.offset = 1.0
+            offset = 1.0
         else:
             z, found = self.x_projection(query)
             z = np.dot(z, self.embedding.x)
-            self.diteration.offset = 0.0
+            offset = 0.0
         self.embedding._result_found = found
         self.diteration(self.embedding.x, self.embedding.y, z,
                         alpha=p['alpha'], n_iter=p['n_iter'],
-                        offset=p['offset'], memory=p['memory'])
+                        offset=offset, memory=p['memory'])
         return found

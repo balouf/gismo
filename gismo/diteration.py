@@ -11,7 +11,7 @@ def jit_diffusion(x_pointers, x_indices, x_data,
                   y_pointers, y_indices, y_data,
                   z_indices, z_data,
                   x_relevance, y_relevance,
-                  alpha, n_iter, offset,
+                  alpha, n_iter, offset: float,
                   x_fluid, y_fluid):
     """
     Core diffusion engine written to be compatible with `Numba <https://numba.pydata.org/>`_.
@@ -69,13 +69,15 @@ def jit_diffusion(x_pointers, x_indices, x_data,
             y_fluid[j] = 0.0
             if f > 0:
                 y_relevance[j] += f
-                x_fluid[y_indices[y_pointers[j]:y_pointers[j + 1]]] += f * alpha * y_data[y_pointers[j]:y_pointers[j + 1]]
+                x_fluid[y_indices[y_pointers[j]:y_pointers[j + 1]]] += f * alpha * y_data[
+                                                                                   y_pointers[j]:y_pointers[j + 1]]
         for i in range(n):
             f = x_fluid[i]
             x_fluid[i] = 0.0
             if f > 0:
                 x_relevance[i] += f
-                y_fluid[x_indices[x_pointers[i]:x_pointers[i + 1]]] += f * alpha * x_data[x_pointers[i]:x_pointers[i + 1]]
+                y_fluid[x_indices[x_pointers[i]:x_pointers[i + 1]]] += f * alpha * x_data[
+                                                                                   x_pointers[i]:x_pointers[i + 1]]
 
     # Don't waste the last drop of fluid, it's free!
     for i in range(m):
@@ -116,7 +118,7 @@ class DIteration:
         self._y_fluid = np.zeros(m)
 
     def __call__(self, x, y, z,
-                 alpha=ALPHA, n_iter=N_ITER, offset=OFFSET, memory=MEMORY):
+                 alpha=ALPHA, n_iter=N_ITER, offset: float = OFFSET, memory=MEMORY):
         """
         Performs DIteration algorithm and populate relevance / order vectors.
 
