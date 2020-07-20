@@ -142,8 +142,6 @@ class Gismo(MixInIO):
 
             self.parameters = Parameters(**kwargs)
 
-            self.query_distortion = True
-
             self.post_document = post_document
             self.post_feature = post_feature
             self.post_document_cluster = post_document_cluster

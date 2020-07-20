@@ -133,7 +133,7 @@ class Sentencizer:
         local_embedding.fit_ext(self.doc_gismo.embedding)
         local_embedding.transform(self.sent_corpus)
         self.sent_gismo = Gismo(self.sent_corpus, local_embedding)
-        self.sent_gismo.query_distortion = False
+        self.sent_gismo.parameters.distortion = 0.0
         self.sent_gismo.post_document = lambda g, i: g.corpus.to_text(g.corpus[i])
         return self
 

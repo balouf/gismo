@@ -2,6 +2,10 @@
 History
 =======
 
+X.X.X (TODO-List)
+-----------------
+* re-working distortion on both vectors normalization and IDTF/query trade-off.
+
 0.4.0 (2020-07-09)
 ------------------
 * Landmarks! Half Corpus, half Gismo, the Landmarks class can simplify many analysis tasks.

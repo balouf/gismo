@@ -20,7 +20,7 @@ def my_gismo():
     embedding = Embedding(vectorizer=vectorizer)
     embedding.fit_transform(corpus)
     gismo = Gismo(corpus, embedding)
-    gismo.query_distortion = False
+    gismo.parameters.distortion = 0.0
     gismo.rank("Gizmo")
     return gismo
 

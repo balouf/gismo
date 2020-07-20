@@ -1,7 +1,7 @@
 import logging
+
 logging.basicConfig()
 log = logging.getLogger("Gismo")
-
 
 ALPHA = .5
 """
@@ -81,18 +81,47 @@ DEFAULT_PARAMETERS = {'alpha': ALPHA,
                       'wide': WIDE,
                       'post': POST,
                       'distortion': DISTORTION
-}
+                      }
 """
 Dictionary of default `runtime` Gismo parameters.
 """
 
+X_DENSITY = 1000
+"""Default number of documents representing a Landmarks entry"""
+
+Y_DENSITY = 1000
+"""Default number of features representing a Landmarks entry"""
+
+BALANCE = 0.5
+"""Default documents/features trade-off in Landmarks."""
+
+DEFAULT_LANDMARKS_PARAMETERS = {
+    'stretch': STRETCH,
+    'resolution': RESOLUTION,
+    'max_k': MAX_K,
+    'target_k': TARGET_K,
+    'wide': WIDE,
+    'post': POST,
+    'distortion': DISTORTION,
+    'x_density': X_DENSITY,
+    'y_density': Y_DENSITY,
+    'balance': BALANCE,
+    'rank': lambda g, q: g.rank(q)
+}
+"""
+Dictionary of default `runtime` Landmarks parameters.
+"""
+
+
 class Parameters:
     """
-    Manages Gismo runtime parameters. When called, an instance will yield
-    a dictionary of parameters.
+    Manages :class:`~gismo.gismo.Gismo` runtime parameters. When called, an instance will yield
+    a dictionary of parameters. Is also used for other Gismo classes like :class:`~gismo.landmarks.Landmarks`.
 
     Parameters
     ----------
+    parameter_list: dict, optional
+        Indicates which paramaters to manage. Default to Gismo runtime parameter.
     kwargs: dict
         Parameters that need to be distinct from default values.
 
@@ -141,10 +170,18 @@ class Parameters:
     {'alpha': 0.85, 'n_iter': 4, 'offset': 1.0, 'memory': 0.0,
     'stretch': 2.0, 'resolution': 0.7, 'max_k': 100, 'target_k': 1.0,
     'wide': True, 'post': True, 'distortion': 1.0}
+
+    Note the possibility to store custom set of parameters if using ```parameter_list`` in construction.
+
+    >>> p = Parameters(parameter_list={'a': 1.0, 'b': True}, a=1.5)
+    >>> p()
+    {'a': 1.5, 'b': True}
     """
 
-    def __init__(self, **kwargs):
-        for key, value in DEFAULT_PARAMETERS.items():
+    def __init__(self, parameter_list=None, **kwargs):
+        if parameter_list is None:
+            parameter_list = DEFAULT_PARAMETERS
+        for key, value in parameter_list.items():
             setattr(self, key, value)
         for key, value in kwargs.items():
             if hasattr(self, key):
@@ -152,6 +189,7 @@ class Parameters:
                     setattr(self, key, value)
             else:
                 log.warning(f"No parameter named {key}!")
+
     def __call__(self, **kwargs):
         d = {key: value for key, value in self.__dict__.items()}
         for key, value in kwargs.items():

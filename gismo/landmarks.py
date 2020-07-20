@@ -3,10 +3,11 @@ import logging
 from scipy.sparse import csr_matrix, vstack, hstack
 
 from gismo.common import auto_k, toy_source_text
+from gismo.parameters import Parameters, DEFAULT_LANDMARKS_PARAMETERS
 from gismo.corpus import Corpus
 from gismo.embedding import Embedding
 from gismo.gismo import Gismo
-from gismo.clustering import subspace_clusterize, Cluster
+from gismo.clustering import subspace_clusterize, Cluster, subspace_distortion
 
 logging.basicConfig()
 log = logging.getLogger("Gismo")
@@ -151,7 +152,7 @@ class Landmarks(Corpus):
 
     For better readibility, we set the item post_processing to return the `name` of a landmark item.
 
-    >>> landmarks.post_rank = lambda lmk, i: lmk[i]['name']
+    >>> landmarks.post_item = lambda lmk, i: lmk[i]['name']
     >>> landmarks.get_ranked_landmarks(gismo)
     ['Gremlins', 'Star Wars', 'Movies']
 
@@ -239,7 +240,7 @@ class Landmarks(Corpus):
     The reduction is controlled by the `x_density` attribute that tells the number of documents each landmark will
     allow to keep.
 
-    >>> landmarks.x_density = 1
+    >>> landmarks.parameters.x_density = 1
     >>> reduced_gismo = landmarks.get_reduced_gismo(gismo)
     >>> reduced_gismo.corpus.source # doctest: +NORMALIZE_WHITESPACE
     ['This is another sentence about Shadoks.',
@@ -250,10 +251,10 @@ class Landmarks(Corpus):
     specifies how to run a query on a :py:class:`~gismo.gismo.Gismo`. Yet, it is possible to construct the example
     above with the text conversion handled by the `ranking_function`.
 
-    >>> landmarks = Landmarks(landmarks_source, ranking_function=lambda g, q: g.rank(q['content']))
+    >>> landmarks = Landmarks(landmarks_source, rank=lambda g, q: g.rank(q['content']))
     >>> landmarks.fit(gismo)
     >>> success = gismo.rank('yoda')
-    >>> landmarks.post_rank = lambda lmk, i: lmk[i]['name']
+    >>> landmarks.post_item = lambda lmk, i: lmk[i]['name']
     >>> landmarks.get_ranked_landmarks(gismo)
     ['Star Wars', 'Movies', 'Gremlins']
 
@@ -269,20 +270,13 @@ class Landmarks(Corpus):
     >>> landmarks = Landmarks(landmarks_source, to_text=lambda e: e['content'])
     >>> landmarks.fit(gismo)
     >>> success = gismo.rank('gizmo')
-    >>> landmarks.post_rank = lambda lmk, i: lmk[i]['name']
+    >>> landmarks.post_item = lambda lmk, i: lmk[i]['name']
     >>> landmarks.get_ranked_landmarks(gismo)
     ['Shadoks', 'unrelated']
     """
 
-    def __init__(self, source=None, to_text=None, filename=None, path='.',
-                 x_density=1000, y_density=1000, ranking_function=None):
-        if ranking_function is None:
-            self.rank = lambda g, q: g.rank(q)
-        else:
-            self.rank = ranking_function
-
-        self.x_density = x_density
-        self.y_density = y_density
+    def __init__(self, source=None, to_text=None, filename=None, path='.', **kwargs):
+        self.parameters = Parameters(parameter_list=DEFAULT_LANDMARKS_PARAMETERS, **kwargs)
 
         self.x_vectors = None
         self.y_vectors = None
@@ -290,33 +284,31 @@ class Landmarks(Corpus):
         self.x_direction = None
         self.y_direction = None
 
-        self.x_len = None
-        self.y_len = None
-
-        self.post_rank = post_landmarks_item_default
+        self.post_item = post_landmarks_item_default
         self.post_cluster = post_landmarks_cluster_default
 
         super().__init__(source=source, to_text=to_text, filename=filename, path=path)
 
-    def embed_entry(self, gismo, entry):
+    def embed_entry(self, gismo, entry, **kwargs):
+        p = self.parameters(**kwargs)
         log.debug(f"Processing {entry}.")
-        success = self.rank(gismo, entry)
+        success = p['rank'](gismo, entry)
         if not success:
             log.warning(f"Query {entry} didn't match any feature.")
 
-        indptr = [0, min(self.y_density, self.y_len)]
-        indices = gismo.diteration.y_order[:self.y_density]
+        indptr = [0, min(p['y_density'], gismo.embedding.m)]
+        indices = gismo.diteration.y_order[:p['y_density']]
         data = gismo.diteration.y_relevance[indices]
         y = csr_matrix((data, indices, indptr), shape=(1, gismo.embedding.m))
 
-        indptr = [0, min(self.x_density, self.x_len)]
-        indices = gismo.diteration.x_order[:self.x_density]
+        indptr = [0, min(p['x_density'], gismo.embedding.n)]
+        indices = gismo.diteration.x_order[:p['x_density']]
         data = gismo.diteration.x_relevance[indices]
         x = csr_matrix((data, indices, indptr), shape=(1, gismo.embedding.n))
         log.debug(f"Landmarks of {entry} computed.")
         return x / np.sum(x), y / np.sum(y)
 
-    def fit(self, gismo):
+    def fit(self, gismo, **kwargs):
         """
         Runs gismo queries on all landmarks.
         The relevance results are used to build two set of vectors:
@@ -328,6 +320,9 @@ class Landmarks(Corpus):
         Parameters
         ----------
         gismo: Gismo
+            The Gismo on which vectors will be computed.
+        kwargs: dict
+            Custom Landmarks runtime parameters.
 
         Returns
         -------
@@ -335,9 +330,7 @@ class Landmarks(Corpus):
 
         """
         log.info(f"Start computation of {len(self)} landmarks.")
-        self.x_len = gismo.embedding.n
-        self.y_len = gismo.embedding.m
-        xy = [self.embed_entry(gismo, entry) for entry in self.iterate_text()]
+        xy = [self.embed_entry(gismo, entry, **kwargs) for entry in self.iterate_text()]
         self.x_vectors = vstack([v[0] for v in xy])
         self.x_direction = np.squeeze(np.asarray(np.sum(self.x_vectors, axis=0)))
         self.y_vectors = vstack([v[1] for v in xy])
@@ -347,11 +340,11 @@ class Landmarks(Corpus):
     def get_base(self, balance):
         return csr_matrix(hstack([balance * self.x_vectors, (1 - balance) * self.y_vectors]))
 
-    def get_ranked_landmarks(self, reference, k=None, target=1.0, max_k=100, balance=0.5,
-                             base=None, post=True):
+    def get_ranked_landmarks(self, reference, k=None, base=None, **kwargs):
+        p = self.parameters(**kwargs)
         if base is None:
-            base = self.get_base(balance)
-        direction = get_direction(reference, balance)
+            base = self.get_base(p['balance'])
+        direction = get_direction(reference, p['balance'])
         if isinstance(direction, np.ndarray):
             similarities = base.dot(direction)
         elif isinstance(direction, csr_matrix):
@@ -362,24 +355,28 @@ class Landmarks(Corpus):
             similarities = None
         order = np.argsort(-similarities)
         if k is None:
-            k = auto_k(data=similarities, order=order, max_k=max_k, target=target)
-        if post:
-            return [self.post_rank(self, i) for i in order[:k]]
+            k = auto_k(data=similarities, order=order, max_k=p['max_k'], target=p['target_k'])
+        if p['post']:
+            return [self.post_item(self, i) for i in order[:k]]
         else:
             return order[:k]
 
-    def get_clustered_landmarks(self, reference, k=None, target=1.0, max_k=100, balance=0.5,
-                                resolution=.7, distortion=True, post=True):
-        base = self.get_base(balance)
-        direction = get_direction(reference, balance)
-        order = self.get_ranked_landmarks(reference=direction, k=k, target=target, max_k=max_k,
-                                          balance=balance, base=base, post=False)
-        if distortion:
-            subspace = csr_matrix(vstack([base[i, :].multiply(direction) for i in order]))
-        else:
-            subspace = csr_matrix(vstack([base[i, :] for i in order]))
-        cluster = subspace_clusterize(subspace, resolution=resolution, indices=order)
-        if post:
+    def get_clustered_landmarks(self, reference, k=None, **kwargs):
+        p = self.parameters(**kwargs)
+        base = self.get_base(p['balance'])
+        direction = get_direction(reference, p['balance'])
+        order = self.get_ranked_landmarks(reference=direction, k=k, base=base,
+                                          target_k=p['target_k'], max_k=p['max_k'],
+                                          balance=p['balance'], post=False)
+
+
+        subspace = vstack([base[i, :] for i in order])
+        if p['distortion']>0:
+            subspace_distortion(indices=subspace.indices, data=subspace.data,
+                                relevance=direction, distortion=p['distortion'])
+
+        cluster = subspace_clusterize(subspace, resolution=p['resolution'], indices=order)
+        if p['post']:
             return self.post_cluster(self, cluster)
         else:
             return cluster
@@ -395,4 +392,6 @@ class Landmarks(Corpus):
                                 to_text=gismo.corpus.to_text)
         reduced_embedding = Embedding(vectorizer=gismo.embedding.vectorizer)
         reduced_embedding.fit_transform(reduced_corpus)
-        return Gismo(reduced_corpus, reduced_embedding)
+        reduced_gismo = Gismo(reduced_corpus, reduced_embedding)
+        reduced_gismo.parameters = gismo.parameters
+        return reduced_gismo
