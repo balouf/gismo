@@ -9,7 +9,8 @@ class Sentencizer:
     """
     The Sentencizer class allows to refine a document-level gismo into a sentence-level gismo.
     A simple sentence extraction is proposed.
-    For more complex usages, the class can provide a full :py:class:`~gismo.gismo.Gismo` instance.
+    For more complex usages, the class can provide a full :py:class:`~gismo.gismo.Gismo` instance that operates at
+    sentence-level.
 
     Parameters
     ----------
@@ -104,7 +105,7 @@ class Sentencizer:
             self.sent_corpus = Corpus(source, to_text=lambda x: x['content'])
         return self
 
-    def make_local_gismo(self, query=None, txt=None, k=None):
+    def make_sent_gismo(self, query=None, txt=None, k=None, **kwargs):
         """
         Construct a sentence-level Gismo stored in the :py:attr:`sent_gismo` attribute.
 
@@ -118,6 +119,12 @@ class Sentencizer:
         k: int (optional)
             Number of top-documents used for the built.
             If not set, the :py:func:`~gismo.common.auto_k` heuristic will be used.
+        kwargs: dict
+            Custom default runtime parameters to pass to the sentence-level Gismo.
+            You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_PARAMETERS`.
+            Note that distortion will be automatically de-activated. If you really want it, manually change the value
+            of ``self.sent_gismo.parameters.distortion`` afterwards.
+
 
         Returns
         -------
@@ -132,7 +139,7 @@ class Sentencizer:
         local_embedding = Embedding()
         local_embedding.fit_ext(self.doc_gismo.embedding)
         local_embedding.transform(self.sent_corpus)
-        self.sent_gismo = Gismo(self.sent_corpus, local_embedding)
+        self.sent_gismo = Gismo(self.sent_corpus, local_embedding, **kwargs)
         self.sent_gismo.parameters.distortion = 0.0
         self.sent_gismo.post_documents_item = lambda g, i: g.corpus.to_text(g.corpus[i])
         return self
@@ -142,7 +149,7 @@ class Sentencizer:
         """
         All-in-one method to extract covering sentences from the corpus.
         Computes sentence-level corpus, sentence-level gismo,
-        and calls :py:meth:`~gismo.gismo.Gismo.get_covering_documents`.
+        and calls :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage`.
 
         Parameters
         ----------
@@ -153,25 +160,25 @@ class Sentencizer:
             If not set, the sentences will be extracted from the top-documents.
         k: int (optional)
             Number of top-documents used for the built.
-            If not set, the :py:func:`~gismo.common.auto_k` heuristic will be used.
+            If not set, the :py:func:`~gismo.common.auto_k` heuristic of the document-level Gismo will be used.
         s: int (optional)
             Number of sentences to return.
-            If not set, the :py:func:`~gismo.common.auto_k` heuristic will be used.
+            If not set, the :py:func:`~gismo.common.auto_k` heuristic of the sentence-level Gismo will be used.
         resolution: float (optional)
-            Tree resolution passed to the :py:meth:`~gismo.gismo.Gismo.get_covering_documents` method.
+            Tree resolution passed to the :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage` method.
         stretch: float >= 1 (optional)
-            Stretch factor passed to the :py:meth:`~gismo.gismo.Gismo.get_covering_documents` method.
+            Stretch factor passed to the :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage` method.
         wide: bool (optional)
-            bfs wideness passed to the :py:meth:`~gismo.gismo.Gismo.get_covering_documents` method.
+            bfs wideness passed to the :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage` method.
         post: bool (optional)
-            Use of post-proccessing passed to the :py:meth:`~gismo.gismo.Gismo.get_covering_documents` method.
+            Use of post-proccessing passed to the :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage` method.
 
         Returns
         -------
         list
         """
 
-        self.make_local_gismo(query=query, txt=txt, k=k)
+        self.make_sent_gismo(query=query, txt=txt, k=k)
         if query is None:
             query = self.doc_gismo.embedding._query
         self.sent_gismo.rank(query)

@@ -92,7 +92,8 @@ class Gismo(MixInIO):
     -- chinese (R: 0.00; S: 0.07)
     -- folklore (R: 0.00; S: 0.07)
 
-    The class also offers ``get_covering_documents`` and ``get_covering_features`` that yield
+    The class also offers :meth:`~gismo.gismo.Gismo.get_documents_by_coverage` and
+    :meth:`~gismo.gismo.Gismo.get_features_by_coverage` that yield
     a list of results obtained from a Covering-like traversal of the ranked cluster.
 
     To demonstrate it, we first add an outsider document to the corpus and rebuild Gismo.
@@ -244,7 +245,7 @@ class Gismo(MixInIO):
 
         Returns
         -------
-        Object
+        object
 
         """
         p = self.parameters(**kwargs)
@@ -272,7 +273,7 @@ class Gismo(MixInIO):
 
         Returns
         -------
-        Object
+        object
 
         """
         p = self.parameters(**kwargs)
@@ -298,7 +299,7 @@ class Gismo(MixInIO):
 
         Returns
         -------
-        Object
+        object
 
         """
         p = self.parameters(**kwargs)
@@ -326,7 +327,7 @@ class Gismo(MixInIO):
 
         Returns
         -------
-        Object
+        object
         """
         p = self.parameters(**kwargs)
         if k is None:

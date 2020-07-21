@@ -38,13 +38,16 @@ def create_file_source(source=None, filename='mysource', path='.'):
 
 class FileSource:
     """
-    Yield a file source as a list. File corpus is made of two files:
-    The *corpus*.data file contains the stacked items. Each item is compressed with :py:mod:`zlib`;
-    The  *corpus*.index files contains the list of pointers to seek items in the data file
+    Yield a file source as a list. Assumes the existence of two files:
+    The *mysource*.data file contains the stacked items. Each item is compressed with :py:mod:`zlib`;
+    The  *mysource*.index files contains the list of pointers to seek items in the data file.
 
-    The resulting source object can be iterated (``[item for item in source]``),
-    can yield single items (``source[i]``), and has a length (``len(source)``). Slices are not
-    implemented.
+    The resulting source object is fully compatible with the :class:`~gismo.corpus.Corpus` class:
+     * It can be iterated (``[item for item in source]``);
+     * It can yield single items (``source[i]``);
+     * It has a length (``len(source)``).
+
+    More advanced functionalities like slices are not implemented.
 
     Parameters
     ----------

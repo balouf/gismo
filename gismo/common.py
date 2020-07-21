@@ -11,19 +11,6 @@ import numpy as np
 
 from pathlib import Path
 
-# DIteration parameters
-ALPHA = .25  # diffusion attenuation
-N_ITER = 4  # Number of round-trip diffusions
-D_MAX = 10  # Maximum number of documents
-K_MAX = 5  # Maximum number of keywords
-S_MAX = 4  # Maximum number of sentences
-F_MAX = 6  # Maximum number of features
-
-# Hierarchical clustering parameters
-STRETCH = 2  # Stretch factor that determines the coverage/relevance trade-off
-C_MAX = 3  # Maximum depth of concepts
-P_MAX = 4  # Maximum depth of document partitions
-
 
 class MixInIO:
     """
@@ -38,16 +25,12 @@ class MixInIO:
         ----------
         filename: str
             The stem of the filename.
-        path: str or Path
+        path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
             The location path.
-        erase:
+        erase: bool
             Should existing file be erased if it exists?
-        compress:
+        compress: bool
             Should gzip compression be used?
-
-        Returns
-        -------
-        None
 
         Examples
         ----------
@@ -114,12 +97,8 @@ class MixInIO:
         ----------
         filename: str
             The stem of the filename.
-        path: str or Path
+        path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
             The location path.
-
-        Returns
-        -------
-        None
         """
         path = Path(path)
         dest = path / Path(filename).with_suffix(".pkl")
@@ -138,9 +117,9 @@ class MixInIO:
 
 class ToyClass(MixInIO):
     """
-    A minimal class to demonstrate the use of the MixInIO MixIN.
+    A minimal class to demonstrate the use of the :class:`~gismo.common.MixInIO` MixIN.
 
-    The class itself just stores one value, but the MixIn provides save/load capabilities for free.
+    The class itself just stores one value, but the MixIn automatically adds save/load capabilities.
 
     Parameters
     ----------
@@ -157,7 +136,7 @@ def auto_k(data, order=None, max_k=100, target=1.0):
 
     Parameters
     ----------
-    data: np.array
+    data: :class:`~numpy.ndarray`
         Vector with positive relevance values.
     order: list of int, optional
         Ordered indices of ``data``

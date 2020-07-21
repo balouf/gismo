@@ -67,7 +67,7 @@ DISTORTION = 1.0
 """
 Default distortion.
 Controls how much of diteration relevance is mixed into the embedding
-for similirity computation.
+for similarity computation.
 """
 
 DEFAULT_PARAMETERS = {'alpha': ALPHA,
@@ -83,17 +83,17 @@ DEFAULT_PARAMETERS = {'alpha': ALPHA,
                       'distortion': DISTORTION
                       }
 """
-Dictionary of default `runtime` Gismo parameters.
+Dictionary of default `runtime` :class:`~gismo.gismo.Gismo` parameters.
 """
 
 X_DENSITY = 1000
-"""Default number of documents representing a Landmarks entry"""
+"""Default number of documents representing a :class:`~gismo.landmarks.Landmarks` entry."""
 
 Y_DENSITY = 1000
-"""Default number of features representing a Landmarks entry"""
+"""Default number of features representing a :class:`~gismo.landmarks.Landmarks` entry."""
 
 BALANCE = 0.5
-"""Default documents/features trade-off in Landmarks."""
+"""Default documents/features trade-off in :class:`~gismo.landmarks.Landmarks`."""
 
 DEFAULT_LANDMARKS_PARAMETERS = {
     'stretch': STRETCH,
@@ -109,7 +109,7 @@ DEFAULT_LANDMARKS_PARAMETERS = {
     'rank': lambda g, q: g.rank(q)
 }
 """
-Dictionary of default `runtime` Landmarks parameters.
+Dictionary of default `runtime` :class:`~gismo.landmarks.Landmarks` parameters.
 """
 
 
@@ -163,7 +163,7 @@ class Parameters:
     >>> p(resolution=0.9)['resolution']
     0.9
 
-    Like for construction, parameters tha do not exist are ignored and a warning
+    Like for construction, parameters that do not exist are ignored and a warning
     is issued.
 
     >>> p(resolutio = .9) # doctest: +NORMALIZE_WHITESPACE
@@ -171,7 +171,7 @@ class Parameters:
     'stretch': 2.0, 'resolution': 0.7, 'max_k': 100, 'target_k': 1.0,
     'wide': True, 'post': True, 'distortion': 1.0}
 
-    Note the possibility to store custom set of parameters if using ```parameter_list`` in construction.
+    Note the possibility to store a custom set of parameters if one uses ``parameter_list`` in construction.
 
     >>> p = Parameters(parameter_list={'a': 1.0, 'b': True}, a=1.5)
     >>> p()

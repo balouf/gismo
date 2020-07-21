@@ -147,7 +147,8 @@ def element_to_filesource(elt, data_handler, index):
 
     Returns
     -------
-    True
+    bool
+        Always return True for compatibility with the xml parser.
     """
     dic = xml_element_to_dict(elt=elt)
     if dic is None:
@@ -159,7 +160,7 @@ def element_to_filesource(elt, data_handler, index):
 
 class Dblp:
     """
-    The DBLP class can download DBLP database and produce source files compatible with the FileSource class.
+    The DBLP class can download DBLP database and produce source files compatible with the :class:`~gismo.filesource.FileSource` class.
 
     Parameters
     ----------

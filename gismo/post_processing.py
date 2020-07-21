@@ -14,7 +14,7 @@ def post_documents_item_raw(gismo, i):
 
     Returns
     -------
-    Object
+    object
         Document i from corpus
     """
     return gismo.corpus[i]

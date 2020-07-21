@@ -178,8 +178,8 @@ class Landmarks(Corpus):
     |- Shadoks
 
     Note that a :py:class:`~gismo.clustering.Cluster` can also be used as reference for the
-    :func:`~gismo.landmarks.Landmarks.get_ranked_landmarks` and
-    :func:`~gismo.landmarks.Landmarks.get_clustered_landmarks` methods.
+    :meth:`~gismo.landmarks.Landmarks.get_landmarks_by_rank` and
+    :meth:`~gismo.landmarks.Landmarks.get_landmarks_by_cluster` methods.
 
     >>> cluster = landmarks.get_landmarks_by_cluster(gismo, post=False)
     >>> landmarks.get_landmarks_by_rank(cluster)

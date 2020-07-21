@@ -6,18 +6,25 @@ X.X.X (TODO-List)
 -----------------
 * re-working distortion on both vectors normalization and IDTF/query trade-off.
 
-0.4.0 (2020-07-09)
+0.4.0 (2020-07-21)
 ------------------
-* Landmarks! Half Corpus, half Gismo, the Landmarks class can simplify many analysis tasks.
-    * Landmarks are (small) corpus where each entry is augmented with the computation of an associated gismo query;
-    * Landmarks can be used to refine the analysis around a part of your data;
-    * They can be used as soft and fast classifiers.
-* Documentation summer cleaning.
+0.4 is a big update. Lot of things added, lot of things changed.
+
 * New API for Gismo runtime parameters (see new parameters module for details). Short version:
     * ``gismo = Gismo(corpus, embedding, alpha=0.85)``: create a gismo with damping factor set to 0.85 instead of default value.
     * ``gismo.parameters.alpha = 0.85``: set the damping factor of the gismo to 0.85.
     * ``gismo.rank(query, alpha=0.85)``: makes a query with damping factor temporarily set to 0.85.
+* Landmarks! Half Corpus, half Gismo, the Landmarks class can simplify many analysis tasks.
+    * Landmarks are (small) corpus where each entry is augmented with the computation of an associated gismo query;
+    * Landmarks can be used to refine the analysis around a part of your data;
+    * They can be used as soft and fast classifiers.
+    * Landmarks' runtime parameters follow the same approach than for Gismo instances (cf above).
+* Documentation summer cleaning.
 * ``query_distortion`` parameter (reshape subspace for clustering) is renamed ``distortion`` and is now a float instead of a bool (e.g. you can apply distortion in a non-binary way).
+* Full refactoring of get_*** and post_*** methods and objects.
+    * The good news is that they are now more natural, self-describing, and unified.
+    * The bad news is that there is no backward-compatibility with previous Gismo versions. Hopefully this refactoring
+      will last for some time!
 
 0.3.1 (2020-06-12)
 ------------------
