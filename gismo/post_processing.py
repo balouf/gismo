@@ -1,7 +1,7 @@
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def post_document(gismo, i):
+def post_documents_item_raw(gismo, i):
     """
     Document indice to document entry
 
@@ -20,7 +20,7 @@ def post_document(gismo, i):
     return gismo.corpus[i]
 
 
-def post_document_content(gismo, i, max_size=None):
+def post_documents_item_content(gismo, i, max_size=None):
     """
     Document indice to document content.
 
@@ -43,7 +43,7 @@ def post_document_content(gismo, i, max_size=None):
     return gismo.corpus[i]['content'][:max_size]
 
 
-def post_feature(gismo, i):
+def post_features_item_raw(gismo, i):
     """
     Feature indice to feature name
 
@@ -62,7 +62,7 @@ def post_feature(gismo, i):
     return gismo.embedding.features[i]
 
 
-def post_document_cluster(gismo, cluster):
+def post_documents_cluster_json(gismo, cluster):
     """
     Convert cluster of documents into basic json
 
@@ -80,10 +80,10 @@ def post_document_cluster(gismo, cluster):
     """
     return {'document': gismo.corpus[cluster.indice],
             'focus': cluster.focus,
-            'children': [post_document_cluster(gismo, c) for c in cluster.children]}
+            'children': [post_documents_cluster_json(gismo, c) for c in cluster.children]}
 
 
-def print_document_cluster(gismo, cluster, depth=""):
+def post_documents_cluster_print(gismo, cluster, depth=""):
     """
     Print an ASCII view of a document cluster with metrics (focus, relevance, similarity)
 
@@ -107,10 +107,10 @@ def print_document_cluster(gismo, cluster, depth=""):
               f"R: {sum(gismo.diteration.x_relevance[cluster.members]):.2f}. "
               f"S: {sim:.2f}.")
     for c in cluster.children:
-        print_document_cluster(gismo, c, depth=depth + '-')
+        post_documents_cluster_print(gismo, c, depth=depth + '-')
 
 
-def post_feature_cluster(gismo, cluster):
+def post_features_cluster_json(gismo, cluster):
     """
     Convert feature cluster into basic json
 
@@ -128,10 +128,10 @@ def post_feature_cluster(gismo, cluster):
     """
     return {'feature': gismo.embedding.features[cluster.indice],
             'focus': cluster.focus,
-            'children': [post_feature_cluster(gismo, c) for c in cluster.children]}
+            'children': [post_features_cluster_json(gismo, c) for c in cluster.children]}
 
 
-def print_feature_cluster(gismo, cluster, depth=""):
+def post_features_cluster_print(gismo, cluster, depth=""):
     """
         Print an ASCII view of a feature cluster with metrics (focus, relevance, similarity)
 
@@ -154,5 +154,44 @@ def print_feature_cluster(gismo, cluster, depth=""):
               f"R: {sum(gismo.diteration.y_relevance[cluster.members]):.2f}. "
               f"S: {sim:.2f}.")
     for c in cluster.children:
-        print_feature_cluster(gismo, c, depth=depth + '-')
+        post_features_cluster_print(gismo, c, depth=depth + '-')
 
+
+def post_landmarks_item_raw(landmark, i):
+    """
+    Default post processor for individual landmarks.
+
+    Parameters
+    ----------
+    landmark: Landmarks
+        A Landmarks instance
+    i: int
+        Indice of the landmark to process.
+
+    Returns
+    -------
+    object
+        The landmark of indice i.
+    """
+    return landmark[i]
+
+
+def post_landmarks_cluster_json(landmark, cluster):
+    """
+    Default post processor for a cluster of landmarks.
+
+    Parameters
+    ----------
+    landmark: Landmarks
+        A Landmarks instance
+    cluster: Cluster
+        Cluster of the landmarks to process.
+
+    Returns
+    -------
+    dict
+        A dict with the head landmark, cluster focus, and list of children.
+    """
+    return {'landmark': landmark[cluster.indice],
+            'focus': cluster.focus,
+            'children': [post_landmarks_cluster_json(landmark, child) for child in cluster.children]}

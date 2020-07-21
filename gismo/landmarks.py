@@ -8,49 +8,10 @@ from gismo.corpus import Corpus
 from gismo.embedding import Embedding
 from gismo.gismo import Gismo
 from gismo.clustering import subspace_clusterize, Cluster, subspace_distortion
+from gismo.post_processing import post_landmarks_item_raw, post_landmarks_cluster_json
 
 logging.basicConfig()
 log = logging.getLogger("Gismo")
-
-
-def post_landmarks_item_default(landmark, i):
-    """
-    Default post processor for individual landmarks.
-
-    Parameters
-    ----------
-    landmark: Landmarks
-        A Landmarks instance
-    i: int
-        Indice of the landmark to process.
-
-    Returns
-    -------
-    object
-        The landmark of indice i.
-    """
-    return landmark[i]
-
-
-def post_landmarks_cluster_default(landmark, cluster):
-    """
-    Default post processor for a cluster of landmarks.
-
-    Parameters
-    ----------
-    landmark: Landmarks
-        A Landmarks instance
-    cluster: Cluster
-        Cluster of the landmarks to process.
-
-    Returns
-    -------
-    dict
-        A dict with the head landmark, cluster focus, and list of children.
-    """
-    return {'landmark': landmark[cluster.indice],
-            'focus': cluster.focus,
-            'children': [post_landmarks_cluster_default(landmark, child) for child in cluster.children]}
 
 
 def get_direction(reference, balance):
@@ -103,14 +64,9 @@ class Landmarks(Corpus):
         Load landmarks from filename
     path: str or Path, optional
         Directory where the landmarks instance is to be loaded from.
-    x_density: int
-        nnz entries to keep on the documents space.
-    y_density: int
-        nnz entries to keep on the features space.
-    ranking_function: function, optional
-        Function that uses a gismo and a query as inputs and runs the query on the gismo. This is useful for
-        :py:class:`~gismo.gismo.Gismo` subclasses like :py:class:`~gismo.gismo.XGismo`, which have multiple ways
-        to run queries.
+    kwargs: dict
+        Custom default runtime parameters.
+        You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_LANDMARKS_PARAMETERS`.
 
     Examples
     --------
@@ -145,7 +101,7 @@ class Landmarks(Corpus):
     the word `Yoda` only exists in one sentence, which contains the words `Gremlins` and `Gizmo`.
 
     >>> success = gismo.rank('yoda')
-    >>> landmarks.get_ranked_landmarks(gismo) # doctest: +NORMALIZE_WHITESPACE
+    >>> landmarks.get_landmarks_by_rank(gismo) # doctest: +NORMALIZE_WHITESPACE
     [{'name': 'Gremlins', 'content': 'The Gremlins movie features a Mogwai.'},
     {'name': 'Star Wars', 'content': 'The Star Wars movies feature Yoda.'},
     {'name': 'Movies', 'content': 'Star Wars, Gremlins, and Blade are movies.'}]
@@ -153,37 +109,37 @@ class Landmarks(Corpus):
     For better readibility, we set the item post_processing to return the `name` of a landmark item.
 
     >>> landmarks.post_item = lambda lmk, i: lmk[i]['name']
-    >>> landmarks.get_ranked_landmarks(gismo)
+    >>> landmarks.get_landmarks_by_rank(gismo)
     ['Gremlins', 'Star Wars', 'Movies']
 
     The balance adjusts between documents and features spaces.
     A balance set to 1.0 focuses only on documents.
 
     >>> success = gismo.rank('blade')
-    >>> landmarks.get_ranked_landmarks(gismo, balance=1)
+    >>> landmarks.get_landmarks_by_rank(gismo, balance=1)
     ['Movies']
 
     A balance set to 0.0 focuses only on features.
     For *blade*, this triggers *Shadoks* as a secondary result, because of the shared word *sentence*.
 
-    >>> landmarks.get_ranked_landmarks(gismo, balance=0)
+    >>> landmarks.get_landmarks_by_rank(gismo, balance=0)
     ['Movies', 'Shadoks']
 
     Landmarks can be used to analyze landmarks.
 
-    >>> landmarks.get_ranked_landmarks(landmarks)
+    >>> landmarks.get_landmarks_by_rank(landmarks)
     ['Gremlins', 'Star Wars']
 
     See again how balance can change things.
     Here a balance set to 0.0 (using only features) fully changes the results.
 
-    >>> landmarks.get_ranked_landmarks(landmarks, balance=0)
+    >>> landmarks.get_landmarks_by_rank(landmarks, balance=0)
     ['Shadoks']
 
     Like for :py:class:`~gismo.gismo.Gismo`, landmarks can provide clusters.
 
     >>> success = gismo.rank('gizmo')
-    >>> landmarks.get_clustered_landmarks(gismo) # doctest: +NORMALIZE_WHITESPACE
+    >>> landmarks.get_landmarks_by_cluster(gismo) # doctest: +NORMALIZE_WHITESPACE
     {'landmark': {'name': 'Gremlins',
                   'content': 'The Gremlins movie features a Mogwai.'},
                   'focus': 0.9999983623793101,
@@ -204,7 +160,7 @@ class Landmarks(Corpus):
     ...     for c in cluster.children:
     ...         post_cluster(lmk, c, depth=depth+1)
     >>> landmarks.post_cluster = post_cluster
-    >>> landmarks.get_clustered_landmarks(gismo)
+    >>> landmarks.get_landmarks_by_cluster(gismo)
     |
     |- Gremlins
     |- Star Wars
@@ -212,7 +168,7 @@ class Landmarks(Corpus):
 
     Like for :py:class:`~gismo.gismo.Gismo`, parameters like `k`, `distortion`, or `resolution` can be used.
 
-    >>> landmarks.get_clustered_landmarks(gismo, k=4, distortion=False, resolution=.9)
+    >>> landmarks.get_landmarks_by_cluster(gismo, k=4, distortion=False, resolution=.9)
     |
     |-
     |--
@@ -225,13 +181,13 @@ class Landmarks(Corpus):
     :func:`~gismo.landmarks.Landmarks.get_ranked_landmarks` and
     :func:`~gismo.landmarks.Landmarks.get_clustered_landmarks` methods.
 
-    >>> cluster = landmarks.get_clustered_landmarks(gismo, post=False)
-    >>> landmarks.get_ranked_landmarks(cluster)
+    >>> cluster = landmarks.get_landmarks_by_cluster(gismo, post=False)
+    >>> landmarks.get_landmarks_by_rank(cluster)
     ['Gremlins', 'Star Wars', 'Movies']
 
     Yet, you cannot use anything as reference. For example, you cannot use a string as such.
 
-    >>> landmarks.get_ranked_landmarks("Landmarks do not use external queries (pass them to a gismo")  # doctest.ELLIPSIS
+    >>> landmarks.get_landmarks_by_rank("Landmarks do not use external queries (pass them to a gismo")  # doctest.ELLIPSIS
     Traceback (most recent call last):
     ...
     TypeError: bad operand type for unary -: 'NoneType'
@@ -255,7 +211,7 @@ class Landmarks(Corpus):
     >>> landmarks.fit(gismo)
     >>> success = gismo.rank('yoda')
     >>> landmarks.post_item = lambda lmk, i: lmk[i]['name']
-    >>> landmarks.get_ranked_landmarks(gismo)
+    >>> landmarks.get_landmarks_by_rank(gismo)
     ['Star Wars', 'Movies', 'Gremlins']
 
     However, this is bad practice. When you only need to customize the way an item is converted to text, you should
@@ -271,7 +227,7 @@ class Landmarks(Corpus):
     >>> landmarks.fit(gismo)
     >>> success = gismo.rank('gizmo')
     >>> landmarks.post_item = lambda lmk, i: lmk[i]['name']
-    >>> landmarks.get_ranked_landmarks(gismo)
+    >>> landmarks.get_landmarks_by_rank(gismo)
     ['Shadoks', 'unrelated']
     """
 
@@ -284,8 +240,8 @@ class Landmarks(Corpus):
         self.x_direction = None
         self.y_direction = None
 
-        self.post_item = post_landmarks_item_default
-        self.post_cluster = post_landmarks_cluster_default
+        self.post_item = post_landmarks_item_raw
+        self.post_cluster = post_landmarks_cluster_json
 
         super().__init__(source=source, to_text=to_text, filename=filename, path=path)
 
@@ -340,7 +296,7 @@ class Landmarks(Corpus):
     def get_base(self, balance):
         return csr_matrix(hstack([balance * self.x_vectors, (1 - balance) * self.y_vectors]))
 
-    def get_ranked_landmarks(self, reference, k=None, base=None, **kwargs):
+    def get_landmarks_by_rank(self, reference, k=None, base=None, **kwargs):
         p = self.parameters(**kwargs)
         if base is None:
             base = self.get_base(p['balance'])
@@ -361,13 +317,13 @@ class Landmarks(Corpus):
         else:
             return order[:k]
 
-    def get_clustered_landmarks(self, reference, k=None, **kwargs):
+    def get_landmarks_by_cluster(self, reference, k=None, **kwargs):
         p = self.parameters(**kwargs)
         base = self.get_base(p['balance'])
         direction = get_direction(reference, p['balance'])
-        order = self.get_ranked_landmarks(reference=direction, k=k, base=base,
-                                          target_k=p['target_k'], max_k=p['max_k'],
-                                          balance=p['balance'], post=False)
+        order = self.get_landmarks_by_rank(reference=direction, k=k, base=base,
+                                           target_k=p['target_k'], max_k=p['max_k'],
+                                           balance=p['balance'], post=False)
 
 
         subspace = vstack([base[i, :] for i in order])

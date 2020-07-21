@@ -11,8 +11,8 @@ from gismo.embedding import Embedding
 from gismo.diteration import DIteration
 from gismo.parameters import Parameters
 from gismo.clustering import subspace_clusterize, covering_order, subspace_distortion
-from gismo.post_processing import post_document, post_document_content, post_document_cluster, \
-    post_feature, post_feature_cluster, print_document_cluster, print_feature_cluster
+from gismo.post_processing import post_documents_item_raw, post_documents_item_content, post_documents_cluster_json, \
+    post_features_item_raw, post_features_cluster_json, post_documents_cluster_print, post_features_cluster_print
 
 
 class Gismo(MixInIO):
@@ -31,7 +31,7 @@ class Gismo(MixInIO):
         Directory where the gismo is to be loaded from.
     kwargs: dict
         Custom default runtime parameters.
-        You just need to specify the parameters that differ from :class:`~gismo.parameters.DEFAULT_PARAMETERS`.
+        You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_PARAMETERS`.
 
 
     Example
@@ -56,31 +56,31 @@ class Gismo(MixInIO):
     >>> gismo = Gismo(corpus, embedding)
     >>> success = gismo.rank("Gizmo")
     >>> gismo.parameters.target_k = .2 # The toy dataset is very small, so we lower the auto_k parameter.
-    >>> gismo.get_ranked_documents()
+    >>> gismo.get_documents_by_rank()
     [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}, {'title': 'Fourth Document', 'content': 'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.'}, {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
 
     Post processing functions can be used to tweak the returned object (the underlying ranking is unchanged)
 
-    >>> gismo.post_document = partial(post_document_content, max_size=42)
-    >>> gismo.get_ranked_documents()
+    >>> gismo.post_documents_item = partial(post_documents_item_content, max_size=42)
+    >>> gismo.get_documents_by_rank()
     ['Gizmo is a Mogwaï.', 'This very long sentence, with a lot of stu', 'In chinese folklore, a Mogwaï is a demon.']
 
     Ranking also works on features.
 
-    >>> gismo.get_ranked_features()
+    >>> gismo.get_features_by_rank()
     ['mogwaï', 'gizmo', 'is', 'in', 'demon', 'chinese', 'folklore']
 
     Clustering organizes results can provide additional hints on their relationships.
 
-    >>> gismo.post_document_cluster = print_document_cluster
-    >>> gismo.get_clustered_ranked_documents(resolution=.9) # doctest: +NORMALIZE_WHITESPACE
+    >>> gismo.post_documents_cluster = post_documents_cluster_print
+    >>> gismo.get_documents_by_cluster(resolution=.9) # doctest: +NORMALIZE_WHITESPACE
      F: 0.60. R: 0.65. S: 0.98.
     - F: 0.71. R: 0.57. S: 0.98.
     -- Gizmo is a Mogwaï. (R: 0.54; S: 0.99)
     -- In chinese folklore, a Mogwaï is a demon. (R: 0.04; S: 0.71)
     - This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda. (R: 0.08; S: 0.69)
-    >>> gismo.post_feature_cluster = print_feature_cluster
-    >>> gismo.get_clustered_ranked_features() # doctest: +NORMALIZE_WHITESPACE
+    >>> gismo.post_features_cluster = post_features_cluster_print
+    >>> gismo.get_features_by_cluster() # doctest: +NORMALIZE_WHITESPACE
      F: 0.03. R: 0.29. S: 0.98.
     - F: 1.00. R: 0.27. S: 0.99.
     -- mogwaï (R: 0.12; S: 0.99)
@@ -103,32 +103,32 @@ class Gismo(MixInIO):
     >>> embedding = Embedding(vectorizer=vectorizer)
     >>> embedding.fit_transform(corpus)
     >>> gismo = Gismo(corpus, embedding)
-    >>> gismo.post_document = post_document_content
+    >>> gismo.post_documents_item = post_documents_item_content
     >>> success = gismo.rank("Gizmo")
     >>> gismo.parameters.target_k = .3
 
     Remind the classical rank-based result.
 
-    >>> gismo.get_ranked_documents()
+    >>> gismo.get_documents_by_rank()
     ['Gizmo is a Mogwaï.', 'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.', 'In chinese folklore, a Mogwaï is a demon.']
 
     Gismo can use the cluster to propose alternate results that try to cover more subjects.
 
-    >>> gismo.get_covering_documents()
+    >>> gismo.get_documents_by_coverage()
     ['Gizmo is a Mogwaï.', 'Totally unrelated stuff.', 'This is a sentence about Blade.']
 
     Note how the new entry, which has nothing to do with the rest, is pushed into the results.
     By setting the ``wide`` option to False, we get an alternative that focuses on mainstream results.
 
-    >>> gismo.get_covering_documents(wide=False)
+    >>> gismo.get_documents_by_coverage(wide=False)
     ['Gizmo is a Mogwaï.', 'This is a sentence about Blade.', 'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.']
 
     The same principle applies for features.
 
-    >>> gismo.get_ranked_features()
+    >>> gismo.get_features_by_rank()
     ['mogwaï', 'gizmo', 'is', 'in', 'chinese', 'folklore', 'demon']
 
-    >>> gismo.get_covering_features()
+    >>> gismo.get_features_by_coverage()
     ['mogwaï', 'this', 'in', 'by', 'gizmo', 'is', 'chinese']
     """
 
@@ -142,10 +142,10 @@ class Gismo(MixInIO):
 
             self.parameters = Parameters(**kwargs)
 
-            self.post_document = post_document
-            self.post_feature = post_feature
-            self.post_document_cluster = post_document_cluster
-            self.post_feature_cluster = post_feature_cluster
+            self.post_documents_item = post_documents_item_raw
+            self.post_features_item = post_features_item_raw
+            self.post_documents_cluster = post_documents_cluster_json
+            self.post_features_cluster = post_features_cluster_json
 
     # Ranking Part
     def rank(self, query="", **kwargs):
@@ -171,10 +171,10 @@ class Gismo(MixInIO):
                         offset=p['offset'], memory=p['memory'])
         return success
 
-    def get_ranked_documents(self, k=None, **kwargs):
+    def get_documents_by_rank(self, k=None, **kwargs):
         """
         Returns a list of top documents according to the current ranking.
-        By default, the documents are post_processed through the post_document method.
+        By default, the documents are post_processed through the post_documents_item method.
 
         Parameters
         ----------
@@ -196,14 +196,14 @@ class Gismo(MixInIO):
                        max_k=p['max_k'],
                        target=p['target_k'])
         if p['post']:
-            return [self.post_document(self, i) for i in self.diteration.x_order[:k]]
+            return [self.post_documents_item(self, i) for i in self.diteration.x_order[:k]]
         else:
             return self.diteration.x_order[:k]
 
-    def get_ranked_features(self, k=None, **kwargs):
+    def get_features_by_rank(self, k=None, **kwargs):
         """
         Returns a list of top features according to the current ranking.
-        By default, the features are post_processed through the post_feature method.
+        By default, the features are post_processed through the post_features_item method.
 
         Parameters
         ----------
@@ -224,15 +224,15 @@ class Gismo(MixInIO):
                        max_k=p['max_k'],
                        target=p['target_k'])
         if p['post']:
-            return [self.post_feature(self, i) for i in self.diteration.y_order[:k]]
+            return [self.post_features_item(self, i) for i in self.diteration.y_order[:k]]
         else:
             return self.diteration.y_order[:k]
 
     # Cluster part
-    def get_clustered_documents(self, indices, **kwargs):
+    def get_documents_by_cluster_from_indices(self, indices, **kwargs):
         """
         Returns a cluster of documents.
-        The cluster is by default post_processed through the post_document_cluster method.
+        The cluster is by default post_processed through the post_documents_cluster method.
 
         Parameters
         ----------
@@ -254,13 +254,13 @@ class Gismo(MixInIO):
                                 relevance=self.diteration.y_relevance, distortion=p['distortion'])
         cluster = subspace_clusterize(subspace, p['resolution'], indices)
         if p['post']:
-            return self.post_document_cluster(self, cluster)
+            return self.post_documents_cluster(self, cluster)
         return cluster
 
-    def get_clustered_ranked_documents(self, k=None, **kwargs):
+    def get_documents_by_cluster(self, k=None, **kwargs):
         """
         Returns a cluster of the best ranked documents.
-        The cluster is by default post_processed through the post_document_cluster method.
+        The cluster is by default post_processed through the post_documents_cluster method.
 
         Parameters
         ----------
@@ -281,12 +281,12 @@ class Gismo(MixInIO):
                        order=self.diteration.x_order,
                        max_k=p['max_k'],
                        target=p['target_k'])
-        return self.get_clustered_documents(self.diteration.x_order[:k], **kwargs)
+        return self.get_documents_by_cluster_from_indices(self.diteration.x_order[:k], **kwargs)
 
-    def get_clustered_features(self, indices, **kwargs):
+    def get_features_by_cluster_from_indices(self, indices, **kwargs):
         """
         Returns a cluster of features.
-        The cluster is by default post_processed through the post_feature_cluster method.
+        The cluster is by default post_processed through the post_features_cluster method.
 
         Parameters
         ----------
@@ -308,13 +308,13 @@ class Gismo(MixInIO):
                                 relevance=self.diteration.x_relevance, distortion=p['distortion'])
         cluster = subspace_clusterize(subspace, p['resolution'], indices)
         if p['post']:
-            return self.post_feature_cluster(self, cluster)
+            return self.post_features_cluster(self, cluster)
         return cluster
 
-    def get_clustered_ranked_features(self, k=None, **kwargs):
+    def get_features_by_cluster(self, k=None, **kwargs):
         """
         Returns a cluster of the best ranked features.
-        The cluster is by default post_processed through the post_feature_cluster method.
+        The cluster is by default post_processed through the post_features_cluster method.
 
         Parameters
         ----------
@@ -334,14 +334,14 @@ class Gismo(MixInIO):
                        order=self.diteration.y_order,
                        max_k=p['max_k'],
                        target=p['target_k'])
-        return self.get_clustered_features(self.diteration.y_order[:k], **kwargs)
+        return self.get_features_by_cluster_from_indices(self.diteration.y_order[:k], **kwargs)
 
     # Covering part
 
-    def get_covering_documents(self, k=None, **kwargs):
+    def get_documents_by_coverage(self, k=None, **kwargs):
         """
         Returns a list of top covering documents.
-        By default, the documents are post_processed through the post_document method.
+        By default, the documents are post_processed through the post_documents_item method.
 
         Parameters
         ----------
@@ -362,19 +362,19 @@ class Gismo(MixInIO):
                        order=self.diteration.x_order,
                        max_k=p['max_k'],
                        target=p['target_k'])
-        cluster = self.get_clustered_ranked_documents(k=int(k * p['stretch']),
-                                                      resolution=p['resolution'],
-                                                      post=False)
+        cluster = self.get_documents_by_cluster(k=int(k * p['stretch']),
+                                                resolution=p['resolution'],
+                                                post=False)
         indices = covering_order(cluster, wide=p['wide'])[:k]
         if p['post']:
-            return [self.post_document(self, i) for i in indices]
+            return [self.post_documents_item(self, i) for i in indices]
         else:
             return indices
 
-    def get_covering_features(self, k=None, **kwargs):
+    def get_features_by_coverage(self, k=None, **kwargs):
         """
         Returns a list of top covering features.
-        By default, the features are post_processed through the post_feature method.
+        By default, the features are post_processed through the post_features_item method.
 
         Parameters
         ----------
@@ -395,12 +395,12 @@ class Gismo(MixInIO):
                        order=self.diteration.y_order,
                        max_k=p['max_k'],
                        target=p['target_k'])
-        cluster = self.get_clustered_ranked_features(k=int(k * p['stretch']),
-                                                     resolution=p['resolution'],
-                                                     post=False)
+        cluster = self.get_features_by_cluster(k=int(k * p['stretch']),
+                                               resolution=p['resolution'],
+                                               post=False)
         indices = covering_order(cluster, wide=p['wide'])[:k]
         if p['post']:
-            return [self.post_feature(self, i) for i in indices]
+            return [self.post_features_item(self, i) for i in indices]
         else:
             return indices
 
@@ -456,18 +456,18 @@ class XGismo(Gismo):
     We can now combine the two embeddings in one xgismo.
 
     >>> xgismo = XGismo(a_embedding, w_embedding)
-    >>> xgismo.post_document = lambda g, i: g.corpus[i].replace('_', ' ')
+    >>> xgismo.post_documents_item = lambda g, i: g.corpus[i].replace('_', ' ')
 
     We can use xgismo to query keyword(s).
 
     >>> success = xgismo.rank("Pagerank")
-    >>> xgismo.get_ranked_documents()
+    >>> xgismo.get_documents_by_rank()
     ['Mohamed Bouklit', 'Dohy Hong', 'The Dang Huynh']
 
     We can use it to query researcher(s).
 
     >>> success = xgismo.rank("Anne_Bouillard", y=False)
-    >>> xgismo.get_ranked_documents()
+    >>> xgismo.get_documents_by_rank()
     ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiss', 'Dmitry Lebedev']
     """
     def __init__(self, x_embedding=None, y_embedding=None, filename=None, path=".", **kwargs):

@@ -127,14 +127,14 @@ class Sentencizer:
             if query is not None:
                 self.doc_gismo.rank(query)
             txt = [(self.doc_gismo.corpus.to_text(self.doc_gismo.corpus[i]), i)
-                   for i in self.doc_gismo.get_ranked_documents(k, post=False)]
+                   for i in self.doc_gismo.get_documents_by_rank(k, post=False)]
         self.splitter(txt)
         local_embedding = Embedding()
         local_embedding.fit_ext(self.doc_gismo.embedding)
         local_embedding.transform(self.sent_corpus)
         self.sent_gismo = Gismo(self.sent_corpus, local_embedding)
         self.sent_gismo.parameters.distortion = 0.0
-        self.sent_gismo.post_document = lambda g, i: g.corpus.to_text(g.corpus[i])
+        self.sent_gismo.post_documents_item = lambda g, i: g.corpus.to_text(g.corpus[i])
         return self
 
     def get_sentences(self, query=None, txt=None, k=None, s=None,
@@ -175,5 +175,5 @@ class Sentencizer:
         if query is None:
             query = self.doc_gismo.embedding._query
         self.sent_gismo.rank(query)
-        return self.sent_gismo.get_covering_documents(k=s, resolution=resolution,
-                                                  stretch=stretch, wide=wide, post=post)
+        return self.sent_gismo.get_documents_by_coverage(k=s, resolution=resolution,
+                                                         stretch=stretch, wide=wide, post=post)
