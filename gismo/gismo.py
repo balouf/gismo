@@ -358,16 +358,17 @@ class Gismo(MixInIO):
 
         """
         p = self.parameters(**kwargs)
+        post = p['post']
         if k is None:
             k = auto_k(data=self.diteration.x_relevance,
                        order=self.diteration.x_order,
                        max_k=p['max_k'],
                        target=p['target_k'])
+        p['post'] = False
         cluster = self.get_documents_by_cluster(k=int(k * p['stretch']),
-                                                resolution=p['resolution'],
-                                                post=False)
+                                                **p)
         indices = covering_order(cluster, wide=p['wide'])[:k]
-        if p['post']:
+        if post:
             return [self.post_documents_item(self, i) for i in indices]
         else:
             return indices
@@ -391,16 +392,17 @@ class Gismo(MixInIO):
 
         """
         p = self.parameters(**kwargs)
+        post = p['post']
         if k is None:
             k = auto_k(data=self.diteration.y_relevance,
                        order=self.diteration.y_order,
                        max_k=p['max_k'],
                        target=p['target_k'])
+        p['post'] = False
         cluster = self.get_features_by_cluster(k=int(k * p['stretch']),
-                                               resolution=p['resolution'],
-                                               post=False)
+                                               **p)
         indices = covering_order(cluster, wide=p['wide'])[:k]
-        if p['post']:
+        if post:
             return [self.post_features_item(self, i) for i in indices]
         else:
             return indices
