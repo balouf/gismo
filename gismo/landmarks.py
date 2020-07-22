@@ -204,8 +204,8 @@ class Landmarks(Corpus):
     Gremlins movie by comparing Gizmo and Yoda.']
 
     Side remark #1: in the constructor, `to_text` indicates how to convert an item to `str`, while `ranking_function`
-    specifies how to run a query on a :py:class:`~gismo.gismo.Gismo`. Yet, it is possible to construct the example
-    above with the text conversion handled by the `ranking_function`.
+    specifies how to run a query on a :py:class:`~gismo.gismo.Gismo`. Yet, it is possible to have the text conversion
+    handled by the `ranking_function`.
 
     >>> landmarks = Landmarks(landmarks_source, rank=lambda g, q: g.rank(q['content']))
     >>> landmarks.fit(gismo)
