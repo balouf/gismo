@@ -5,6 +5,7 @@ History
 X.X.X (TODO-List)
 -----------------
 * re-working distortion on both vectors normalization and IDTF/query trade-off.
+* Accelerate similarity computation (currently sklearn-based) in clustering.
 
 0.4.0 (2020-07-21)
 ------------------

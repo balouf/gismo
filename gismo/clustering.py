@@ -319,3 +319,19 @@ def subspace_distortion(indices, data, relevance, distortion: float):
     """
     for i, indice in enumerate(indices):
         data[i] *= relevance[indice] ** distortion
+
+
+def get_sim(csr, arr):
+    """
+    Simple similarity computation between csr_matrix and ndarray.
+
+    Parameters
+    ----------
+    csr: :class:`~scipy.sparse.csr_matrix`
+    arr: :class:`~numpy.ndarray`
+
+    Returns
+    -------
+    float
+    """
+    return csr.dot(arr)[0]/np.linalg.norm(csr.data)/np.linalg.norm(arr)

@@ -1,4 +1,4 @@
-from sklearn.metrics.pairwise import cosine_similarity
+from gismo.clustering import get_sim
 
 
 def post_documents_item_raw(gismo, i):
@@ -96,7 +96,7 @@ def post_documents_cluster_print(gismo, cluster, depth=""):
     depth: str, optional
         Current depth string used in recursion
     """
-    sim = cosine_similarity(cluster.vector, gismo.diteration.y_relevance.reshape(1, -1))[0][0]
+    sim = get_sim(cluster.vector, gismo.diteration.y_relevance)
     if len(cluster.children) == 0:
         txt = gismo.corpus.to_text(gismo.corpus[cluster.indice])
         print(f"{depth} {txt} "
@@ -144,7 +144,7 @@ def post_features_cluster_print(gismo, cluster, depth=""):
         depth: str, optional
             Current depth string used in recursion
         """
-    sim = cosine_similarity(cluster.vector, gismo.diteration.x_relevance.reshape(1, -1))[0][0]
+    sim = get_sim(cluster.vector, gismo.diteration.x_relevance)
     if len(cluster.children) == 0:
         print(f"{depth} {gismo.embedding.features[cluster.indice]} "
               f"(R: {gismo.diteration.y_relevance[cluster.indice]:.2f}; "
