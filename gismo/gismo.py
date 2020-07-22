@@ -61,9 +61,9 @@ class Gismo(MixInIO):
 
     Post processing functions can be used to tweak the returned object (the underlying ranking is unchanged)
 
-    >>> gismo.post_documents_item = partial(post_documents_item_content, max_size=42)
+    >>> gismo.post_documents_item = partial(post_documents_item_content, max_size=44)
     >>> gismo.get_documents_by_rank()
-    ['Gizmo is a Mogwaï.', 'This very long sentence, with a lot of stu', 'In chinese folklore, a Mogwaï is a demon.']
+    ['Gizmo is a Mogwaï.', 'This very long sentence, with a lot of stuff', 'In chinese folklore, a Mogwaï is a demon.']
 
     Ranking also works on features.
 
@@ -78,7 +78,7 @@ class Gismo(MixInIO):
     - F: 0.71. R: 0.57. S: 0.98.
     -- Gizmo is a Mogwaï. (R: 0.54; S: 0.99)
     -- In chinese folklore, a Mogwaï is a demon. (R: 0.04; S: 0.71)
-    - This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda. (R: 0.08; S: 0.69)
+    - This very long sentence, with a lot of stuff (R: 0.08; S: 0.69)
     >>> gismo.post_features_cluster = post_features_cluster_print
     >>> gismo.get_features_by_cluster() # doctest: +NORMALIZE_WHITESPACE
      F: 0.03. R: 0.29. S: 0.98.

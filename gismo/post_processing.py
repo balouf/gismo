@@ -83,7 +83,7 @@ def post_documents_cluster_json(gismo, cluster):
             'children': [post_documents_cluster_json(gismo, c) for c in cluster.children]}
 
 
-def post_documents_cluster_print(gismo, cluster, depth=""):
+def post_documents_cluster_print(gismo, cluster, post_item=None, depth=""):
     """
     Print an ASCII view of a document cluster with metrics (focus, relevance, similarity)
 
@@ -93,12 +93,16 @@ def post_documents_cluster_print(gismo, cluster, depth=""):
         Gismo instance
     cluster: Cluster
         Cluster of documents
+    post_item: function, optional
+        Post-processing function for individual documents
     depth: str, optional
         Current depth string used in recursion
     """
+    if post_item is None:
+        post_item = gismo.post_documents_item
     sim = get_sim(cluster.vector, gismo.diteration.y_relevance)
     if len(cluster.children) == 0:
-        txt = gismo.corpus.to_text(gismo.corpus[cluster.indice])
+        txt = post_item(gismo, cluster.indice)
         print(f"{depth} {txt} "
               f"(R: {gismo.diteration.x_relevance[cluster.indice]:.2f}; "
               f"S: {sim:.2f})")
@@ -107,7 +111,7 @@ def post_documents_cluster_print(gismo, cluster, depth=""):
               f"R: {sum(gismo.diteration.x_relevance[cluster.members]):.2f}. "
               f"S: {sim:.2f}.")
     for c in cluster.children:
-        post_documents_cluster_print(gismo, c, depth=depth + '-')
+        post_documents_cluster_print(gismo, c, post_item=post_item, depth=depth + '-')
 
 
 def post_features_cluster_json(gismo, cluster):
@@ -131,7 +135,7 @@ def post_features_cluster_json(gismo, cluster):
             'children': [post_features_cluster_json(gismo, c) for c in cluster.children]}
 
 
-def post_features_cluster_print(gismo, cluster, depth=""):
+def post_features_cluster_print(gismo, cluster, post_item=None, depth=""):
     """
         Print an ASCII view of a feature cluster with metrics (focus, relevance, similarity)
 
@@ -141,12 +145,16 @@ def post_features_cluster_print(gismo, cluster, depth=""):
             Gismo instance
         cluster: Cluster
             Cluster of features
+        post_item: function, optional
+            Post-processing function for individual features
         depth: str, optional
             Current depth string used in recursion
         """
+    if post_item is None:
+        post_item = gismo.post_features_item
     sim = get_sim(cluster.vector, gismo.diteration.x_relevance)
     if len(cluster.children) == 0:
-        print(f"{depth} {gismo.embedding.features[cluster.indice]} "
+        print(f"{depth} {post_item(gismo, cluster.indice)} "
               f"(R: {gismo.diteration.y_relevance[cluster.indice]:.2f}; "
               f"S: {sim:.2f})")
     else:
