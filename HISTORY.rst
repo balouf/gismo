@@ -20,6 +20,7 @@ X.X.X (TODO-List)
     * Landmarks can be used to refine the analysis around a part of your data;
     * They can be used as soft and fast classifiers.
     * Landmarks' runtime parameters follow the same approach than for Gismo instances (cf above).
+    * See the dedicated tutorial to learn more!
 * Documentation summer cleaning.
 * ``query_distortion`` parameter (reshape subspace for clustering) is renamed ``distortion`` and is now a float instead of a bool (e.g. you can apply distortion in a non-binary way).
 * Full refactoring of get_*** and post_*** methods and objects.

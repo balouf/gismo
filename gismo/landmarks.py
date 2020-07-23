@@ -150,32 +150,26 @@ class Landmarks(Corpus):
                              {'landmark': {'name': 'Movies', 'content': 'Star Wars, Gremlins, and Blade are movies.'},
                               'focus': 1.0, 'children': []}]}
 
-    We can set the `post_cluster` attribute to customize the output.
+    We can set the `post_cluster` attribute to customize the output. Gismo provides a simple display.
 
-    >>> def post_cluster(lmk, cluster, depth=0):
-    ...     name = f"|{'-'*depth}"
-    ...     if len(cluster.children)==0:
-    ...         name = f"{name} {lmk[cluster.indice]['name']}"
-    ...     print(name)
-    ...     for c in cluster.children:
-    ...         post_cluster(lmk, c, depth=depth+1)
-    >>> landmarks.post_cluster = post_cluster
-    >>> landmarks.get_landmarks_by_cluster(gismo)
-    |
-    |- Gremlins
-    |- Star Wars
-    |- Movies
+    >>> from gismo.post_processing import post_landmarks_cluster_print
+    >>> landmarks.post_cluster = post_landmarks_cluster_print
+    >>> landmarks.get_landmarks_by_cluster(gismo) # doctest: +NORMALIZE_WHITESPACE
+    F: 1.00.
+    - Gremlins
+    - Star Wars
+    - Movies
 
     Like for :py:class:`~gismo.gismo.Gismo`, parameters like `k`, `distortion`, or `resolution` can be used.
 
-    >>> landmarks.get_landmarks_by_cluster(gismo, k=4, distortion=False, resolution=.9)
-    |
-    |-
-    |--
-    |--- Gremlins
-    |--- Star Wars
-    |-- Movies
-    |- Shadoks
+    >>> landmarks.get_landmarks_by_cluster(gismo, k=4, distortion=False, resolution=.9) # doctest: +NORMALIZE_WHITESPACE
+    F: 0.03.
+    - F: 0.93.
+    -- F: 1.00.
+    --- Gremlins
+    --- Star Wars
+    -- Movies
+    - Shadoks
 
     Note that a :py:class:`~gismo.clustering.Cluster` can also be used as reference for the
     :meth:`~gismo.landmarks.Landmarks.get_landmarks_by_rank` and
