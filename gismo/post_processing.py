@@ -203,3 +203,29 @@ def post_landmarks_cluster_json(landmark, cluster):
     return {'landmark': landmark[cluster.indice],
             'focus': cluster.focus,
             'children': [post_landmarks_cluster_json(landmark, child) for child in cluster.children]}
+
+
+def post_landmarks_cluster_print(landmark, cluster, post_item=None, depth=""):
+    """
+    ASCII display post processor for a cluster of landmarks.
+
+    Parameters
+    ----------
+    landmark: Landmarks
+        A Landmarks instance
+    cluster: Cluster
+        Cluster of the landmarks to process.
+    post_item: function, optional
+        Post-processing function for individual landmarks
+    depth: str, optional
+        Current depth string used in recursion
+    """
+    if post_item is None:
+        post_item = landmark.post_item
+    if len(cluster.children) == 0:
+        txt = post_item(landmark, cluster.indice)
+        print(f"{depth} {txt} ")
+    else:
+        print(f"{depth} F: {cluster.focus:.2f}. ")
+    for c in cluster.children:
+        post_landmarks_cluster_print(landmark, c, post_item=post_item, depth=depth + '-')
