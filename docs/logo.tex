@@ -1,0 +1,69 @@
+% !TeX program = lualatex
+\documentclass[beamer,tikz,ignorerest]{standalone}
+
+% To convert the result into PNG, use the following ImageMagick command:
+% convert -density 300 logo.pdf -trim -transparent white logo-%01d.png
+
+\usepackage[no-math]{fontspec}
+\setmainfont{Domestic Manners}
+\setsansfont{Domestic Manners}
+
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\usepackage{color}
+
+\definecolor{myred}{RGB}{235,62,62}
+\definecolor{myblue}{RGB}{92,92,235}
+\definecolor{mygreen}{RGB}{92,235,92}
+
+
+\newcommand{\doc}[1]{%
+\tikz[scale=0.2, every node/.style={scale=0.2}]{%
+\node[fill=white, draw=#1, rounded corners, line width=2] {\tikz{
+\foreach \j in {0,0.5,1,1.5,2,2.5,3} {
+\draw (0, \j) edge[#1, line width=6] (2, \j);
+}
+}};}
+}
+
+\newcommand{\docgraph}{%
+\tikz{%
+\node (r) at (0,0) {\doc{myred}};
+\node (g) at (0,.75) {\doc{mygreen}};
+\node (b) at (0,-.75) {\doc{myblue}};
+
+\foreach \j in {1,...,15} {
+	\node[circle, fill=black, inner sep=0pt,minimum size=3pt] (n\j) at ($(1.8, -1)!\j/16!(1.8, 1)$) {};
+}
+\foreach \j in {1,2,3,4,5,7,8} {\draw (b) edge (n\j);}
+\foreach \j in {2,6,7,9,10,12} {\draw (r) edge (n\j);}
+\foreach \j in {9,10,11,13,14,15} {\draw (g) edge (n\j);}
+}
+}
+
+
+
+\begin{document}
+\begin{standaloneframe}
+
+\tikz[scale=1, 
+every node/.style={scale=.9},
+ rect/.style={rounded corners, draw, 
+ 	minimum height=5cm, minimum width=3cm, line width=1.5},
+ graphic/.style= {minimum height=.1cm, minimum width=.1, , inner sep=1pt},
+ arc/.style={>=latex,-, line width=2}]{
+
+\node[graphic] (mid) {\docgraph};
+
+\node<2> at (0, -1.25) {\huge Gismo};
+
+\node<3>[scale=2.0] at (3.3, 0) {\Huge Gismo};
+
+}
+
+
+\end{standaloneframe}
+\end{document}
