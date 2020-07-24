@@ -6,7 +6,6 @@ X.X.X (TODO-List)
 -----------------
 * Rethink distortion on both vectors normalization and IDTF/query trade-off.
 * Accelerate similarity computation (currently sklearn-based) in clustering.
-* Add a logo!
 
 0.4.0 (2020-07-21)
 ------------------
@@ -28,6 +27,7 @@ X.X.X (TODO-List)
     * The good news is that they are now more natural, self-describing, and unified.
     * The bad news is that there is no backward-compatibility with previous Gismo versions. Hopefully this refactoring
       will last for some time!
+* Gismo logo added!
 
 0.3.1 (2020-06-12)
 ------------------

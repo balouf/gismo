@@ -1,7 +1,10 @@
-=====
-GISMO
-=====
+.. image:: https://github.com/balouf/gismo/raw/master/docs/logo-line.png
+    :alt: Gismo logo
+    :target: https://gismo.readthedocs.io/en/latest/index.html
 
+--------------------------------------------------------
+A Generic Information Search... With a Mind of its Own!
+--------------------------------------------------------
 
 .. image:: https://img.shields.io/pypi/v/gismo.svg
         :target: https://pypi.python.org/pypi/gismo
