@@ -7,6 +7,14 @@ X.X.X (TODO-List)
 * Rethink distortion on both vectors normalization and IDTF/query trade-off.
 * Accelerate similarity computation (currently sklearn-based) in clustering.
 
+0.4.1 (2020-11-25)
+------------------
+Minor update.
+
+* DBLP API modified to you can specify the set of fields you want to retrieve.
+* Minor update in doctests.
+* Python 3.9 compatibility added.
+
 0.4.0 (2020-07-21)
 ------------------
 0.4 is a big update. Lot of things added, lot of things changed.

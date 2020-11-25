@@ -471,7 +471,7 @@ class XGismo(Gismo):
 
     >>> success = xgismo.rank("Anne_Bouillard", y=False)
     >>> xgismo.get_documents_by_rank()
-    ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiss', 'Dmitry Lebedev']
+    ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiß', 'Dmitry Lebedev']
     """
     def __init__(self, x_embedding=None, y_embedding=None, filename=None, path=".", **kwargs):
         if filename is not None:

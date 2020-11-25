@@ -10,7 +10,30 @@ from lxml import etree
 
 
 URL = "https://dblp.uni-trier.de/xml/dblp.xml.gz"
+"""
+URL of the full DBLP database.
+"""
+
 DTD_URL = "https://dblp.uni-trier.de/xml/dblp.dtd"
+"""
+URL of the dtd file (required to correctly parse non-ASCII characters).
+"""
+
+DEFAULT_FIELDS = {'type', 'title', 'authors', 'venue', 'year'}
+"""
+Default fields to extract.
+"""
+
+LIST_TYPE_FIELDS = {'urls', 'authors'}
+"""
+DBLP fields with possibly multiple entries.
+"""
+
+FIELD_REDIRECTION = {'journal': 'venue',
+                     'booktitle': 'venue',
+                     'author': 'authors',
+                     'ee': 'urls'
+                     }
 
 
 def fast_iter(context, func, d=2, **kwargs):
@@ -49,7 +72,7 @@ def fast_iter(context, func, d=2, **kwargs):
     del context
 
 
-def xml_element_to_dict(elt):
+def xml_element_to_dict(elt, fields):
     """
     Converts the xml element ``elt`` into a dict if it is a paper.
 
@@ -57,6 +80,8 @@ def xml_element_to_dict(elt):
     ----------
     elt: Any
         a XML element.
+    fields: set
+        Set of entries to retrieve.
 
     Returns
     -------
@@ -66,40 +91,41 @@ def xml_element_to_dict(elt):
     children = elt.getchildren()
     if not children:
         return None
-    dic = {"type": elt.tag}
-    authors = []
+    dic = {"type": elt.tag} if "type" in fields else dict()
     for c in children:
-        if not isinstance(c.text, str):
+        value = c.text
+        key = c.tag
+        key = FIELD_REDIRECTION.get(key, key)
+        if key not in fields or not isinstance(value, str):
             continue
-        if c.tag == "author":
-            authors.append(c.text)
-        elif c.tag in {"journal", "booktitle"}:
-            dic["venue"] = c.text
-        elif c.tag in {"year", "title"}:
-            dic[c.tag] = c.text
-    dic['authors'] = authors
-    if dic['authors'] == [] or not all(key in dic for key in ['year', 'title', 'venue']):
+        if key in LIST_TYPE_FIELDS:
+            dic.setdefault(key,[]).append(value)
+        else:
+            dic[key] = value
+    if not dic.get('authors') or not all(key in dic for key in ['year', 'title', 'venue']):
         return None
     return dic
 
 
-def element_to_source(elt, source):
+def element_to_source(elt, source, fields):
     """
     Test if elt is an article, converts it to dictionary and appends to source
 
     Parameters
     ----------
     elt: Any
-        a XML element
+        a XML element.
     source: list
-        the source in construction
+        the source in construction.
+    fields: set
+        Set of fields to retrieve.
     """
-    dic = xml_element_to_dict(elt)
+    dic = xml_element_to_dict(elt, fields)
     if dic is not None:
         source.append(dic)
 
 
-def url2source(url):
+def url2source(url, fields=None):
     """
     Directly transform URL of a dblp xml into a list of dictionnary.
     Only use for datasets that fit into memory (e.g. articles from one author).
@@ -108,7 +134,9 @@ def url2source(url):
     Parameters
     ----------
     url: str
-        the URL to fetch
+        the URL to fetch.
+    fields: set
+        Set of DBLP fields to capture.
 
     Returns
     -------
@@ -122,15 +150,17 @@ def url2source(url):
     >>> art['authors']
     ['Maria Potop-Butucaru', 'Michel Raynal', 'Sébastien Tixeuil']
     """
+    if fields is None:
+        fields = DEFAULT_FIELDS
     r = requests.get(url)
     source = []
     with io.BytesIO(r.content) as f:
         context = etree.iterparse(f, events=('start', 'end',))
-        fast_iter(context, element_to_source, d=3, source=source)
+        fast_iter(context, element_to_source, d=3, source=source, fields=fields)
     return source
 
 
-def element_to_filesource(elt, data_handler, index):
+def element_to_filesource(elt, data_handler, index, fields):
     """
     * Converts the xml element ``elt`` into a dict if it is an article.
     * Compress and write the dict in ``data_handler``
@@ -144,13 +174,15 @@ def element_to_filesource(elt, data_handler, index):
         Where the compressed data will be stored. Must be writable.
     index:
         a list that contains the initial position of the data_handler for all previously processed elements.
+    fields: set
+        Set of fields to retrieve.
 
     Returns
     -------
     bool
         Always return True for compatibility with the xml parser.
     """
-    dic = xml_element_to_dict(elt=elt)
+    dic = xml_element_to_dict(elt=elt, fields=fields)
     if dic is None:
         return True
     data_handler.write(zlib.compress(json.dumps(dic).encode('utf8')))
@@ -196,7 +228,7 @@ class Dblp:
                         f.write(chunk)
         print(f"DBLP database downloaded to {self.dblp_xml}.")
 
-    def build(self, refresh=False, d=2):
+    def build(self, refresh=False, d=2, fields=None):
         """
         Main class method. Create the data and index files.
 
@@ -206,6 +238,8 @@ class Dblp:
             Tell if files are to be rebuilt if they are already there.
         d: int
             depth level where articles are. Usually 2 or 3 (2 for the main database).
+        fields: set, optional
+            Set of fields to collect. Default to :obj:`~gismo.datasets.dblp.DEFAULT_FIELDS`.
 
         Example
         -------
@@ -250,6 +284,8 @@ class Dblp:
         >>> source.close()
         >>> tmp.cleanup()
         """
+        if fields is None:
+            fields = DEFAULT_FIELDS
         if self.dblp_xml.exists() and not refresh:
             print(f"File {self.dblp_xml} already exists. Use refresh option to overwrite.")
         else:
@@ -268,7 +304,7 @@ class Dblp:
                 index = [0]
                 with open(self.dblp_data, "wb") as g:
                     context = etree.iterparse(f, events=('start', 'end',), load_dtd=True)
-                    fast_iter(context, element_to_filesource, d=d, data_handler=g, index=index)
+                    fast_iter(context, element_to_filesource, d=d, data_handler=g, index=index, fields=fields)
                 print(f"Building Index.")
                 with open(self.dblp_index, "wb") as g:
                     pickle.dump(np.array(index), g)
