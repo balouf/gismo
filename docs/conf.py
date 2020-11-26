@@ -173,6 +173,6 @@ texinfo_documents = [
 ]
 
 # Mocking packages
-autodoc_mock_imports = ['numpy', 'spacy', 'sklearn']
+autodoc_mock_imports = ['numpy', 'spacy', 'sklearn', 'scikit-learn', 'scipy']
 
 
