@@ -35,6 +35,12 @@ try:
 except ImportError:
     autodoc_mock_imports.append('sklearn')
 
+try:
+    import cython
+except ImportError:
+    autodoc_mock_imports.append('cython')
+
+
 
 # -- General configuration ---------------------------------------------
 
