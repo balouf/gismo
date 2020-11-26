@@ -172,5 +172,7 @@ texinfo_documents = [
      'NLP'),
 ]
 
+# Mocking packages
+autodoc_mock_imports = ['numpy', 'spacy', 'sklearn']
 
 
