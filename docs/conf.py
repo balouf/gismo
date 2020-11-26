@@ -23,6 +23,19 @@ sys.path.insert(0, os.path.abspath('..'))
 
 import gismo
 
+
+autodoc_mock_imports = []
+try:
+    import numpy
+except ImportError:
+    autodoc_mock_imports.append('numpy')
+
+try:
+    import sklearn
+except ImportError:
+    autodoc_mock_imports.append('sklearn')
+
+
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -171,8 +184,4 @@ texinfo_documents = [
      'a Generic Information Search... with a Mind of its Own!',
      'NLP'),
 ]
-
-# Mocking packages
-autodoc_mock_imports = ['numpy', 'spacy', 'sklearn', 'scikit-learn', 'scipy']
-
 
