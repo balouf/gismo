@@ -2,7 +2,7 @@
 
 __author__ = """Fabien Mathieu"""
 __email__ = 'fabien.mathieu@normalesup.org'
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 
 from gismo.corpus import Corpus
