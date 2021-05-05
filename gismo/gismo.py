@@ -99,8 +99,8 @@ class Gismo(MixInIO):
     >>> z # doctest: +NORMALIZE_WHITESPACE
     <1x36 sparse matrix of type '<class 'numpy.float64'>'
     	with 3 stored elements in Compressed Sparse Row format>
-    >>> success = gismo.rank(z=z)
-    >>> success
+    >>> s = gismo.rank(z=z)
+    >>> s
     True
     >>> gismo.get_documents_by_rank(k=2)
     ['In chinese folklore, a Mogwaï is a demon.', 'Gizmo is a Mogwaï.']
