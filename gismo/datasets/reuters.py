@@ -2,8 +2,8 @@ import requests
 from zipfile import ZipFile
 import io
 
-URL = "https://archive.ics.uci.edu/ml/machine-learning-databases/00217/C50.zip"
-
+# URL = "https://archive.ics.uci.edu/ml/machine-learning-databases/00217/C50.zip"
+URL = "https://github.com/balouf/datasets/raw/main/C50.zip"
 
 def get_reuters_entry(name, z):
     """

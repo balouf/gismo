@@ -92,6 +92,21 @@ class Gismo(MixInIO):
     -- chinese (R: 0.00; S: 0.07)
     -- folklore (R: 0.00; S: 0.07)
 
+    As an alternative to a textual query, the :meth:`~gismo.gismo.Gismo.rank` method can directly use a vector
+    `z` as input.
+
+    >>> z, s = gismo.embedding.query_projection("gizmo chinese folklore")
+    >>> z # doctest: +NORMALIZE_WHITESPACE
+    <1x36 sparse matrix of type '<class 'numpy.float64'>'
+    	with 3 stored elements in Compressed Sparse Row format>
+    >>> success = gismo.rank(z=z)
+    >>> success
+    True
+    >>> gismo.get_documents_by_rank(k=2)
+    ['In chinese folklore, a Mogwaï is a demon.', 'Gizmo is a Mogwaï.']
+    >>> gismo.get_features_by_rank()
+    ['mogwaï', 'in', 'chinese', 'folklore', 'demon', 'gizmo', 'is']
+
     The class also offers :meth:`~gismo.gismo.Gismo.get_documents_by_coverage` and
     :meth:`~gismo.gismo.Gismo.get_features_by_coverage` that yield
     a list of results obtained from a Covering-like traversal of the ranked cluster.
@@ -149,14 +164,16 @@ class Gismo(MixInIO):
             self.post_features_cluster = post_features_cluster_json
 
     # Ranking Part
-    def rank(self, query="", **kwargs):
+    def rank(self, query="", z=None, **kwargs):
         """
         Runs the Diteration using query as starting point
 
         Parameters
         ----------
         query: str
-               Text that starts DIteration
+            Text that starts DIteration
+        z: :class:`~scipy.sparse.csr_matrix`, optional
+            Query vector to use in place of the textual query
         kwargs: dict, optional
             Custom runtime parameters.
 
@@ -166,7 +183,10 @@ class Gismo(MixInIO):
             success of the query projection. If projection fails, a ranking on uniform distribution is performed.
         """
         p = self.parameters(**kwargs)
-        z, success = self.embedding.query_projection(query)
+        if z is None:
+            z, success = self.embedding.query_projection(query)
+        else:
+            success = True
         self.diteration(self.embedding.x, self.embedding.y, z,
                         alpha=p['alpha'], n_iter=p['n_iter'],
                         offset=p['offset'], memory=p['memory'])

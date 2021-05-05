@@ -7,6 +7,29 @@ X.X.X (TODO-List)
 * Rethink distortion on both vectors normalization and IDTF/query trade-off.
 * Accelerate similarity computation (currently sklearn-based) in clustering.
 
+
+0.4.X (2021-0X-XX) (tentative)
+-------------------------------
+
+* Context manager for FileSource (e.g. ``with FileSource(...) as source:``)
+
+* 3.9 compatibility issues rechecked
+
+* Wheels
+
+* Minor change in test_dblp.py
+
+
+0.4.2 (2021-05-05)
+-------------------------------
+
+Minor patch
+
+* Signature of the Gismo rank method changed to allow to enter directly a query vector instead of a string query
+  (useful if one wants to craft a custom query vector).
+* Original source of the Reuters 50/50 dataset was discontinued; changed to an alternate source.
+* Fix change in spacy API
+
 0.4.1 (2020-11-25)
 ------------------
 Minor update.

@@ -75,7 +75,7 @@ class Sentencizer:
 
     def __init__(self, gismo):
         self.parser = English()
-        self.parser.add_pipe(self.parser.create_pipe('sentencizer'))
+        self.parser.add_pipe('sentencizer')
         self.doc_gismo = gismo
         self.sent_corpus = None
         self.sent_gismo = None
