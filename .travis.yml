@@ -6,6 +6,7 @@ python:
 
 install:
 - pip install --upgrade pip
+- pip install cryptography
 - pip install -U tox-travis
 - pip install codecov
 - export NUMBA_DISABLE_JIT=1
