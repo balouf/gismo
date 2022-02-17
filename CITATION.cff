@@ -1,0 +1,14 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Generic Information Search with a Mind of its Own (Gismo)
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - family-names: Mathieu
+    given-names: Fabien
+    email: fabien.mathieu@normalesup.org
+url: "https://gismo.readthedocs.io/en/latest/"
