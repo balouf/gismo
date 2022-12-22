@@ -428,9 +428,9 @@ class Embedding(MixInIO):
         >>> embedding.fit_transform(corpus)
         >>> z, success = embedding.query_projection("Gizmo is not Yoda but he rocks!")
         >>> for i in range(len(z.data)):
-        ...    print(f"{embedding.features[z.indices[i]]}: {z.data[i]}")
-        gizmo: 0.3868528072345416
-        yoda: 0.6131471927654585
+        ...    print(f"{embedding.features[z.indices[i]]}: {z.data[i]}") # doctest: +ELLIPSIS
+        gizmo: 0.3868528072...
+        yoda: 0.6131471927...
         >>> success
         True
         >>> z, success = embedding.query_projection("That content does not intersect toy corpus")
