@@ -177,7 +177,7 @@ def auto_vect(corpus=None):
     return CountVectorizer(
         min_df=min_df,
         max_df=max_df,
-        ngram_range=[1, 1],
+        ngram_range=(1, 1),
         stop_words="english",
         dtype=float
     )
@@ -250,7 +250,7 @@ class Embedding(MixInIO):
         >>> embedding.x  # doctest: +NORMALIZE_WHITESPACE
         <5x21 sparse matrix of type '<class 'numpy.float64'>'
             with 25 stored elements in Compressed Sparse Row format>
-        >>> embedding.features[:8]
+        >>> list(embedding.features[:8])
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
         if self.vectorizer is None:
@@ -262,7 +262,7 @@ class Embedding(MixInIO):
         # Release stop_words_ from vectorizer
         self.vectorizer.stop_words_ = None
         # Populate vocabulary
-        self.features = self.vectorizer.get_feature_names()
+        self.features = self.vectorizer.get_feature_names_out()
         # Extract number of documents and features
         (self.n, self.m) = x.shape
         # PART OF TRANSFORM, MUTUALIZED: Apply sublinear smoothing
@@ -304,7 +304,7 @@ class Embedding(MixInIO):
         >>> embedding.fit(corpus)
         >>> len(embedding.idf)
         21
-        >>> embedding.features[:8]
+        >>> list(embedding.features[:8])
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
         assert corpus
@@ -317,7 +317,7 @@ class Embedding(MixInIO):
         # Release stop_words_ from vectorizer
         self.vectorizer.stop_words_ = None
         # Populate vocabulary
-        self.features = self.vectorizer.get_feature_names()
+        self.features = self.vectorizer.get_feature_names_out()
         # Extract number of documents (required for idf) and features (required in fit)
         (self.n, self.m) = x.shape
         # Compute transposed CountVectorizer Y
@@ -345,7 +345,7 @@ class Embedding(MixInIO):
         >>> embedding.fit_ext(other_embedding)
         >>> len(embedding.idf)
         21
-        >>> embedding.features[:8]
+        >>> list(embedding.features[:8])
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
         self.m = embedding.m

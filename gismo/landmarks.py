@@ -139,16 +139,19 @@ class Landmarks(Corpus):
     Like for :py:class:`~gismo.gismo.Gismo`, landmarks can provide clusters.
 
     >>> success = gismo.rank('gizmo')
-    >>> landmarks.get_landmarks_by_cluster(gismo) # doctest: +NORMALIZE_WHITESPACE
+    >>> landmarks.get_landmarks_by_cluster(gismo) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     {'landmark': {'name': 'Gremlins',
                   'content': 'The Gremlins movie features a Mogwai.'},
-                  'focus': 0.9999983623793101,
-                  'children': [{'landmark': {'name': 'Gremlins', 'content': 'The Gremlins movie features a Mogwai.'},
-                                'focus': 1.0, 'children': []},
-                             {'landmark': {'name': 'Star Wars', 'content': 'The Star Wars movies feature Yoda.'},
-                              'focus': 1.0, 'children': []},
-                             {'landmark': {'name': 'Movies', 'content': 'Star Wars, Gremlins, and Blade are movies.'},
-                              'focus': 1.0, 'children': []}]}
+                  'focus': 0.999998...,
+                  'children': [{'landmark': {'name': 'Gremlins',
+                                             'content': 'The Gremlins movie features a Mogwai.'},
+                                             'focus': 1.0, 'children': []},
+                               {'landmark': {'name': 'Star Wars',
+                                             'content': 'The Star Wars movies feature Yoda.'},
+                                             'focus': 1.0, 'children': []},
+                               {'landmark': {'name': 'Movies',
+                                             'content': 'Star Wars, Gremlins, and Blade are movies.'},
+                                             'focus': 1.0, 'children': []}]}
 
     We can set the `post_cluster` attribute to customize the output. Gismo provides a simple display.
 
