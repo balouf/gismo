@@ -9,16 +9,16 @@ A Generic Information Search... With a Mind of its Own!
 .. image:: https://img.shields.io/pypi/v/gismo.svg
         :target: https://pypi.python.org/pypi/gismo
 
-.. image:: https://img.shields.io/travis/balouf/gismo.svg
-        :target: https://travis-ci.org/balouf/gismo
+.. image:: https://github.com/balouf/gismo/workflows/build/badge.svg?branch=master
+        :target: https://github.com/balouf/gismo/actions?query=workflow%3Abuild
+        :alt: Build Status
 
 .. image:: https://readthedocs.org/projects/gismo/badge/?version=latest
         :target: https://gismo.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-
 .. image:: https://codecov.io/gh/balouf/gismo/branch/master/graphs/badge.svg
-        :target: https://codecov.io/gh/balouf/gismo/branch/master/graphs/badge
+        :target: https://codecov.io/gh/balouf/gismo/branch/master
         :alt: Code Coverage
 
 
