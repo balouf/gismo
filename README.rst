@@ -1,6 +1,6 @@
 .. image:: https://github.com/balouf/gismo/raw/master/docs/logo-line.png
     :alt: Gismo logo
-    :target: https://gismo.readthedocs.io/en/latest/index.html
+    :target: https://balouf.github.io/gismo/
 
 --------------------------------------------------------
 A Generic Information Search... With a Mind of its Own!
@@ -13,8 +13,8 @@ A Generic Information Search... With a Mind of its Own!
         :target: https://github.com/balouf/gismo/actions?query=workflow%3Abuild
         :alt: Build Status
 
-.. image:: https://readthedocs.org/projects/gismo/badge/?version=latest
-        :target: https://gismo.readthedocs.io/en/latest/?badge=latest
+.. image:: https://github.com/balouf/gismo/workflows/docs/badge.svg?branch=master
+        :target: https://github.com/balouf/gismo/actions?query=workflow%3Adocs
         :alt: Documentation Status
 
 .. image:: https://codecov.io/gh/balouf/gismo/branch/master/graphs/badge.svg
@@ -30,8 +30,8 @@ GISMO is a NLP tool to rank and organize a corpus of documents according to a qu
 Gismo stands for Generic Information Search... with a Mind of its Own.
 
 * Free software: GNU General Public License v3
-* Github: https://github.com/balouf/gismo.
-* Documentation: https://gismo.readthedocs.io.
+* Github: https://github.com/balouf/gismo/
+* Documentation: https://balouf.github.io/gismo/
 
 
 Features
@@ -69,8 +69,8 @@ Thomas Bonald, Anne Bouillard, Marc-Olivier Buob, Dohy Hong.
 
 This package was created with Cookiecutter_ and the `francois-durand/package_helper`_ project template.
 
-.. _reference: https://gismo.readthedocs.io/en/latest/reference.html
-.. _`Toy Example`: https://gismo.readthedocs.io/en/latest/tutorials/tutorial_toy_example.html
-.. _tutorials: https://gismo.readthedocs.io/en/latest/tutorials/index.html#
+.. _reference: https://balouf.github.io/gismo/reference.html
+.. _`Toy Example`: https://balouf.github.io/gismo/tutorials/tutorial_toy_example.html
+.. _tutorials: https://balouf.github.io/gismo/tutorials/index.html#
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`francois-durand/package_helper`: https://github.com/francois-durand/package_helper
