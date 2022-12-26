@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gismo.embedding &mdash; GISMO 0.4.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo-line.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">A Generic Information Search… With a Mind of its Own!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GISMO</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gismo.embedding</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gismo.embedding</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># GISMO: a Generic Information Search with a Mind of its Own</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+
+<span class="kn">from</span> <span class="nn">gismo.common</span> <span class="kn">import</span> <span class="n">MixInIO</span><span class="p">,</span> <span class="n">toy_source_text</span>
+<span class="kn">from</span> <span class="nn">gismo.corpus</span> <span class="kn">import</span> <span class="n">Corpus</span>
+
+
+<span class="c1"># 1-norm for diffusion (input is X or Y indptr and data, inplace modification)</span>
+<div class="viewcode-block" id="l1_normalize"><a class="viewcode-back" href="../../reference.html#gismo.embedding.l1_normalize">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">l1_normalize</span><span class="p">(</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes L1 norm on sparse embedding (x or y) and applies inplace normalization.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indptr: :class:`~numpy.ndarray`</span>
+<span class="sd">        Pointers of the embedding (e.g. x.indptr).</span>
+<span class="sd">    data: :class:`~numpy.ndarray`</span>
+<span class="sd">        Values of the embedding  (e.g. x.data).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    l1_norm: :class:`~numpy.ndarray`</span>
+<span class="sd">        L1 norms of all vectors of the embedding before normalization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalize inplace the embedding (X or Y)</span>
+<span class="sd">    :param indptr: the pointers of the vector</span>
+<span class="sd">    :param data:  the data of the vector</span>
+<span class="sd">    :return: the l1 norm. Data is normalized in place</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indptr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">l1_norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">l1_norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">indptr</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">indptr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]])</span>
+        <span class="k">if</span> <span class="n">l1_norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">indptr</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">indptr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">/=</span> <span class="n">l1_norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">l1_norms</span></div>
+
+
+<span class="c1"># Note: the use of external embedding breaks a symmetry between X and Y. IDF needs to be stored if one wants to switch.</span>
+
+<span class="c1"># ITF transformation</span>
+<div class="viewcode-block" id="itf_fit_transform"><a class="viewcode-back" href="../../reference.html#gismo.embedding.itf_fit_transform">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">itf_fit_transform</span><span class="p">(</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies inplace Inverse-Term-Frequency transformation on sparse embedding x.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indptr: :class:`~numpy.ndarray`</span>
+<span class="sd">        Pointers of the embedding (e.g. x.indptr).</span>
+<span class="sd">    data: :class:`~numpy.ndarray`</span>
+<span class="sd">        Values of the embedding  (e.g. x.data).</span>
+<span class="sd">    m: int</span>
+<span class="sd">        Number of features</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indptr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">log_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">indptr</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">indptr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">*=</span> <span class="n">log_m</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">indptr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">indptr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span></div>
+
+
+<span class="c1"># IDF computation</span>
+<div class="viewcode-block" id="idf_fit"><a class="viewcode-back" href="../../reference.html#gismo.embedding.idf_fit">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">idf_fit</span><span class="p">(</span><span class="n">indptr</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the Inverse-Document-Frequency vector on sparse embedding y.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indptr: :class:`~numpy.ndarray`</span>
+<span class="sd">        Pointers of the embedding y (e.g. y.indptr).</span>
+<span class="sd">    n: int</span>
+<span class="sd">        Number of documents.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    idf_vector: :class:`~numpy.ndarray`</span>
+<span class="sd">        IDF vector of size `m`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indptr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">idf_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="n">idf_vector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">indptr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">indptr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">idf_vector</span></div>
+
+
+<span class="c1"># IDF transformation</span>
+<div class="viewcode-block" id="idf_transform"><a class="viewcode-back" href="../../reference.html#gismo.embedding.idf_transform">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">idf_transform</span><span class="p">(</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">idf_vector</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies inplace Inverse-Document-Frequency transformation on sparse embedding y.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indptr: :class:`~numpy.ndarray`</span>
+<span class="sd">        Pointers of the embedding y (e.g. y.indptr).</span>
+<span class="sd">    data: :class:`~numpy.ndarray`</span>
+<span class="sd">        Values of the embedding y (e.g. y.data).</span>
+<span class="sd">    idf_vector: :class:`~numpy.ndarray`</span>
+<span class="sd">        IDF vector of the embedding, obtained from :func:`~gismo.embedding.idf_fit`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indptr</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">indptr</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span><span class="n">indptr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">*=</span> <span class="n">idf_vector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="query_shape"><a class="viewcode-back" href="../../reference.html#gismo.embedding.query_shape">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">query_shape</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">idf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies inplace logarithmic smoothing, IDF weighting, and normalization</span>
+<span class="sd">    to the output of the</span>
+<span class="sd">    :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
+<span class="sd">    :meth:`~sklearn.feature_extraction.text.CountVectorizer.transform` method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indices: :class:`~numpy.ndarray`</span>
+<span class="sd">        Indice attribute of the :class:`~scipy.sparse.csr_matrix` obtained from</span>
+<span class="sd">        :meth:`~sklearn.feature_extraction.text.CountVectorizer.transform`.</span>
+<span class="sd">    data: :class:`~numpy.ndarray`</span>
+<span class="sd">        Data attribute of the :class:`~scipy.sparse.csr_matrix` obtained from</span>
+<span class="sd">        :meth:`~sklearn.feature_extraction.text.CountVectorizer.transform`.</span>
+<span class="sd">    idf: :class:`~numpy.ndarray`</span>
+<span class="sd">        IDF vector of the embedding, obtained from :func:`~gismo.embedding.idf_fit`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    norm: float</span>
+<span class="sd">        The norm of the vector before normalization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># log normalization</span>
+    <span class="n">data</span><span class="p">[:]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># IdF</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">indice</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indices</span><span class="p">):</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">idf</span><span class="p">[</span><span class="n">indice</span><span class="p">]</span>
+    <span class="c1"># Normalization</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">norm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[:]</span> <span class="o">/=</span> <span class="n">norm</span>
+    <span class="k">return</span> <span class="n">norm</span></div>
+
+
+<div class="viewcode-block" id="auto_vect"><a class="viewcode-back" href="../../reference.html#gismo.embedding.auto_vect">[docs]</a><span class="k">def</span> <span class="nf">auto_vect</span><span class="p">(</span><span class="n">corpus</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a default :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
+<span class="sd">    compatible with the</span>
+<span class="sd">    :class:`~gismo.embedding.Embedding` constructor.</span>
+<span class="sd">    For not-too-small corpi, a slight frequency-filter is applied.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    corpus: :class:`~gismo.corpus.Corpus`, optional</span>
+<span class="sd">        The corpus for which the</span>
+<span class="sd">        :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
+<span class="sd">        is intended.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
+<span class="sd">        A :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
+<span class="sd">        object compatible with the</span>
+<span class="sd">        :class:`~gismo.embedding.Embedding` constructor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span> <span class="k">if</span> <span class="n">corpus</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="p">(</span><span class="n">min_df</span><span class="p">,</span> <span class="n">max_df</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">.15</span><span class="p">)</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="k">else</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+        <span class="n">min_df</span><span class="o">=</span><span class="n">min_df</span><span class="p">,</span>
+        <span class="n">max_df</span><span class="o">=</span><span class="n">max_df</span><span class="p">,</span>
+        <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">stop_words</span><span class="o">=</span><span class="s2">&quot;english&quot;</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Embedding"><a class="viewcode-back" href="../../reference.html#gismo.embedding.Embedding">[docs]</a><span class="k">class</span> <span class="nc">Embedding</span><span class="p">(</span><span class="n">MixInIO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class leverages the :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
+<span class="sd">    class to build the dual embedding of a :class:`~gismo.corpus.Corpus`.</span>
+
+<span class="sd">    * Documents are embedded in the space of features;</span>
+<span class="sd">    * Features are embedded in the space of documents.</span>
+
+<span class="sd">    See the examples and methods below for all usages of the class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vectorizer: :class:`~sklearn.feature_extraction.text.CountVectorizer`, optional</span>
+<span class="sd">                Custom :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
+<span class="sd">                to override default behavior (recommended).</span>
+<span class="sd">                Having a :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
+<span class="sd">                adapted to the :class:`~gismo.corpus.Corpus` is good practice.</span>
+<span class="sd">    filename: :py:class:`str`, optional</span>
+<span class="sd">        If set, load embedding from corresponding file.</span>
+<span class="sd">    path: :py:class:`str` or :py:class:`~pathlib.Path`, optional</span>
+<span class="sd">        If set, specify the directory where the embedding is located.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">vectorizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">vectorizer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Number of documents</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Number of features</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># TF-IDTF X embedding of documents into features, normalized</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_norm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># memory of X norm for hierarchical merge</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Y embedding of features into documents</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_norm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># memory of Y norm for hierarchical merge</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># idf vector</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># vocabulary list</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_result_found</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># keep track of projection successes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># keep track of projection query</span>
+
+<div class="viewcode-block" id="Embedding.fit_transform"><a class="viewcode-back" href="../../reference.html#gismo.embedding.Embedding.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ingest a corpus of documents.</span>
+
+<span class="sd">        * If not yet set, a default :class:`~sklearn.feature_extraction.text.CountVectorizer` is created.</span>
+<span class="sd">        * Features are computed and stored (fit).</span>
+<span class="sd">        * Inverse-Document-Frequency weights of features are computed (fit).</span>
+<span class="sd">        * TF-IDF embedding of documents is computed and stored (transform).</span>
+<span class="sd">        * TF-ITF embedding of features is computed and stored (transform).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        corpus: :class:`~gismo.corpus.Corpus`</span>
+<span class="sd">            The corpus to ingest.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        &gt;&gt;&gt; corpus=Corpus(toy_source_text)</span>
+<span class="sd">        &gt;&gt;&gt; embedding = Embedding()</span>
+<span class="sd">        &gt;&gt;&gt; embedding.fit_transform(corpus)</span>
+<span class="sd">        &gt;&gt;&gt; embedding.x  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        &lt;5x21 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;</span>
+<span class="sd">            with 25 stored elements in Compressed Sparse Row format&gt;</span>
+<span class="sd">        &gt;&gt;&gt; list(embedding.features[:8])</span>
+<span class="sd">        [&#39;blade&#39;, &#39;chinese&#39;, &#39;comparing&#39;, &#39;demon&#39;, &#39;folklore&#39;, &#39;gizmo&#39;, &#39;gremlins&#39;, &#39;inside&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">auto_vect</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+
+        <span class="c1"># THE FIT PART</span>
+        <span class="c1"># Start with a simple CountVectorizer X</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">iterate_text</span><span class="p">())</span>
+        <span class="c1"># Release stop_words_ from vectorizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">stop_words_</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Populate vocabulary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
+        <span class="c1"># Extract number of documents and features</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="c1"># PART OF TRANSFORM, MUTUALIZED: Apply sublinear smoothing</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># PART OF TRANSFORM, MUTUALIZED: Apply ITF transformation</span>
+        <span class="n">itf_fit_transform</span><span class="p">(</span><span class="n">indptr</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="c1"># Compute transposed CountVectorizer Y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">tocsc</span><span class="p">()</span>
+        <span class="c1"># Compute IDF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="n">idf_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="c1"># THE TRANSFORM PART</span>
+        <span class="n">idf_transform</span><span class="p">(</span><span class="n">indptr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">idf_vector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="p">)</span>
+        <span class="c1"># back to x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">tocsr</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Transpose y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">T</span>
+        <span class="c1"># Normalize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_norm</span> <span class="o">=</span> <span class="n">l1_normalize</span><span class="p">(</span><span class="n">indptr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_norm</span> <span class="o">=</span> <span class="n">l1_normalize</span><span class="p">(</span><span class="n">indptr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Embedding.fit"><a class="viewcode-back" href="../../reference.html#gismo.embedding.Embedding.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Learn features from a corpus of documents.</span>
+
+<span class="sd">        * If not yet set, a default :class:`~sklearn.feature_extraction.text.CountVectorizer` is created.</span>
+<span class="sd">        * Features are computed and stored.</span>
+<span class="sd">        * Inverse-Document-Frequency weights of features are computed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        corpus: :class:`~gismo.corpus.Corpus`</span>
+<span class="sd">            The corpus to ingest.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        &gt;&gt;&gt; corpus=Corpus(toy_source_text)</span>
+<span class="sd">        &gt;&gt;&gt; embedding = Embedding()</span>
+<span class="sd">        &gt;&gt;&gt; embedding.fit(corpus)</span>
+<span class="sd">        &gt;&gt;&gt; len(embedding.idf)</span>
+<span class="sd">        21</span>
+<span class="sd">        &gt;&gt;&gt; list(embedding.features[:8])</span>
+<span class="sd">        [&#39;blade&#39;, &#39;chinese&#39;, &#39;comparing&#39;, &#39;demon&#39;, &#39;folklore&#39;, &#39;gizmo&#39;, &#39;gremlins&#39;, &#39;inside&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">corpus</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">auto_vect</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+
+        <span class="c1"># THE FIT PART</span>
+        <span class="c1"># Start with a simple CountVectorizer X</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">iterate_text</span><span class="p">())</span>
+        <span class="c1"># Release stop_words_ from vectorizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">stop_words_</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Populate vocabulary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
+        <span class="c1"># Extract number of documents (required for idf) and features (required in fit)</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="c1"># Compute transposed CountVectorizer Y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">tocsc</span><span class="p">()</span>
+        <span class="c1"># Compute IDF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="n">idf_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Embedding.fit_ext"><a class="viewcode-back" href="../../reference.html#gismo.embedding.Embedding.fit_ext">[docs]</a>    <span class="k">def</span> <span class="nf">fit_ext</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use learned features from another :class:`~gismo.embedding.Embedding`.</span>
+<span class="sd">        This is useful for the fast creation of local embeddings</span>
+<span class="sd">        (e.g. at sentence level) out of a global embedding.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        embedding: :class:`~gismo.embedding.Embedding`</span>
+<span class="sd">                  External embedding to copy.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; corpus=Corpus(toy_source_text)</span>
+<span class="sd">        &gt;&gt;&gt; other_embedding = Embedding()</span>
+<span class="sd">        &gt;&gt;&gt; other_embedding.fit(corpus)</span>
+<span class="sd">        &gt;&gt;&gt; embedding = Embedding()</span>
+<span class="sd">        &gt;&gt;&gt; embedding.fit_ext(other_embedding)</span>
+<span class="sd">        &gt;&gt;&gt; len(embedding.idf)</span>
+<span class="sd">        21</span>
+<span class="sd">        &gt;&gt;&gt; list(embedding.features[:8])</span>
+<span class="sd">        [&#39;blade&#39;, &#39;chinese&#39;, &#39;comparing&#39;, &#39;demon&#39;, &#39;folklore&#39;, &#39;gizmo&#39;, &#39;gremlins&#39;, &#39;inside&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">vectorizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">idf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">features</span></div>
+
+<div class="viewcode-block" id="Embedding.transform"><a class="viewcode-back" href="../../reference.html#gismo.embedding.Embedding.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ingest a corpus of documents using existing features.</span>
+<span class="sd">        Requires that the embedding has been fitted beforehand.</span>
+
+<span class="sd">        * TF-IDF embedding of documents is computed and stored.</span>
+<span class="sd">        * TF-ITF embedding of features is computed and stored.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        corpus: :class:`~gismo.corpus.Corpus`</span>
+<span class="sd">            The corpus to ingest.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        &gt;&gt;&gt; corpus=Corpus(toy_source_text)</span>
+<span class="sd">        &gt;&gt;&gt; embedding = Embedding()</span>
+<span class="sd">        &gt;&gt;&gt; embedding.fit_transform(corpus)</span>
+<span class="sd">        &gt;&gt;&gt; [embedding.features[i] for i in embedding.x.indices[:8]]</span>
+<span class="sd">        [&#39;gizmo&#39;, &#39;mogwaï&#39;, &#39;blade&#39;, &#39;sentence&#39;, &#39;sentence&#39;, &#39;shadoks&#39;, &#39;comparing&#39;, &#39;gizmo&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; small_corpus = Corpus([&quot;I only talk about Yoda&quot;, &quot;Gizmo forever!&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; embedding.transform(small_corpus)</span>
+<span class="sd">        &gt;&gt;&gt; [embedding.features[i] for i in embedding.x.indices]</span>
+<span class="sd">        [&#39;yoda&#39;, &#39;gizmo&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The fit part</span>
+        <span class="k">assert</span> <span class="n">corpus</span>
+
+        <span class="c1"># THE FIT PART</span>
+        <span class="c1"># Start with a simple CountVectorizer X</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">iterate_text</span><span class="p">())</span>
+        <span class="c1"># Release stop_words_ from vectorizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">stop_words_</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Extract number of documents and features</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="c1"># PART OF TRANSFORM, MUTUALIZED: Apply sublinear smoothing</span>
+        <span class="n">x</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># PART OF TRANSFORM, MUTUALIZED: Apply ITF transformation</span>
+        <span class="n">itf_fit_transform</span><span class="p">(</span><span class="n">indptr</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="c1"># Compute transposed CountVectorizer Y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">tocsc</span><span class="p">()</span>
+
+        <span class="c1"># THE TRANSFORM PART</span>
+        <span class="n">idf_transform</span><span class="p">(</span><span class="n">indptr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">idf_vector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="p">)</span>
+        <span class="c1"># back to x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">tocsr</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Transpose y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">T</span>
+        <span class="c1"># Normalize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_norm</span> <span class="o">=</span> <span class="n">l1_normalize</span><span class="p">(</span><span class="n">indptr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_norm</span> <span class="o">=</span> <span class="n">l1_normalize</span><span class="p">(</span><span class="n">indptr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Embedding.query_projection"><a class="viewcode-back" href="../../reference.html#gismo.embedding.Embedding.query_projection">[docs]</a>    <span class="k">def</span> <span class="nf">query_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Project a query in the feature space.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query: :class:`str`</span>
+<span class="sd">               Text to project.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        z: :class:`~scipy.sparse.csr_matrix`</span>
+<span class="sd">            result of the query projection (IDF distribution if query does not match any feature).</span>
+<span class="sd">        success: :class:`bool`</span>
+<span class="sd">            projection success (``True`` if at least one feature been found).</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        &gt;&gt;&gt; corpus=Corpus(toy_source_text)</span>
+<span class="sd">        &gt;&gt;&gt; embedding = Embedding()</span>
+<span class="sd">        &gt;&gt;&gt; embedding.fit_transform(corpus)</span>
+<span class="sd">        &gt;&gt;&gt; z, success = embedding.query_projection(&quot;Gizmo is not Yoda but he rocks!&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; for i in range(len(z.data)):</span>
+<span class="sd">        ...    print(f&quot;{embedding.features[z.indices[i]]}: {z.data[i]}&quot;) # doctest: +ELLIPSIS</span>
+<span class="sd">        gizmo: 0.3868528072...</span>
+<span class="sd">        yoda: 0.6131471927...</span>
+<span class="sd">        &gt;&gt;&gt; success</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; z, success = embedding.query_projection(&quot;That content does not intersect toy corpus&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; success</span>
+<span class="sd">        False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">=</span> <span class="n">query</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">([</span><span class="n">query</span><span class="p">])</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">query_shape</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">z</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">z</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">idf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idf</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_result_found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_result_found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_result_found</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Fabien Mathieu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gismo.common &mdash; GISMO 0.4.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo-line.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">A Generic Information Search… With a Mind of its Own!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GISMO</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gismo.common</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gismo.common</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># GISMO: a Generic Information Search with a Mind of its Own</span>
+
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">dill</span> <span class="k">as</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+
+<div class="viewcode-block" id="MixInIO"><a class="viewcode-back" href="../../reference.html#gismo.common.MixInIO">[docs]</a><span class="k">class</span> <span class="nc">MixInIO</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provide basic save/load capacities to other classes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MixInIO.save"><a class="viewcode-back" href="../../reference.html#gismo.common.MixInIO.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save instance to file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename: str</span>
+<span class="sd">            The stem of the filename.</span>
+<span class="sd">        path: :py:class:`str` or :py:class:`~pathlib.Path`, optional</span>
+<span class="sd">            The location path.</span>
+<span class="sd">        erase: bool</span>
+<span class="sd">            Should existing file be erased if it exists?</span>
+<span class="sd">        compress: bool</span>
+<span class="sd">            Should gzip compression be used?</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        ----------</span>
+<span class="sd">        &gt;&gt;&gt; import tempfile</span>
+<span class="sd">        &gt;&gt;&gt; v1 = ToyClass(42)</span>
+<span class="sd">        &gt;&gt;&gt; v2 = ToyClass()</span>
+<span class="sd">        &gt;&gt;&gt; v2.value</span>
+<span class="sd">        0</span>
+<span class="sd">        &gt;&gt;&gt; with tempfile.TemporaryDirectory() as tmpdirname:</span>
+<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, compress=True, path=tmpdirname)</span>
+<span class="sd">        ...     dir_content = [f.name for f in Path(tmpdirname).glob(&#39;*&#39;)]</span>
+<span class="sd">        ...     v2.load(filename=&#39;myfile&#39;, path=Path(tmpdirname))</span>
+<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, compress=True, path=tmpdirname) # doctest.ELLIPSIS</span>
+<span class="sd">        File ...myfile.pkl.gz already exists! Use erase option to overwrite.</span>
+<span class="sd">        &gt;&gt;&gt; dir_content</span>
+<span class="sd">        [&#39;myfile.pkl.gz&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; v2.value</span>
+<span class="sd">        42</span>
+
+<span class="sd">        &gt;&gt;&gt; with tempfile.TemporaryDirectory() as tmpdirname:</span>
+<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, path=tmpdirname)</span>
+<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, path=tmpdirname) # doctest.ELLIPSIS</span>
+<span class="sd">        File ...myfile.pkl already exists! Use erase option to overwrite.</span>
+
+<span class="sd">        &gt;&gt;&gt; v1.value = 51</span>
+<span class="sd">        &gt;&gt;&gt; with tempfile.TemporaryDirectory() as tmpdirname:</span>
+<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, path=tmpdirname)</span>
+<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, path=tmpdirname, erase=True)</span>
+<span class="sd">        ...     v2.load(filename=&#39;myfile&#39;, path=tmpdirname)</span>
+<span class="sd">        ...     dir_content = [f.name for f in Path(tmpdirname).glob(&#39;*&#39;)]</span>
+<span class="sd">        &gt;&gt;&gt; dir_content</span>
+<span class="sd">        [&#39;myfile.pkl&#39;]</span>
+<span class="sd">        &gt;&gt;&gt; v2.value</span>
+<span class="sd">        51</span>
+
+<span class="sd">        &gt;&gt;&gt; with tempfile.TemporaryDirectory() as tmpdirname:</span>
+<span class="sd">        ...    v2.load(filename=&#39;thisfilenamedoesnotexist&#39;) # doctest.ELLIPSIS</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">         ...</span>
+<span class="sd">        FileNotFoundError: [Errno 2] No such file or directory: ...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+        <span class="k">if</span> <span class="n">compress</span><span class="p">:</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">destination</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pkl.gz&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">erase</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2"> already exists! Use erase option to overwrite.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">destination</span> <span class="o">=</span> <span class="n">destination</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">erase</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2"> already exists! Use erase option to overwrite.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MixInIO.load"><a class="viewcode-back" href="../../reference.html#gismo.common.MixInIO.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load instance from file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename: str</span>
+<span class="sd">            The stem of the filename.</span>
+<span class="sd">        path: :py:class:`str` or :py:class:`~pathlib.Path`, optional</span>
+<span class="sd">            The location path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">dest</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dest</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">dest</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;.pkl.gz&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dest</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                    <span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">),</span> <span class="n">dest</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ToyClass"><a class="viewcode-back" href="../../reference.html#gismo.common.ToyClass">[docs]</a><span class="k">class</span> <span class="nc">ToyClass</span><span class="p">(</span><span class="n">MixInIO</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A minimal class to demonstrate the use of the :class:`~gismo.common.MixInIO` MixIN.</span>
+
+<span class="sd">    The class itself just stores one value, but the MixIn automatically adds save/load capabilities.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    v: object</span>
+<span class="sd">        A value to store.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="auto_k"><a class="viewcode-back" href="../../reference.html#gismo.common.auto_k">[docs]</a><span class="k">def</span> <span class="nf">auto_k</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_k</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Proposes a threshold k of significant values according to a relevance vector.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: :class:`~numpy.ndarray`</span>
+<span class="sd">        Vector with positive relevance values.</span>
+<span class="sd">    order: list of int, optional</span>
+<span class="sd">        Ordered indices of ``data``</span>
+<span class="sd">    max_k: int</span>
+<span class="sd">        Maximal number of entries to return; also number of entries used to determine threshold.</span>
+<span class="sd">    target: float</span>
+<span class="sd">        Threshold modulation. Higher target means less result.</span>
+<span class="sd">        A target set to 1.0 corresponds to using the average of the max_k top values as threshold.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    k: int</span>
+<span class="sd">        Recommended number of values.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; data = np.array([30, 1, 2, .3, 4, 50, 80])</span>
+<span class="sd">    &gt;&gt;&gt; auto_k(data)</span>
+<span class="sd">    3</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">ordered_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">order</span><span class="p">[:</span><span class="n">max_k</span><span class="p">]]</span>
+    <span class="n">max_k</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ordered_data</span><span class="p">)</span><span class="o">*</span><span class="n">target</span><span class="o">/</span><span class="n">max_k</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ordered_data</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span></div>
+
+
+<span class="n">toy_source_text</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Gizmo is a Mogwaï.&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;This is a sentence about Blade.&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;This is another sentence about Shadoks.&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side &#39;</span>
+                   <span class="s1">&#39;reference to the Gremlins movie by comparing Gizmo and Yoda.&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;In chinese folklore, a Mogwaï is a demon.&#39;</span><span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;A minimal source example where items are :py:obj:`str`.&quot;&quot;&quot;</span>
+
+<span class="n">toy_source_dict</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;First Document&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Gizmo is a Mogwaï.&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Second Document&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;This is a sentence about Blade.&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Third Document&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;This is another sentence about Shadoks.&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Fourth Document&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;This very long sentence, with a lot of stuff about Star Wars inside, &#39;</span>
+                               <span class="s1">&#39;makes at some point a side reference to the Gremlins movie by &#39;</span>
+                               <span class="s1">&#39;comparing Gizmo and Yoda.&#39;</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Fifth Document&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;In chinese folklore, a Mogwaï is a demon.&#39;</span><span class="p">}]</span>
+<span class="sd">&quot;&quot;&quot;A minimal source example where items are :py:obj:`dict` with keys `title` and `content`.&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Fabien Mathieu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

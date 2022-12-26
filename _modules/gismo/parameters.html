@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gismo.parameters &mdash; GISMO 0.4.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo-line.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">A Generic Information Search… With a Mind of its Own!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GISMO</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gismo.parameters</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gismo.parameters</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;Gismo&quot;</span><span class="p">)</span>
+
+<span class="n">ALPHA</span> <span class="o">=</span> <span class="mf">.5</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default value for damping factor.</span>
+<span class="sd">Controls the trade-off between closeness and centrality.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">N_ITER</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default value for the number of round-trip diffusions to perform.</span>
+<span class="sd">Higher value means better precision but longer execution time.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">OFFSET</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default offset value.</span>
+<span class="sd">Controls how much of the initial fluid should be deduced from the relevance.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">MEMORY</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default memory value.</span>
+<span class="sd">Controls how much of previous computation is kept</span>
+<span class="sd">when performing a new diffusion.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">STRETCH</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default stretch value.</span>
+<span class="sd">When performing covering, defines the ratio between considered pages and</span>
+<span class="sd">selected covering pages.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">RESOLUTION</span> <span class="o">=</span> <span class="mf">0.7</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default resolution value.</span>
+<span class="sd">Defines how strict the merging of cluster is during recursive clustering.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">MAX_K</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default top population size for estimating k.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">TARGET_K</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default threshold for estimating k.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">WIDE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default Covering behavior for covering.</span>
+<span class="sd">True for wide variant, false for core variant.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">POST</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default post policy.</span>
+<span class="sd">If True, post function is applied on items and clusters.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">DISTORTION</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default distortion.</span>
+<span class="sd">Controls how much of diteration relevance is mixed into the embedding</span>
+<span class="sd">for similarity computation.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">DEFAULT_PARAMETERS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">ALPHA</span><span class="p">,</span>
+                      <span class="s1">&#39;n_iter&#39;</span><span class="p">:</span> <span class="n">N_ITER</span><span class="p">,</span>
+                      <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="n">OFFSET</span><span class="p">,</span>
+                      <span class="s1">&#39;memory&#39;</span><span class="p">:</span> <span class="n">MEMORY</span><span class="p">,</span>
+                      <span class="s1">&#39;stretch&#39;</span><span class="p">:</span> <span class="n">STRETCH</span><span class="p">,</span>
+                      <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="n">RESOLUTION</span><span class="p">,</span>
+                      <span class="s1">&#39;max_k&#39;</span><span class="p">:</span> <span class="n">MAX_K</span><span class="p">,</span>
+                      <span class="s1">&#39;target_k&#39;</span><span class="p">:</span> <span class="n">TARGET_K</span><span class="p">,</span>
+                      <span class="s1">&#39;wide&#39;</span><span class="p">:</span> <span class="n">WIDE</span><span class="p">,</span>
+                      <span class="s1">&#39;post&#39;</span><span class="p">:</span> <span class="n">POST</span><span class="p">,</span>
+                      <span class="s1">&#39;distortion&#39;</span><span class="p">:</span> <span class="n">DISTORTION</span>
+                      <span class="p">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Dictionary of default `runtime` :class:`~gismo.gismo.Gismo` parameters.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">X_DENSITY</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="sd">&quot;&quot;&quot;Default number of documents representing a :class:`~gismo.landmarks.Landmarks` entry.&quot;&quot;&quot;</span>
+
+<span class="n">Y_DENSITY</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="sd">&quot;&quot;&quot;Default number of features representing a :class:`~gismo.landmarks.Landmarks` entry.&quot;&quot;&quot;</span>
+
+<span class="n">BALANCE</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="sd">&quot;&quot;&quot;Default documents/features trade-off in :class:`~gismo.landmarks.Landmarks`.&quot;&quot;&quot;</span>
+
+<span class="n">DEFAULT_LANDMARKS_PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;stretch&#39;</span><span class="p">:</span> <span class="n">STRETCH</span><span class="p">,</span>
+    <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="n">RESOLUTION</span><span class="p">,</span>
+    <span class="s1">&#39;max_k&#39;</span><span class="p">:</span> <span class="n">MAX_K</span><span class="p">,</span>
+    <span class="s1">&#39;target_k&#39;</span><span class="p">:</span> <span class="n">TARGET_K</span><span class="p">,</span>
+    <span class="s1">&#39;wide&#39;</span><span class="p">:</span> <span class="n">WIDE</span><span class="p">,</span>
+    <span class="s1">&#39;post&#39;</span><span class="p">:</span> <span class="n">POST</span><span class="p">,</span>
+    <span class="s1">&#39;distortion&#39;</span><span class="p">:</span> <span class="n">DISTORTION</span><span class="p">,</span>
+    <span class="s1">&#39;x_density&#39;</span><span class="p">:</span> <span class="n">X_DENSITY</span><span class="p">,</span>
+    <span class="s1">&#39;y_density&#39;</span><span class="p">:</span> <span class="n">Y_DENSITY</span><span class="p">,</span>
+    <span class="s1">&#39;balance&#39;</span><span class="p">:</span> <span class="n">BALANCE</span><span class="p">,</span>
+    <span class="s1">&#39;rank&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">g</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Dictionary of default `runtime` :class:`~gismo.landmarks.Landmarks` parameters.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Parameters"><a class="viewcode-back" href="../../reference.html#gismo.parameters.Parameters">[docs]</a><span class="k">class</span> <span class="nc">Parameters</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manages :class:`~gismo.gismo.Gismo` runtime parameters. When called, an instance will yield</span>
+<span class="sd">    a dictionary of parameters. Is also used for other Gismo classes like :class:`~gismo.landmarks.Landmarks`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parameter_list: dict, optional</span>
+<span class="sd">        Indicates which paramaters to manage. Default to Gismo runtime parameter.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Parameters that need to be distinct from default values.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Use default parameters.</span>
+
+<span class="sd">    &gt;&gt;&gt; p = Parameters()</span>
+<span class="sd">    &gt;&gt;&gt; p() # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    {&#39;alpha&#39;: 0.5, &#39;n_iter&#39;: 4, &#39;offset&#39;: 1.0, &#39;memory&#39;: 0.0,</span>
+<span class="sd">    &#39;stretch&#39;: 2.0, &#39;resolution&#39;: 0.7, &#39;max_k&#39;: 100, &#39;target_k&#39;: 1.0,</span>
+<span class="sd">    &#39;wide&#39;: True, &#39;post&#39;: True, &#39;distortion&#39;: 1.0}</span>
+
+<span class="sd">    Use default parameters with changed `stretch`.</span>
+
+<span class="sd">    &gt;&gt;&gt; p = Parameters(stretch=1.7)</span>
+<span class="sd">    &gt;&gt;&gt; p()[&#39;stretch&#39;]</span>
+<span class="sd">    1.7</span>
+
+<span class="sd">    Note that parameters that do not exist will be ignored and (a warning will</span>
+<span class="sd">    be issued)</span>
+
+<span class="sd">    &gt;&gt;&gt; p = Parameters(strech=1.7)</span>
+<span class="sd">    &gt;&gt;&gt; p() # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    {&#39;alpha&#39;: 0.5, &#39;n_iter&#39;: 4, &#39;offset&#39;: 1.0, &#39;memory&#39;: 0.0,</span>
+<span class="sd">    &#39;stretch&#39;: 2.0, &#39;resolution&#39;: 0.7, &#39;max_k&#39;: 100, &#39;target_k&#39;: 1.0,</span>
+<span class="sd">    &#39;wide&#39;: True, &#39;post&#39;: True, &#39;distortion&#39;: 1.0}</span>
+
+<span class="sd">    You can change the value of an attribute to alter the returned parameter.</span>
+
+<span class="sd">    &gt;&gt;&gt; p.alpha = 0.85</span>
+<span class="sd">    &gt;&gt;&gt; p()[&#39;alpha&#39;]</span>
+<span class="sd">    0.85</span>
+
+<span class="sd">    You can also apply on-the-fly parameters by passing them when</span>
+<span class="sd">    calling the instance.</span>
+
+<span class="sd">    &gt;&gt;&gt; p(resolution=0.9)[&#39;resolution&#39;]</span>
+<span class="sd">    0.9</span>
+
+<span class="sd">    Like for construction, parameters that do not exist are ignored and a warning</span>
+<span class="sd">    is issued.</span>
+
+<span class="sd">    &gt;&gt;&gt; p(resolutio = .9) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    {&#39;alpha&#39;: 0.85, &#39;n_iter&#39;: 4, &#39;offset&#39;: 1.0, &#39;memory&#39;: 0.0,</span>
+<span class="sd">    &#39;stretch&#39;: 2.0, &#39;resolution&#39;: 0.7, &#39;max_k&#39;: 100, &#39;target_k&#39;: 1.0,</span>
+<span class="sd">    &#39;wide&#39;: True, &#39;post&#39;: True, &#39;distortion&#39;: 1.0}</span>
+
+<span class="sd">    Note the possibility to store a custom set of parameters if one uses ``parameter_list`` in construction.</span>
+
+<span class="sd">    &gt;&gt;&gt; p = Parameters(parameter_list={&#39;a&#39;: 1.0, &#39;b&#39;: True}, a=1.5)</span>
+<span class="sd">    &gt;&gt;&gt; p()</span>
+<span class="sd">    {&#39;a&#39;: 1.5, &#39;b&#39;: True}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameter_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameter_list</span> <span class="o">=</span> <span class="n">DEFAULT_PARAMETERS</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">parameter_list</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No parameter named </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No parameter named </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Fabien Mathieu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

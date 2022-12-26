@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DBLP exploration &mdash; GISMO 0.4.3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Landmarks Tutorial" href="landmarks_tutorial.html" />
+    <link rel="prev" title="ACM categories" href="tutorial_acm.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html">
+            <img src="../_static/logo-line.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">A Generic Information Search… With a Mind of its Own!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tutorial_toy_example.html">Toy example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_acm.html">ACM categories</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DBLP exploration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Initialisation">Initialisation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Machine-Learning-(and-Covid-19)-query">Machine Learning (and Covid-19) query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Authors-query">Authors query</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Laurent-Massoulié-query">Laurent Massoulié query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Jim-Roberts-query">Jim Roberts query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Combined-queries">Combined queries</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Cross-gismo">Cross-gismo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="landmarks_tutorial.html">Landmarks Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GISMO</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">DBLP exploration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/tutorial_dblp.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars and line breaks on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+    white-space: pre;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="DBLP-exploration">
+<h1>DBLP exploration<a class="headerlink" href="#DBLP-exploration" title="Permalink to this heading"></a></h1>
+<p>This tutorial shows how explore DBLP with Gismo.</p>
+<p>If you have never used Gismo before, you may want to start with the <em>Toy example tutorial</em> or the <em>ACM</em> tutorial.</p>
+<p>Note: the DBLP databased is not small. Recommended requirements to excute this Notebook: - Fast Internet connection (you will need to download a few hundred Mb) - 4 Gb of free space - 4 Gb of RAM (8Gb or more recommended) - Descent CPU (can take more than one hour on slow CPUs)</p>
+<p>Here, <em>documents</em> are articles in DBLP. The <em>features</em> of an article category will vary.</p>
+<section id="Initialisation">
+<h2>Initialisation<a class="headerlink" href="#Initialisation" title="Permalink to this heading"></a></h2>
+<p>First, we load the required packages.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">cosine_similarity</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="kn">from</span> <span class="nn">gismo.datasets.dblp</span> <span class="kn">import</span> <span class="n">Dblp</span>
+<span class="kn">from</span> <span class="nn">gismo.filesource</span> <span class="kn">import</span> <span class="n">FileSource</span>
+<span class="kn">from</span> <span class="nn">gismo.corpus</span> <span class="kn">import</span> <span class="n">Corpus</span>
+<span class="kn">from</span> <span class="nn">gismo.embedding</span> <span class="kn">import</span> <span class="n">Embedding</span>
+<span class="kn">from</span> <span class="nn">gismo.gismo</span> <span class="kn">import</span> <span class="n">Gismo</span>
+<span class="kn">from</span> <span class="nn">gismo.post_processing</span> <span class="kn">import</span> <span class="n">post_features_cluster_print</span><span class="p">,</span> <span class="n">post_documents_cluster_print</span>
+</pre></div>
+</div>
+</div>
+<p>Then, we prepare the DBLP source.</p>
+<p>First we choose the location of the DBLP files. If you want to run this Notebook at your place, please change the path below and check that it exists.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../../../../../Datasets/DBLP&quot;</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>Construction of the dblp files. Only needs to be performed the first time or when you want to refresh the database. Takes about 10 minutes on a Surface Pro 4 with fiber Internet connection.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dblp</span> <span class="o">=</span> <span class="n">Dblp</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="n">dblp</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+File ..\..\..\..\..\Datasets\DBLP\dblp.xml.gz already exists. Use refresh option to overwrite.
+File ..\..\..\..\..\Datasets\DBLP\dblp.data already exists. Use refresh option to overwrite.
+</pre></div></div>
+</div>
+<p>Then, we can load the database as a filesource.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">=</span> <span class="n">FileSource</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;type&#39;: &#39;article&#39;,
+ &#39;title&#39;: &#39;Spectre Attacks: Exploiting Speculative Execution.&#39;,
+ &#39;venue&#39;: &#39;meltdownattack.com&#39;,
+ &#39;year&#39;: &#39;2018&#39;,
+ &#39;authors&#39;: [&#39;Paul Kocher&#39;,
+  &#39;Daniel Genkin&#39;,
+  &#39;Daniel Gruss&#39;,
+  &#39;Werner Haas&#39;,
+  &#39;Mike Hamburg&#39;,
+  &#39;Moritz Lipp&#39;,
+  &#39;Stefan Mangard&#39;,
+  &#39;Thomas Prescher 0002&#39;,
+  &#39;Michael Schwarz 0001&#39;,
+  &#39;Yuval Yarom&#39;]}
+</pre></div></div>
+</div>
+<p>Each article is a dict with fields <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">venue</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">year</span></code>, and <code class="docutils literal notranslate"><span class="pre">authors</span></code>. We build a corpus that will tell Gismo that the content of an article is its <code class="docutils literal notranslate"><span class="pre">title</span></code> value.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>We build an embedding on top of that corpus. - We set <code class="docutils literal notranslate"><span class="pre">min_df=30</span></code> to exclude rare features; - We set <code class="docutils literal notranslate"><span class="pre">max_df=.02</span></code> to exclude anything present in more than 2% of the corpus; - We use <code class="docutils literal notranslate"><span class="pre">spacy</span></code> to lemmatize &amp; remove some stopwords; remove <code class="docutils literal notranslate"><span class="pre">preprocessor=...</span></code> from the input if you want to skip this (takes time); - A few manually selected stopwords to fine-tune things. - We set <code class="docutils literal notranslate"><span class="pre">ngram_range=[1,</span> <span class="pre">2]</span></code> to include bi-grams in the embedding.</p>
+<p>This will take a few minutes (without spacy) up to a few hours (with spacy enabled). You can save the embedding for later if you want.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;parser&#39;</span><span class="p">,</span> <span class="s1">&#39;ner&#39;</span><span class="p">])</span>
+<span class="n">keep</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ADJ&#39;</span><span class="p">,</span> <span class="s1">&#39;NOUN&#39;</span><span class="p">,</span> <span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;PROPN&#39;</span><span class="p">,</span> <span class="s1">&#39;SYM&#39;</span><span class="p">,</span> <span class="s1">&#39;VERB&#39;</span><span class="p">}</span>
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">min_df</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">.02</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                             <span class="n">preprocessor</span><span class="o">=</span><span class="k">lambda</span> <span class="n">txt</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">w</span><span class="o">.</span><span class="n">lemma_</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">nlp</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+                                                                <span class="k">if</span> <span class="n">w</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">keep</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">w</span><span class="o">.</span><span class="n">is_stop</span><span class="p">]),</span>
+                             <span class="n">stop_words</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span> <span class="s1">&#39;an&#39;</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="s1">&#39;for&#39;</span><span class="p">,</span> <span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="s1">&#39;of&#39;</span><span class="p">,</span> <span class="s1">&#39;on&#39;</span><span class="p">,</span> <span class="s1">&#39;the&#39;</span><span class="p">,</span> <span class="s1">&#39;with&#39;</span><span class="p">])</span>
+<span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">embedding</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+    <span class="n">embedding</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;4889758x149361 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+        with 45847196 stored elements in Compressed Sparse Row format&gt;
+</pre></div></div>
+</div>
+<p>We see from <code class="docutils literal notranslate"><span class="pre">embedding.x</span></code> that the embedding links about 5,000,000 documents to 150,000 features. In average, each document is linked to about 10 features.</p>
+<p>Now, we initiate the gismo object, and customize post_processers to ease the display.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">embedding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">post_article</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">authors</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> By </span><span class="si">{</span><span class="n">authors</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;venue&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="n">post_article</span>
+
+<span class="k">def</span> <span class="nf">post_title</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
+    <span class="n">authors</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> By </span><span class="si">{</span><span class="n">authors</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;venue&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<span class="k">def</span> <span class="nf">post_meta</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">authors</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">authors</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;venue&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_cluster</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">post_documents_cluster_print</span><span class="p">,</span> <span class="n">post_item</span><span class="o">=</span><span class="n">post_title</span><span class="p">)</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_print</span>
+</pre></div>
+</div>
+</div>
+<p>As the dataset is big, we lower the precision of the computation to speed up things a little bit.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">n_iter</span> <span class="o">=</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Machine-Learning-(and-Covid-19)-query">
+<h2>Machine Learning (and Covid-19) query<a class="headerlink" href="#Machine-Learning-(and-Covid-19)-query" title="Permalink to this heading"></a></h2>
+<p>We perform the query <em>Machine learning</em>. The returned <code class="docutils literal notranslate"><span class="pre">True</span></code> tells that some of the query features were found in the corpus’ features.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Machine Learning&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>What are the best articles on <em>Machine Learning</em>?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Can Machine Learning Model with Static Features be Fooled: an Adversarial Machine Learning Approach. By Rahim Taheri, Reza Javidan, Mohammad Shojafar, Vinod P, Mauro Conti (CoRR, 2019)&#39;,
+ &#39;How Developers Iterate on Machine Learning Workflows - A Survey of the Applied Machine Learning Literature. By Doris Xin, Litian Ma, Shuchen Song, Aditya G. Parameswaran (CoRR, 2018)&#39;,
+ &#39;Informed Machine Learning - Towards a Taxonomy of Explicit Integration of Knowledge into Machine Learning. By Laura von Rüden, Sebastian Mayer, Jochen Garcke, Christian Bauckhage, Jannis Schücker (CoRR, 2019)&#39;,
+ &#39;Three Differential Emotion Classification by Machine Learning Algorithms using Physiological Signals - Discriminantion of Emotions by Machine Learning Algorithms. By Eun-Hye Jang, Byoung-Jun Park, Sang-Hyeob Kim, Jin-Hun Sohn (ICAART (1), 2012)&#39;,
+ &#39;When Lempel-Ziv-Welch Meets Machine Learning: A Case Study of Accelerating Machine Learning using Coding. By Fengan Li, Lingjiao Chen, Arun Kumar 0001, Jeffrey F. Naughton, Jignesh M. Patel, Xi Wu 0001 (CoRR, 2017)&#39;,
+ &#39;Linear Algebra and Optimization with Applications to Machine Learning - Volume I: Linear Algebra for Computer Vision, Robotics, and Machine Learning By Jean H. Gallier, Jocelyn Quaintance (Linear Algebra Optim. Appl. Mach. Learn. I, 2020)&#39;,
+ &#39;Sports and machine learning: How young people can use data from their own bodies to learn about machine learning. By Abigail Zimmermann-Niefield, R. Benjamin Shapiro, Shaun K. Kane (ACM Crossroads, 2019)&#39;,
+ &#39;Ethem Alpaydin. Introduction to Machine Learning (Adaptive Computation and Machine Learning Series). The MIT Press, 2004, ISBN 0 262 01211 1. By Shahzad Khan (Nat. Lang. Eng., 2008)&#39;,
+ &#39;Motion Evaluation of Therapy Exercises by Means of Skeleton Normalisation, Incremental Dynamic Time Warping and Machine Learning: A Comparison of a Rule-Based and a Machine-Learning-Based Approach. By Julia Richter, Christian Wiede, Ulrich Heinkel, Gangolf Hirtz (VISIGRAPP (4: VISAPP), 2019)&#39;]
+</pre></div></div>
+</div>
+<p>OK, this seems to go everywhere. Maybe we can narrow with a more specific request.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Machine Learning and covid-19&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;GSA-DenseNet121-COVID-19: a Hybrid Deep Learning Architecture for the Diagnosis of COVID-19 Disease based on Gravitational Search Optimization Algorithm. By Dalia Ezzat, Aboul Ella Hassanien, Hassan Aboul Ella (CoRR, 2020)&#39;,
+ &#39;NAIST COVID: Multilingual COVID-19 Twitter and Weibo Dataset. By Zhiwei Gao, Shuntaro Yada, Shoko Wakamiya, Eiji Aramaki (CoRR, 2020)&#39;,
+ &#39;COVID-MobileXpert: On-Device COVID-19 Screening using Snapshots of Chest X-Ray. By Xin Li, Chengyin Li, Dongxiao Zhu (CoRR, 2020)&#39;,
+ &#39;Deep-COVID: Predicting COVID-19 From Chest X-Ray Images Using Deep Transfer Learning. By Shervin Minaee, Rahele Kafieh, Milan Sonka, Shakib Yazdani, Ghazaleh Jamalipour Soufi (CoRR, 2020)&#39;,
+ &#39;COVID-CAPS: A Capsule Network-based Framework for Identification of COVID-19 cases from X-ray Images. By Parnian Afshar, Shahin Heidarian, Farnoosh Naderkhani, Anastasia Oikonomou, Konstantinos N. Plataniotis, Arash Mohammadi 0001 (CoRR, 2020)&#39;,
+ &#39;COVID-Net: A Tailored Deep Convolutional Neural Network Design for Detection of COVID-19 Cases from Chest Radiography Images. By Linda Wang, Alexander Wong (CoRR, 2020)&#39;,
+ &#39;CORD-19: The Covid-19 Open Research Dataset. By Lucy Lu Wang, Kyle Lo, Yoganand Chandrasekhar, Russell Reas, Jiangjiang Yang, Darrin Eide, Kathryn Funk, Rodney Kinney, Ziyang Liu, William Merrill, Paul Mooney, Dewey Murdick, Devvret Rishi, Jerry Sheehan, Zhihong Shen, Brandon Stilson, Alex D. Wade, Kuansan Wang, Chris Wilhelm, Boya Xie, Douglas Raymond, Daniel S. Weld, Oren Etzioni, Sebastian Kohlmeier (CoRR, 2020)&#39;,
+ &#39;A SIDARTHE Model of COVID-19 Epidemic in Italy. By Giulia Giordano, Franco Blanchini, Raffaele Bruno, Patrizio Colaneri, Alessandro Di Filippo, Angela Di Matteo, Marta Colaneri (CoRR, 2020)&#39;,
+ &#39;A First Instagram Dataset on COVID-19. By Koosha Zarei, Reza Farahbakhsh, Noël Crespi, Gareth Tyson (CoRR, 2020)&#39;,
+ &#39;SurviveCovid-19 - A Game for Improving Awareness of Social Distancing and Health Measures for Covid-19 Pandemic. By Akhila Sri Manasa Venigalla, Dheeraj Vagavolu, Sridhar Chimalakonda (CoRR, 2020)&#39;,
+ &#39;Responding to the COVID-19 pandemic: an invitation. By Mikael Wiberg, Alex S. Taylor, Daniela Rosner (Interactions, 2020)&#39;,
+ &#39;Tracing Contacts to Control the COVID-19 Pandemic. By Christoph Günther 0001, Michael Günther 0007, Daniel Günther 0005 (CoRR, 2020)&#39;,
+ &#39;Learning to Forecast and Forecasting to Learn from the COVID-19 Pandemic. By Ajitesh Srivastava, Viktor K. Prasanna (CoRR, 2020)&#39;,
+ &#39;Campus Traffic and e-Learning during COVID-19 Pandemic. By Thomas Favale, Francesca Soro, Martino Trevisan, Idilio Drago, Marco Mellia (CoRR, 2020)&#39;,
+ &#39;MiniSeg: An Extremely Minimum Network for Efficient COVID-19 Segmentation. By Yu Qiu, Yun Liu, Jing Xu (CoRR, 2020)&#39;,
+ &#39;COVID-19 Image Data Collection. By Joseph Paul Cohen, Paul Morrison, Lan Dao (CoRR, 2020)&#39;,
+ &#39;The COVID-19 Social Media Infodemic. By Matteo Cinelli, Walter Quattrociocchi, Alessandro Galeazzi, Carlo Michele Valensise, Emanuele Brugnoli, Ana Lucía Schmidt, Paola Zola, Fabiana Zollo, Antonio Scala (CoRR, 2020)&#39;,
+ &#39;Mobility Changes in Response to COVID-19. By Michael S. Warren, Samuel W. Skillman (CoRR, 2020)&#39;,
+ &#39;Building a COVID-19 Vulnerability Index. By Dave DeCaprio, Joseph Gartner, Thadeus Burgess, Sarthak Kothari, Shaayan Sayed, Carol J. McCall (CoRR, 2020)&#39;,
+ &#39;Why do People Share Misinformation during the COVID-19 Pandemic? By Samuli Laato, A. K. M. Najmul Islam, Muhammad Nazrul Islam, Eoin Whelan (CoRR, 2020)&#39;,
+ &#39;CovidAID: COVID-19 Detection Using Chest X-Ray. By Arpan Mangal, Surya Kalia, Harish Rajgopal, Krithika Rangarajan, Vinay Namboodiri, Subhashis Banerjee, Chetan Arora 0001 (CoRR, 2020)&#39;]
+</pre></div></div>
+</div>
+<p>Sounds nice. How are the top-10 articles related? Note: as the graph structure is really sparse on the document side (10 features), it is best to de-activate the query-distortion, which is intended for longer documents.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">distortion</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.56. R: 0.02. S: 0.93.
+- F: 0.57. R: 0.02. S: 0.92.
+-- GSA-DenseNet121-COVID-19: a Hybrid Deep Learning Architecture for the Diagnosis of COVID-19 Disease based on Gravitational Search Optimization Algorithm. (R: 0.00; S: 0.64)
+-- F: 0.66. R: 0.01. S: 0.91.
+--- F: 0.66. R: 0.01. S: 0.90.
+---- NAIST COVID: Multilingual COVID-19 Twitter and Weibo Dataset. (R: 0.00; S: 0.69)
+---- CORD-19: The Covid-19 Open Research Dataset. (R: 0.00; S: 0.76)
+---- A SIDARTHE Model of COVID-19 Epidemic in Italy. (R: 0.00; S: 0.79)
+---- A First Instagram Dataset on COVID-19. (R: 0.00; S: 0.80)
+--- F: 0.68. R: 0.00. S: 0.73.
+---- COVID-MobileXpert: On-Device COVID-19 Screening using Snapshots of Chest X-Ray. (R: 0.00; S: 0.70)
+---- Deep-COVID: Predicting COVID-19 From Chest X-Ray Images Using Deep Transfer Learning. (R: 0.00; S: 0.63)
+-- COVID-CAPS: A Capsule Network-based Framework for Identification of COVID-19 cases from X-ray Images. (R: 0.00; S: 0.60)
+-- COVID-Net: A Tailored Deep Convolutional Neural Network Design for Detection of COVID-19 Cases from Chest Radiography Images. (R: 0.00; S: 0.56)
+- SurviveCovid-19 - A Game for Improving Awareness of Social Distancing and Health Measures for Covid-19 Pandemic. (R: 0.00; S: 0.62)
+</pre></div></div>
+</div>
+<p>OK! Let’s decode this: we have: - Lone wolves on gravitional search (first article) and serious gaming (last article) - A large cluster on applications of ML to X-Ray / CT scan processing - A cluster on datasets and social networks - Note that it’s not perfect: the social network has been nested inside X-Ray although a manual classification would probably have put it nearby…</p>
+<p>Now, let’s look at the main keywords.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;19&#39;,
+ &#39;covid&#39;,
+ &#39;covid 19&#39;,
+ &#39;machine&#39;,
+ &#39;machine learning&#39;,
+ &#39;pandemic&#39;,
+ &#39;chest&#39;,
+ &#39;chest ray&#39;,
+ &#39;coronavirus&#39;,
+ &#39;ray&#39;,
+ &#39;dataset&#39;,
+ &#39;deep&#39;,
+ &#39;ct&#39;,
+ &#39;epidemic&#39;,
+ &#39;ray image&#39;,
+ &#39;social&#39;,
+ &#39;learn&#39;,
+ &#39;twitter&#39;,
+ &#39;infection&#39;,
+ &#39;spread&#39;]
+</pre></div></div>
+</div>
+<p>Let’s organize them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># On the feature side, the graph is more dense so we can use query distortion</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">distortion</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.15. R: 0.07. S: 0.93.
+- F: 0.26. R: 0.06. S: 0.93.
+-- F: 0.29. R: 0.06. S: 0.97.
+--- F: 0.97. R: 0.05. S: 0.98.
+---- 19 (R: 0.02; S: 0.99)
+---- covid (R: 0.02; S: 0.97)
+---- covid 19 (R: 0.02; S: 0.98)
+--- pandemic (R: 0.00; S: 0.32)
+--- F: 0.86. R: 0.00. S: 0.30.
+---- chest (R: 0.00; S: 0.32)
+---- chest ray (R: 0.00; S: 0.28)
+---- ray (R: 0.00; S: 0.33)
+--- dataset (R: 0.00; S: 0.28)
+-- coronavirus (R: 0.00; S: 0.27)
+- F: 0.79. R: 0.01. S: 0.14.
+-- machine (R: 0.00; S: 0.16)
+-- machine learning (R: 0.00; S: 0.12)
+</pre></div></div>
+</div>
+<p>Rough, very broad analysis: - One big keyword cluster about Coronavirus / Covid-19; - Chest X-ray as a sub-cluster; - Machine Learning as a separate small cluster.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">query_projection</span><span class="p">(</span><span class="s2">&quot;Machine learning&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;1x4889758 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+        with 56026 stored elements in Compressed Sparse Row format&gt;
+</pre></div></div>
+</div>
+<p>50,000 articles with an explicit link to machine learning.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">query_projection</span><span class="p">(</span><span class="s2">&quot;Covid-19&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;1x4889758 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+        with 762 stored elements in Compressed Sparse Row format&gt;
+</pre></div></div>
+</div>
+<p>800 articles with an explicit link to covid-19.</p>
+</section>
+<section id="Authors-query">
+<h2>Authors query<a class="headerlink" href="#Authors-query" title="Permalink to this heading"></a></h2>
+<p>Instead of looking at words, we can explore authors and their collaborations.</p>
+<p>We just have to rewire the corpus to output string of authors.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">to_authors_text</span><span class="p">(</span><span class="n">dic</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">a</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">]])</span>
+<span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="n">to_authors_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We can build a new embedding on top of this modified corpus. We tell the vectorizer to be stupid: don’t preprocess, words are separated spaces.</p>
+<p>This will take a few minutes (you can save the embedding for later if you want).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                            <span class="n">preprocessor</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">))</span>
+<span class="n">a_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">a_embedding</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">a_embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+    <span class="n">a_embedding</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a_embedding</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;4889758x2532137 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+        with 15083911 stored elements in Compressed Sparse Row format&gt;
+</pre></div></div>
+</div>
+<p>We now have about 2,500,000 authors to explore. Let’s reload gismo and try to play.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">a_embedding</span><span class="p">)</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="n">post_article</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_features_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_cluster</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">post_documents_cluster_print</span><span class="p">,</span> <span class="n">post_item</span><span class="o">=</span><span class="n">post_meta</span><span class="p">)</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_print</span>
+</pre></div>
+</div>
+</div>
+<section id="Laurent-Massoulié-query">
+<h3>Laurent Massoulié query<a class="headerlink" href="#Laurent-Massoulié-query" title="Permalink to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Laurent_Massoulié&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>What are the most central articles of Laurent Massoulié in terms of collaboration?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Robustness of Spectral Methods for Community Detection. By Ludovic Stephan, Laurent Massoulié (COLT, 2019)&#39;,
+ &#39;Robustness of spectral methods for community detection. By Ludovic Stephan, Laurent Massoulié (CoRR, 2018)&#39;,
+ &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (CoRR, 2020)&#39;,
+ &#39;Spectral alignment of correlated Gaussian random matrices. By Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019)&#39;,
+ &#39;Planting trees in graphs, and finding them back. By Laurent Massoulié, Ludovic Stephan, Don Towsley (COLT, 2019)&#39;,
+ &#39;Brief announcement: adaptive content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (PODC, 2010)&#39;,
+ &#39;Optimal content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011)&#39;,
+ &#39;Optimal Content Placement for Peer-to-Peer Video-on-Demand Systems. By Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013)&#39;,
+ &#39;Scalable Local Area Service Discovery. By Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007)&#39;,
+ &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016)&#39;]
+</pre></div></div>
+</div>
+<p>We see lots of duplicates. This is not surprising as many articles can published first as a research report, then as a conference paper, last as a journal article. Luckily, Gismo can cover for you.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_coverage</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Robustness of Spectral Methods for Community Detection. By Ludovic Stephan, Laurent Massoulié (COLT, 2019)&#39;,
+ &#39;Robustness of spectral methods for community detection. By Ludovic Stephan, Laurent Massoulié (CoRR, 2018)&#39;,
+ &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (CoRR, 2020)&#39;,
+ &#39;Spectral alignment of correlated Gaussian random matrices. By Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019)&#39;,
+ &#39;Planting trees in graphs, and finding them back. By Laurent Massoulié, Ludovic Stephan, Don Towsley (COLT, 2019)&#39;,
+ &#39;Brief announcement: adaptive content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (PODC, 2010)&#39;,
+ &#39;Optimal content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011)&#39;,
+ &#39;Optimal Content Placement for Peer-to-Peer Video-on-Demand Systems. By Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013)&#39;,
+ &#39;Scalable Local Area Service Discovery. By Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007)&#39;,
+ &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016)&#39;]
+</pre></div></div>
+</div>
+<p>Hum, not working well. The reason here is query distortion. Query distortion is a gismo feature that modulates the clustering with the query. Sadly, when features are authors, the underlying graph has a very specific structure (highly sparse and redundant) that makes query distortion <em>too</em> effective. The solution is to desactivate it.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">distortion</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_coverage</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Robustness of Spectral Methods for Community Detection. By Ludovic Stephan, Laurent Massoulié (COLT, 2019)&#39;,
+ &#39;Scalable Local Area Service Discovery. By Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007)&#39;,
+ &#39;Asynchronous Accelerated Proximal Stochastic Gradient for Strongly Convex Distributed Finite Sums. By Hadrien Hendrikx, Francis Bach, Laurent Massoulié (CoRR, 2019)&#39;,
+ &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (CoRR, 2020)&#39;,
+ &#39;Brief announcement: adaptive content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (PODC, 2010)&#39;,
+ &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016)&#39;,
+ &#39;Adaptive matching for expert systems with uncertain task types. By Virag Shah, Lennart Gulikers, Laurent Massoulié, Milan Vojnovic (Allerton, 2017)&#39;,
+ &#39;Spectral alignment of correlated Gaussian random matrices. By Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019)&#39;,
+ &#39;Planting trees in graphs, and finding them back. By Laurent Massoulié, Ludovic Stephan, Don Towsley (COLT, 2019)&#39;,
+ &#39;Optimal content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011)&#39;]
+</pre></div></div>
+</div>
+<p>Much better. No duplicate and more diversity in the results. Let’s observe the communities.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.9</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.36. R: 0.09. S: 0.87.
+- F: 0.36. R: 0.08. S: 0.86.
+-- F: 0.36. R: 0.06. S: 0.83.
+--- F: 0.36. R: 0.03. S: 0.73.
+---- F: 0.88. R: 0.01. S: 0.60.
+----- F: 1.00. R: 0.01. S: 0.60.
+------ Ludovic Stephan, Laurent Massoulié (COLT, 2019) (R: 0.00; S: 0.60)
+------ Ludovic Stephan, Laurent Massoulié (CoRR, 2018) (R: 0.00; S: 0.60)
+----- Laurent Massoulié, Ludovic Stephan, Don Towsley (COLT, 2019) (R: 0.00; S: 0.54)
+---- F: 1.00. R: 0.01. S: 0.61.
+----- Bo Tan 0002, Laurent Massoulié (PODC, 2010) (R: 0.00; S: 0.61)
+----- Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011) (R: 0.00; S: 0.61)
+----- Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013) (R: 0.00; S: 0.61)
+--- F: 0.41. R: 0.03. S: 0.69.
+---- F: 0.86. R: 0.01. S: 0.59.
+----- Luca Ganassali, Laurent Massoulié (CoRR, 2020) (R: 0.00; S: 0.58)
+----- Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019) (R: 0.00; S: 0.56)
+---- F: 0.61. R: 0.03. S: 0.60.
+----- F: 1.00. R: 0.02. S: 0.59.
+------ Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016) (R: 0.00; S: 0.59)
+------ Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015) (R: 0.00; S: 0.59)
+------ Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015) (R: 0.00; S: 0.59)
+------ Lennart Gulikers, Marc Lelarge, Laurent Massoulié (ITCS, 2017) (R: 0.00; S: 0.59)
+----- F: 1.00. R: 0.01. S: 0.47.
+------ Virag Shah, Lennart Gulikers, Laurent Massoulié, Milan Vojnovic (Allerton, 2017) (R: 0.00; S: 0.47)
+------ Virag Shah, Lennart Gulikers, Laurent Massoulié, Milan Vojnovic (CoRR, 2017) (R: 0.00; S: 0.47)
+-- F: 1.00. R: 0.02. S: 0.55.
+--- Hadrien Hendrikx, Francis Bach, Laurent Massoulié (CoRR, 2019) (R: 0.00; S: 0.55)
+--- Hadrien Hendrikx, Francis Bach, Laurent Massoulié (CoRR, 2019) (R: 0.00; S: 0.55)
+--- Hadrien Hendrikx, Francis Bach, Laurent Massoulié (AISTATS, 2019) (R: 0.00; S: 0.55)
+--- Hadrien Hendrikx, Laurent Massoulié, Francis Bach (CoRR, 2018) (R: 0.00; S: 0.55)
+--- Hadrien Hendrikx, Francis Bach, Laurent Massoulié (NeurIPS, 2019) (R: 0.00; S: 0.55)
+- Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007) (R: 0.00; S: 0.47)
+</pre></div></div>
+</div>
+<p>OK! We see that the articles are organized by writing commmunities. Also note how Gismo managed to organize a hierachical grouping of the communities.</p>
+<p>Now, let’s look in terms of authors. This is actually the interesting part when studying collaborations.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Laurent Massoulié&#39;,
+ &#39;Marc Lelarge&#39;,
+ &#39;Stratis Ioannidis&#39;,
+ &#39;Nidhi Hegde&#39;,
+ &#39;Peter B. Key&#39;,
+ &#39;Anne-Marie Kermarrec&#39;,
+ &#39;Ayalvadi J. Ganesh&#39;,
+ &#39;Lennart Gulikers&#39;,
+ &#39;Hadrien Hendrikx&#39;,
+ &#39;Francis Bach&#39;,
+ &#39;Dan-Cristian Tomozei&#39;,
+ &#39;Amin Karbasi&#39;,
+ &#39;Milan Vojnovic&#39;,
+ &#39;Augustin Chaintreau&#39;,
+ &#39;Mathieu Leconte&#39;,
+ &#39;Bo Tan 0002&#39;,
+ &#39;James Roberts&#39;,
+ &#39;Ludovic Stephan&#39;,
+ &#39;Kuang Xu&#39;,
+ &#39;Fabio Picconi&#39;]
+</pre></div></div>
+</div>
+<p>We see many authors that were not present in the articles listed above. This is an important observation: central articles (with respect to a query) are not necessarily written by central authors!</p>
+<p>Let’s organize them into communities.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="mf">.6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.00. R: 0.21. S: 0.52.
+- F: 0.00. R: 0.21. S: 0.52.
+-- F: 0.01. R: 0.21. S: 0.52.
+--- F: 0.02. R: 0.20. S: 0.51.
+---- F: 0.03. R: 0.17. S: 0.50.
+----- F: 0.04. R: 0.17. S: 0.49.
+------ F: 0.08. R: 0.16. S: 0.49.
+------- F: 0.13. R: 0.15. S: 0.50.
+-------- F: 0.15. R: 0.14. S: 0.49.
+--------- Laurent Massoulié (R: 0.10; S: 1.00)
+--------- Nidhi Hegde (R: 0.01; S: 0.18)
+--------- Peter B. Key (R: 0.01; S: 0.16)
+--------- Ayalvadi J. Ganesh (R: 0.01; S: 0.16)
+--------- Lennart Gulikers (R: 0.00; S: 0.22)
+--------- Hadrien Hendrikx (R: 0.00; S: 0.18)
+--------- Francis Bach (R: 0.00; S: 0.06)
+-------- Marc Lelarge (R: 0.01; S: 0.15)
+------- Milan Vojnovic (R: 0.00; S: 0.06)
+------ Anne-Marie Kermarrec (R: 0.01; S: 0.08)
+----- Mathieu Leconte (R: 0.00; S: 0.10)
+---- F: 0.03. R: 0.02. S: 0.14.
+----- F: 0.09. R: 0.02. S: 0.14.
+------ Stratis Ioannidis (R: 0.01; S: 0.15)
+------ Augustin Chaintreau (R: 0.00; S: 0.06)
+----- Amin Karbasi (R: 0.00; S: 0.05)
+---- Dan-Cristian Tomozei (R: 0.00; S: 0.08)
+---- Ludovic Stephan (R: 0.00; S: 0.16)
+--- Bo Tan 0002 (R: 0.00; S: 0.13)
+--- Fabio Picconi (R: 0.00; S: 0.08)
+-- James Roberts (R: 0.00; S: 0.06)
+- Kuang Xu (R: 0.00; S: 0.04)
+</pre></div></div>
+</div>
+</section>
+<section id="Jim-Roberts-query">
+<h3>Jim Roberts query<a class="headerlink" href="#Jim-Roberts-query" title="Permalink to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;James_W._Roberts&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>Let’s have a covering set of articles.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_coverage</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Integrated Admission Control for Streaming and Elastic Traffic. By Nabil Benameur, Slim Ben Fredj, Frank Delcoigne, Sara Oueslati-Boulahia, James W. Roberts (QofIS, 2001)&#39;,
+ &#39;An In-Camera Data Stream Processing System for Defect Detection in Web Inspection Tasks. By S. Hossain Hajimowlana, Roberto Muscedere, Graham A. Jullien, James W. Roberts (Real-Time Imaging, 1999)&#39;,
+ &#34;Modifications of Thomae&#39;s Function and Differentiability. By Kevin Beanland, James W. Roberts, Craig Stevenson (The American Mathematical Monthly, 2009)&#34;,
+ &#39;A Traffic Control Framework for High Speed Data Transmission. By James W. Roberts, Brahim Bensaou, Y. Canetti (Modelling and Evaluation of ATM Networks, 1993)&#39;,
+ &#39;Statistical bandwidth sharing: a study of congestion at flow level. By Slim Ben Fredj, Thomas Bonald, Alexandre Proutière, G. Régnié, James W. Roberts (SIGCOMM, 2001)&#39;,
+ &#39;Swing: Traffic capacity of a simple WDM ring network. By Thomas Bonald, Sara Oueslati, James W. Roberts, Charlotte Roger (International Teletraffic Congress, 2009)&#39;,
+ &#39;Impact of &#34;Trunk Reservation&#34; on Elastic Flow Routing. By Sara Oueslati-Boulahia, James W. Roberts (NETWORKING, 2000)&#39;,
+ &#39;Traffic Control in the B-ISDN. By James W. Roberts (Computer Networks and ISDN Systems, 1993)&#39;,
+ &#39;Burstiness Bounds Based Muliplexing Schemes for VBR Video Connections in the B-ISDN. By Maher Hamdi, James W. Roberts (International Zurich Seminar on Digital Communications, 1996)&#39;,
+ &#39;Multi-resource fairness: Objectives, algorithms and performance. By Thomas Bonald, James W. Roberts (CoRR, 2014)&#39;]
+</pre></div></div>
+</div>
+<p>Who are the associated authors?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;James W. Roberts&#39;,
+ &#39;Thomas Bonald&#39;,
+ &#39;Maher Hamdi&#39;,
+ &#39;Sara Oueslati-Boulahia&#39;,
+ &#39;Ali Ibrahim&#39;,
+ &#39;Alexandre Proutière&#39;,
+ &#39;Sara Oueslati&#39;,
+ &#39;Jorma T. Virtamo&#39;,
+ &#39;Slim Ben Fredj&#39;,
+ &#39;Jussi Kangasharju&#39;]
+</pre></div></div>
+</div>
+<p>Let’s organize them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.01. R: 0.23. S: 0.55.
+- F: 0.01. R: 0.22. S: 0.54.
+-- F: 0.04. R: 0.20. S: 0.53.
+--- F: 0.16. R: 0.19. S: 0.53.
+---- F: 0.25. R: 0.17. S: 0.91.
+----- James W. Roberts (R: 0.12; S: 1.00)
+----- Thomas Bonald (R: 0.05; S: 0.28)
+---- F: 0.57. R: 0.02. S: 0.34.
+----- Sara Oueslati-Boulahia (R: 0.01; S: 0.28)
+----- Slim Ben Fredj (R: 0.01; S: 0.32)
+---- Sara Oueslati (R: 0.01; S: 0.16)
+--- Alexandre Proutière (R: 0.01; S: 0.05)
+-- Maher Hamdi (R: 0.01; S: 0.13)
+-- Ali Ibrahim (R: 0.01; S: 0.07)
+- F: 0.01. R: 0.01. S: 0.05.
+-- Jorma T. Virtamo (R: 0.01; S: 0.04)
+-- Jussi Kangasharju (R: 0.01; S: 0.03)
+</pre></div></div>
+</div>
+</section>
+<section id="Combined-queries">
+<h3>Combined queries<a class="headerlink" href="#Combined-queries" title="Permalink to this heading"></a></h3>
+<p>We can input multiple authors.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Laurent_Massoulié and James_W._Roberts&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>Let’s have a covering set of articles.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_coverage</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Integrated Admission Control for Streaming and Elastic Traffic. By Nabil Benameur, Slim Ben Fredj, Frank Delcoigne, Sara Oueslati-Boulahia, James W. Roberts (QofIS, 2001)&#39;,
+ &#39;An In-Camera Data Stream Processing System for Defect Detection in Web Inspection Tasks. By S. Hossain Hajimowlana, Roberto Muscedere, Graham A. Jullien, James W. Roberts (Real-Time Imaging, 1999)&#39;,
+ &#34;Modifications of Thomae&#39;s Function and Differentiability. By Kevin Beanland, James W. Roberts, Craig Stevenson (The American Mathematical Monthly, 2009)&#34;,
+ &#39;A Traffic Control Framework for High Speed Data Transmission. By James W. Roberts, Brahim Bensaou, Y. Canetti (Modelling and Evaluation of ATM Networks, 1993)&#39;,
+ &#39;Statistical bandwidth sharing: a study of congestion at flow level. By Slim Ben Fredj, Thomas Bonald, Alexandre Proutière, G. Régnié, James W. Roberts (SIGCOMM, 2001)&#39;,
+ &#39;Swing: Traffic capacity of a simple WDM ring network. By Thomas Bonald, Sara Oueslati, James W. Roberts, Charlotte Roger (International Teletraffic Congress, 2009)&#39;,
+ &#39;Impact of &#34;Trunk Reservation&#34; on Elastic Flow Routing. By Sara Oueslati-Boulahia, James W. Roberts (NETWORKING, 2000)&#39;,
+ &#39;Traffic Control in the B-ISDN. By James W. Roberts (Computer Networks and ISDN Systems, 1993)&#39;,
+ &#39;QoS Guarantees for Shaped Bit Rate Video Connections in Broadband Networks. By Maher Hamdi, James W. Roberts (MMNET, 1995)&#39;,
+ &#39;Internet and the Erlang formula. By Thomas Bonald, James W. Roberts (Computer Communication Review, 2012)&#39;]
+</pre></div></div>
+</div>
+<p>Note that we get here only articles by Roberts, yet the articles returned have sightly changed.</p>
+<p>Now, let’s look at the main authors.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;James W. Roberts&#39;,
+ &#39;Laurent Massoulié&#39;,
+ &#39;Thomas Bonald&#39;,
+ &#39;Nidhi Hegde&#39;,
+ &#39;Maher Hamdi&#39;,
+ &#39;Marc Lelarge&#39;,
+ &#39;Stratis Ioannidis&#39;,
+ &#39;Alexandre Proutière&#39;,
+ &#39;Sara Oueslati-Boulahia&#39;,
+ &#39;Ali Ibrahim&#39;,
+ &#39;Peter B. Key&#39;,
+ &#39;Jorma T. Virtamo&#39;,
+ &#39;Sara Oueslati&#39;,
+ &#39;Anne-Marie Kermarrec&#39;,
+ &#39;Ayalvadi J. Ganesh&#39;,
+ &#39;Slim Ben Fredj&#39;]
+</pre></div></div>
+</div>
+<p>We see a mix of both co-authors. How are they organized?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="mf">.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.01. R: 0.20. S: 0.54.
+- F: 0.01. R: 0.20. S: 0.54.
+-- F: 0.05. R: 0.19. S: 0.53.
+--- F: 0.25. R: 0.09. S: 0.84.
+---- James W. Roberts (R: 0.06; S: 0.91)
+---- Thomas Bonald (R: 0.03; S: 0.26)
+--- F: 0.12. R: 0.08. S: 0.23.
+---- Laurent Massoulié (R: 0.05; S: 0.40)
+---- Nidhi Hegde (R: 0.01; S: 0.10)
+---- Marc Lelarge (R: 0.01; S: 0.06)
+---- Stratis Ioannidis (R: 0.01; S: 0.06)
+---- Alexandre Proutière (R: 0.01; S: 0.05)
+---- Peter B. Key (R: 0.00; S: 0.07)
+---- Ayalvadi J. Ganesh (R: 0.00; S: 0.06)
+--- F: 0.57. R: 0.01. S: 0.31.
+---- Sara Oueslati-Boulahia (R: 0.00; S: 0.26)
+---- Slim Ben Fredj (R: 0.00; S: 0.29)
+--- Sara Oueslati (R: 0.00; S: 0.15)
+--- Anne-Marie Kermarrec (R: 0.00; S: 0.03)
+-- Maher Hamdi (R: 0.01; S: 0.12)
+-- Ali Ibrahim (R: 0.00; S: 0.07)
+- Jorma T. Virtamo (R: 0.00; S: 0.04)
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Cross-gismo">
+<h2>Cross-gismo<a class="headerlink" href="#Cross-gismo" title="Permalink to this heading"></a></h2>
+<p>Gismo can combine two embeddings two create one hybrid gismo. This is called a cross-gismo (XGismo). This features can be used to analyze authors with respect to the words they use (and vice-versa).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gismo.gismo</span> <span class="kn">import</span> <span class="n">XGismo</span>
+<span class="n">gismo</span> <span class="o">=</span> <span class="n">XGismo</span><span class="p">(</span><span class="n">x_embedding</span><span class="o">=</span><span class="n">a_embedding</span><span class="p">,</span> <span class="n">y_embedding</span><span class="o">=</span><span class="n">embedding</span><span class="p">)</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">n_iter</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># to speed up a little bit computation time</span>
+</pre></div>
+</div>
+</div>
+<p>Note that XGismo does not use the underlying corpus, so we can now close the source (the source keeps the file <code class="docutils literal notranslate"><span class="pre">dblp.data</span></code> open).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_print</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_cluster</span> <span class="o">=</span> <span class="n">post_documents_cluster_print</span>
+</pre></div>
+</div>
+</div>
+<p>Let’s try a request.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;self-stabilization&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>What are the associated keywords?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;stabilization&#39;,
+ &#39;self&#39;,
+ &#39;self stabilization&#39;,
+ &#39;stabilize&#39;,
+ &#39;self stabilize&#39;,
+ &#39;distribute&#39;,
+ &#39;distributed&#39;,
+ &#39;robust&#39;,
+ &#39;sensor&#39;,
+ &#39;adaptive&#39;]
+</pre></div></div>
+</div>
+<p>How are keywords structured?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.03. R: 0.02. S: 0.80.
+- F: 0.50. R: 0.02. S: 0.80.
+-- F: 0.65. R: 0.02. S: 0.80.
+--- F: 0.70. R: 0.02. S: 0.81.
+---- F: 0.77. R: 0.02. S: 0.81.
+----- F: 0.91. R: 0.01. S: 0.81.
+------ stabilization (R: 0.00; S: 0.81)
+------ self (R: 0.00; S: 0.75)
+------ self stabilization (R: 0.00; S: 0.82)
+------ stabilize (R: 0.00; S: 0.72)
+------ self stabilize (R: 0.00; S: 0.67)
+----- F: 0.86. R: 0.00. S: 0.75.
+------ distribute (R: 0.00; S: 0.68)
+------ distributed (R: 0.00; S: 0.76)
+----- F: 0.92. R: 0.00. S: 0.68.
+------ sensor (R: 0.00; S: 0.67)
+------ wireless (R: 0.00; S: 0.65)
+----- fault (R: 0.00; S: 0.75)
+---- adaptive (R: 0.00; S: 0.57)
+--- F: 0.82. R: 0.00. S: 0.47.
+---- F: 0.82. R: 0.00. S: 0.47.
+----- networks (R: 0.00; S: 0.75)
+----- byzantine (R: 0.00; S: 0.46)
+----- optimal (R: 0.00; S: 0.65)
+----- mobile (R: 0.00; S: 0.56)
+---- robot (R: 0.00; S: 0.44)
+-- robust (R: 0.00; S: 0.46)
+- F: 0.60. R: 0.00. S: 0.13.
+-- F: 0.68. R: 0.00. S: 0.10.
+--- nonlinear (R: 0.00; S: 0.08)
+--- delay (R: 0.00; S: 0.09)
+-- linear (R: 0.00; S: 0.26)
+</pre></div></div>
+</div>
+<p>Who are the associated researchers?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Ted Herman&#39;,
+ &#39;Shlomi Dolev&#39;,
+ &#39;Sébastien Tixeuil&#39;,
+ &#39;Sukumar Ghosh&#39;,
+ &#39;George Varghese&#39;,
+ &#39;Shay Kutten&#39;,
+ &#39;Toshimitsu Masuzawa&#39;,
+ &#39;Stefan Schmid 0001&#39;,
+ &#39;Swan Dubois&#39;,
+ &#39;Bertrand Ducourthial&#39;]
+</pre></div></div>
+</div>
+<p>How are they structured?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.9</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.79. R: 0.05. S: 0.84.
+- F: 0.88. R: 0.05. S: 0.84.
+-- F: 0.93. R: 0.04. S: 0.83.
+--- F: 0.95. R: 0.03. S: 0.83.
+---- Ted Herman (R: 0.01; S: 0.81)
+---- Sébastien Tixeuil (R: 0.01; S: 0.83)
+---- Sukumar Ghosh (R: 0.01; S: 0.80)
+---- Swan Dubois (R: 0.00; S: 0.79)
+--- F: 0.96. R: 0.02. S: 0.78.
+---- Shlomi Dolev (R: 0.01; S: 0.78)
+---- Shay Kutten (R: 0.00; S: 0.83)
+---- Toshimitsu Masuzawa (R: 0.00; S: 0.72)
+-- F: 0.98. R: 0.01. S: 0.80.
+--- George Varghese (R: 0.00; S: 0.82)
+--- Bertrand Ducourthial (R: 0.00; S: 0.79)
+- Stefan Schmid 0001 (R: 0.00; S: 0.72)
+</pre></div></div>
+</div>
+<p>We can also query researchers. Just use underscores in the query and add <code class="docutils literal notranslate"><span class="pre">y=False</span></code> to indicate that the input is <em>documents</em>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Sébastien_Tixeuil and Fabien_Mathieu&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>What are the associated keywords?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;p2p&#39;,
+ &#39;byzantine&#39;,
+ &#39;stabilization&#39;,
+ &#39;stabilize&#39;,
+ &#39;p2p network&#39;,
+ &#39;refresh&#39;,
+ &#39;reload&#39;,
+ &#39;self&#39;,
+ &#39;self stabilize&#39;,
+ &#39;self stabilization&#39;]
+</pre></div></div>
+</div>
+<p>Using covering can yield other keywords of interest.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_coverage</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;p2p&#39;,
+ &#39;byzantine&#39;,
+ &#39;grid&#39;,
+ &#39;preference&#39;,
+ &#39;pagerank&#39;,
+ &#39;p2p network&#39;,
+ &#39;refresh&#39;,
+ &#39;streaming&#39;,
+ &#39;acyclic&#39;,
+ &#39;stabilization&#39;]
+</pre></div></div>
+</div>
+<p>How are keywords structured?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.7</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.06. R: 0.23. S: 0.64.
+- F: 0.62. R: 0.13. S: 0.27.
+-- F: 0.68. R: 0.12. S: 0.27.
+--- F: 0.69. R: 0.11. S: 0.27.
+---- p2p (R: 0.02; S: 0.32)
+---- p2p network (R: 0.01; S: 0.28)
+---- F: 0.84. R: 0.06. S: 0.25.
+----- refresh (R: 0.01; S: 0.24)
+----- reload (R: 0.01; S: 0.24)
+----- old (R: 0.01; S: 0.23)
+----- live streaming (R: 0.01; S: 0.25)
+----- preference base (R: 0.01; S: 0.23)
+----- live (R: 0.01; S: 0.32)
+---- streaming (R: 0.01; S: 0.31)
+---- acyclic (R: 0.01; S: 0.27)
+--- pagerank (R: 0.01; S: 0.20)
+-- preference (R: 0.01; S: 0.19)
+- F: 0.39. R: 0.10. S: 0.61.
+-- F: 0.82. R: 0.09. S: 0.61.
+--- F: 0.84. R: 0.03. S: 0.54.
+---- byzantine (R: 0.02; S: 0.54)
+---- asynchronous (R: 0.01; S: 0.55)
+--- F: 0.91. R: 0.06. S: 0.60.
+---- stabilization (R: 0.02; S: 0.58)
+---- stabilize (R: 0.01; S: 0.61)
+---- self (R: 0.01; S: 0.62)
+---- self stabilize (R: 0.01; S: 0.60)
+---- self stabilization (R: 0.01; S: 0.58)
+-- grid (R: 0.01; S: 0.41)
+</pre></div></div>
+</div>
+<p>Who are the associated researchers?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Sébastien Tixeuil&#39;,
+ &#39;Fabien Mathieu&#39;,
+ &#39;Shlomi Dolev&#39;,
+ &#39;Toshimitsu Masuzawa&#39;,
+ &#39;Nitin H. Vaidya&#39;,
+ &#39;Edmond Bianco&#39;,
+ &#39;Stéphane Devismes&#39;,
+ &#39;Franck Petit&#39;,
+ &#39;Michel Raynal&#39;,
+ &#39;Ted Herman&#39;]
+</pre></div></div>
+</div>
+<p>How are they structured?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.00. R: 0.01. S: 0.63.
+- F: 0.08. R: 0.00. S: 0.63.
+-- F: 0.71. R: 0.00. S: 0.52.
+--- Sébastien Tixeuil (R: 0.00; S: 0.56)
+--- F: 0.93. R: 0.00. S: 0.46.
+---- Shlomi Dolev (R: 0.00; S: 0.46)
+---- Toshimitsu Masuzawa (R: 0.00; S: 0.48)
+---- Stéphane Devismes (R: 0.00; S: 0.44)
+---- Franck Petit (R: 0.00; S: 0.44)
+---- Ted Herman (R: 0.00; S: 0.42)
+--- F: 0.78. R: 0.00. S: 0.34.
+---- Nitin H. Vaidya (R: 0.00; S: 0.30)
+---- Michel Raynal (R: 0.00; S: 0.37)
+-- Fabien Mathieu (R: 0.00; S: 0.69)
+- Edmond Bianco (R: 0.00; S: 0.04)
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial_acm.html" class="btn btn-neutral float-left" title="ACM categories" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="landmarks_tutorial.html" class="btn btn-neutral float-right" title="Landmarks Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Fabien Mathieu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gismo.landmarks &mdash; GISMO 0.4.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo-line.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">A Generic Information Search… With a Mind of its Own!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GISMO</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gismo.landmarks</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gismo.landmarks</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">hstack</span>
+
+<span class="kn">from</span> <span class="nn">gismo.common</span> <span class="kn">import</span> <span class="n">auto_k</span><span class="p">,</span> <span class="n">toy_source_text</span>
+<span class="kn">from</span> <span class="nn">gismo.parameters</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">DEFAULT_LANDMARKS_PARAMETERS</span>
+<span class="kn">from</span> <span class="nn">gismo.corpus</span> <span class="kn">import</span> <span class="n">Corpus</span>
+<span class="kn">from</span> <span class="nn">gismo.embedding</span> <span class="kn">import</span> <span class="n">Embedding</span>
+<span class="kn">from</span> <span class="nn">gismo.gismo</span> <span class="kn">import</span> <span class="n">Gismo</span>
+<span class="kn">from</span> <span class="nn">gismo.clustering</span> <span class="kn">import</span> <span class="n">subspace_clusterize</span><span class="p">,</span> <span class="n">Cluster</span><span class="p">,</span> <span class="n">subspace_distortion</span>
+<span class="kn">from</span> <span class="nn">gismo.post_processing</span> <span class="kn">import</span> <span class="n">post_landmarks_item_raw</span><span class="p">,</span> <span class="n">post_landmarks_cluster_json</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;Gismo&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_direction"><a class="viewcode-back" href="../../reference.html#gismo.landmarks.get_direction">[docs]</a><span class="k">def</span> <span class="nf">get_direction</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">balance</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a reference object into a `n+m` direction (dense or sparse depending on reference type).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    reference: Gismo or Landmarks or Cluster or np.ndarray or csr_matrix.</span>
+<span class="sd">        The object from which a direction will be extracted.</span>
+<span class="sd">    balance: float in range [0.0, 1.0]</span>
+<span class="sd">        The trade-off between documents and features.</span>
+<span class="sd">        Set to 0.0, only the feature space will be used.</span>
+<span class="sd">        Set to 1.0, only the document space will be used.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray or csr_matrix</span>
+<span class="sd">        A `n+m` direction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">Gismo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">balance</span> <span class="o">*</span> <span class="n">reference</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_relevance</span><span class="p">,</span>
+                          <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">balance</span><span class="p">)</span> <span class="o">*</span> <span class="n">reference</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_relevance</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">Landmarks</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">balance</span> <span class="o">*</span> <span class="n">reference</span><span class="o">.</span><span class="n">x_direction</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">balance</span><span class="p">)</span> <span class="o">*</span> <span class="n">reference</span><span class="o">.</span><span class="n">y_direction</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">Cluster</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reference</span><span class="o">.</span><span class="n">vector</span>
+    <span class="k">return</span> <span class="n">reference</span></div>
+
+
+<div class="viewcode-block" id="Landmarks"><a class="viewcode-back" href="../../reference.html#gismo.landmarks.Landmarks">[docs]</a><span class="k">class</span> <span class="nc">Landmarks</span><span class="p">(</span><span class="n">Corpus</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The `Landmarks` class is a subclass :py:class:`~gismo.corpus.Corpus`.</span>
+<span class="sd">    It offers the capability to batch-rank all its entries against a :py:class:`~gismo.gismo.Gismo` instance.</span>
+<span class="sd">    After it has been processed, a `Landmarks` can be used to analyze/classify</span>
+<span class="sd">    :py:class:`~gismo.gismo.Gismo` queries, :py:class:`~gismo.clustering.Cluster`,</span>
+<span class="sd">    or :py:class:`~gismo.landmarks.Landmarks`.</span>
+
+<span class="sd">    Landmarks also offers the possibility to reduce a source or a gismo to its neighborhood.</span>
+<span class="sd">    This can be useful if the source is huge and one wants something smaller for performance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+
+<span class="sd">    source: list</span>
+<span class="sd">        The list of items that form Landmarks.</span>
+<span class="sd">    to_text: function</span>
+<span class="sd">        The function that transforms an item into text</span>
+<span class="sd">    filename: str, optional</span>
+<span class="sd">        Load landmarks from filename</span>
+<span class="sd">    path: str or Path, optional</span>
+<span class="sd">        Directory where the landmarks instance is to be loaded from.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Custom default runtime parameters.</span>
+<span class="sd">        You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_LANDMARKS_PARAMETERS`.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Landmarks lean on a Gismo. We can use a toy Gismo to start with.</span>
+
+<span class="sd">    &gt;&gt;&gt; corpus = Corpus(toy_source_text)</span>
+<span class="sd">    &gt;&gt;&gt; embedding = Embedding()</span>
+<span class="sd">    &gt;&gt;&gt; embedding.fit_transform(corpus)</span>
+<span class="sd">    &gt;&gt;&gt; gismo = Gismo(corpus, embedding)</span>
+<span class="sd">    &gt;&gt;&gt; print(toy_source_text) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [&#39;Gizmo is a Mogwaï.&#39;,</span>
+<span class="sd">    &#39;This is a sentence about Blade.&#39;,</span>
+<span class="sd">    &#39;This is another sentence about Shadoks.&#39;,</span>
+<span class="sd">    &#39;This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.&#39;,</span>
+<span class="sd">    &#39;In chinese folklore, a Mogwaï is a demon.&#39;]</span>
+
+<span class="sd">    Landmarks are constructed exactly like a Gismo object, with a source and a `to_text` function.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks_source = [{&#39;name&#39;: &#39;Movies&#39;, &#39;content&#39;: &#39;Star Wars, Gremlins, and Blade are movies.&#39;},</span>
+<span class="sd">    ... {&#39;name&#39;: &#39;Gremlins&#39;, &#39;content&#39;: &#39;The Gremlins movie features a Mogwai.&#39;},</span>
+<span class="sd">    ... {&#39;name&#39;: &#39;Star Wars&#39;, &#39;content&#39;: &#39;The Star Wars movies feature Yoda.&#39;},</span>
+<span class="sd">    ... {&#39;name&#39;: &#39;Shadoks&#39;, &#39;content&#39;: &#39;Shadoks is a French sarcastic show.&#39;},]</span>
+<span class="sd">    &gt;&gt;&gt; landmarks = Landmarks(landmarks_source, to_text=lambda e: e[&#39;content&#39;])</span>
+
+<span class="sd">    The :func:`~gismo.landmarks.Landmarks.fit` method compute gismo queries for all landmarks and retain the results.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks.fit(gismo)</span>
+
+<span class="sd">    We run the request *Yoda* and look at the key landmarks.</span>
+<span class="sd">    Note that *Gremlins* comes before *Star Wars*. This is actually *correct* in this small dataset:</span>
+<span class="sd">    the word `Yoda` only exists in one sentence, which contains the words `Gremlins` and `Gizmo`.</span>
+
+<span class="sd">    &gt;&gt;&gt; success = gismo.rank(&#39;yoda&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(gismo) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [{&#39;name&#39;: &#39;Gremlins&#39;, &#39;content&#39;: &#39;The Gremlins movie features a Mogwai.&#39;},</span>
+<span class="sd">    {&#39;name&#39;: &#39;Star Wars&#39;, &#39;content&#39;: &#39;The Star Wars movies feature Yoda.&#39;},</span>
+<span class="sd">    {&#39;name&#39;: &#39;Movies&#39;, &#39;content&#39;: &#39;Star Wars, Gremlins, and Blade are movies.&#39;}]</span>
+
+<span class="sd">    For better readibility, we set the item post_processing to return the `name` of a landmark item.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks.post_item = lambda lmk, i: lmk[i][&#39;name&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(gismo)</span>
+<span class="sd">    [&#39;Gremlins&#39;, &#39;Star Wars&#39;, &#39;Movies&#39;]</span>
+
+<span class="sd">    The balance adjusts between documents and features spaces.</span>
+<span class="sd">    A balance set to 1.0 focuses only on documents.</span>
+
+<span class="sd">    &gt;&gt;&gt; success = gismo.rank(&#39;blade&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(gismo, balance=1)</span>
+<span class="sd">    [&#39;Movies&#39;]</span>
+
+<span class="sd">    A balance set to 0.0 focuses only on features.</span>
+<span class="sd">    For *blade*, this triggers *Shadoks* as a secondary result, because of the shared word *sentence*.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(gismo, balance=0)</span>
+<span class="sd">    [&#39;Movies&#39;, &#39;Shadoks&#39;]</span>
+
+<span class="sd">    Landmarks can be used to analyze landmarks.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(landmarks)</span>
+<span class="sd">    [&#39;Gremlins&#39;, &#39;Star Wars&#39;]</span>
+
+<span class="sd">    See again how balance can change things.</span>
+<span class="sd">    Here a balance set to 0.0 (using only features) fully changes the results.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(landmarks, balance=0)</span>
+<span class="sd">    [&#39;Shadoks&#39;]</span>
+
+<span class="sd">    Like for :py:class:`~gismo.gismo.Gismo`, landmarks can provide clusters.</span>
+
+<span class="sd">    &gt;&gt;&gt; success = gismo.rank(&#39;gizmo&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_cluster(gismo) # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS</span>
+<span class="sd">    {&#39;landmark&#39;: {&#39;name&#39;: &#39;Gremlins&#39;,</span>
+<span class="sd">                  &#39;content&#39;: &#39;The Gremlins movie features a Mogwai.&#39;},</span>
+<span class="sd">                  &#39;focus&#39;: 0.999998...,</span>
+<span class="sd">                  &#39;children&#39;: [{&#39;landmark&#39;: {&#39;name&#39;: &#39;Gremlins&#39;,</span>
+<span class="sd">                                             &#39;content&#39;: &#39;The Gremlins movie features a Mogwai.&#39;},</span>
+<span class="sd">                                             &#39;focus&#39;: 1.0, &#39;children&#39;: []},</span>
+<span class="sd">                               {&#39;landmark&#39;: {&#39;name&#39;: &#39;Star Wars&#39;,</span>
+<span class="sd">                                             &#39;content&#39;: &#39;The Star Wars movies feature Yoda.&#39;},</span>
+<span class="sd">                                             &#39;focus&#39;: 1.0, &#39;children&#39;: []},</span>
+<span class="sd">                               {&#39;landmark&#39;: {&#39;name&#39;: &#39;Movies&#39;,</span>
+<span class="sd">                                             &#39;content&#39;: &#39;Star Wars, Gremlins, and Blade are movies.&#39;},</span>
+<span class="sd">                                             &#39;focus&#39;: 1.0, &#39;children&#39;: []}]}</span>
+
+<span class="sd">    We can set the `post_cluster` attribute to customize the output. Gismo provides a simple display.</span>
+
+<span class="sd">    &gt;&gt;&gt; from gismo.post_processing import post_landmarks_cluster_print</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.post_cluster = post_landmarks_cluster_print</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_cluster(gismo) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    F: 1.00.</span>
+<span class="sd">    - Gremlins</span>
+<span class="sd">    - Star Wars</span>
+<span class="sd">    - Movies</span>
+
+<span class="sd">    Like for :py:class:`~gismo.gismo.Gismo`, parameters like `k`, `distortion`, or `resolution` can be used.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_cluster(gismo, k=4, distortion=False, resolution=.9) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    F: 0.03.</span>
+<span class="sd">    - F: 0.93.</span>
+<span class="sd">    -- F: 1.00.</span>
+<span class="sd">    --- Gremlins</span>
+<span class="sd">    --- Star Wars</span>
+<span class="sd">    -- Movies</span>
+<span class="sd">    - Shadoks</span>
+
+<span class="sd">    Note that a :py:class:`~gismo.clustering.Cluster` can also be used as reference for the</span>
+<span class="sd">    :meth:`~gismo.landmarks.Landmarks.get_landmarks_by_rank` and</span>
+<span class="sd">    :meth:`~gismo.landmarks.Landmarks.get_landmarks_by_cluster` methods.</span>
+
+<span class="sd">    &gt;&gt;&gt; cluster = landmarks.get_landmarks_by_cluster(gismo, post=False)</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(cluster)</span>
+<span class="sd">    [&#39;Gremlins&#39;, &#39;Star Wars&#39;, &#39;Movies&#39;]</span>
+
+<span class="sd">    Yet, you cannot use anything as reference. For example, you cannot use a string as such.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(&quot;Landmarks do not use external queries (pass them to a gismo&quot;)  # doctest.ELLIPSIS</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">    ...</span>
+<span class="sd">    TypeError: bad operand type for unary -: &#39;NoneType&#39;</span>
+
+<span class="sd">    Last but not least, landmarks can be used to reduce the size of a source or a :py:class:`~gismo.gismo.Gismo`.</span>
+<span class="sd">    The reduction is controlled by the `x_density` attribute that tells the number of documents each landmark will</span>
+<span class="sd">    allow to keep.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks.parameters.x_density = 1</span>
+<span class="sd">    &gt;&gt;&gt; reduced_gismo = landmarks.get_reduced_gismo(gismo)</span>
+<span class="sd">    &gt;&gt;&gt; reduced_gismo.corpus.source # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [&#39;This is another sentence about Shadoks.&#39;,</span>
+<span class="sd">    &#39;This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the</span>
+<span class="sd">    Gremlins movie by comparing Gizmo and Yoda.&#39;]</span>
+
+<span class="sd">    Side remark #1: in the constructor, `to_text` indicates how to convert an item to `str`, while `ranking_function`</span>
+<span class="sd">    specifies how to run a query on a :py:class:`~gismo.gismo.Gismo`. Yet, it is possible to have the text conversion</span>
+<span class="sd">    handled by the `ranking_function`.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks = Landmarks(landmarks_source, rank=lambda g, q: g.rank(q[&#39;content&#39;]))</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.fit(gismo)</span>
+<span class="sd">    &gt;&gt;&gt; success = gismo.rank(&#39;yoda&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.post_item = lambda lmk, i: lmk[i][&#39;name&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(gismo)</span>
+<span class="sd">    [&#39;Star Wars&#39;, &#39;Movies&#39;, &#39;Gremlins&#39;]</span>
+
+<span class="sd">    However, this is bad practice. When you only need to customize the way an item is converted to text, you should</span>
+<span class="sd">    stick to `to_text`. `ranking_function` is for more elaborated filters that require to change the default way</span>
+<span class="sd">    gismo does queries.</span>
+
+<span class="sd">    Side remark #2: if a landmark item query fails (its text does not intersect the gismo features),</span>
+<span class="sd">    the default uniform projection will be used and a warning will be issued. This may yield to</span>
+<span class="sd">    undesired results.</span>
+
+<span class="sd">    &gt;&gt;&gt; landmarks_source.append({&#39;name&#39;: &#39;unrelated&#39;, &#39;content&#39;: &#39;unrelated.&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; landmarks = Landmarks(landmarks_source, to_text=lambda e: e[&#39;content&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.fit(gismo)</span>
+<span class="sd">    &gt;&gt;&gt; success = gismo.rank(&#39;gizmo&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.post_item = lambda lmk, i: lmk[i][&#39;name&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; landmarks.get_landmarks_by_rank(gismo)</span>
+<span class="sd">    [&#39;Shadoks&#39;, &#39;unrelated&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="n">parameter_list</span><span class="o">=</span><span class="n">DEFAULT_LANDMARKS_PARAMETERS</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_vectors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_vectors</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_direction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_direction</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_item</span> <span class="o">=</span> <span class="n">post_landmarks_item_raw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_cluster</span> <span class="o">=</span> <span class="n">post_landmarks_cluster_json</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="n">to_text</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">embed_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gismo</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;rank&#39;</span><span class="p">](</span><span class="n">gismo</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Query </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2"> didn&#39;t match any feature.&quot;</span><span class="p">)</span>
+
+        <span class="n">indptr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;y_density&#39;</span><span class="p">],</span> <span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">m</span><span class="p">)]</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_order</span><span class="p">[:</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;y_density&#39;</span><span class="p">]]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_relevance</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indptr</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">m</span><span class="p">))</span>
+
+        <span class="n">indptr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;x_density&#39;</span><span class="p">],</span> <span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">n</span><span class="p">)]</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_order</span><span class="p">[:</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;x_density&#39;</span><span class="p">]]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_relevance</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">indptr</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Landmarks of </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2"> computed.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Landmarks.fit"><a class="viewcode-back" href="../../reference.html#gismo.landmarks.Landmarks.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gismo</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs gismo queries on all landmarks.</span>
+<span class="sd">        The relevance results are used to build two set of vectors:</span>
+<span class="sd">        `x_vectors` is the vectors on the document space;</span>
+<span class="sd">        `y_vectors` is the vectors on the document space.</span>
+<span class="sd">        On each space, vectors are summed to build a direction, which is a sort of</span>
+<span class="sd">        vector summary of the landmarks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gismo: Gismo</span>
+<span class="sd">            The Gismo on which vectors will be computed.</span>
+<span class="sd">        kwargs: dict</span>
+<span class="sd">            Custom Landmarks runtime parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start computation of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2"> landmarks.&quot;</span><span class="p">)</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_entry</span><span class="p">(</span><span class="n">gismo</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterate_text</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_vectors</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">xy</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_vectors</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">xy</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_vectors</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All landmarks are built.&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">get_base</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">balance</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">hstack</span><span class="p">([</span><span class="n">balance</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_vectors</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">balance</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_vectors</span><span class="p">]))</span>
+
+    <span class="k">def</span> <span class="nf">get_landmarks_by_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_base</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;balance&#39;</span><span class="p">])</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">get_direction</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;balance&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">similarities</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">):</span>
+            <span class="n">similarities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">direction</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Direction type not supported. Direction must be gismo.gismo.Gismo, gismo.clustering.Cluster, &quot;</span>
+                      <span class="s2">&quot;gismo.landmarks.Landmarks, numpy.ndarray or scipy.sparse.csr_matrix.&quot;</span><span class="p">)</span>
+            <span class="n">similarities</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">similarities</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">similarities</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">max_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;max_k&#39;</span><span class="p">],</span> <span class="n">target</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;target_k&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">post_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">[:</span><span class="n">k</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">order</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get_landmarks_by_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_base</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;balance&#39;</span><span class="p">])</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">get_direction</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;balance&#39;</span><span class="p">])</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">base</span><span class="p">,</span>
+                                           <span class="n">target_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;target_k&#39;</span><span class="p">],</span> <span class="n">max_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;max_k&#39;</span><span class="p">],</span>
+                                           <span class="n">balance</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;balance&#39;</span><span class="p">],</span> <span class="n">post</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+        <span class="n">subspace</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="n">base</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;distortion&#39;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">subspace_distortion</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="n">subspace</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">subspace</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                                <span class="n">relevance</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span> <span class="n">distortion</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;distortion&#39;</span><span class="p">])</span>
+
+        <span class="n">cluster</span> <span class="o">=</span> <span class="n">subspace_clusterize</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;resolution&#39;</span><span class="p">],</span> <span class="n">indices</span><span class="o">=</span><span class="n">order</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cluster</span>
+
+    <span class="k">def</span> <span class="nf">get_reduced_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gismo</span><span class="p">,</span> <span class="n">rebuild</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">rebuild</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+        <span class="n">reduced_indices</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_vectors</span><span class="o">.</span><span class="n">indices</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gismo</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">reduced_indices</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get_reduced_gismo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gismo</span><span class="p">,</span> <span class="n">rebuild</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">reduced_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_reduced_source</span><span class="p">(</span><span class="n">gismo</span><span class="p">,</span> <span class="n">rebuild</span><span class="o">=</span><span class="n">rebuild</span><span class="p">),</span>
+                                <span class="n">to_text</span><span class="o">=</span><span class="n">gismo</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">to_text</span><span class="p">)</span>
+        <span class="n">reduced_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">vectorizer</span><span class="p">)</span>
+        <span class="n">reduced_embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">reduced_corpus</span><span class="p">)</span>
+        <span class="n">reduced_gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">reduced_corpus</span><span class="p">,</span> <span class="n">reduced_embedding</span><span class="p">)</span>
+        <span class="n">reduced_gismo</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">return</span> <span class="n">reduced_gismo</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Fabien Mathieu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

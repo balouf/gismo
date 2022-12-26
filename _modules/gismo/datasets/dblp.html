@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gismo.datasets.dblp &mdash; GISMO 0.4.3 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html">
+            <img src="../../../_static/logo-line.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">A Generic Information Search… With a Mind of its Own!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">GISMO</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gismo.datasets.dblp</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gismo.datasets.dblp</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">zlib</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">dill</span> <span class="k">as</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+
+
+<span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;https://dblp.uni-trier.de/xml/dblp.xml.gz&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">URL of the full DBLP database.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">DTD_URL</span> <span class="o">=</span> <span class="s2">&quot;https://dblp.uni-trier.de/xml/dblp.dtd&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">URL of the dtd file (required to correctly parse non-ASCII characters).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">DEFAULT_FIELDS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="s1">&#39;venue&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Default fields to extract.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">LIST_TYPE_FIELDS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;urls&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">DBLP fields with possibly multiple entries.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">FIELD_REDIRECTION</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;journal&#39;</span><span class="p">:</span> <span class="s1">&#39;venue&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;booktitle&#39;</span><span class="p">:</span> <span class="s1">&#39;venue&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;authors&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;ee&#39;</span><span class="p">:</span> <span class="s1">&#39;urls&#39;</span>
+                     <span class="p">}</span>
+
+
+<div class="viewcode-block" id="fast_iter"><a class="viewcode-back" href="../../../reference.html#gismo.datasets.dblp.fast_iter">[docs]</a><span class="k">def</span> <span class="nf">fast_iter</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies ``func`` to all xml elements of depth 1 of the xml parser ``context``. `</span>
+<span class="sd">    ``**kwargs`` are passed to ``func``.</span>
+
+<span class="sd">    Modified version of a modified version of Liza Daly&#39;s fast_iter</span>
+<span class="sd">    Inspired by</span>
+<span class="sd">    https://stackoverflow.com/questions/4695826/efficient-way-to-iterate-through-xml-elements</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    context: XMLparser</span>
+<span class="sd">        A parser obtained from etree.iterparse</span>
+<span class="sd">    func: function</span>
+<span class="sd">        How to process the elements</span>
+<span class="sd">    d: int, optional</span>
+<span class="sd">        Depth to process elements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">event</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">context</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="s1">&#39;start&#39;</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="s1">&#39;end&#39;</span><span class="p">:</span>
+            <span class="n">depth</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">depth</span> <span class="o">&lt;</span> <span class="n">d</span><span class="p">:</span>
+                <span class="n">func</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="c1"># It&#39;s safe to call clear() here because no descendants will be</span>
+                <span class="c1"># accessed</span>
+                <span class="n">elem</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                <span class="c1"># Also eliminate now-empty references from the root node to elem</span>
+                <span class="k">for</span> <span class="n">ancestor</span> <span class="ow">in</span> <span class="n">elem</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;ancestor-or-self::*&#39;</span><span class="p">):</span>
+                    <span class="k">while</span> <span class="n">ancestor</span><span class="o">.</span><span class="n">getprevious</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">del</span> <span class="n">ancestor</span><span class="o">.</span><span class="n">getparent</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">del</span> <span class="n">context</span></div>
+
+
+<div class="viewcode-block" id="xml_element_to_dict"><a class="viewcode-back" href="../../../reference.html#gismo.datasets.dblp.xml_element_to_dict">[docs]</a><span class="k">def</span> <span class="nf">xml_element_to_dict</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts the xml element ``elt`` into a dict if it is a paper.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elt: Any</span>
+<span class="sd">        a XML element.</span>
+<span class="sd">    fields: set</span>
+<span class="sd">        Set of entries to retrieve.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict or None</span>
+<span class="sd">        Article dictionary if element contains the attributes of an article, None otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">elt</span><span class="o">.</span><span class="n">getchildren</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">children</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">elt</span><span class="o">.</span><span class="n">tag</span><span class="p">}</span> <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">tag</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">FIELD_REDIRECTION</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fields</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">LIST_TYPE_FIELDS</span><span class="p">:</span>
+            <span class="n">dic</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dic</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="n">dic</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;venue&#39;</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">dic</span></div>
+
+
+<div class="viewcode-block" id="element_to_source"><a class="viewcode-back" href="../../../reference.html#gismo.datasets.dblp.element_to_source">[docs]</a><span class="k">def</span> <span class="nf">element_to_source</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test if elt is an article, converts it to dictionary and appends to source</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elt: Any</span>
+<span class="sd">        a XML element.</span>
+<span class="sd">    source: list</span>
+<span class="sd">        the source in construction.</span>
+<span class="sd">    fields: set</span>
+<span class="sd">        Set of fields to retrieve.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">xml_element_to_dict</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dic</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">source</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="url2source"><a class="viewcode-back" href="../../../reference.html#gismo.datasets.dblp.url2source">[docs]</a><span class="k">def</span> <span class="nf">url2source</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Directly transform URL of a dblp xml into a list of dictionnary.</span>
+<span class="sd">    Only use for datasets that fit into memory (e.g. articles from one author).</span>
+<span class="sd">    If the dataset does not fit, consider using the Dblp class instead.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url: str</span>
+<span class="sd">        the URL to fetch.</span>
+<span class="sd">    fields: set</span>
+<span class="sd">        Set of DBLP fields to capture.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    source: list of dict</span>
+<span class="sd">        Articles retrieved from the URL</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; source = url2source(&quot;https://dblp.org/pers/xx/t/Tixeuil:S=eacute=bastien.xml&quot;, fields={&#39;authors&#39;, &#39;title&#39;, &#39;year&#39;, &#39;venue&#39;, &#39;urls&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; art = [s for s in source if s[&#39;title&#39;]==&quot;Distributed Computing with Mobile Robots: An Introductory Survey.&quot;][0]</span>
+<span class="sd">    &gt;&gt;&gt; art[&#39;authors&#39;]</span>
+<span class="sd">    [&#39;Maria Potop-Butucaru&#39;, &#39;Michel Raynal&#39;, &#39;Sébastien Tixeuil&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; art[&#39;urls&#39;]</span>
+<span class="sd">    [&#39;https://doi.org/10.1109/NBiS.2011.55&#39;, &#39;http://doi.ieeecomputersociety.org/10.1109/NBiS.2011.55&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">DEFAULT_FIELDS</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">iterparse</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">,))</span>
+        <span class="n">fast_iter</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">element_to_source</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">source</span></div>
+
+
+<div class="viewcode-block" id="element_to_filesource"><a class="viewcode-back" href="../../../reference.html#gismo.datasets.dblp.element_to_filesource">[docs]</a><span class="k">def</span> <span class="nf">element_to_filesource</span><span class="p">(</span><span class="n">elt</span><span class="p">,</span> <span class="n">data_handler</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Converts the xml element ``elt`` into a dict if it is an article.</span>
+<span class="sd">    * Compress and write the dict in ``data_handler``</span>
+<span class="sd">    * Append file position in ``data_handler`` to ``index``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elt: Any</span>
+<span class="sd">        a XML element.</span>
+<span class="sd">    data_handler: file_descriptor</span>
+<span class="sd">        Where the compressed data will be stored. Must be writable.</span>
+<span class="sd">    index:</span>
+<span class="sd">        a list that contains the initial position of the data_handler for all previously processed elements.</span>
+<span class="sd">    fields: set</span>
+<span class="sd">        Set of fields to retrieve.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        Always return True for compatibility with the xml parser.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dic</span> <span class="o">=</span> <span class="n">xml_element_to_dict</span><span class="p">(</span><span class="n">elt</span><span class="o">=</span><span class="n">elt</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dic</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">data_handler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">zlib</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)))</span>
+    <span class="n">index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_handler</span><span class="o">.</span><span class="n">tell</span><span class="p">())</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Dblp"><a class="viewcode-back" href="../../../reference.html#gismo.datasets.dblp.Dblp">[docs]</a><span class="k">class</span> <span class="nc">Dblp</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The DBLP class can download DBLP database and produce source files compatible with the :class:`~gismo.filesource.FileSource` class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dblp_url: str, optional</span>
+<span class="sd">        Alternative URL for the dblp.xml.gz file</span>
+<span class="sd">    filename: str</span>
+<span class="sd">        Stem of the files (suffixes will be appened)</span>
+<span class="sd">    path: str or path, optional</span>
+<span class="sd">            Destination of the files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dblp_url</span><span class="o">=</span><span class="n">URL</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp&quot;</span><span class="p">,</span>
+                 <span class="n">path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dblp_url</span> <span class="o">=</span> <span class="n">dblp_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dblp_xml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.xml.gz&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dblp_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.data&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dblp_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.index&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xml_handler</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">json_handler</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">download</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dblp_url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;gz&quot;</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_xml</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>  <span class="c1"># filter out keep-alive new chunks</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_xml</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>  <span class="c1"># filter out keep-alive new chunks</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DBLP database downloaded to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_xml</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Dblp.build"><a class="viewcode-back" href="../../../reference.html#gismo.datasets.dblp.Dblp.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Main class method. Create the data and index files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        refresh: bool</span>
+<span class="sd">            Tell if files are to be rebuilt if they are already there.</span>
+<span class="sd">        d: int</span>
+<span class="sd">            depth level where articles are. Usually 2 or 3 (2 for the main database).</span>
+<span class="sd">        fields: set, optional</span>
+<span class="sd">            Set of fields to collect. Default to :obj:`~gismo.datasets.dblp.DEFAULT_FIELDS`.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        By default, the class downloads the full dataset. Here we will limit to one entry.</span>
+
+<span class="sd">        &gt;&gt;&gt; toy_url = &quot;https://dblp.org/pers/xx/m/Mathieu:Fabien.xml&quot;</span>
+<span class="sd">        &gt;&gt;&gt; import tempfile</span>
+<span class="sd">        &gt;&gt;&gt; from gismo.filesource import FileSource</span>
+<span class="sd">        &gt;&gt;&gt; tmp = tempfile.TemporaryDirectory()</span>
+<span class="sd">        &gt;&gt;&gt; dblp = Dblp(dblp_url=toy_url, path=tmp.name)</span>
+<span class="sd">        &gt;&gt;&gt; dblp.build() # doctest.ELLIPSIS</span>
+<span class="sd">        Retrieve https://dblp.org/pers/xx/m/Mathieu:Fabien.xml from the Internet.</span>
+<span class="sd">        DBLP database downloaded to ...xml.gz.</span>
+<span class="sd">        Converting DBLP database from ...xml.gz (may take a while).</span>
+<span class="sd">        Building Index.</span>
+<span class="sd">        Conversion done.</span>
+
+<span class="sd">        By default, build uses existing files.</span>
+
+<span class="sd">        &gt;&gt;&gt; dblp.build() # doctest.ELLIPSIS</span>
+<span class="sd">        File ...xml.gz already exists. Use refresh option to overwrite.</span>
+<span class="sd">        File ...data already exists. Use refresh option to overwrite.</span>
+
+<span class="sd">        The refresh parameter can be used to ignore existing files.</span>
+
+<span class="sd">        &gt;&gt;&gt; dblp.build(d=3, refresh=True) # doctest.ELLIPSIS</span>
+<span class="sd">        Retrieve https://dblp.org/pers/xx/m/Mathieu:Fabien.xml from the Internet.</span>
+<span class="sd">        DBLP database downloaded to ...xml.gz.</span>
+<span class="sd">        Converting DBLP database from ...xml.gz (may take a while).</span>
+<span class="sd">        Building Index.</span>
+<span class="sd">        Conversion done.</span>
+
+<span class="sd">        The resulting files can be used to create a FileSource.</span>
+
+<span class="sd">        &gt;&gt;&gt; source = FileSource(filename=&quot;dblp&quot;, path=tmp.name)</span>
+<span class="sd">        &gt;&gt;&gt; art = [s for s in source if s[&#39;title&#39;]==&quot;Can P2P networks be super-scalable?&quot;][0]</span>
+<span class="sd">        &gt;&gt;&gt; art[&#39;authors&#39;] # doctest.ELLIPSIS</span>
+<span class="sd">        [&#39;François Baccelli&#39;, &#39;Fabien Mathieu&#39;, &#39;Ilkka Norros&#39;, &#39;Rémi Varloot&#39;]</span>
+
+<span class="sd">        Don&#39;t forget to close source after use.</span>
+
+<span class="sd">        &gt;&gt;&gt; source.close()</span>
+<span class="sd">        &gt;&gt;&gt; tmp.cleanup()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">DEFAULT_FIELDS</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dblp_xml</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">refresh</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_xml</span><span class="si">}</span><span class="s2"> already exists. Use refresh option to overwrite.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrieve </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_url</span><span class="si">}</span><span class="s2"> from the Internet.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dblp_data</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">refresh</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_data</span><span class="si">}</span><span class="s2"> already exists. Use refresh option to overwrite.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Converting DBLP database from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_xml</span><span class="si">}</span><span class="s2"> (may take a while).&quot;</span><span class="p">)</span>
+            <span class="c1"># Download the DTD parser</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://dblp.uni-trier.de/xml/dblp.dtd&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;dblp.dtd&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_xml</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_data</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">g</span><span class="p">:</span>
+                    <span class="n">context</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">iterparse</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">,),</span> <span class="n">load_dtd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">fast_iter</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">element_to_filesource</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">data_handler</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building Index.&quot;</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dblp_index</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">g</span><span class="p">:</span>
+                    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="n">g</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conversion done.&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Fabien Mathieu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gismo.sentencizer &mdash; GISMO 0.4.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/logo-line.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.4.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">A Generic Information Search… With a Mind of its Own!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GISMO</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">gismo.sentencizer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gismo.sentencizer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">spacy.lang.en</span> <span class="kn">import</span> <span class="n">English</span>
+
+<span class="kn">from</span> <span class="nn">gismo.corpus</span> <span class="kn">import</span> <span class="n">Corpus</span>
+<span class="kn">from</span> <span class="nn">gismo.embedding</span> <span class="kn">import</span> <span class="n">Embedding</span>
+<span class="kn">from</span> <span class="nn">gismo.gismo</span> <span class="kn">import</span> <span class="n">Gismo</span>
+
+
+<div class="viewcode-block" id="Sentencizer"><a class="viewcode-back" href="../../reference.html#gismo.sentencizer.Sentencizer">[docs]</a><span class="k">class</span> <span class="nc">Sentencizer</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Sentencizer class allows to refine a document-level gismo into a sentence-level gismo.</span>
+<span class="sd">    A simple sentence extraction is proposed.</span>
+<span class="sd">    For more complex usages, the class can provide a full :py:class:`~gismo.gismo.Gismo` instance that operates at</span>
+<span class="sd">    sentence-level.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    gismo: Gismo</span>
+<span class="sd">        Document-level Gismo.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    We use the C50 Reuters dataset (5000 news paragraphs).</span>
+
+<span class="sd">    &gt;&gt;&gt; from gismo.datasets.reuters import get_reuters_news</span>
+<span class="sd">    &gt;&gt;&gt; corpus = Corpus(get_reuters_news(), to_text=lambda e: e[&#39;content&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; embedding = Embedding()</span>
+<span class="sd">    &gt;&gt;&gt; embedding.fit_transform(corpus)</span>
+<span class="sd">    &gt;&gt;&gt; gismo = Gismo(corpus, embedding)</span>
+<span class="sd">    &gt;&gt;&gt; sentencer = Sentencizer(gismo)</span>
+
+<span class="sd">    First Example: run explicitly the query *Orange* at document-level,</span>
+<span class="sd">    extract 4 covering sentences with narrow bfs.</span>
+
+<span class="sd">    &gt;&gt;&gt; success = gismo.rank(&quot;Orange&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; sentencer.get_sentences(s=4, wide=False) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [&#39;Snook says the all important average retained revenue per Orange subscriber will</span>
+<span class="sd">    rise from around 442 pounds per year, partly because dominant telecoms player British</span>
+<span class="sd">    Telecommunications last month raised the price of a call to Orange phones from its fixed lines.&#39;,</span>
+<span class="sd">    &#39;Analysts said that Orange shares had good upside potential after a rollercoaster ride in their</span>
+<span class="sd">    short time on the market.&#39;,</span>
+<span class="sd">    &#39;Orange, which was floated last March at 205 pence per share, initially saw its stock slump to</span>
+<span class="sd">    157.5 pence before recovering over the last few months to trade at 218 on Tuesday, a rise of four</span>
+<span class="sd">    pence on the day.&#39;,</span>
+<span class="sd">    &#39;One-2-One and Orange ORA.L, which offer only digital services, are due to release their</span>
+<span class="sd">    connection figures next week.&#39;]</span>
+
+<span class="sd">    Second example: extract *Ericsson*-related sentences</span>
+
+<span class="sd">    &gt;&gt;&gt; sentencer.get_sentences(query=&quot;Ericsson&quot;) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [&#39;These latest wins follow a recent $350 million contract win with Telefon AB L.M. Ericsson,</span>
+<span class="sd">    bolstering its already strong activity in the contract manufacturing of telecommuncation and</span>
+<span class="sd">    data communciation products, he said.&#39;,</span>
+<span class="sd">    &#39;The restraints are few in areas such as consumer products, while in sectors such as banking,</span>
+<span class="sd">    distribution and insurance, foreign firms are kept on a very tight leash.&#39;,</span>
+<span class="sd">    &quot;The company also said it had told analysts in a briefing Tuesday of new contract wins with</span>
+<span class="sd">    Ascend Communications Inc, Harris Corp&#39;s Communications unit and Philips Electronics NV.&quot;,</span>
+<span class="sd">    &#39;Pocket is the first from the high-priced 1996 auction known to have filed for bankruptcy</span>
+<span class="sd">    protection.&#39;,</span>
+<span class="sd">    &#39;With Ascend in particular, he said the company would be manufacturing the company\\&#39;s</span>
+<span class="sd">    mainstream MAX TNT remote access network equipment. &quot;&#39;]</span>
+
+<span class="sd">    Third example: extract *Communications*-related sentences from a string.</span>
+
+<span class="sd">    &gt;&gt;&gt; txt = gismo.corpus[4517][&#39;content&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; sentencer.get_sentences(query=&quot;communications&quot;, txt=txt) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [&quot;Privately-held Pocket&#39;s big creditors include a group of Asian entrepreneurs and</span>
+<span class="sd">    communications-equipment makers Siemens AG of Germany and L.M. Ericsson of Sweden.&quot;,</span>
+<span class="sd">    &quot;2 bidder at the government&#39;s high-flying wireless phone auction last year has filed for</span>
+<span class="sd">    bankruptcy protection from its creditors, underscoring the problems besetting the</span>
+<span class="sd">    auction&#39;s winners.&quot;,</span>
+<span class="sd">    &quot;The Federal Communications Commission on Monday gave PCS companies from last year&#39;s</span>
+<span class="sd">    auction some breathing space when it suspended indefinitely a March 31 deadline for</span>
+<span class="sd">    them to make payments to the agency for their licenses.&quot;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gismo</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span> <span class="o">=</span> <span class="n">English</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s1">&#39;sentencizer&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc_gismo</span> <span class="o">=</span> <span class="n">gismo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent_corpus</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent_gismo</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Sentencizer.splitter"><a class="viewcode-back" href="../../reference.html#gismo.sentencizer.Sentencizer.splitter">[docs]</a>    <span class="k">def</span> <span class="nf">splitter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform input content into a corpus of sentences stored into the :py:attr:`sent_corpus` attribute.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        txt: str or list</span>
+<span class="sd">            Text or list of documents to split in sentences. For the latter, documents are assumed</span>
+<span class="sd">            to be provided as `(content, id)` pairs, where `content` is the actual text and `id` a</span>
+<span class="sd">            reference of the document.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sentencizer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span><span class="o">.</span><span class="n">sents</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sent_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">source</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                       <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()}</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">txt</span>
+                      <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parser</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">sents</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sent_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Sentencizer.make_sent_gismo"><a class="viewcode-back" href="../../reference.html#gismo.sentencizer.Sentencizer.make_sent_gismo">[docs]</a>    <span class="k">def</span> <span class="nf">make_sent_gismo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct a sentence-level Gismo stored in the :py:attr:`sent_gismo` attribute.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query: str (optional)</span>
+<span class="sd">            Query to run on the document-level Gismo.</span>
+<span class="sd">        txt: str (optional)</span>
+<span class="sd">            Text to use for sentence extraction.</span>
+<span class="sd">            If not set, the sentences will be extracted from the top-documents.</span>
+<span class="sd">        k: int (optional)</span>
+<span class="sd">            Number of top-documents used for the built.</span>
+<span class="sd">            If not set, the :py:func:`~gismo.common.auto_k` heuristic will be used.</span>
+<span class="sd">        kwargs: dict</span>
+<span class="sd">            Custom default runtime parameters to pass to the sentence-level Gismo.</span>
+<span class="sd">            You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_PARAMETERS`.</span>
+<span class="sd">            Note that distortion will be automatically de-activated. If you really want it, manually change the value</span>
+<span class="sd">            of ``self.sent_gismo.parameters.distortion`` afterwards.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sentencizer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">txt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">query</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">doc_gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">txt</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">doc_gismo</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">to_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doc_gismo</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">)</span>
+                   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc_gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">splitter</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="n">local_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+        <span class="n">local_embedding</span><span class="o">.</span><span class="n">fit_ext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doc_gismo</span><span class="o">.</span><span class="n">embedding</span><span class="p">)</span>
+        <span class="n">local_embedding</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sent_corpus</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent_gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sent_corpus</span><span class="p">,</span> <span class="n">local_embedding</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent_gismo</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">distortion</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent_gismo</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">to_text</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Sentencizer.get_sentences"><a class="viewcode-back" href="../../reference.html#gismo.sentencizer.Sentencizer.get_sentences">[docs]</a>    <span class="k">def</span> <span class="nf">get_sentences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                      <span class="n">resolution</span><span class="o">=</span><span class="mf">.7</span><span class="p">,</span> <span class="n">stretch</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">wide</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        All-in-one method to extract covering sentences from the corpus.</span>
+<span class="sd">        Computes sentence-level corpus, sentence-level gismo,</span>
+<span class="sd">        and calls :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query: str (optional)</span>
+<span class="sd">            Query to run on the document-level Gismo</span>
+<span class="sd">        txt: str (optional)</span>
+<span class="sd">            Text to use for sentence extraction.</span>
+<span class="sd">            If not set, the sentences will be extracted from the top-documents.</span>
+<span class="sd">        k: int (optional)</span>
+<span class="sd">            Number of top-documents used for the built.</span>
+<span class="sd">            If not set, the :py:func:`~gismo.common.auto_k` heuristic of the document-level Gismo will be used.</span>
+<span class="sd">        s: int (optional)</span>
+<span class="sd">            Number of sentences to return.</span>
+<span class="sd">            If not set, the :py:func:`~gismo.common.auto_k` heuristic of the sentence-level Gismo will be used.</span>
+<span class="sd">        resolution: float (optional)</span>
+<span class="sd">            Tree resolution passed to the :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage` method.</span>
+<span class="sd">        stretch: float &gt;= 1 (optional)</span>
+<span class="sd">            Stretch factor passed to the :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage` method.</span>
+<span class="sd">        wide: bool (optional)</span>
+<span class="sd">            bfs wideness passed to the :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage` method.</span>
+<span class="sd">        post: bool (optional)</span>
+<span class="sd">            Use of post-proccessing passed to the :py:meth:`~gismo.gismo.Gismo.get_documents_by_coverage` method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_sent_gismo</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="n">txt</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">query</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doc_gismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">_query</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent_gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sent_gismo</span><span class="o">.</span><span class="n">get_documents_by_coverage</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                                                         <span class="n">stretch</span><span class="o">=</span><span class="n">stretch</span><span class="p">,</span> <span class="n">wide</span><span class="o">=</span><span class="n">wide</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="n">post</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Fabien Mathieu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
