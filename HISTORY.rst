@@ -8,7 +8,7 @@ X.X.X (TODO-List)
 * Accelerate similarity computation (currently sklearn-based) in clustering.
 
 
-0.4.X (2021-0X-XX) (tentative)
+0.4.X (2023-0X-XX) (tentative)
 -------------------------------
 
 * Context manager for FileSource (e.g. ``with FileSource(...) as source:``)
@@ -18,6 +18,14 @@ X.X.X (TODO-List)
 * Wheels
 
 * Minor change in test_dblp.py
+
+
+0.4.3 (2022-12-26)
+--------------------
+
+* Update compatibility to 3.10
+
+* Patch sklearn change of API
 
 
 0.4.2 (2021-05-05)
