@@ -18,7 +18,7 @@ def test_corpuslist_io():
     multi_corp = CorpusList([Corpus(toy_source_text, lambda x: x[:15]+"..."),
                              Corpus(toy_source_dict, lambda e: e['title'])])
     with tempfile.TemporaryDirectory() as tmp:
-        multi_corp.save(filename="test", path=tmp)
-        new_corp = CorpusList(filename="test", path=tmp)
+        multi_corp.dump(filename="test", path=tmp)
+        new_corp = CorpusList.load(filename="test", path=tmp)
         assert len(new_corp) == 10
         assert [e for e in new_corp.iterate()][0] == 'Gizmo is a Mogwaï.'

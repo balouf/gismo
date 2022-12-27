@@ -25,10 +25,6 @@ class Gismo(MixInIO):
         Defines the documents of the gismo.
     embedding: Embedding
         Defines the embedding of the gismo.
-    filename: str, optional
-                If set, will load gismo from file.
-    path: str or Path, optional
-        Directory where the gismo is to be loaded from.
     kwargs: dict
         Custom default runtime parameters.
         You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_PARAMETERS`.
@@ -148,20 +144,17 @@ class Gismo(MixInIO):
     ['mogwaï', 'this', 'in', 'by', 'gizmo', 'is', 'chinese']
     """
 
-    def __init__(self, corpus=None, embedding=None, filename=None, path=".", **kwargs):
-        if filename is not None:
-            self.load(filename=filename, path=path)
-        else:
-            self.corpus = corpus
-            self.embedding = embedding
-            self.diteration = DIteration(n=embedding.n, m=embedding.m)
+    def __init__(self, corpus=None, embedding=None, **kwargs):
+        self.corpus = corpus
+        self.embedding = embedding
+        self.diteration = DIteration(n=embedding.n, m=embedding.m)
 
-            self.parameters = Parameters(**kwargs)
+        self.parameters = Parameters(**kwargs)
 
-            self.post_documents_item = post_documents_item_raw
-            self.post_features_item = post_features_item_raw
-            self.post_documents_cluster = post_documents_cluster_json
-            self.post_features_cluster = post_features_cluster_json
+        self.post_documents_item = post_documents_item_raw
+        self.post_features_item = post_features_item_raw
+        self.post_documents_cluster = post_documents_cluster_json
+        self.post_features_cluster = post_features_cluster_json
 
     # Ranking Part
     def rank(self, query="", z=None, **kwargs):
@@ -459,7 +452,7 @@ class XGismo(Gismo):
     and the words they use. Let's start by retrieving a few articles.
 
     >>> toy_url = "https://dblp.org/pers/xx/m/Mathieu:Fabien.xml"
-    >>> source = [a for a in url2source(toy_url) if int(a['year'])<2020]
+    >>> source = [a for a in url2source(toy_url) if int(a['year'])<2023]
 
     Then we build the embedding of words.
 
@@ -491,7 +484,7 @@ class XGismo(Gismo):
 
     >>> success = xgismo.rank("Anne_Bouillard", y=False)
     >>> xgismo.get_documents_by_rank()
-    ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiß', 'Dmitry Lebedev']
+    ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Thomas Deiß', 'Philippe Sehier', 'Dmitry Lebedev']
     """
     def __init__(self, x_embedding=None, y_embedding=None, filename=None, path=".", **kwargs):
         if filename is not None:

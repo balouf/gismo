@@ -23,10 +23,16 @@ X.X.X (TODO-List)
 0.4.3 (2022-12-26)
 --------------------
 
-* Update compatibility to 3.10
+* Refresh dependencies, compatibilities, and such.
+
+* Gismo is tested up to Python 3.10.
 
 * Patch sklearn change of API
+  (`ngram_range` must be a tuple, `get_feature_names` has been renamed `get_feature_names_out`)
 
+* Updates MixInIO logic: you now save with the `dump` method and load with the `load` **class** method.
+
+* Package management now uses Github actions.
 
 0.4.2 (2021-05-05)
 -------------------------------

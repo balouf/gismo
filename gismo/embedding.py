@@ -200,32 +200,20 @@ class Embedding(MixInIO):
                 to override default behavior (recommended).
                 Having a :class:`~sklearn.feature_extraction.text.CountVectorizer`
                 adapted to the :class:`~gismo.corpus.Corpus` is good practice.
-    filename: :py:class:`str`, optional
-        If set, load embedding from corresponding file.
-    path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
-        If set, specify the directory where the embedding is located.
     """
 
-    def __init__(
-        self,
-        vectorizer=None,
-        filename=None,
-        path='.'
-    ):
-        if filename is not None:
-            self.load(filename=filename, path=path)
-        else:
-            self.vectorizer = vectorizer
-            self.n = 0  # Number of documents
-            self.m = 0  # Number of features
-            self.x = None  # TF-IDTF X embedding of documents into features, normalized
-            self.x_norm = None  # memory of X norm for hierarchical merge
-            self.y = None  # Y embedding of features into documents
-            self.y_norm = None  # memory of Y norm for hierarchical merge
-            self.idf = None  # idf vector
-            self.features = None  # vocabulary list
-            self._result_found = True  # keep track of projection successes
-            self._query = ""  # keep track of projection query
+    def __init__(self, vectorizer=None):
+        self.vectorizer = vectorizer
+        self.n = 0  # Number of documents
+        self.m = 0  # Number of features
+        self.x = None  # TF-IDTF X embedding of documents into features, normalized
+        self.x_norm = None  # memory of X norm for hierarchical merge
+        self.y = None  # Y embedding of features into documents
+        self.y_norm = None  # memory of Y norm for hierarchical merge
+        self.idf = None  # idf vector
+        self.features = None  # vocabulary list
+        self._result_found = True  # keep track of projection successes
+        self._query = ""  # keep track of projection query
 
     def fit_transform(self, corpus):
         """

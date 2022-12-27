@@ -50,8 +50,8 @@ def test_default_no_post(my_gismo):
 
 def test_io_gismo(my_gismo):
     with tempfile.TemporaryDirectory() as tmpdirname:
-        my_gismo.save(filename="mygismo", path=tmpdirname)
-        gismo2 = Gismo(filename="mygismo", path=tmpdirname)
+        my_gismo.dump(filename="mygismo", path=tmpdirname)
+        gismo2 = Gismo.load(filename="mygismo", path=tmpdirname)
     gismo2.rank("sentence")
     assert len(gismo2.get_documents_by_rank()) == 2
 
@@ -59,8 +59,8 @@ def test_io_gismo(my_gismo):
 def test_io_xgismo(my_gismo):
     xgismo = XGismo(my_gismo.embedding, my_gismo.embedding)
     with tempfile.TemporaryDirectory() as tmpdirname:
-        xgismo.save(filename="mygismo", path=tmpdirname)
-        xgismo2 = XGismo(filename="mygismo", path=tmpdirname)
+        xgismo.dump(filename="mygismo", path=tmpdirname)
+        xgismo2 = XGismo.load(filename="mygismo", path=tmpdirname)
     xgismo2.rank("gizmo")
     assert xgismo2.get_documents_by_rank() == ['mogwaï', 'gizmo', 'is']
 

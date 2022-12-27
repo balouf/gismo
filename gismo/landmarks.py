@@ -60,10 +60,6 @@ class Landmarks(Corpus):
         The list of items that form Landmarks.
     to_text: function
         The function that transforms an item into text
-    filename: str, optional
-        Load landmarks from filename
-    path: str or Path, optional
-        Directory where the landmarks instance is to be loaded from.
     kwargs: dict
         Custom default runtime parameters.
         You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_LANDMARKS_PARAMETERS`.
@@ -228,7 +224,7 @@ class Landmarks(Corpus):
     ['Shadoks', 'unrelated']
     """
 
-    def __init__(self, source=None, to_text=None, filename=None, path='.', **kwargs):
+    def __init__(self, source=None, to_text=None, **kwargs):
         self.parameters = Parameters(parameter_list=DEFAULT_LANDMARKS_PARAMETERS, **kwargs)
 
         self.x_vectors = None
@@ -240,7 +236,7 @@ class Landmarks(Corpus):
         self.post_item = post_landmarks_item_raw
         self.post_cluster = post_landmarks_cluster_json
 
-        super().__init__(source=source, to_text=to_text, filename=filename, path=path)
+        super().__init__(source=source, to_text=to_text)
 
     def embed_entry(self, gismo, entry, **kwargs):
         p = self.parameters(**kwargs)

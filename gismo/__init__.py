@@ -8,4 +8,4 @@ __version__ = '0.4.3'
 from gismo.corpus import Corpus
 from gismo.embedding import Embedding
 from gismo.diteration import DIteration
-from gismo.gismo import Gismo
+from gismo.gismo import Gismo, XGismo

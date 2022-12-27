@@ -17,7 +17,7 @@ class MixInIO:
     Provide basic save/load capacities to other classes.
     """
 
-    def save(self, filename: str, path='.', erase=False, compress=False):
+    def dump(self, filename: str, path='.', overwrite=False, compress=True):
         """
         Save instance to file.
 
@@ -27,47 +27,48 @@ class MixInIO:
             The stem of the filename.
         path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
             The location path.
-        erase: bool
+        overwrite: bool
             Should existing file be erased if it exists?
         compress: bool
             Should gzip compression be used?
 
         Examples
         ----------
+
         >>> import tempfile
         >>> v1 = ToyClass(42)
         >>> v2 = ToyClass()
         >>> v2.value
         0
         >>> with tempfile.TemporaryDirectory() as tmpdirname:
-        ...     v1.save(filename='myfile', compress=True, path=tmpdirname)
-        ...     dir_content = [f.name for f in Path(tmpdirname).glob('*')]
-        ...     v2.load(filename='myfile', path=Path(tmpdirname))
-        ...     v1.save(filename='myfile', compress=True, path=tmpdirname) # doctest.ELLIPSIS
-        File ...myfile.pkl.gz already exists! Use erase option to overwrite.
+        ...     v1.dump(filename='myfile', compress=True, path=tmpdirname)
+        ...     dir_content = [file.name for file in Path(tmpdirname).glob('*')]
+        ...     v2 = ToyClass.load(filename='myfile', path=Path(tmpdirname))
+        ...     v1.dump(filename='myfile', compress=True, path=tmpdirname) # doctest.ELLIPSIS
+        File ...myfile.pkl.gz already exists! Use overwrite option to overwrite.
         >>> dir_content
         ['myfile.pkl.gz']
         >>> v2.value
         42
 
         >>> with tempfile.TemporaryDirectory() as tmpdirname:
-        ...     v1.save(filename='myfile', path=tmpdirname)
-        ...     v1.save(filename='myfile', path=tmpdirname) # doctest.ELLIPSIS
-        File ...myfile.pkl already exists! Use erase option to overwrite.
+        ...     v1.dump(filename='myfile', compress=False, path=tmpdirname)
+        ...     v1.dump(filename='myfile', compress=False, path=tmpdirname) # doctest.ELLIPSIS
+        File ...myfile.pkl already exists! Use overwrite option to overwrite.
 
         >>> v1.value = 51
         >>> with tempfile.TemporaryDirectory() as tmpdirname:
-        ...     v1.save(filename='myfile', path=tmpdirname)
-        ...     v1.save(filename='myfile', path=tmpdirname, erase=True)
-        ...     v2.load(filename='myfile', path=tmpdirname)
-        ...     dir_content = [f.name for f in Path(tmpdirname).glob('*')]
+        ...     v1.dump(filename='myfile', path=tmpdirname, compress=False)
+        ...     v1.dump(filename='myfile', path=tmpdirname, overwrite=True, compress=False)
+        ...     v2 = ToyClass.load(filename='myfile', path=tmpdirname)
+        ...     dir_content = [file.name for file in Path(tmpdirname).glob('*')]
         >>> dir_content
         ['myfile.pkl']
         >>> v2.value
         51
 
         >>> with tempfile.TemporaryDirectory() as tmpdirname:
-        ...    v2.load(filename='thisfilenamedoesnotexist') # doctest.ELLIPSIS
+        ...    v2 = ToyClass.load(filename='thisfilenamedoesnotexist')
         Traceback (most recent call last):
          ...
         FileNotFoundError: [Errno 2] No such file or directory: ...
@@ -76,20 +77,21 @@ class MixInIO:
         destination = path / Path(filename).stem
         if compress:
             destination = destination.with_suffix(".pkl.gz")
-            if destination.exists() and not erase:
-                print(f"File {destination} already exists! Use erase option to overwrite.")
+            if destination.exists() and not overwrite:
+                print(f"File {destination} already exists! Use overwrite option to overwrite.")
             else:
                 with gzip.open(destination, "wb") as f:
                     pickle.dump(self, f)
         else:
             destination = destination.with_suffix(".pkl")
-            if destination.exists() and not erase:
-                print(f"File {destination} already exists! Use erase option to overwrite.")
+            if destination.exists() and not overwrite:
+                print(f"File {destination} already exists! Use overwrite option to overwrite.")
             else:
                 with open(destination, "wb") as f:
                     pickle.dump(self, f)
 
-    def load(self, filename: str, path='.'):
+    @classmethod
+    def load(cls, filename: str, path='.'):
         """
         Load instance from file.
 
@@ -104,30 +106,20 @@ class MixInIO:
         dest = path / Path(filename).with_suffix(".pkl")
         if dest.exists():
             with open(dest, 'rb') as f:
-                self.__dict__.update(pickle.load(f).__dict__)
+                return pickle.load(f)
         else:
             dest = dest.with_suffix('.pkl.gz')
             if dest.exists():
                 with gzip.open(dest) as f:
-                    self.__dict__.update(pickle.load(f).__dict__)
+                    return pickle.load(f)
             else:
                 raise FileNotFoundError(
                     errno.ENOENT, os.strerror(errno.ENOENT), dest)
 
 
 class ToyClass(MixInIO):
-    """
-    A minimal class to demonstrate the use of the :class:`~gismo.common.MixInIO` MixIN.
-
-    The class itself just stores one value, but the MixIn automatically adds save/load capabilities.
-
-    Parameters
-    ----------
-    v: object
-        A value to store.
-    """
-    def __init__(self, v=0):
-        self.value = v
+    def __init__(self, value=0):
+        self.value = value
 
 
 def auto_k(data, order=None, max_k=100, target=1.0):

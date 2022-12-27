@@ -24,10 +24,6 @@ class Corpus(MixInIO):
     to_text: function, optional
         The function that transforms an item from the source into plain text (:py:class:`str`). If not set, it will
         default to the identity function ``lambda x: x``.
-    filename: :py:class:`str`, optional
-        If set, load corpus from corresponding file.
-    path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
-        If set, specify the directory where the corpus is located.
 
     Examples
     --------
@@ -59,31 +55,27 @@ class Corpus(MixInIO):
     This very long ...
     In chinese folk...
 
-    A corpus object can be saved/loaded with the :py:meth:`~gismo.common.MixInIO.save` and
+    A corpus object can be saved/loaded with the :py:meth:`~gismo.common.MixInIO.dump` and
     :py:meth:`~gismo.common.MixInIO.load` methods inherited from the MixIn :py:class:`~gismo.common.MixInIO` class.
-    The :py:meth:`~gismo.common.MixInIO.load` method can be called directly at construction by providing a filename.
+    The :py:meth:`~gismo.common.MixInIO.load` method is a class method to be used instead of the constructor.
 
     >>> import tempfile
     >>> corpus1 = Corpus(toy_source_text)
     >>> with tempfile.TemporaryDirectory() as tmpdirname:
-    ...    corpus1.save(filename="myfile", path=tmpdirname)
-    ...    corpus2 = Corpus(filename="myfile", path=tmpdirname)
+    ...    corpus1.dump(filename="myfile", path=tmpdirname)
+    ...    corpus2 = Corpus.load(filename="myfile", path=tmpdirname)
     >>> corpus2[0]
     'Gizmo is a Mogwaï.'
     """
-
-    def __init__(self, source=None, to_text=None, filename=None, path='.'):
-        if filename is not None:
-            self.load(filename=filename, path=path)
+    def __init__(self, source=None, to_text=None):
+        self.source = source
+        self.i = 0
+        self.n = 0 if source is None or not hasattr(source, '__len__') else len(source)
+        self.iter = None
+        if to_text is None:
+            self.to_text = lambda x: x
         else:
-            self.source = source
-            self.i = 0
-            self.n = 0 if source is None or not hasattr(source, '__len__') else len(source)
-            self.iter = None
-            if to_text is None:
-                self.to_text = lambda x: x
-            else:
-                self.to_text = to_text
+            self.to_text = to_text
 
     def iterate_text(self, to_text=None):
         if to_text is None:
@@ -153,10 +145,6 @@ class CorpusList(MixInIO):
     ----------
     corpus_list: list of :py:class:`.Corpus`
         The list of corpi to glue.
-    filename: str, optional
-        If set, load CorpusList from corresponding file.
-    path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
-        If set, specify the directory where the CorpusList is located.
 
 
     Example
@@ -182,15 +170,12 @@ class CorpusList(MixInIO):
     """
 
     def __init__(self, corpus_list=None, filename=None, path='.'):
-        if filename is not None:
-            self.load(filename=filename, path=path)
+        if corpus_list is None or len(corpus_list) == 0:
+            print("Please provide a non-empty list of corpi!")
         else:
-            if corpus_list is None or len(corpus_list) == 0:
-                print("Please provide a non-empty list of corpi!")
-            else:
-                self.corpus_list = corpus_list
-                self.cum_n = np.cumsum([len(corpus) for corpus in self.corpus_list])
-                self.n = self.cum_n[-1]
+            self.corpus_list = corpus_list
+            self.cum_n = np.cumsum([len(corpus) for corpus in self.corpus_list])
+            self.n = self.cum_n[-1]
 
     def iterate(self):
         return chain.from_iterable([corpus.iterate() for corpus in self.corpus_list])
