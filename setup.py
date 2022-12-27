@@ -22,7 +22,7 @@ setup(
     author_email='fabien.mathieu@normalesup.org',
     python_requires='>=3.6',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
@@ -30,6 +30,8 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
     description="GISMO is a NLP tool to rank and organize a corpus of documents according to a query.",
     install_requires=requirements,
@@ -43,7 +45,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/balouf/gismo',
+    url='https://balouf.github.io/gismo/',
     version='0.4.3',
     zip_safe=False,
 )
