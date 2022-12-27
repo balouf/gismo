@@ -105,10 +105,6 @@
 <span class="sd">        Defines the documents of the gismo.</span>
 <span class="sd">    embedding: Embedding</span>
 <span class="sd">        Defines the embedding of the gismo.</span>
-<span class="sd">    filename: str, optional</span>
-<span class="sd">                If set, will load gismo from file.</span>
-<span class="sd">    path: str or Path, optional</span>
-<span class="sd">        Directory where the gismo is to be loaded from.</span>
 <span class="sd">    kwargs: dict</span>
 <span class="sd">        Custom default runtime parameters.</span>
 <span class="sd">        You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_PARAMETERS`.</span>
@@ -228,20 +224,17 @@
 <span class="sd">    [&#39;mogwaï&#39;, &#39;this&#39;, &#39;in&#39;, &#39;by&#39;, &#39;gizmo&#39;, &#39;is&#39;, &#39;chinese&#39;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">embedding</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span> <span class="o">=</span> <span class="n">DIteration</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">embedding</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">embedding</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">embedding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span> <span class="o">=</span> <span class="n">DIteration</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">embedding</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">embedding</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="n">post_documents_item_raw</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">post_features_item</span> <span class="o">=</span> <span class="n">post_features_item_raw</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">post_documents_cluster</span> <span class="o">=</span> <span class="n">post_documents_cluster_json</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_json</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="n">post_documents_item_raw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_features_item</span> <span class="o">=</span> <span class="n">post_features_item_raw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_documents_cluster</span> <span class="o">=</span> <span class="n">post_documents_cluster_json</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_json</span>
 
     <span class="c1"># Ranking Part</span>
 <div class="viewcode-block" id="Gismo.rank"><a class="viewcode-back" href="../../reference.html#gismo.gismo.Gismo.rank">[docs]</a>    <span class="k">def</span> <span class="nf">rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -539,7 +532,7 @@
 <span class="sd">    and the words they use. Let&#39;s start by retrieving a few articles.</span>
 
 <span class="sd">    &gt;&gt;&gt; toy_url = &quot;https://dblp.org/pers/xx/m/Mathieu:Fabien.xml&quot;</span>
-<span class="sd">    &gt;&gt;&gt; source = [a for a in url2source(toy_url) if int(a[&#39;year&#39;])&lt;2020]</span>
+<span class="sd">    &gt;&gt;&gt; source = [a for a in url2source(toy_url) if int(a[&#39;year&#39;])&lt;2023]</span>
 
 <span class="sd">    Then we build the embedding of words.</span>
 
@@ -571,7 +564,7 @@
 
 <span class="sd">    &gt;&gt;&gt; success = xgismo.rank(&quot;Anne_Bouillard&quot;, y=False)</span>
 <span class="sd">    &gt;&gt;&gt; xgismo.get_documents_by_rank()</span>
-<span class="sd">    [&#39;Anne Bouillard&#39;, &#39;Elie de Panafieu&#39;, &#39;Céline Comte&#39;, &#39;Philippe Sehier&#39;, &#39;Thomas Deiß&#39;, &#39;Dmitry Lebedev&#39;]</span>
+<span class="sd">    [&#39;Anne Bouillard&#39;, &#39;Elie de Panafieu&#39;, &#39;Céline Comte&#39;, &#39;Thomas Deiß&#39;, &#39;Philippe Sehier&#39;, &#39;Dmitry Lebedev&#39;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

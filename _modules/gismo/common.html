@@ -97,7 +97,7 @@
 <span class="sd">    Provide basic save/load capacities to other classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MixInIO.save"><a class="viewcode-back" href="../../reference.html#gismo.common.MixInIO.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">erase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="MixInIO.dump"><a class="viewcode-back" href="../../reference.html#gismo.common.MixInIO.dump">[docs]</a>    <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save instance to file.</span>
 
@@ -107,47 +107,48 @@
 <span class="sd">            The stem of the filename.</span>
 <span class="sd">        path: :py:class:`str` or :py:class:`~pathlib.Path`, optional</span>
 <span class="sd">            The location path.</span>
-<span class="sd">        erase: bool</span>
+<span class="sd">        overwrite: bool</span>
 <span class="sd">            Should existing file be erased if it exists?</span>
 <span class="sd">        compress: bool</span>
 <span class="sd">            Should gzip compression be used?</span>
 
 <span class="sd">        Examples</span>
 <span class="sd">        ----------</span>
+
 <span class="sd">        &gt;&gt;&gt; import tempfile</span>
 <span class="sd">        &gt;&gt;&gt; v1 = ToyClass(42)</span>
 <span class="sd">        &gt;&gt;&gt; v2 = ToyClass()</span>
 <span class="sd">        &gt;&gt;&gt; v2.value</span>
 <span class="sd">        0</span>
 <span class="sd">        &gt;&gt;&gt; with tempfile.TemporaryDirectory() as tmpdirname:</span>
-<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, compress=True, path=tmpdirname)</span>
-<span class="sd">        ...     dir_content = [f.name for f in Path(tmpdirname).glob(&#39;*&#39;)]</span>
-<span class="sd">        ...     v2.load(filename=&#39;myfile&#39;, path=Path(tmpdirname))</span>
-<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, compress=True, path=tmpdirname) # doctest.ELLIPSIS</span>
-<span class="sd">        File ...myfile.pkl.gz already exists! Use erase option to overwrite.</span>
+<span class="sd">        ...     v1.dump(filename=&#39;myfile&#39;, compress=True, path=tmpdirname)</span>
+<span class="sd">        ...     dir_content = [file.name for file in Path(tmpdirname).glob(&#39;*&#39;)]</span>
+<span class="sd">        ...     v2 = ToyClass.load(filename=&#39;myfile&#39;, path=Path(tmpdirname))</span>
+<span class="sd">        ...     v1.dump(filename=&#39;myfile&#39;, compress=True, path=tmpdirname) # doctest.ELLIPSIS</span>
+<span class="sd">        File ...myfile.pkl.gz already exists! Use overwrite option to overwrite.</span>
 <span class="sd">        &gt;&gt;&gt; dir_content</span>
 <span class="sd">        [&#39;myfile.pkl.gz&#39;]</span>
 <span class="sd">        &gt;&gt;&gt; v2.value</span>
 <span class="sd">        42</span>
 
 <span class="sd">        &gt;&gt;&gt; with tempfile.TemporaryDirectory() as tmpdirname:</span>
-<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, path=tmpdirname)</span>
-<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, path=tmpdirname) # doctest.ELLIPSIS</span>
-<span class="sd">        File ...myfile.pkl already exists! Use erase option to overwrite.</span>
+<span class="sd">        ...     v1.dump(filename=&#39;myfile&#39;, compress=False, path=tmpdirname)</span>
+<span class="sd">        ...     v1.dump(filename=&#39;myfile&#39;, compress=False, path=tmpdirname) # doctest.ELLIPSIS</span>
+<span class="sd">        File ...myfile.pkl already exists! Use overwrite option to overwrite.</span>
 
 <span class="sd">        &gt;&gt;&gt; v1.value = 51</span>
 <span class="sd">        &gt;&gt;&gt; with tempfile.TemporaryDirectory() as tmpdirname:</span>
-<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, path=tmpdirname)</span>
-<span class="sd">        ...     v1.save(filename=&#39;myfile&#39;, path=tmpdirname, erase=True)</span>
-<span class="sd">        ...     v2.load(filename=&#39;myfile&#39;, path=tmpdirname)</span>
-<span class="sd">        ...     dir_content = [f.name for f in Path(tmpdirname).glob(&#39;*&#39;)]</span>
+<span class="sd">        ...     v1.dump(filename=&#39;myfile&#39;, path=tmpdirname, compress=False)</span>
+<span class="sd">        ...     v1.dump(filename=&#39;myfile&#39;, path=tmpdirname, overwrite=True, compress=False)</span>
+<span class="sd">        ...     v2 = ToyClass.load(filename=&#39;myfile&#39;, path=tmpdirname)</span>
+<span class="sd">        ...     dir_content = [file.name for file in Path(tmpdirname).glob(&#39;*&#39;)]</span>
 <span class="sd">        &gt;&gt;&gt; dir_content</span>
 <span class="sd">        [&#39;myfile.pkl&#39;]</span>
 <span class="sd">        &gt;&gt;&gt; v2.value</span>
 <span class="sd">        51</span>
 
 <span class="sd">        &gt;&gt;&gt; with tempfile.TemporaryDirectory() as tmpdirname:</span>
-<span class="sd">        ...    v2.load(filename=&#39;thisfilenamedoesnotexist&#39;) # doctest.ELLIPSIS</span>
+<span class="sd">        ...    v2 = ToyClass.load(filename=&#39;thisfilenamedoesnotexist&#39;)</span>
 <span class="sd">        Traceback (most recent call last):</span>
 <span class="sd">         ...</span>
 <span class="sd">        FileNotFoundError: [Errno 2] No such file or directory: ...</span>
@@ -156,20 +157,21 @@
         <span class="n">destination</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
         <span class="k">if</span> <span class="n">compress</span><span class="p">:</span>
             <span class="n">destination</span> <span class="o">=</span> <span class="n">destination</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pkl.gz&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">erase</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2"> already exists! Use erase option to overwrite.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2"> already exists! Use overwrite option to overwrite.&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">destination</span> <span class="o">=</span> <span class="n">destination</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">erase</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2"> already exists! Use erase option to overwrite.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2"> already exists! Use overwrite option to overwrite.&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MixInIO.load"><a class="viewcode-back" href="../../reference.html#gismo.common.MixInIO.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="MixInIO.load"><a class="viewcode-back" href="../../reference.html#gismo.common.MixInIO.load">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load instance from file.</span>
 
@@ -184,30 +186,20 @@
         <span class="n">dest</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pkl&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dest</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dest</span> <span class="o">=</span> <span class="n">dest</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;.pkl.gz&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">dest</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
                     <span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">),</span> <span class="n">dest</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ToyClass"><a class="viewcode-back" href="../../reference.html#gismo.common.ToyClass">[docs]</a><span class="k">class</span> <span class="nc">ToyClass</span><span class="p">(</span><span class="n">MixInIO</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A minimal class to demonstrate the use of the :class:`~gismo.common.MixInIO` MixIN.</span>
-
-<span class="sd">    The class itself just stores one value, but the MixIn automatically adds save/load capabilities.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    v: object</span>
-<span class="sd">        A value to store.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">v</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span></div>
 
 
 <div class="viewcode-block" id="auto_k"><a class="viewcode-back" href="../../reference.html#gismo.common.auto_k">[docs]</a><span class="k">def</span> <span class="nf">auto_k</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_k</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>

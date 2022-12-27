@@ -140,8 +140,12 @@
 <section id="id1">
 <h2>0.4.3 (2022-12-26)<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>Update compatibility to 3.10</p></li>
-<li><p>Patch sklearn change of API</p></li>
+<li><p>Refresh dependencies, compatibilities, and such.</p></li>
+<li><p>Gismo is tested up to Python 3.10.</p></li>
+<li><p>Patch sklearn change of API
+(<cite>ngram_range</cite> must be a tuple, <cite>get_feature_names</cite> has been renamed <cite>get_feature_names_out</cite>)</p></li>
+<li><p>Updates MixInIO logic: you now save with the <cite>dump</cite> method and load with the <cite>load</cite> <strong>class</strong> method.</p></li>
+<li><p>Package management now uses Github actions.</p></li>
 </ul>
 </section>
 <section id="id2">

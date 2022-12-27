@@ -11,6 +11,6 @@ def test_embedding_io():
     embedding.fit_transform(corpus)
     assert embedding.features[3] == 'demon'
     with tempfile.TemporaryDirectory() as tmp:
-        embedding.save(filename="test", path=tmp)
-        new_embedding = Embedding(filename="test", path=tmp)
+        embedding.dump(filename="test", path=tmp)
+        new_embedding = Embedding.load(filename="test", path=tmp)
     assert new_embedding.features[3] == 'demon'

@@ -280,32 +280,20 @@
 <span class="sd">                to override default behavior (recommended).</span>
 <span class="sd">                Having a :class:`~sklearn.feature_extraction.text.CountVectorizer`</span>
 <span class="sd">                adapted to the :class:`~gismo.corpus.Corpus` is good practice.</span>
-<span class="sd">    filename: :py:class:`str`, optional</span>
-<span class="sd">        If set, load embedding from corresponding file.</span>
-<span class="sd">    path: :py:class:`str` or :py:class:`~pathlib.Path`, optional</span>
-<span class="sd">        If set, specify the directory where the embedding is located.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">vectorizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">path</span><span class="o">=</span><span class="s1">&#39;.&#39;</span>
-    <span class="p">):</span>
-        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">vectorizer</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Number of documents</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Number of features</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># TF-IDTF X embedding of documents into features, normalized</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">x_norm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># memory of X norm for hierarchical merge</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Y embedding of features into documents</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">y_norm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># memory of Y norm for hierarchical merge</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># idf vector</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># vocabulary list</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_result_found</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># keep track of projection successes</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># keep track of projection query</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorizer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">vectorizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Number of documents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Number of features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># TF-IDTF X embedding of documents into features, normalized</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_norm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># memory of X norm for hierarchical merge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Y embedding of features into documents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_norm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># memory of Y norm for hierarchical merge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># idf vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># vocabulary list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_result_found</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># keep track of projection successes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># keep track of projection query</span>
 
 <div class="viewcode-block" id="Embedding.fit_transform"><a class="viewcode-back" href="../../reference.html#gismo.embedding.Embedding.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
