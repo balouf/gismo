@@ -7,6 +7,7 @@
   <title>DBLP exploration &mdash; GISMO 0.4.3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -413,7 +414,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../../../../../Datasets/DBLP&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../../../../../../Datasets/DBLP&quot;</span><span class="p">)</span>
 <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -442,8 +443,11 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-File ..\..\..\..\..\Datasets\DBLP\dblp.xml.gz already exists. Use refresh option to overwrite.
-File ..\..\..\..\..\Datasets\DBLP\dblp.data already exists. Use refresh option to overwrite.
+Retrieve https://dblp.uni-trier.de/xml/dblp.xml.gz from the Internet.
+DBLP database downloaded to ..\..\..\..\..\..\Datasets\DBLP\dblp.xml.gz.
+Converting DBLP database from ..\..\..\..\..\..\Datasets\DBLP\dblp.xml.gz (may take a while).
+Building Index.
+Conversion done.
 </pre></div></div>
 </div>
 <p>Then, we can load the database as a filesource.</p>
@@ -463,19 +467,19 @@ File ..\..\..\..\..\Datasets\DBLP\dblp.data already exists. Use refresh option t
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 {&#39;type&#39;: &#39;article&#39;,
- &#39;title&#39;: &#39;Spectre Attacks: Exploiting Speculative Execution.&#39;,
- &#39;venue&#39;: &#39;meltdownattack.com&#39;,
- &#39;year&#39;: &#39;2018&#39;,
  &#39;authors&#39;: [&#39;Paul Kocher&#39;,
   &#39;Daniel Genkin&#39;,
   &#39;Daniel Gruss&#39;,
-  &#39;Werner Haas&#39;,
+  &#39;Werner Haas 0004&#39;,
   &#39;Mike Hamburg&#39;,
   &#39;Moritz Lipp&#39;,
   &#39;Stefan Mangard&#39;,
   &#39;Thomas Prescher 0002&#39;,
   &#39;Michael Schwarz 0001&#39;,
-  &#39;Yuval Yarom&#39;]}
+  &#39;Yuval Yarom&#39;],
+ &#39;title&#39;: &#39;Spectre Attacks: Exploiting Speculative Execution.&#39;,
+ &#39;venue&#39;: &#39;meltdownattack.com&#39;,
+ &#39;year&#39;: &#39;2018&#39;}
 </pre></div></div>
 </div>
 <p>Each article is a dict with fields <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">venue</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">year</span></code>, and <code class="docutils literal notranslate"><span class="pre">authors</span></code>. We build a corpus that will tell Gismo that the content of an article is its <code class="docutils literal notranslate"><span class="pre">title</span></code> value.</p>
@@ -487,15 +491,15 @@ File ..\..\..\..\..\Datasets\DBLP\dblp.data already exists. Use refresh option t
 </pre></div>
 </div>
 </div>
-<p>We build an embedding on top of that corpus. - We set <code class="docutils literal notranslate"><span class="pre">min_df=30</span></code> to exclude rare features; - We set <code class="docutils literal notranslate"><span class="pre">max_df=.02</span></code> to exclude anything present in more than 2% of the corpus; - We use <code class="docutils literal notranslate"><span class="pre">spacy</span></code> to lemmatize &amp; remove some stopwords; remove <code class="docutils literal notranslate"><span class="pre">preprocessor=...</span></code> from the input if you want to skip this (takes time); - A few manually selected stopwords to fine-tune things. - We set <code class="docutils literal notranslate"><span class="pre">ngram_range=[1,</span> <span class="pre">2]</span></code> to include bi-grams in the embedding.</p>
+<p>We build an embedding on top of that corpus. - We set <code class="docutils literal notranslate"><span class="pre">min_df=30</span></code> to exclude rare features; - We set <code class="docutils literal notranslate"><span class="pre">max_df=.02</span></code> to exclude anything present in more than 2% of the corpus; - We use <code class="docutils literal notranslate"><span class="pre">spacy</span></code> to lemmatize &amp; remove some stopwords; remove <code class="docutils literal notranslate"><span class="pre">preprocessor=...</span></code> from the input if you want to skip this (takes time); - A few manually selected stopwords to fine-tune things. - We set <code class="docutils literal notranslate"><span class="pre">ngram_range=(1,</span> <span class="pre">2)</span></code> to include bi-grams in the embedding.</p>
 <p>This will take a few minutes (without spacy) up to a few hours (with spacy enabled). You can save the embedding for later if you want.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;parser&#39;</span><span class="p">,</span> <span class="s1">&#39;ner&#39;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;en_core_web_sm&#39;</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;parser&#39;</span><span class="p">,</span> <span class="s1">&#39;ner&#39;</span><span class="p">])</span>
 <span class="n">keep</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ADJ&#39;</span><span class="p">,</span> <span class="s1">&#39;NOUN&#39;</span><span class="p">,</span> <span class="s1">&#39;NUM&#39;</span><span class="p">,</span> <span class="s1">&#39;PROPN&#39;</span><span class="p">,</span> <span class="s1">&#39;SYM&#39;</span><span class="p">,</span> <span class="s1">&#39;VERB&#39;</span><span class="p">}</span>
-<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">min_df</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">.02</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">min_df</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">.02</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
                              <span class="n">preprocessor</span><span class="o">=</span><span class="k">lambda</span> <span class="n">txt</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">w</span><span class="o">.</span><span class="n">lemma_</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">nlp</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
                                                                 <span class="k">if</span> <span class="n">w</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">keep</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">w</span><span class="o">.</span><span class="n">is_stop</span><span class="p">]),</span>
                              <span class="n">stop_words</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span> <span class="s1">&#39;an&#39;</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="s1">&#39;for&#39;</span><span class="p">,</span> <span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="s1">&#39;of&#39;</span><span class="p">,</span> <span class="s1">&#39;on&#39;</span><span class="p">,</span> <span class="s1">&#39;the&#39;</span><span class="p">,</span> <span class="s1">&#39;with&#39;</span><span class="p">])</span>
@@ -523,11 +527,11 @@ File ..\..\..\..\..\Datasets\DBLP\dblp.data already exists. Use refresh option t
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;4889758x149361 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
-        with 45847196 stored elements in Compressed Sparse Row format&gt;
+&lt;6232511x192946 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+        with 61239343 stored elements in Compressed Sparse Row format&gt;
 </pre></div></div>
 </div>
-<p>We see from <code class="docutils literal notranslate"><span class="pre">embedding.x</span></code> that the embedding links about 5,000,000 documents to 150,000 features. In average, each document is linked to about 10 features.</p>
+<p>We see from <code class="docutils literal notranslate"><span class="pre">embedding.x</span></code> that the embedding links about 6,200,000 documents to 193,000 features. In average, each document is linked to about 10 features.</p>
 <p>Now, we initiate the gismo object, and customize post_processers to ease the display.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -609,14 +613,69 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;Can Machine Learning Model with Static Features be Fooled: an Adversarial Machine Learning Approach. By Rahim Taheri, Reza Javidan, Mohammad Shojafar, Vinod P, Mauro Conti (CoRR, 2019)&#39;,
- &#39;How Developers Iterate on Machine Learning Workflows - A Survey of the Applied Machine Learning Literature. By Doris Xin, Litian Ma, Shuchen Song, Aditya G. Parameswaran (CoRR, 2018)&#39;,
+[&#39;Resilient Machine Learning for Networked Cyber Physical Systems: A Survey for Machine Learning Security to Securing Machine Learning for CPS. By Felix O. Olowononi, Danda B. Rawat, Chunmei Liu (IEEE Commun. Surv. Tutorials, 2021)&#39;,
+ &#39;Resilient Machine Learning for Networked Cyber Physical Systems: A Survey for Machine Learning Security to Securing Machine Learning for CPS. By Felix O. Olowononi, Danda B. Rawat, Chunmei Liu (CoRR, 2021)&#39;,
+ &#39;The Machine Learning Machine: A Tangible User Interface for Teaching Machine Learning. By Magnus Høholt Kaspersen, Karl-Emil Kjær Bilstrup, Marianne Graves Petersen (TEI, 2021)&#39;,
+ &#39;Resilient Machine Learning (rML) Ensemble Against Adversarial Machine Learning Attacks. By Likai Yao, Cihan Tunc, Pratik Satam, Salim Hariri (DDDAS, 2020)&#39;,
+ &#39;A Machine Learning Tutorial for Operational Meteorology, Part I: Traditional Machine Learning. By Randy J. Chase, David R. Harrison, Amanda Burke, Gary M. Lackmann, Amy McGovern (CoRR, 2022)&#39;,
+ &#39;Critical Tools for Machine Learning: Situating, Figuring, Diffracting, Fabulating Machine Learning Systems Design. By Goda Klumbyte, Claude Draude, Alex S. Taylor (CHItaly, 2021)&#39;,
+ &#39;Poisoning Attacks Against Machine Learning: Can Machine Learning Be Trustworthy? By Alina Oprea, Anoop Singhal, Apostol Vassilev 0001 (Computer, 2022)&#39;,
+ &#39;When Physics Meets Machine Learning: A Survey of Physics-Informed Machine Learning. By Chuizheng Meng, Sungyong Seo, Defu Cao, Sam Griesemer, Yan Liu (CoRR, 2022)&#39;,
+ &#39;Predicting Machine Learning Pipeline Runtimes in the Context of Automated Machine Learning. By Felix Mohr, Marcel Wever, Alexander Tornede, Eyke Hüllermeier (IEEE Trans. Pattern Anal. Mach. Intell., 2021)&#39;,
+ &#39;Adversarial Machine Learning: Difficulties in Applying Machine Learning to Existing Cybersecurity Systems. By Nick Rahimi, Jordan Maynor, Bidyut Gupta (CATA, 2020)&#39;,
+ &#39;Hacking Machine Learning: Towards The Comprehensive Taxonomy of Attacks Against Machine Learning Systems. By Jerzy Surma (ICIAI, 2020)&#39;,
+ &#39;Machine Learning Unplugged - Development and Evaluation of a Workshop About Machine Learning. By Elisaweta Ossovski, Michael Brinkmeier (ISSEP, 2019)&#39;,
+ &#39;Can machine learning model with static features be fooled: an adversarial machine learning approach. By Rahim Taheri, Reza Javidan, Mohammad Shojafar, P. Vinod 0001, Mauro Conti (Clust. Comput., 2020)&#39;,
+ &#39;Machine Learning for Health ( ML4H ) 2019 : What Makes Machine Learning in Medicine Different? By Adrian V. Dalca, Matthew B. A. McDermott, Emily Alsentzer, Samuel G. Finlayson, Michael Oberst, Fabian Falck, Corey Chivers, Andrew Beam, Tristan Naumann, Brett K. Beaulieu-Jones (ML4H@NeurIPS, 2019)&#39;,
+ &#39;Ensemble Machine Learning Methods to Predict the Balancing of Ayurvedic Constituents in the Human Body Ensemble Machine Learning Methods to Predict. By Vani Rajasekar, Sathya Krishnamoorthi, Muzafer Saracevic, Dzenis Pepic, Mahir Zajmovic, Haris Zogic (Comput. Sci., 2022)&#39;,
+ &#39;Special session on machine learning: How will machine learning transform test? By Yiorgos Makris, Amit Nahar, Haralampos-G. D. Stratigopoulos, Marc Hutner (VTS, 2018)&#39;,
  &#39;Informed Machine Learning - Towards a Taxonomy of Explicit Integration of Knowledge into Machine Learning. By Laura von Rüden, Sebastian Mayer, Jochen Garcke, Christian Bauckhage, Jannis Schücker (CoRR, 2019)&#39;,
+ &#39;Machine Learning in Antenna Design: An Overview on Machine Learning Concept and Algorithms. By Hilal M. El Misilmani, Tarek Naous (HPCS, 2019)&#39;,
+ &#39;Can Machine Learning Model with Static Features be Fooled: an Adversarial Machine Learning Approach. By Rahim Taheri, Reza Javidan, Mohammad Shojafar, Vinod P 0001, Mauro Conti (CoRR, 2019)&#39;,
+ &#39;Physics Informed Machine Learning of SPH: Machine Learning Lagrangian Turbulence. By Michael Woodward, Yifeng Tian, Criston Hyett, Chris Fryer, Daniel Livescu, Mikhail Stepanov, Michael Chertkov (CoRR, 2021)&#39;,
+ &#39;Targeted Machine Learning: how we can use machine learning for causal inference. By Antoine Chambaz (EGC, 2021)&#39;,
+ &#39;Arabic Offensive Language Detection Using Machine Learning and Ensemble Machine Learning Approaches. By Fatemah Husain (CoRR, 2020)&#39;,
+ &#39;How Developers Iterate on Machine Learning Workflows - A Survey of the Applied Machine Learning Literature. By Doris Xin, Litian Ma, Shuchen Song, Aditya G. Parameswaran (CoRR, 2018)&#39;,
+ &#39;Declarative Machine Learning Systems: The future of machine learning will depend on it being in the hands of the rest of us. By Piero Molino, Christopher Ré (ACM Queue, 2021)&#39;,
+ &#39;MARVIN: An Open Machine Learning Corpus and Environment for Automated Machine Learning Primitive Annotation and Execution. By Chris A. Mattmann, Sujen Shah, Brian Wilson (CoRR, 2018)&#39;,
+ &#39;Securing Machine Learning in the Cloud: A Systematic Review of Cloud Machine Learning Security. By Adnan Qayyum, Aneeqa Ijaz, Muhammad Usama, Waleed Iqbal, Junaid Qadir 0001, Yehia Elkhatib, Ala I. Al-Fuqaha (Frontiers Big Data, 2020)&#39;,
+ &#39;How to Conduct Rigorous Supervised Machine Learning in Information Systems Research: The Supervised Machine Learning Report Card. By Niklas Kühl, Robin Hirt, Lucas Baier, Björn Schmitz, Gerhard Satzger (Commun. Assoc. Inf. Syst., 2021)&#39;,
+ &#34;Exploring the Effects of Machine Learning Literacy Interventions on Laypeople&#39;s Reliance on Machine Learning Models. By Chun-Wei Chiang, Ming Yin (IUI, 2022)&#34;,
+ &#39;Machine Learning in Space: A Review of Machine Learning Algorithms and Hardware for Space Applications. By James Murphy, John E. Ward, Brian Mac Namee (AICS, 2021)&#39;,
+ &#39;Critical Tools for Machine Learning: Working with Intersectional Critical Concepts in Machine Learning Systems Design. By Goda Klumbyte, Claude Draude, Alex S. Taylor (FAccT, 2022)&#39;,
+ &#39;BetaML: The Beta Machine Learning Toolkit, a self-contained repository of Machine Learning algorithms in Julia. By Antonello Lobianco (J. Open Source Softw., 2021)&#39;,
+ &#39;Can machine learning consistently improve the scoring power of classical scoring functions? Insights into the role of machine learning in scoring functions. By Chao Shen, Ye Hu, Zhe Wang 0041, Xujun Zhang, Haiyang Zhong, Gaoang Wang, Xiaojun Yao, Lei Xu 0035, Dong-Sheng Cao 0001, Tingjun Hou (Briefings Bioinform., 2021)&#39;,
  &#39;Three Differential Emotion Classification by Machine Learning Algorithms using Physiological Signals - Discriminantion of Emotions by Machine Learning Algorithms. By Eun-Hye Jang, Byoung-Jun Park, Sang-Hyeob Kim, Jin-Hun Sohn (ICAART (1), 2012)&#39;,
+ &#39;The Silent Problem - Machine Learning Model Failure - How to Diagnose and Fix Ailing Machine Learning Models. By Michele Bennett, Jaya Balusu, Karin Hayes, Ewa J. Kleczyk (CoRR, 2022)&#39;,
+ &#39;Trustless Machine Learning Contracts; Evaluating and Exchanging Machine Learning Models on the Ethereum Blockchain. By A. Besir Kurtulmus, Kenny Daniel (CoRR, 2018)&#39;,
+ &#39;Machine Learning Against Cancer: Accurate Diagnosis of Cancer by Machine Learning Classification of the Whole Genome Sequencing Data. By Arash Hooshmand (CoRR, 2020)&#39;,
+ &#39;Machine Learning in Python: Main Developments and Technology Trends in Data Science, Machine Learning, and Artificial Intelligence. By Sebastian Raschka, Joshua Patterson, Corey Nolet (Inf., 2020)&#39;,
+ &#39;Machine Learning in Python: Main developments and technology trends in data science, machine learning, and artificial intelligence. By Sebastian Raschka, Joshua Patterson, Corey Nolet (CoRR, 2020)&#39;,
+ &#39;Teaching Machine Learning to Computer Science Preservice Teachers: Human vs. Machine Learning. By Koby Mike, Rinat B. Rosenberg-Kima (SIGCSE, 2021)&#39;,
+ &#39;Linear Algebra and Optimization with Applications to Machine Learning - Volume II: Fundamentals of Optimization Theory with Applications to Machine Learning By Jean H. Gallier, Jocelyn Quaintance (Linear Algebra and Optimization with Applications to Machine Learning, Volume II, 2020)&#39;,
+ &#39;Machine Learning in Textual Criticism: An examination of the performance of supervised machine learning algorithms in reconstructing the text of the Greek New Testament. By Mason Jones, Francesco Romano, Abidalrahman Mohd (ICMLT, 2022)&#39;,
+ &#39;Linear Algebra and Optimization with Applications to Machine Learning - Volume I: Linear Algebra for Computer Vision, Robotics, and Machine Learning By Jean H. Gallier, Jocelyn Quaintance (Linear Algebra and Optimization with Applications to Machine Learning, Volume I, 2020)&#39;,
+ &#39;&#34;I Never Thought About Securing My Machine Learning Systems&#34;: A Study of Security and Privacy Awareness of Machine Learning Practitioners. By Franziska Boenisch, Verena Battis, Nicolas Buchmann, Maija Poikela (MuC, 2021)&#39;,
+ &#39;Métodos de Machine Learning Aplicados no Cenário da Educaçáo a Distância Brasileira (Machine Learning Techniques Applied to the Brazilian Distance Education). By Charles Nicollas C. Freitas, Roberta M. M. Gouveia, Rodrigo G. F. Soares (SIIE, 2020)&#39;,
  &#39;When Lempel-Ziv-Welch Meets Machine Learning: A Case Study of Accelerating Machine Learning using Coding. By Fengan Li, Lingjiao Chen, Arun Kumar 0001, Jeffrey F. Naughton, Jignesh M. Patel, Xi Wu 0001 (CoRR, 2017)&#39;,
- &#39;Linear Algebra and Optimization with Applications to Machine Learning - Volume I: Linear Algebra for Computer Vision, Robotics, and Machine Learning By Jean H. Gallier, Jocelyn Quaintance (Linear Algebra Optim. Appl. Mach. Learn. I, 2020)&#39;,
- &#39;Sports and machine learning: How young people can use data from their own bodies to learn about machine learning. By Abigail Zimmermann-Niefield, R. Benjamin Shapiro, Shaun K. Kane (ACM Crossroads, 2019)&#39;,
+ &#39;Machine Learning approach to Secure Software Defined Network: Machine Learning and Artificial Intelligence. By Afaf D. Althobiti, Rabab M. Almohayawi, Omaimah Bamasag (ICFNDS, 2020)&#39;,
+ &#39;Preserving User Privacy for Machine Learning: Local Differential Privacy or Federated Machine Learning? By Huadi Zheng, Haibo Hu 0001, Ziyang Han (IEEE Intell. Syst., 2020)&#39;,
+ &#34;Machine Learning Explanations as Boundary Objects: How AI Researchers Explain and Non-Experts Perceive Machine Learning. By Amid Ayobi, Katarzyna Stawarz, Dmitri S. Katz, Paul Marshall, Taku Yamagata, Raúl Santos-Rodríguez, Peter A. Flach, Aisling Ann O&#39;Kane (IUI Workshops, 2021)&#34;,
+ &#39;The Holy Grail of &#34;Systems for Machine Learning&#34;: Teaming humans and machine learning for detecting cyber threats. By Ignacio Arnaldo, Kalyan Veeramachaneni (SIGKDD Explor., 2019)&#39;,
+ &#39;Sports and machine learning: How young people can use data from their own bodies to learn about machine learning. By Abigail Zimmermann-Niefield, R. Benjamin Shapiro, Shaun K. Kane (XRDS, 2019)&#39;,
+ &#39;Tracking machine learning models for pandemic scenarios: a systematic review of machine learning models that predict local and global evolution of pandemics. By Marcelo Benedeti Palermo, Lucas Micol Policarpo, Cristiano André da Costa, Rodrigo da Rosa Righi (Netw. Model. Anal. Health Informatics Bioinform., 2022)&#39;,
+ &#39;Current Advances, Trends and Challenges of Machine Learning and Knowledge Extraction: From Machine Learning to Explainable AI. By Andreas Holzinger, Peter Kieseberg, Edgar R. Weippl, A Min Tjoa (CD-MAKE, 2018)&#39;,
+ &#39;Modelling of Received Signals in Molecular Communication Systems based machine learning: Comparison of azure machine learning and Python tools. By Soha Mohamed, Mahmoud S. Fayed (CoRR, 2021)&#39;,
+ &#39;High Value Media Monitoring With Machine Learning - Using Machine Learning to Drive Cost Effectiveness in an Established Business. By Matti Lyra, Daoud Clarke, Hamish Morgan, Jeremy Reffin, David J. Weir (Künstliche Intell., 2013)&#39;,
+ &#39;BPMN4sML: A BPMN Extension for Serverless Machine Learning. Technology Independent and Interoperable Modeling of Machine Learning Workflows and their Serverless Deployment Orchestration. By Laurens Martin Tetzlaff (CoRR, 2022)&#39;,
+ &#39;Do we need different machine learning algorithms for QSAR modeling? A comprehensive assessment of 16 machine learning algorithms on 14 QSAR data sets. By Zhenxing Wu, Minfeng Zhu, Yu Kang 0002, Elaine Lai-Han Leung, Tailong Lei, Chao Shen, Dejun Jiang 0002, Zhe Wang 0041, Dong-Sheng Cao 0001, Tingjun Hou (Briefings Bioinform., 2021)&#39;,
  &#39;Ethem Alpaydin. Introduction to Machine Learning (Adaptive Computation and Machine Learning Series). The MIT Press, 2004, ISBN 0 262 01211 1. By Shahzad Khan (Nat. Lang. Eng., 2008)&#39;,
+ &#39;Bagging Machine Learning Algorithms: A Generic Computing Framework Based on Machine-Learning Methods for Regional Rainfall Forecasting in Upstate New York. By Ning Yu, Timothy Haskins (Informatics, 2021)&#39;,
+ &#39;Artificial Intelligence, Machine Learning, and Signal Processing: Researchers are using artificial intelligence, machine learning, and signal processing to build powerful three-level platforms to help meet project goals [Special Reports]. By John Edwards (IEEE Signal Process. Mag., 2021)&#39;,
+ &#39;Automated Essay Scoring (AES); A Semantic Analysis Inspired Machine Learning Approach: An automated essay scoring system using semantic analysis and machine learning is presented in this research. By Ahsan Ikram, Billy Castle (ICETC, 2020)&#39;,
+ &#39;Digital Phenotyping and Machine Learning in the Next Generation of Digital Health Technologies: Utilising Event Logging, Ecological Momentary Assessment &amp; Machine Learning. By Maurice D. Mulvenna (ICT4AWE, 2020)&#39;,
+ &#39;Can Machine Learning Correct Commonly Accepted Knowledge and Provide Understandable Knowledge in Care Support Domain? Tackling Cognitive Bias and Humanity from Machine Learning Perspective. By Keiki Takadama (AAAI Spring Symposia, 2018)&#39;,
+ &#39;Brain Tumor Classification using Machine Learning and Deep Learning Algorithms: A Comparison: Classifying brain MRI images on thebasis of location of tumor and comparingthe various Machine Learning and Deep LEARNING models used to predict best performance. By Ananya Joshi, Vipasha Rana, Aman Sharma (IC3, 2022)&#39;,
  &#39;Motion Evaluation of Therapy Exercises by Means of Skeleton Normalisation, Incremental Dynamic Time Warping and Machine Learning: A Comparison of a Rule-Based and a Machine-Learning-Based Approach. By Julia Richter, Christian Wiede, Ulrich Heinkel, Gangolf Hirtz (VISIGRAPP (4: VISAPP), 2019)&#39;]
 </pre></div></div>
 </div>
@@ -652,27 +711,47 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;GSA-DenseNet121-COVID-19: a Hybrid Deep Learning Architecture for the Diagnosis of COVID-19 Disease based on Gravitational Search Optimization Algorithm. By Dalia Ezzat, Aboul Ella Hassanien, Hassan Aboul Ella (CoRR, 2020)&#39;,
- &#39;NAIST COVID: Multilingual COVID-19 Twitter and Weibo Dataset. By Zhiwei Gao, Shuntaro Yada, Shoko Wakamiya, Eiji Aramaki (CoRR, 2020)&#39;,
- &#39;COVID-MobileXpert: On-Device COVID-19 Screening using Snapshots of Chest X-Ray. By Xin Li, Chengyin Li, Dongxiao Zhu (CoRR, 2020)&#39;,
- &#39;Deep-COVID: Predicting COVID-19 From Chest X-Ray Images Using Deep Transfer Learning. By Shervin Minaee, Rahele Kafieh, Milan Sonka, Shakib Yazdani, Ghazaleh Jamalipour Soufi (CoRR, 2020)&#39;,
- &#39;COVID-CAPS: A Capsule Network-based Framework for Identification of COVID-19 cases from X-ray Images. By Parnian Afshar, Shahin Heidarian, Farnoosh Naderkhani, Anastasia Oikonomou, Konstantinos N. Plataniotis, Arash Mohammadi 0001 (CoRR, 2020)&#39;,
- &#39;COVID-Net: A Tailored Deep Convolutional Neural Network Design for Detection of COVID-19 Cases from Chest Radiography Images. By Linda Wang, Alexander Wong (CoRR, 2020)&#39;,
- &#39;CORD-19: The Covid-19 Open Research Dataset. By Lucy Lu Wang, Kyle Lo, Yoganand Chandrasekhar, Russell Reas, Jiangjiang Yang, Darrin Eide, Kathryn Funk, Rodney Kinney, Ziyang Liu, William Merrill, Paul Mooney, Dewey Murdick, Devvret Rishi, Jerry Sheehan, Zhihong Shen, Brandon Stilson, Alex D. Wade, Kuansan Wang, Chris Wilhelm, Boya Xie, Douglas Raymond, Daniel S. Weld, Oren Etzioni, Sebastian Kohlmeier (CoRR, 2020)&#39;,
- &#39;A SIDARTHE Model of COVID-19 Epidemic in Italy. By Giulia Giordano, Franco Blanchini, Raffaele Bruno, Patrizio Colaneri, Alessandro Di Filippo, Angela Di Matteo, Marta Colaneri (CoRR, 2020)&#39;,
- &#39;A First Instagram Dataset on COVID-19. By Koosha Zarei, Reza Farahbakhsh, Noël Crespi, Gareth Tyson (CoRR, 2020)&#39;,
- &#39;SurviveCovid-19 - A Game for Improving Awareness of Social Distancing and Health Measures for Covid-19 Pandemic. By Akhila Sri Manasa Venigalla, Dheeraj Vagavolu, Sridhar Chimalakonda (CoRR, 2020)&#39;,
- &#39;Responding to the COVID-19 pandemic: an invitation. By Mikael Wiberg, Alex S. Taylor, Daniela Rosner (Interactions, 2020)&#39;,
- &#39;Tracing Contacts to Control the COVID-19 Pandemic. By Christoph Günther 0001, Michael Günther 0007, Daniel Günther 0005 (CoRR, 2020)&#39;,
- &#39;Learning to Forecast and Forecasting to Learn from the COVID-19 Pandemic. By Ajitesh Srivastava, Viktor K. Prasanna (CoRR, 2020)&#39;,
- &#39;Campus Traffic and e-Learning during COVID-19 Pandemic. By Thomas Favale, Francesca Soro, Martino Trevisan, Idilio Drago, Marco Mellia (CoRR, 2020)&#39;,
- &#39;MiniSeg: An Extremely Minimum Network for Efficient COVID-19 Segmentation. By Yu Qiu, Yun Liu, Jing Xu (CoRR, 2020)&#39;,
- &#39;COVID-19 Image Data Collection. By Joseph Paul Cohen, Paul Morrison, Lan Dao (CoRR, 2020)&#39;,
- &#39;The COVID-19 Social Media Infodemic. By Matteo Cinelli, Walter Quattrociocchi, Alessandro Galeazzi, Carlo Michele Valensise, Emanuele Brugnoli, Ana Lucía Schmidt, Paola Zola, Fabiana Zollo, Antonio Scala (CoRR, 2020)&#39;,
- &#39;Mobility Changes in Response to COVID-19. By Michael S. Warren, Samuel W. Skillman (CoRR, 2020)&#39;,
- &#39;Building a COVID-19 Vulnerability Index. By Dave DeCaprio, Joseph Gartner, Thadeus Burgess, Sarthak Kothari, Shaayan Sayed, Carol J. McCall (CoRR, 2020)&#39;,
- &#39;Why do People Share Misinformation during the COVID-19 Pandemic? By Samuli Laato, A. K. M. Najmul Islam, Muhammad Nazrul Islam, Eoin Whelan (CoRR, 2020)&#39;,
- &#39;CovidAID: COVID-19 Detection Using Chest X-Ray. By Arpan Mangal, Surya Kalia, Harish Rajgopal, Krithika Rangarajan, Vinay Namboodiri, Subhashis Banerjee, Chetan Arora 0001 (CoRR, 2020)&#39;]
+[&#39;Ergonomics of Virtual Learning During COVID-19. By Lu Yuan, Alison Garaudy (AHFE (11), 2021)&#39;,
+ &#39;University Virtual Learning in Covid Times. By Verónica Marín-Díaz, Eloísa Reche, Javier Martín (Technol. Knowl. Learn., 2022)&#39;,
+ &#39;DCML: Deep contrastive mutual learning for COVID-19 recognition. By Hongbin Zhang, Weinan Liang, Chuanxiu Li, Qipeng Xiong, Haowei Shi, Lang Hu, Guangli Li (Biomed. Signal Process. Control., 2022)&#39;,
+ &#39;Interpretable Sequence Learning for Covid-19 Forecasting. By Sercan Ömer Arik, Chun-Liang Li, Jinsung Yoon, Rajarishi Sinha, Arkady Epshteyn, Long T. Le, Vikas Menon, Shashank Singh 0005, Leyou Zhang, Martin Nikoltchev, Yash Sonthalia, Hootan Nakhost, Elli Kanal, Tomas Pfister (NeurIPS, 2020)&#39;,
+ &#39;Interpretable Sequence Learning for COVID-19 Forecasting. By Sercan Ömer Arik, Chun-Liang Li, Jinsung Yoon, Rajarishi Sinha, Arkady Epshteyn, Long T. Le, Vikas Menon, Shashank Singh 0005, Leyou Zhang, Nate Yoder, Martin Nikoltchev, Yash Sonthalia, Hootan Nakhost, Elli Kanal, Tomas Pfister (CoRR, 2020)&#39;,
+ &#39;The Deaf Experience in Remote Learning during COVID-19. By Yosra Bouzid, Mohamed Jemni (ICTA, 2021)&#39;,
+ &#39;The Study on the Efficiency of Smart Learning in the COVID-19. By Seong-Kyu Kim, Mi-Jung Lee, Eun-Sill Jang, Young-Eun Lee (J. Multim. Inf. Syst., 2022)&#39;,
+ &#39;Dual Teaching: Simultaneous Remote and In-Person Learning During COVID. By Hunter M. Williams, Malcolm Haynes, Joseph Kim (SIGITE, 2021)&#39;,
+ &#39;An Analysis of the Effectiveness of Emergency Distance Learning under COVID-19. By Ngo Tung Son, Bui Ngoc Anh, Kieu Quoc Tuan, Son Ba Nguyen, Son Hoang Nguyen, Jafreezal Jaafar (CCRIS, 2020)&#39;,
+ &#39;Automated Machine Learning for COVID-19 Forecasting. By Jaco Tetteroo, Mitra Baratchi, Holger H. Hoos (IEEE Access, 2022)&#39;,
+ &#34;Unsupervised Convolutional Filter Learning for COVID-19 Classification. By Sakthi Ganesh Mahalingam, Saichandra Pandraju (Rev. d&#39;Intelligence Artif., 2021)&#34;,
+ &#39;A Data Augmented Approach to Transfer Learning for Covid-19 Detection. By Shagufta Henna, Aparna Reji (CoRR, 2021)&#39;,
+ &#39;Academic Procrastination and Online Learning During the COVID-19 Pandemic. By Jørgen Melgaard, Rubina Monir, Lester Allan Lasrado, Asle Fagerstrøm (CENTERIS/ProjMAN/HCist, 2021)&#39;,
+ &#39;A comprehensive review of federated learning for COVID-19 detection. By Sadaf Naz, Khoa Tran Phan, Yi-Ping Phoebe Chen (Int. J. Intell. Syst., 2022)&#39;,
+ &#39;M-learning in the COVID-19 era: physical vs digital class. By Vasiliki Matzavela, Efthimios Alepis (Educ. Inf. Technol., 2021)&#39;,
+ &#39;Challenges of Online Learning During the COVID-19: What Can We Learn on Twitter? By Wei Quan (ARTIIS, 2021)&#39;,
+ &#39;Exploring the Effectiveness of Fully Online Translation Learning During COVID-19. By Wenchao Su, Defeng Li, Xiaoxing Zhao, Ruilin Li (ICWL/SETE, 2020)&#39;,
+ &#39;Educational Transformation: An Evaluation of Online Learning Due To COVID-19. By Rizky Firmansyah, Dhika Maha Putri, Mochammad Galih Satriyo Wicaksono, Sheila Febriani Putri, Ahmad Arif Widianto, Mohd Rizal Palil (Int. J. Emerg. Technol. Learn., 2021)&#39;,
+ &#39;Adoption, use and enhancement of virtual learning during COVID-19. By Munyaradzi Zhou, Canicio Dzingirai, Kudakwashe Hove, Tavengwa Chitata, Raymond Mugandani (Educ. Inf. Technol., 2022)&#39;,
+ &#39;Online Learning Before, During and After COVID-19: Observations Over 20 Years. By Natalie Wieland, Liz Kollias (Int. J. Adv. Corp. Learn., 2020)&#39;,
+ &#39;Attitudes Towards Online Learning During COVID-19: A Cluster and Sentiment Analyses. By Rex Perez Bringula, Ma. Teresa Borebor, Ma. Ymelda C. Batalla (MLIS, 2022)&#39;,
+ &#39;The Effects of the Sudden Switch to Remote Learning Due to Covid-19 on HBCU Students and Faculty. By Mariele Ponticiello, Mariah Simmons, Joon-Suk Lee (HCI (23), 2021)&#39;,
+ &#39;Dynamic-Fusion-Based Federated Learning for COVID-19 Detection. By Weishan Zhang, Tao Zhou, Qinghua Lu 0001, Xiao Wang 0002, Chunsheng Zhu, Haoyun Sun, Zhipeng Wang, Sin Kit Lo, Fei-Yue Wang 0001 (IEEE Internet Things J., 2021)&#39;,
+ &#39;Dynamic Fusion based Federated Learning for COVID-19 Detection. By Weishan Zhang, Tao Zhou, Qinghua Lu 0001, Xiao Wang 0002, Chunsheng Zhu, Haoyun Sun, Zhipeng Wang, Sin Kit Lo, Feiyue Wang 0001 (CoRR, 2020)&#39;,
+ &#39;Using Mobile ICT for Online Learning During COVID-19 Lockdown. By Viktoriia Tkachuk, Yuliia V. Yechkalo, Serhiy Semerikov, Maria Kislova, Yana Hladyr (ICTERI (Revised Selected Papers), 2020)&#39;,
+ &#34;Analysis of Teachers&#39; Satisfaction With Online Learning During the Covid-19 Pandemic. By Yaser Saleh, Nuha El-Khalili, Nesreen A. Otoum, Mohammad Al-Sheikh Hasan, Saif Abu-Aishah, Izzeddin Matar (IWSSIP, 2022)&#34;,
+ &#34;Teachers&#39; emotions, technostress, and burnout in distance learning during the COVID-19 pandemic. By Francesco Sulla, Benedetta Ragni, Miriana D&#39;Angelo, Dolores Rollo (teleXbe, 2022)&#34;,
+ &#34;Teachers&#39; Difficulties in Implementing Distance Learning during Covid-19 Pandemic. By Nana Diana, Suhendra Suhendra, Yohannes Yohannes (ICETC, 2020)&#34;,
+ &#39;Student Emotions in the Shift to Online Learning During the COVID-19 Pandemic. By Danielle P. Espino, Tiffany Wright, Victoria M. Brown, Zachariah Mbasu, Matthew Sweeney, Seung B. Lee (ICQE, 2020)&#39;,
+ &#39;CNN-based Transfer Learning for Covid-19 Diagnosis. By Zanear Sh. Ahmed, Nigar M. Shafiq Surameery, Rasber Dh. Rashid, Shadman Q. Salih, Hawre Kh. Abdulla (ICIT, 2021)&#39;,
+ &#39;Federated learning for COVID-19 screening from Chest X-ray images. By Ines Feki, Sourour Ammar, Yousri Kessentini, Khan Muhammad (Appl. Soft Comput., 2021)&#39;,
+ &#39;University-Wide Online Learning During COVID-19: From Policy to Practice. By Nuengwong Tuaycharoen (Int. J. Interact. Mob. Technol., 2021)&#39;,
+ &#39;Mobile Technology for Learning During Covid-19: Opportunities, Lessons, and Challenges. By Oluwakemi Fasae, Femi Alufa, Victor Ayodele, Akachukwu Okoli, Opeyemi Dele-Ajayi (IMCL, 2021)&#39;,
+ &#39;Optimal policy learning for COVID-19 prevention using reinforcement learning. By Muhammad Irfan Uddin, Syed Atif Ali Shah, Mahmoud Ahmad Al-Khasawneh, Ala Abdulsalam Alarood, Eesa Alsolami (J. Inf. Sci., 2022)&#39;,
+ &#39;Semi-supervised Learning for COVID-19 Image Classification via ResNet. By Lucy Nwuso, Xiangfang Li, Lijun Qian, Seungchan Kim, Xishuang Dong (CoRR, 2021)&#39;,
+ &#39;Using Deep Learning for COVID-19 Control: Implementing a Convolutional Neural Network in a Facemask Detection Application. By Caolan Deery, Kevin Meehan (SmartNets, 2021)&#39;,
+ &#39;Boosting Deep Transfer Learning For Covid-19 Classification. By Fouzia Altaf, Syed M. S. Islam, Naeem Khalid Janjua, Naveed Akhtar (ICIP, 2021)&#39;,
+ &#39;Boosting Deep Transfer Learning for COVID-19 Classification. By Fouzia Altaf, Syed M. S. Islam, Naeem Khalid Janjua, Naveed Akhtar (CoRR, 2021)&#39;,
+ &#39;Applications of machine learning for COVID-19 misinformation: a systematic review. By A. R. Sanaullah, Anupam Das 0006, Anik Das, Muhammad Ashad Kabir, Kai Shu (Soc. Netw. Anal. Min., 2022)&#39;,
+ &#39;A Survey on Deep Learning and Machine Learning for COVID-19 Detection. By Mohamed M. Dessouky, Sahar F. Sabbeh, Boushra Alshehri (ICFNDS, 2021)&#39;,
+ &#34;Evaluating Students&#39; Aprehension About Remote Learning During the COVID-19 Pandemic: a Brazilian Sample. By Wesley Machado, Cassia Isac, Thiago Franco Leal, Luiz Couto, David Silva (LWMOOCS, 2020)&#34;]
 </pre></div></div>
 </div>
 <p>Sounds nice. How are the top-10 articles related? Note: as the graph structure is really sparse on the document side (10 features), it is best to de-activate the query-distortion, which is intended for longer documents.</p>
@@ -690,24 +769,24 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.56. R: 0.02. S: 0.93.
-- F: 0.57. R: 0.02. S: 0.92.
--- GSA-DenseNet121-COVID-19: a Hybrid Deep Learning Architecture for the Diagnosis of COVID-19 Disease based on Gravitational Search Optimization Algorithm. (R: 0.00; S: 0.64)
--- F: 0.66. R: 0.01. S: 0.91.
---- F: 0.66. R: 0.01. S: 0.90.
----- NAIST COVID: Multilingual COVID-19 Twitter and Weibo Dataset. (R: 0.00; S: 0.69)
----- CORD-19: The Covid-19 Open Research Dataset. (R: 0.00; S: 0.76)
----- A SIDARTHE Model of COVID-19 Epidemic in Italy. (R: 0.00; S: 0.79)
----- A First Instagram Dataset on COVID-19. (R: 0.00; S: 0.80)
---- F: 0.68. R: 0.00. S: 0.73.
----- COVID-MobileXpert: On-Device COVID-19 Screening using Snapshots of Chest X-Ray. (R: 0.00; S: 0.70)
----- Deep-COVID: Predicting COVID-19 From Chest X-Ray Images Using Deep Transfer Learning. (R: 0.00; S: 0.63)
--- COVID-CAPS: A Capsule Network-based Framework for Identification of COVID-19 cases from X-ray Images. (R: 0.00; S: 0.60)
--- COVID-Net: A Tailored Deep Convolutional Neural Network Design for Detection of COVID-19 Cases from Chest Radiography Images. (R: 0.00; S: 0.56)
-- SurviveCovid-19 - A Game for Improving Awareness of Social Distancing and Health Measures for Covid-19 Pandemic. (R: 0.00; S: 0.62)
+ F: 0.45. R: 0.01. S: 0.74.
+- F: 0.45. R: 0.01. S: 0.73.
+-- F: 0.45. R: 0.00. S: 0.66.
+--- F: 0.66. R: 0.00. S: 0.53.
+---- Ergonomics of Virtual Learning During COVID-19. (R: 0.00; S: 0.63)
+---- University Virtual Learning in Covid Times. (R: 0.00; S: 0.35)
+--- DCML: Deep contrastive mutual learning for COVID-19 recognition. (R: 0.00; S: 0.60)
+--- Dual Teaching: Simultaneous Remote and In-Person Learning During COVID. (R: 0.00; S: 0.35)
+--- An Analysis of the Effectiveness of Emergency Distance Learning under COVID-19. (R: 0.00; S: 0.56)
+-- F: 0.70. R: 0.00. S: 0.60.
+--- F: 1.00. R: 0.00. S: 0.54.
+---- Interpretable Sequence Learning for Covid-19 Forecasting. (R: 0.00; S: 0.54)
+---- Interpretable Sequence Learning for COVID-19 Forecasting. (R: 0.00; S: 0.54)
+--- Automated Machine Learning for COVID-19 Forecasting. (R: 0.00; S: 0.59)
+-- The Deaf Experience in Remote Learning during COVID-19. (R: 0.00; S: 0.52)
+- The Study on the Efficiency of Smart Learning in the COVID-19. (R: 0.00; S: 0.50)
 </pre></div></div>
 </div>
-<p>OK! Let’s decode this: we have: - Lone wolves on gravitional search (first article) and serious gaming (last article) - A large cluster on applications of ML to X-Ray / CT scan processing - A cluster on datasets and social networks - Note that it’s not perfect: the social network has been nested inside X-Ray although a manual classification would probably have put it nearby…</p>
 <p>Now, let’s look at the main keywords.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -723,26 +802,26 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;19&#39;,
- &#39;covid&#39;,
+[&#39;covid&#39;,
+ &#39;19&#39;,
  &#39;covid 19&#39;,
+ &#39;learning covid&#39;,
  &#39;machine&#39;,
  &#39;machine learning&#39;,
  &#39;pandemic&#39;,
+ &#39;19 pandemic&#39;,
+ &#39;online learning&#39;,
+ &#39;online&#39;,
  &#39;chest&#39;,
- &#39;chest ray&#39;,
- &#39;coronavirus&#39;,
- &#39;ray&#39;,
- &#39;dataset&#39;,
  &#39;deep&#39;,
- &#39;ct&#39;,
- &#39;epidemic&#39;,
- &#39;ray image&#39;,
- &#39;social&#39;,
- &#39;learn&#39;,
- &#39;twitter&#39;,
- &#39;infection&#39;,
- &#39;spread&#39;]
+ &#39;19 detection&#39;,
+ &#39;deep learning&#39;,
+ &#39;student&#39;,
+ &#39;distance learning&#39;,
+ &#39;ray&#39;,
+ &#39;chest ray&#39;,
+ &#39;classification&#39;,
+ &#39;ct&#39;]
 </pre></div></div>
 </div>
 <p>Let’s organize them.</p>
@@ -760,26 +839,26 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.15. R: 0.07. S: 0.93.
-- F: 0.26. R: 0.06. S: 0.93.
--- F: 0.29. R: 0.06. S: 0.97.
---- F: 0.97. R: 0.05. S: 0.98.
----- 19 (R: 0.02; S: 0.99)
----- covid (R: 0.02; S: 0.97)
----- covid 19 (R: 0.02; S: 0.98)
---- pandemic (R: 0.00; S: 0.32)
---- F: 0.86. R: 0.00. S: 0.30.
----- chest (R: 0.00; S: 0.32)
----- chest ray (R: 0.00; S: 0.28)
----- ray (R: 0.00; S: 0.33)
---- dataset (R: 0.00; S: 0.28)
--- coronavirus (R: 0.00; S: 0.27)
-- F: 0.79. R: 0.01. S: 0.14.
--- machine (R: 0.00; S: 0.16)
--- machine learning (R: 0.00; S: 0.12)
+ F: 0.31. R: 0.06. S: 0.97.
+- F: 0.46. R: 0.06. S: 0.97.
+-- F: 0.55. R: 0.05. S: 0.97.
+--- F: 0.96. R: 0.05. S: 0.97.
+---- covid (R: 0.01; S: 1.00)
+---- 19 (R: 0.01; S: 0.99)
+---- covid 19 (R: 0.01; S: 0.99)
+---- learning covid (R: 0.01; S: 0.97)
+--- F: 0.97. R: 0.01. S: 0.55.
+---- pandemic (R: 0.00; S: 0.56)
+---- 19 pandemic (R: 0.00; S: 0.54)
+-- F: 0.95. R: 0.00. S: 0.44.
+--- online learning (R: 0.00; S: 0.44)
+--- online (R: 0.00; S: 0.45)
+- F: 1.00. R: 0.01. S: 0.31.
+-- machine (R: 0.00; S: 0.31)
+-- machine learning (R: 0.00; S: 0.31)
 </pre></div></div>
 </div>
-<p>Rough, very broad analysis: - One big keyword cluster about Coronavirus / Covid-19; - Chest X-ray as a sub-cluster; - Machine Learning as a separate small cluster.</p>
+<p>Rough, very broad analysis: - One big keyword cluster about Coronavirus / Covid-19, pandemic, online learning; - Machine Learning as a separate small cluster.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
@@ -794,11 +873,11 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;1x4889758 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
-        with 56026 stored elements in Compressed Sparse Row format&gt;
+&lt;1x6232511 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+        with 88256 stored elements in Compressed Sparse Row format&gt;
 </pre></div></div>
 </div>
-<p>50,000 articles with an explicit link to machine learning.</p>
+<p>88,000 articles with an explicit link to machine learning.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
@@ -813,11 +892,11 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;1x4889758 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
-        with 762 stored elements in Compressed Sparse Row format&gt;
+&lt;1x6232511 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+        with 11831 stored elements in Compressed Sparse Row format&gt;
 </pre></div></div>
 </div>
-<p>800 articles with an explicit link to covid-19.</p>
+<p>12,000 articles with an explicit link to covid-19.</p>
 </section>
 <section id="Authors-query">
 <h2>Authors query<a class="headerlink" href="#Authors-query" title="Permalink to this heading"></a></h2>
@@ -835,7 +914,7 @@ True
 </div>
 <p>We can build a new embedding on top of this modified corpus. We tell the vectorizer to be stupid: don’t preprocess, words are separated spaces.</p>
 <p>This will take a few minutes (you can save the embedding for later if you want).</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -849,6 +928,15 @@ True
     <span class="n">a_embedding</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\fabienma\anaconda3\lib\site-packages\sklearn\feature_extraction\text.py:528: UserWarning: The parameter &#39;token_pattern&#39; will not be used since &#39;tokenizer&#39; is not None&#39;
+  warnings.warn(
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
@@ -864,11 +952,11 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;4889758x2532137 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
-        with 15083911 stored elements in Compressed Sparse Row format&gt;
+&lt;6232511x3200857 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+        with 20237296 stored elements in Compressed Sparse Row format&gt;
 </pre></div></div>
 </div>
-<p>We now have about 2,500,000 authors to explore. Let’s reload gismo and try to play.</p>
+<p>We now have about 3,200,000 authors to explore. Let’s reload gismo and try to play.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
@@ -922,16 +1010,16 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;Robustness of Spectral Methods for Community Detection. By Ludovic Stephan, Laurent Massoulié (COLT, 2019)&#39;,
- &#39;Robustness of spectral methods for community detection. By Ludovic Stephan, Laurent Massoulié (CoRR, 2018)&#39;,
- &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (CoRR, 2020)&#39;,
- &#39;Spectral alignment of correlated Gaussian random matrices. By Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019)&#39;,
- &#39;Planting trees in graphs, and finding them back. By Laurent Massoulié, Ludovic Stephan, Don Towsley (COLT, 2019)&#39;,
- &#39;Brief announcement: adaptive content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (PODC, 2010)&#39;,
- &#39;Optimal content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011)&#39;,
- &#39;Optimal Content Placement for Peer-to-Peer Video-on-Demand Systems. By Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013)&#39;,
+[&#39;Asynchrony and Acceleration in Gossip Algorithms. By Mathieu Even, Hadrien Hendrikx, Laurent Massoulié (CoRR, 2020)&#39;,
+ &#39;Decentralized Optimization with Heterogeneous Delays: a Continuous-Time Approach. By Mathieu Even, Hadrien Hendrikx, Laurent Massoulié (CoRR, 2021)&#39;,
  &#39;Scalable Local Area Service Discovery. By Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007)&#39;,
- &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016)&#39;]
+ &#39;A spectral method for community detection in moderately-sparse degree-corrected stochastic block models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015)&#39;,
+ &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016)&#39;,
+ &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (ITCS, 2017)&#39;,
+ &#39;An Impossibility Result for Reconstruction in a Degree-Corrected Planted-Partition Model. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015)&#39;,
+ &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (CoRR, 2020)&#39;,
+ &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (COLT, 2020)&#39;,
+ &#39;Optimal Content Placement for Peer-to-Peer Video-on-Demand Systems. By Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013)&#39;]
 </pre></div></div>
 </div>
 <p>We see lots of duplicates. This is not surprising as many articles can published first as a research report, then as a conference paper, last as a journal article. Luckily, Gismo can cover for you.</p>
@@ -949,16 +1037,16 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;Robustness of Spectral Methods for Community Detection. By Ludovic Stephan, Laurent Massoulié (COLT, 2019)&#39;,
- &#39;Robustness of spectral methods for community detection. By Ludovic Stephan, Laurent Massoulié (CoRR, 2018)&#39;,
- &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (CoRR, 2020)&#39;,
- &#39;Spectral alignment of correlated Gaussian random matrices. By Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019)&#39;,
- &#39;Planting trees in graphs, and finding them back. By Laurent Massoulié, Ludovic Stephan, Don Towsley (COLT, 2019)&#39;,
- &#39;Brief announcement: adaptive content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (PODC, 2010)&#39;,
- &#39;Optimal content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011)&#39;,
- &#39;Optimal Content Placement for Peer-to-Peer Video-on-Demand Systems. By Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013)&#39;,
+[&#39;Asynchrony and Acceleration in Gossip Algorithms. By Mathieu Even, Hadrien Hendrikx, Laurent Massoulié (CoRR, 2020)&#39;,
+ &#39;Decentralized Optimization with Heterogeneous Delays: a Continuous-Time Approach. By Mathieu Even, Hadrien Hendrikx, Laurent Massoulié (CoRR, 2021)&#39;,
  &#39;Scalable Local Area Service Discovery. By Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007)&#39;,
- &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016)&#39;]
+ &#39;A spectral method for community detection in moderately-sparse degree-corrected stochastic block models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015)&#39;,
+ &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016)&#39;,
+ &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (ITCS, 2017)&#39;,
+ &#39;An Impossibility Result for Reconstruction in a Degree-Corrected Planted-Partition Model. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015)&#39;,
+ &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (CoRR, 2020)&#39;,
+ &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (COLT, 2020)&#39;,
+ &#39;Optimal Content Placement for Peer-to-Peer Video-on-Demand Systems. By Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013)&#39;]
 </pre></div></div>
 </div>
 <p>Hum, not working well. The reason here is query distortion. Query distortion is a gismo feature that modulates the clustering with the query. Sadly, when features are authors, the underlying graph has a very specific structure (highly sparse and redundant) that makes query distortion <em>too</em> effective. The solution is to desactivate it.</p>
@@ -977,16 +1065,16 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&#39;Robustness of Spectral Methods for Community Detection. By Ludovic Stephan, Laurent Massoulié (COLT, 2019)&#39;,
+[&#39;Asynchrony and Acceleration in Gossip Algorithms. By Mathieu Even, Hadrien Hendrikx, Laurent Massoulié (CoRR, 2020)&#39;,
  &#39;Scalable Local Area Service Discovery. By Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007)&#39;,
- &#39;Asynchronous Accelerated Proximal Stochastic Gradient for Strongly Convex Distributed Finite Sums. By Hadrien Hendrikx, Francis Bach, Laurent Massoulié (CoRR, 2019)&#39;,
+ &#39;A spectral method for community detection in moderately-sparse degree-corrected stochastic block models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015)&#39;,
  &#39;From tree matching to sparse graph alignment. By Luca Ganassali, Laurent Massoulié (CoRR, 2020)&#39;,
- &#39;Brief announcement: adaptive content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (PODC, 2010)&#39;,
+ &#39;Optimal Content Placement for Peer-to-Peer Video-on-Demand Systems. By Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013)&#39;,
+ &#39;Robustness of Spectral Methods for Community Detection. By Ludovic Stephan, Laurent Massoulié (COLT, 2019)&#39;,
+ &#39;Concentration of Non-Isotropic Random Tensors with Applications to Learning and Empirical Risk Minimization. By Mathieu Even, Laurent Massoulié (CoRR, 2021)&#39;,
+ &#39;Correlation Detection in Trees for Planted Graph Alignment. By Luca Ganassali, Laurent Massoulié, Marc Lelarge (ITCS, 2022)&#39;,
  &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016)&#39;,
- &#39;Adaptive matching for expert systems with uncertain task types. By Virag Shah, Lennart Gulikers, Laurent Massoulié, Milan Vojnovic (Allerton, 2017)&#39;,
- &#39;Spectral alignment of correlated Gaussian random matrices. By Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019)&#39;,
- &#39;Planting trees in graphs, and finding them back. By Laurent Massoulié, Ludovic Stephan, Don Towsley (COLT, 2019)&#39;,
- &#39;Optimal content placement for peer-to-peer video-on-demand systems. By Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011)&#39;]
+ &#39;Non-Backtracking Spectrum of Degree-Corrected Stochastic Block Models. By Lennart Gulikers, Marc Lelarge, Laurent Massoulié (ITCS, 2017)&#39;]
 </pre></div></div>
 </div>
 <p>Much better. No duplicate and more diversity in the results. Let’s observe the communities.</p>
@@ -1003,39 +1091,39 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.36. R: 0.09. S: 0.87.
-- F: 0.36. R: 0.08. S: 0.86.
--- F: 0.36. R: 0.06. S: 0.83.
---- F: 0.36. R: 0.03. S: 0.73.
----- F: 0.88. R: 0.01. S: 0.60.
------ F: 1.00. R: 0.01. S: 0.60.
------- Ludovic Stephan, Laurent Massoulié (COLT, 2019) (R: 0.00; S: 0.60)
------- Ludovic Stephan, Laurent Massoulié (CoRR, 2018) (R: 0.00; S: 0.60)
------ Laurent Massoulié, Ludovic Stephan, Don Towsley (COLT, 2019) (R: 0.00; S: 0.54)
+ F: 0.37. R: 0.07. S: 0.86.
+- F: 0.37. R: 0.07. S: 0.86.
+-- F: 0.81. R: 0.01. S: 0.63.
+--- F: 1.00. R: 0.01. S: 0.56.
+---- Mathieu Even, Hadrien Hendrikx, Laurent Massoulié (CoRR, 2020) (R: 0.00; S: 0.56)
+---- Mathieu Even, Hadrien Hendrikx, Laurent Massoulié (CoRR, 2021) (R: 0.00; S: 0.56)
+--- F: 1.00. R: 0.01. S: 0.63.
+---- Mathieu Even, Laurent Massoulié (CoRR, 2021) (R: 0.00; S: 0.63)
+---- Mathieu Even, Laurent Massoulié (COLT, 2021) (R: 0.00; S: 0.63)
+-- F: 0.37. R: 0.06. S: 0.81.
+--- F: 0.50. R: 0.04. S: 0.71.
+---- F: 1.00. R: 0.01. S: 0.59.
+----- Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015) (R: 0.00; S: 0.59)
+----- Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016) (R: 0.00; S: 0.59)
+----- Lennart Gulikers, Marc Lelarge, Laurent Massoulié (ITCS, 2017) (R: 0.00; S: 0.59)
+----- Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015) (R: 0.00; S: 0.59)
+---- F: 0.84. R: 0.03. S: 0.64.
+----- F: 1.00. R: 0.01. S: 0.64.
+------ Luca Ganassali, Laurent Massoulié (CoRR, 2020) (R: 0.00; S: 0.64)
+------ Luca Ganassali, Laurent Massoulié (COLT, 2020) (R: 0.00; S: 0.64)
+----- F: 1.00. R: 0.02. S: 0.60.
+------ Luca Ganassali, Laurent Massoulié, Marc Lelarge (ITCS, 2022) (R: 0.00; S: 0.60)
+------ Luca Ganassali, Laurent Massoulié, Marc Lelarge (CoRR, 2021) (R: 0.00; S: 0.60)
+------ Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019) (R: 0.00; S: 0.60)
+------ Luca Ganassali, Laurent Massoulié, Marc Lelarge (COLT, 2021) (R: 0.00; S: 0.60)
+------ Luca Ganassali, Laurent Massoulié, Marc Lelarge (CoRR, 2021) (R: 0.00; S: 0.60)
+--- F: 0.37. R: 0.01. S: 0.70.
 ---- F: 1.00. R: 0.01. S: 0.61.
------ Bo Tan 0002, Laurent Massoulié (PODC, 2010) (R: 0.00; S: 0.61)
------ Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011) (R: 0.00; S: 0.61)
 ----- Bo Tan 0002, Laurent Massoulié (IEEE/ACM Trans. Netw., 2013) (R: 0.00; S: 0.61)
---- F: 0.41. R: 0.03. S: 0.69.
----- F: 0.86. R: 0.01. S: 0.59.
------ Luca Ganassali, Laurent Massoulié (CoRR, 2020) (R: 0.00; S: 0.58)
------ Luca Ganassali, Marc Lelarge, Laurent Massoulié (CoRR, 2019) (R: 0.00; S: 0.56)
----- F: 0.61. R: 0.03. S: 0.60.
------ F: 1.00. R: 0.02. S: 0.59.
------- Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2016) (R: 0.00; S: 0.59)
------- Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015) (R: 0.00; S: 0.59)
------- Lennart Gulikers, Marc Lelarge, Laurent Massoulié (CoRR, 2015) (R: 0.00; S: 0.59)
------- Lennart Gulikers, Marc Lelarge, Laurent Massoulié (ITCS, 2017) (R: 0.00; S: 0.59)
------ F: 1.00. R: 0.01. S: 0.47.
------- Virag Shah, Lennart Gulikers, Laurent Massoulié, Milan Vojnovic (Allerton, 2017) (R: 0.00; S: 0.47)
------- Virag Shah, Lennart Gulikers, Laurent Massoulié, Milan Vojnovic (CoRR, 2017) (R: 0.00; S: 0.47)
--- F: 1.00. R: 0.02. S: 0.55.
---- Hadrien Hendrikx, Francis Bach, Laurent Massoulié (CoRR, 2019) (R: 0.00; S: 0.55)
---- Hadrien Hendrikx, Francis Bach, Laurent Massoulié (CoRR, 2019) (R: 0.00; S: 0.55)
---- Hadrien Hendrikx, Francis Bach, Laurent Massoulié (AISTATS, 2019) (R: 0.00; S: 0.55)
---- Hadrien Hendrikx, Laurent Massoulié, Francis Bach (CoRR, 2018) (R: 0.00; S: 0.55)
---- Hadrien Hendrikx, Francis Bach, Laurent Massoulié (NeurIPS, 2019) (R: 0.00; S: 0.55)
-- Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007) (R: 0.00; S: 0.47)
+----- Bo Tan 0002, Laurent Massoulié (INFOCOM, 2011) (R: 0.00; S: 0.61)
+----- Bo Tan 0002, Laurent Massoulié (PODC, 2010) (R: 0.00; S: 0.61)
+---- Ludovic Stephan, Laurent Massoulié (COLT, 2019) (R: 0.00; S: 0.61)
+- Richard Black, Heimir Sverrisson, Laurent Massoulié (ICC, 2007) (R: 0.00; S: 0.46)
 </pre></div></div>
 </div>
 <p>OK! We see that the articles are organized by writing commmunities. Also note how Gismo managed to organize a hierachical grouping of the communities.</p>
@@ -1057,23 +1145,24 @@ True
 [&#39;Laurent Massoulié&#39;,
  &#39;Marc Lelarge&#39;,
  &#39;Stratis Ioannidis&#39;,
- &#39;Nidhi Hegde&#39;,
+ &#39;Hadrien Hendrikx&#39;,
+ &#39;Nidhi Hegde 0001&#39;,
  &#39;Peter B. Key&#39;,
+ &#39;Francis R. Bach&#39;,
  &#39;Anne-Marie Kermarrec&#39;,
  &#39;Ayalvadi J. Ganesh&#39;,
+ &#39;Luca Ganassali&#39;,
+ &#39;Mathieu Even&#39;,
  &#39;Lennart Gulikers&#39;,
- &#39;Hadrien Hendrikx&#39;,
- &#39;Francis Bach&#39;,
+ &#39;Milan Vojnovic&#39;,
  &#39;Dan-Cristian Tomozei&#39;,
  &#39;Amin Karbasi&#39;,
- &#39;Milan Vojnovic&#39;,
  &#39;Augustin Chaintreau&#39;,
  &#39;Mathieu Leconte&#39;,
  &#39;Bo Tan 0002&#39;,
  &#39;James Roberts&#39;,
- &#39;Ludovic Stephan&#39;,
- &#39;Kuang Xu&#39;,
- &#39;Fabio Picconi&#39;]
+ &#39;Rémi Varloot&#39;,
+ &#39;Kuang Xu&#39;]
 </pre></div></div>
 </div>
 <p>We see many authors that were not present in the articles listed above. This is an important observation: central articles (with respect to a query) are not necessarily written by central authors!</p>
@@ -1091,37 +1180,43 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.00. R: 0.21. S: 0.52.
-- F: 0.00. R: 0.21. S: 0.52.
--- F: 0.01. R: 0.21. S: 0.52.
---- F: 0.02. R: 0.20. S: 0.51.
----- F: 0.03. R: 0.17. S: 0.50.
------ F: 0.04. R: 0.17. S: 0.49.
------- F: 0.08. R: 0.16. S: 0.49.
-------- F: 0.13. R: 0.15. S: 0.50.
--------- F: 0.15. R: 0.14. S: 0.49.
+ F: 0.00. R: 0.21. S: 0.54.
+- F: 0.00. R: 0.21. S: 0.54.
+-- F: 0.01. R: 0.21. S: 0.54.
+--- F: 0.01. R: 0.20. S: 0.54.
+---- F: 0.01. R: 0.20. S: 0.55.
+----- F: 0.02. R: 0.18. S: 0.54.
+------ F: 0.03. R: 0.17. S: 0.52.
+------- F: 0.08. R: 0.13. S: 0.42.
+-------- F: 0.15. R: 0.12. S: 0.41.
 --------- Laurent Massoulié (R: 0.10; S: 1.00)
---------- Nidhi Hegde (R: 0.01; S: 0.18)
---------- Peter B. Key (R: 0.01; S: 0.16)
---------- Ayalvadi J. Ganesh (R: 0.01; S: 0.16)
+--------- Marc Lelarge (R: 0.01; S: 0.17)
+--------- Luca Ganassali (R: 0.01; S: 0.19)
+-------- F: 0.12. R: 0.01. S: 0.22.
 --------- Lennart Gulikers (R: 0.00; S: 0.22)
---------- Hadrien Hendrikx (R: 0.00; S: 0.18)
---------- Francis Bach (R: 0.00; S: 0.06)
--------- Marc Lelarge (R: 0.01; S: 0.15)
-------- Milan Vojnovic (R: 0.00; S: 0.06)
------- Anne-Marie Kermarrec (R: 0.01; S: 0.08)
------ Mathieu Leconte (R: 0.00; S: 0.10)
----- F: 0.03. R: 0.02. S: 0.14.
------ F: 0.09. R: 0.02. S: 0.14.
------- Stratis Ioannidis (R: 0.01; S: 0.15)
------- Augustin Chaintreau (R: 0.00; S: 0.06)
------ Amin Karbasi (R: 0.00; S: 0.05)
+--------- Milan Vojnovic (R: 0.00; S: 0.06)
+------- F: 0.10. R: 0.02. S: 0.27.
+-------- F: 0.35. R: 0.01. S: 0.27.
+--------- Hadrien Hendrikx (R: 0.01; S: 0.26)
+--------- Mathieu Even (R: 0.00; S: 0.20)
+-------- Francis R. Bach (R: 0.01; S: 0.07)
+------- F: 0.08. R: 0.02. S: 0.18.
+-------- F: 0.12. R: 0.01. S: 0.17.
+--------- Peter B. Key (R: 0.01; S: 0.12)
+--------- Ayalvadi J. Ganesh (R: 0.01; S: 0.14)
+-------- Anne-Marie Kermarrec (R: 0.01; S: 0.07)
+------ Nidhi Hegde 0001 (R: 0.01; S: 0.16)
+------ Mathieu Leconte (R: 0.00; S: 0.09)
+----- F: 0.02. R: 0.02. S: 0.11.
+------ F: 0.07. R: 0.01. S: 0.11.
+------- Stratis Ioannidis (R: 0.01; S: 0.11)
+------- Augustin Chaintreau (R: 0.00; S: 0.05)
+------ Amin Karbasi (R: 0.00; S: 0.04)
 ---- Dan-Cristian Tomozei (R: 0.00; S: 0.08)
----- Ludovic Stephan (R: 0.00; S: 0.16)
---- Bo Tan 0002 (R: 0.00; S: 0.13)
---- Fabio Picconi (R: 0.00; S: 0.08)
--- James Roberts (R: 0.00; S: 0.06)
-- Kuang Xu (R: 0.00; S: 0.04)
+---- Bo Tan 0002 (R: 0.00; S: 0.11)
+--- Rémi Varloot (R: 0.00; S: 0.09)
+-- James Roberts (R: 0.00; S: 0.05)
+- Kuang Xu (R: 0.00; S: 0.03)
 </pre></div></div>
 </div>
 </section>
@@ -1160,15 +1255,15 @@ True
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 [&#39;Integrated Admission Control for Streaming and Elastic Traffic. By Nabil Benameur, Slim Ben Fredj, Frank Delcoigne, Sara Oueslati-Boulahia, James W. Roberts (QofIS, 2001)&#39;,
- &#39;An In-Camera Data Stream Processing System for Defect Detection in Web Inspection Tasks. By S. Hossain Hajimowlana, Roberto Muscedere, Graham A. Jullien, James W. Roberts (Real-Time Imaging, 1999)&#39;,
- &#34;Modifications of Thomae&#39;s Function and Differentiability. By Kevin Beanland, James W. Roberts, Craig Stevenson (The American Mathematical Monthly, 2009)&#34;,
+ &#39;An In-Camera Data Stream Processing System for Defect Detection in Web Inspection Tasks. By S. Hossain Hajimowlana, Roberto Muscedere, Graham A. Jullien, James W. Roberts (Real Time Imaging, 1999)&#39;,
+ &#34;Modifications of Thomae&#39;s Function and Differentiability. By Kevin Beanland, James W. Roberts, Craig Stevenson (Am. Math. Mon., 2009)&#34;,
  &#39;A Traffic Control Framework for High Speed Data Transmission. By James W. Roberts, Brahim Bensaou, Y. Canetti (Modelling and Evaluation of ATM Networks, 1993)&#39;,
  &#39;Statistical bandwidth sharing: a study of congestion at flow level. By Slim Ben Fredj, Thomas Bonald, Alexandre Proutière, G. Régnié, James W. Roberts (SIGCOMM, 2001)&#39;,
- &#39;Swing: Traffic capacity of a simple WDM ring network. By Thomas Bonald, Sara Oueslati, James W. Roberts, Charlotte Roger (International Teletraffic Congress, 2009)&#39;,
+ &#39;Swing: Traffic capacity of a simple WDM ring network. By Thomas Bonald, Sara Oueslati, James W. Roberts, Charlotte Roger (ITC, 2009)&#39;,
  &#39;Impact of &#34;Trunk Reservation&#34; on Elastic Flow Routing. By Sara Oueslati-Boulahia, James W. Roberts (NETWORKING, 2000)&#39;,
- &#39;Traffic Control in the B-ISDN. By James W. Roberts (Computer Networks and ISDN Systems, 1993)&#39;,
- &#39;Burstiness Bounds Based Muliplexing Schemes for VBR Video Connections in the B-ISDN. By Maher Hamdi, James W. Roberts (International Zurich Seminar on Digital Communications, 1996)&#39;,
- &#39;Multi-resource fairness: Objectives, algorithms and performance. By Thomas Bonald, James W. Roberts (CoRR, 2014)&#39;]
+ &#39;Comment on &#34;Datacenter Congestion Control: Identifying what is essential and making it practical&#34; by Aisha Mushtaq, et al, CCR, July 2019. By James W. Roberts (Comput. Commun. Rev., 2020)&#39;,
+ &#39;QoS Guarantees for Shaped Bit Rate Video Connections in Broadband Networks. By Maher Hamdi, James W. Roberts (MMNET, 1995)&#39;,
+ &#39;Multi-Resource Fairness: Objectives, Algorithms and Performance. By Thomas Bonald, James W. Roberts (SIGMETRICS, 2015)&#39;]
 </pre></div></div>
 </div>
 <p>Who are the associated authors?</p>
@@ -1212,23 +1307,23 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.01. R: 0.23. S: 0.55.
-- F: 0.01. R: 0.22. S: 0.54.
--- F: 0.04. R: 0.20. S: 0.53.
---- F: 0.16. R: 0.19. S: 0.53.
----- F: 0.25. R: 0.17. S: 0.91.
------ James W. Roberts (R: 0.12; S: 1.00)
------ Thomas Bonald (R: 0.05; S: 0.28)
----- F: 0.57. R: 0.02. S: 0.34.
------ Sara Oueslati-Boulahia (R: 0.01; S: 0.28)
------ Slim Ben Fredj (R: 0.01; S: 0.32)
----- Sara Oueslati (R: 0.01; S: 0.16)
---- Alexandre Proutière (R: 0.01; S: 0.05)
--- Maher Hamdi (R: 0.01; S: 0.13)
--- Ali Ibrahim (R: 0.01; S: 0.07)
+ F: 0.01. R: 0.24. S: 0.51.
+- F: 0.01. R: 0.23. S: 0.51.
+-- F: 0.04. R: 0.21. S: 0.50.
+--- F: 0.15. R: 0.20. S: 0.50.
+---- F: 0.23. R: 0.18. S: 0.90.
+----- James W. Roberts (R: 0.14; S: 1.00)
+----- Thomas Bonald (R: 0.05; S: 0.25)
+---- F: 0.57. R: 0.01. S: 0.32.
+----- Sara Oueslati-Boulahia (R: 0.01; S: 0.27)
+----- Slim Ben Fredj (R: 0.01; S: 0.30)
+---- Sara Oueslati (R: 0.01; S: 0.15)
+--- Alexandre Proutière (R: 0.01; S: 0.04)
+-- Maher Hamdi (R: 0.01; S: 0.12)
+-- Ali Ibrahim (R: 0.01; S: 0.06)
 - F: 0.01. R: 0.01. S: 0.05.
 -- Jorma T. Virtamo (R: 0.01; S: 0.04)
--- Jussi Kangasharju (R: 0.01; S: 0.03)
+-- Jussi Kangasharju (R: 0.00; S: 0.03)
 </pre></div></div>
 </div>
 </section>
@@ -1268,15 +1363,15 @@ True
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 [&#39;Integrated Admission Control for Streaming and Elastic Traffic. By Nabil Benameur, Slim Ben Fredj, Frank Delcoigne, Sara Oueslati-Boulahia, James W. Roberts (QofIS, 2001)&#39;,
- &#39;An In-Camera Data Stream Processing System for Defect Detection in Web Inspection Tasks. By S. Hossain Hajimowlana, Roberto Muscedere, Graham A. Jullien, James W. Roberts (Real-Time Imaging, 1999)&#39;,
- &#34;Modifications of Thomae&#39;s Function and Differentiability. By Kevin Beanland, James W. Roberts, Craig Stevenson (The American Mathematical Monthly, 2009)&#34;,
+ &#39;Defect detection in web inspection using fuzzy fusion of texture features. By S. Hossain Hajimowlana, Roberto Muscedere, Graham A. Jullien, James W. Roberts (ISCAS, 2000)&#39;,
+ &#34;Modifications of Thomae&#39;s Function and Differentiability. By Kevin Beanland, James W. Roberts, Craig Stevenson (Am. Math. Mon., 2009)&#34;,
  &#39;A Traffic Control Framework for High Speed Data Transmission. By James W. Roberts, Brahim Bensaou, Y. Canetti (Modelling and Evaluation of ATM Networks, 1993)&#39;,
  &#39;Statistical bandwidth sharing: a study of congestion at flow level. By Slim Ben Fredj, Thomas Bonald, Alexandre Proutière, G. Régnié, James W. Roberts (SIGCOMM, 2001)&#39;,
- &#39;Swing: Traffic capacity of a simple WDM ring network. By Thomas Bonald, Sara Oueslati, James W. Roberts, Charlotte Roger (International Teletraffic Congress, 2009)&#39;,
+ &#39;Swing: Traffic capacity of a simple WDM ring network. By Thomas Bonald, Sara Oueslati, James W. Roberts, Charlotte Roger (ITC, 2009)&#39;,
  &#39;Impact of &#34;Trunk Reservation&#34; on Elastic Flow Routing. By Sara Oueslati-Boulahia, James W. Roberts (NETWORKING, 2000)&#39;,
- &#39;Traffic Control in the B-ISDN. By James W. Roberts (Computer Networks and ISDN Systems, 1993)&#39;,
+ &#39;Internet traffic, QoS, and pricing. By James W. Roberts (Proc. IEEE, 2004)&#39;,
  &#39;QoS Guarantees for Shaped Bit Rate Video Connections in Broadband Networks. By Maher Hamdi, James W. Roberts (MMNET, 1995)&#39;,
- &#39;Internet and the Erlang formula. By Thomas Bonald, James W. Roberts (Computer Communication Review, 2012)&#39;]
+ &#39;Enhanced Cluster Computing Performance Through Proportional Fairness. By Thomas Bonald, James W. Roberts (CoRR, 2014)&#39;]
 </pre></div></div>
 </div>
 <p>Note that we get here only articles by Roberts, yet the articles returned have sightly changed.</p>
@@ -1298,19 +1393,18 @@ True
 [&#39;James W. Roberts&#39;,
  &#39;Laurent Massoulié&#39;,
  &#39;Thomas Bonald&#39;,
- &#39;Nidhi Hegde&#39;,
- &#39;Maher Hamdi&#39;,
  &#39;Marc Lelarge&#39;,
+ &#39;Maher Hamdi&#39;,
+ &#39;Nidhi Hegde 0001&#39;,
  &#39;Stratis Ioannidis&#39;,
  &#39;Alexandre Proutière&#39;,
  &#39;Sara Oueslati-Boulahia&#39;,
+ &#39;Hadrien Hendrikx&#39;,
  &#39;Ali Ibrahim&#39;,
  &#39;Peter B. Key&#39;,
+ &#39;Francis R. Bach&#39;,
  &#39;Jorma T. Virtamo&#39;,
- &#39;Sara Oueslati&#39;,
- &#39;Anne-Marie Kermarrec&#39;,
- &#39;Ayalvadi J. Ganesh&#39;,
- &#39;Slim Ben Fredj&#39;]
+ &#39;Sara Oueslati&#39;]
 </pre></div></div>
 </div>
 <p>We see a mix of both co-authors. How are they organized?</p>
@@ -1327,27 +1421,27 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.01. R: 0.20. S: 0.54.
-- F: 0.01. R: 0.20. S: 0.54.
--- F: 0.05. R: 0.19. S: 0.53.
---- F: 0.25. R: 0.09. S: 0.84.
----- James W. Roberts (R: 0.06; S: 0.91)
----- Thomas Bonald (R: 0.03; S: 0.26)
---- F: 0.12. R: 0.08. S: 0.23.
----- Laurent Massoulié (R: 0.05; S: 0.40)
----- Nidhi Hegde (R: 0.01; S: 0.10)
----- Marc Lelarge (R: 0.01; S: 0.06)
----- Stratis Ioannidis (R: 0.01; S: 0.06)
----- Alexandre Proutière (R: 0.01; S: 0.05)
----- Peter B. Key (R: 0.00; S: 0.07)
----- Ayalvadi J. Ganesh (R: 0.00; S: 0.06)
---- F: 0.57. R: 0.01. S: 0.31.
----- Sara Oueslati-Boulahia (R: 0.00; S: 0.26)
----- Slim Ben Fredj (R: 0.00; S: 0.29)
---- Sara Oueslati (R: 0.00; S: 0.15)
---- Anne-Marie Kermarrec (R: 0.00; S: 0.03)
--- Maher Hamdi (R: 0.01; S: 0.12)
--- Ali Ibrahim (R: 0.00; S: 0.07)
+ F: 0.01. R: 0.20. S: 0.55.
+- F: 0.02. R: 0.19. S: 0.55.
+-- F: 0.05. R: 0.11. S: 0.50.
+--- F: 0.23. R: 0.10. S: 0.50.
+---- James W. Roberts (R: 0.07; S: 0.92)
+---- Thomas Bonald (R: 0.03; S: 0.24)
+---- Sara Oueslati-Boulahia (R: 0.00; S: 0.25)
+--- Sara Oueslati (R: 0.00; S: 0.14)
+-- F: 0.14. R: 0.05. S: 0.21.
+--- F: 0.24. R: 0.05. S: 0.21.
+---- Laurent Massoulié (R: 0.05; S: 0.39)
+---- Hadrien Hendrikx (R: 0.00; S: 0.10)
+--- Francis R. Bach (R: 0.00; S: 0.03)
+-- Marc Lelarge (R: 0.01; S: 0.07)
+-- Maher Hamdi (R: 0.01; S: 0.11)
+-- F: 0.10. R: 0.01. S: 0.09.
+--- Nidhi Hegde 0001 (R: 0.01; S: 0.08)
+--- Alexandre Proutière (R: 0.00; S: 0.04)
+-- Stratis Ioannidis (R: 0.00; S: 0.04)
+-- Ali Ibrahim (R: 0.00; S: 0.06)
+-- Peter B. Key (R: 0.00; S: 0.05)
 - Jorma T. Virtamo (R: 0.00; S: 0.04)
 </pre></div></div>
 </div>
@@ -1427,7 +1521,7 @@ True
  &#39;distributed&#39;,
  &#39;robust&#39;,
  &#39;sensor&#39;,
- &#39;adaptive&#39;]
+ &#39;stabilizing&#39;]
 </pre></div></div>
 </div>
 <p>How are keywords structured?</p>
@@ -1444,38 +1538,39 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.03. R: 0.02. S: 0.80.
-- F: 0.50. R: 0.02. S: 0.80.
--- F: 0.65. R: 0.02. S: 0.80.
---- F: 0.70. R: 0.02. S: 0.81.
----- F: 0.77. R: 0.02. S: 0.81.
------ F: 0.91. R: 0.01. S: 0.81.
------- stabilization (R: 0.00; S: 0.81)
------- self (R: 0.00; S: 0.75)
------- self stabilization (R: 0.00; S: 0.82)
------- stabilize (R: 0.00; S: 0.72)
------- self stabilize (R: 0.00; S: 0.67)
------ F: 0.86. R: 0.00. S: 0.75.
------- distribute (R: 0.00; S: 0.68)
------- distributed (R: 0.00; S: 0.76)
------ F: 0.92. R: 0.00. S: 0.68.
------- sensor (R: 0.00; S: 0.67)
------- wireless (R: 0.00; S: 0.65)
------ fault (R: 0.00; S: 0.75)
----- adaptive (R: 0.00; S: 0.57)
---- F: 0.82. R: 0.00. S: 0.47.
----- F: 0.82. R: 0.00. S: 0.47.
------ networks (R: 0.00; S: 0.75)
------ byzantine (R: 0.00; S: 0.46)
------ optimal (R: 0.00; S: 0.65)
------ mobile (R: 0.00; S: 0.56)
----- robot (R: 0.00; S: 0.44)
--- robust (R: 0.00; S: 0.46)
-- F: 0.60. R: 0.00. S: 0.13.
--- F: 0.68. R: 0.00. S: 0.10.
+ F: 0.35. R: 0.02. S: 0.80.
+- F: 0.61. R: 0.02. S: 0.80.
+-- F: 0.76. R: 0.02. S: 0.81.
+--- F: 0.82. R: 0.01. S: 0.81.
+---- F: 0.92. R: 0.01. S: 0.81.
+----- stabilization (R: 0.00; S: 0.81)
+----- self stabilization (R: 0.00; S: 0.81)
+----- stabilizing (R: 0.00; S: 0.75)
+---- F: 0.94. R: 0.00. S: 0.68.
+----- sensor (R: 0.00; S: 0.68)
+----- wireless (R: 0.00; S: 0.66)
+---- fault (R: 0.00; S: 0.76)
+--- F: 0.85. R: 0.01. S: 0.67.
+---- F: 0.97. R: 0.01. S: 0.67.
+----- self (R: 0.00; S: 0.76)
+----- stabilize (R: 0.00; S: 0.69)
+----- self stabilize (R: 0.00; S: 0.66)
+---- distributed (R: 0.00; S: 0.70)
+-- F: 0.79. R: 0.00. S: 0.46.
+--- distribute (R: 0.00; S: 0.67)
+--- robot (R: 0.00; S: 0.41)
+--- byzantine (R: 0.00; S: 0.44)
+--- optimal (R: 0.00; S: 0.64)
+--- mobile (R: 0.00; S: 0.53)
+- F: 0.54. R: 0.00. S: 0.36.
+-- F: 0.65. R: 0.00. S: 0.44.
+--- F: 0.68. R: 0.00. S: 0.38.
+---- robust (R: 0.00; S: 0.44)
+---- stability (R: 0.00; S: 0.32)
+--- adaptive (R: 0.00; S: 0.51)
+-- F: 0.54. R: 0.00. S: 0.15.
 --- nonlinear (R: 0.00; S: 0.08)
---- delay (R: 0.00; S: 0.09)
--- linear (R: 0.00; S: 0.26)
+--- linear (R: 0.00; S: 0.25)
 </pre></div></div>
 </div>
 <p>Who are the associated researchers?</p>
@@ -1502,7 +1597,7 @@ True
  &#39;Toshimitsu Masuzawa&#39;,
  &#39;Stefan Schmid 0001&#39;,
  &#39;Swan Dubois&#39;,
- &#39;Bertrand Ducourthial&#39;]
+ &#39;Laurence Pilard&#39;]
 </pre></div></div>
 </div>
 <p>How are they structured?</p>
@@ -1519,22 +1614,23 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.79. R: 0.05. S: 0.84.
-- F: 0.88. R: 0.05. S: 0.84.
--- F: 0.93. R: 0.04. S: 0.83.
---- F: 0.95. R: 0.03. S: 0.83.
----- Ted Herman (R: 0.01; S: 0.81)
----- Sébastien Tixeuil (R: 0.01; S: 0.83)
----- Sukumar Ghosh (R: 0.01; S: 0.80)
----- Swan Dubois (R: 0.00; S: 0.79)
---- F: 0.96. R: 0.02. S: 0.78.
+ F: 0.78. R: 0.05. S: 0.83.
+- F: 0.93. R: 0.05. S: 0.83.
+-- F: 0.98. R: 0.01. S: 0.82.
+--- Ted Herman (R: 0.01; S: 0.82)
+--- George Varghese (R: 0.00; S: 0.81)
+-- F: 0.96. R: 0.02. S: 0.80.
+--- F: 0.97. R: 0.01. S: 0.80.
 ---- Shlomi Dolev (R: 0.01; S: 0.78)
----- Shay Kutten (R: 0.00; S: 0.83)
----- Toshimitsu Masuzawa (R: 0.00; S: 0.72)
--- F: 0.98. R: 0.01. S: 0.80.
---- George Varghese (R: 0.00; S: 0.82)
---- Bertrand Ducourthial (R: 0.00; S: 0.79)
-- Stefan Schmid 0001 (R: 0.00; S: 0.72)
+---- Toshimitsu Masuzawa (R: 0.00; S: 0.74)
+---- Laurence Pilard (R: 0.00; S: 0.80)
+--- Shay Kutten (R: 0.00; S: 0.82)
+-- F: 0.94. R: 0.02. S: 0.82.
+--- F: 0.98. R: 0.01. S: 0.81.
+---- Sébastien Tixeuil (R: 0.01; S: 0.82)
+---- Sukumar Ghosh (R: 0.01; S: 0.80)
+--- Swan Dubois (R: 0.00; S: 0.81)
+- Stefan Schmid 0001 (R: 0.00; S: 0.67)
 </pre></div></div>
 </div>
 <p>We can also query researchers. Just use underscores in the query and add <code class="docutils literal notranslate"><span class="pre">y=False</span></code> to indicate that the input is <em>documents</em>.</p>
@@ -1571,15 +1667,15 @@ True
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 [&#39;p2p&#39;,
+ &#39;grid&#39;,
  &#39;byzantine&#39;,
  &#39;stabilization&#39;,
- &#39;stabilize&#39;,
- &#39;p2p network&#39;,
+ &#39;reloaded&#39;,
  &#39;refresh&#39;,
- &#39;reload&#39;,
  &#39;self&#39;,
- &#39;self stabilize&#39;,
- &#39;self stabilization&#39;]
+ &#39;self stabilization&#39;,
+ &#39;p2p network&#39;,
+ &#39;live streaming&#39;]
 </pre></div></div>
 </div>
 <p>Using covering can yield other keywords of interest.</p>
@@ -1598,15 +1694,15 @@ True
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 [&#39;p2p&#39;,
- &#39;byzantine&#39;,
  &#39;grid&#39;,
+ &#39;byzantine&#39;,
  &#39;preference&#39;,
  &#39;pagerank&#39;,
+ &#39;fun&#39;,
+ &#39;reloaded&#39;,
  &#39;p2p network&#39;,
- &#39;refresh&#39;,
- &#39;streaming&#39;,
- &#39;acyclic&#39;,
- &#39;stabilization&#39;]
+ &#39;old&#39;,
+ &#39;acyclic&#39;]
 </pre></div></div>
 </div>
 <p>How are keywords structured?</p>
@@ -1623,35 +1719,31 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.06. R: 0.23. S: 0.64.
-- F: 0.62. R: 0.13. S: 0.27.
--- F: 0.68. R: 0.12. S: 0.27.
---- F: 0.69. R: 0.11. S: 0.27.
----- p2p (R: 0.02; S: 0.32)
----- p2p network (R: 0.01; S: 0.28)
----- F: 0.84. R: 0.06. S: 0.25.
------ refresh (R: 0.01; S: 0.24)
------ reload (R: 0.01; S: 0.24)
------ old (R: 0.01; S: 0.23)
------ live streaming (R: 0.01; S: 0.25)
------ preference base (R: 0.01; S: 0.23)
------ live (R: 0.01; S: 0.32)
----- streaming (R: 0.01; S: 0.31)
----- acyclic (R: 0.01; S: 0.27)
---- pagerank (R: 0.01; S: 0.20)
--- preference (R: 0.01; S: 0.19)
-- F: 0.39. R: 0.10. S: 0.61.
--- F: 0.82. R: 0.09. S: 0.61.
---- F: 0.84. R: 0.03. S: 0.54.
----- byzantine (R: 0.02; S: 0.54)
----- asynchronous (R: 0.01; S: 0.55)
---- F: 0.91. R: 0.06. S: 0.60.
----- stabilization (R: 0.02; S: 0.58)
----- stabilize (R: 0.01; S: 0.61)
----- self (R: 0.01; S: 0.62)
----- self stabilize (R: 0.01; S: 0.60)
----- self stabilization (R: 0.01; S: 0.58)
--- grid (R: 0.01; S: 0.41)
+ F: 0.39. R: 0.21. S: 0.67.
+- F: 0.72. R: 0.09. S: 0.31.
+-- F: 0.72. R: 0.06. S: 0.31.
+--- p2p (R: 0.02; S: 0.34)
+--- refresh (R: 0.01; S: 0.27)
+--- live streaming (R: 0.01; S: 0.29)
+--- live (R: 0.01; S: 0.33)
+--- streaming (R: 0.01; S: 0.32)
+-- reloaded (R: 0.01; S: 0.29)
+-- p2p network (R: 0.01; S: 0.29)
+-- old (R: 0.01; S: 0.27)
+-- acyclic (R: 0.01; S: 0.32)
+- grid (R: 0.02; S: 0.47)
+- F: 0.66. R: 0.09. S: 0.62.
+-- F: 0.79. R: 0.08. S: 0.62.
+--- byzantine (R: 0.01; S: 0.56)
+--- stabilization (R: 0.01; S: 0.58)
+--- self (R: 0.01; S: 0.62)
+--- self stabilization (R: 0.01; S: 0.59)
+--- stabilize (R: 0.01; S: 0.60)
+--- self stabilize (R: 0.01; S: 0.60)
+--- asynchronous (R: 0.01; S: 0.56)
+-- fun (R: 0.01; S: 0.48)
+- preference (R: 0.01; S: 0.24)
+- pagerank (R: 0.01; S: 0.24)
 </pre></div></div>
 </div>
 <p>Who are the associated researchers?</p>
@@ -1673,11 +1765,11 @@ True
  &#39;Fabien Mathieu&#39;,
  &#39;Shlomi Dolev&#39;,
  &#39;Toshimitsu Masuzawa&#39;,
- &#39;Nitin H. Vaidya&#39;,
- &#39;Edmond Bianco&#39;,
- &#39;Stéphane Devismes&#39;,
- &#39;Franck Petit&#39;,
  &#39;Michel Raynal&#39;,
+ &#39;Nitin H. Vaidya&#39;,
+ &#39;Stéphane Devismes&#39;,
+ &#39;Fukuhito Ooshita&#39;,
+ &#39;Edmond Bianco&#39;,
  &#39;Ted Herman&#39;]
 </pre></div></div>
 </div>
@@ -1695,20 +1787,21 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
- F: 0.00. R: 0.01. S: 0.63.
-- F: 0.08. R: 0.00. S: 0.63.
--- F: 0.71. R: 0.00. S: 0.52.
---- Sébastien Tixeuil (R: 0.00; S: 0.56)
---- F: 0.93. R: 0.00. S: 0.46.
----- Shlomi Dolev (R: 0.00; S: 0.46)
----- Toshimitsu Masuzawa (R: 0.00; S: 0.48)
----- Stéphane Devismes (R: 0.00; S: 0.44)
----- Franck Petit (R: 0.00; S: 0.44)
----- Ted Herman (R: 0.00; S: 0.42)
---- F: 0.78. R: 0.00. S: 0.34.
----- Nitin H. Vaidya (R: 0.00; S: 0.30)
+ F: 0.00. R: 0.01. S: 0.66.
+- F: 0.12. R: 0.00. S: 0.66.
+-- F: 0.36. R: 0.00. S: 0.52.
+--- F: 0.80. R: 0.00. S: 0.50.
+---- F: 0.80. R: 0.00. S: 0.52.
+----- Sébastien Tixeuil (R: 0.00; S: 0.53)
+----- Shlomi Dolev (R: 0.00; S: 0.42)
+----- Toshimitsu Masuzawa (R: 0.00; S: 0.47)
+----- Stéphane Devismes (R: 0.00; S: 0.41)
+----- Fukuhito Ooshita (R: 0.00; S: 0.50)
+---- Ted Herman (R: 0.00; S: 0.39)
+--- F: 0.82. R: 0.00. S: 0.31.
 ---- Michel Raynal (R: 0.00; S: 0.37)
--- Fabien Mathieu (R: 0.00; S: 0.69)
+---- Nitin H. Vaidya (R: 0.00; S: 0.26)
+-- Fabien Mathieu (R: 0.00; S: 0.73)
 - Edmond Bianco (R: 0.00; S: 0.04)
 </pre></div></div>
 </div>
