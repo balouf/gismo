@@ -681,11 +681,11 @@ Found candidate: (&#39;Rémi_Varloot&#39;, 68.42105263157895)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer_author</span><span class="p">)</span>
     <span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
-    <span class="n">embedding</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">embedding</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1071,16 +1071,16 @@ True
 </div>
 <p>We can save this for later use.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;reduced_lincs_xgismo&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">erase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;reduced_lincs_xgismo&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>The file should be about 53 Mb, whereas a full-size DBLP XGismo is about 4 Gb. What about speed and quality of results?</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Anne_Bouillard&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1088,7 +1088,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1097,7 +1097,7 @@ True
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
@@ -1105,7 +1105,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1136,7 +1136,7 @@ True
 </div>
 <p>Let’s try some more elaborate display.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gismo.post_processing</span> <span class="kn">import</span> <span class="n">post_documents_cluster_print</span><span class="p">,</span> <span class="n">post_features_cluster_print</span>
@@ -1189,7 +1189,7 @@ True
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">target_k</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">distortion</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
@@ -1225,7 +1225,7 @@ True
 <h3>Lincs landmarks<a class="headerlink" href="#Lincs-landmarks" title="Permalink to this heading"></a></h3>
 <p>We can rebuild Lincs landmarks on the XGismo.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lincs_landmarks</span> <span class="o">=</span> <span class="n">Landmarks</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">lincs</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;dblp&#39;</span><span class="p">],</span>
@@ -1327,7 +1327,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 <p>We can extract the Lincs researchers that the most similar to a given researcher (not necessarily from Lincs).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Anne_Bouillard&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1337,7 +1337,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1359,7 +1359,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 <p>We can also use a keyword query, and organize the results in clusters.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Anne_Bouillard&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1391,7 +1391,7 @@ INFO:Gismo:All landmarks are built.
 <h3>ACM landmarks<a class="headerlink" href="#ACM-landmarks" title="Permalink to this heading"></a></h3>
 <p>We can build other landmarks using the ACM categories. This will enable to describe things in term of categories.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gismo.datasets.acm</span> <span class="kn">import</span> <span class="n">get_acm</span><span class="p">,</span> <span class="n">flatten_acm</span>
@@ -1400,7 +1400,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">acm_landmarks</span> <span class="o">=</span> <span class="n">Landmarks</span><span class="p">(</span><span class="n">acm</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">])</span>
@@ -1408,7 +1408,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
@@ -1426,7 +1426,7 @@ INFO:Gismo:All landmarks are built.
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Fabien_Mathieu&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1436,7 +1436,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1452,7 +1452,7 @@ INFO:Gismo:All landmarks are built.
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;combinatorics&quot;</span><span class="p">)</span>
@@ -1490,7 +1490,7 @@ INFO:Gismo:All landmarks are built.
 <h3>Combining landmarks<a class="headerlink" href="#Combining-landmarks" title="Permalink to this heading"></a></h3>
 <p>Through the <code class="docutils literal notranslate"><span class="pre">post_processing</span></code> methods, we can intricate multiple landmarks. For example, the following method associates Lincs researchers and keywords to a tree of ACM categories.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gismo.common</span> <span class="kn">import</span> <span class="n">auto_k</span>
@@ -1519,7 +1519,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;combinatorics&quot;</span><span class="p">)</span>
@@ -1553,7 +1553,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 <p>Conversely, one can associate ACM categories and keywords to a tree of Lincs researchers.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">post_cluster_lincs</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">kw_size</span><span class="o">=</span><span class="mf">.3</span><span class="p">,</span> <span class="n">acm_size</span><span class="o">=</span><span class="mf">.5</span><span class="p">):</span>
@@ -1580,7 +1580,7 @@ INFO:Gismo:All landmarks are built.
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Anne_Bouillard&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
