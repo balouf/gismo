@@ -51,7 +51,8 @@ except ImportError:
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon', 'nbsphinx',
-              'IPython.sphinxext.ipython_console_highlighting', 'sphinx.ext.intersphinx']
+              'IPython.sphinxext.ipython_console_highlighting', 'sphinx.ext.intersphinx',
+              'sphinx.ext.imgconverter', 'sphinx_mdinclude']
 
 # Add the possibility to access python documentation.
 intersphinx_mapping = {'python':('https://docs.python.org/3', None),
@@ -67,8 +68,8 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
+# source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
@@ -124,7 +125,14 @@ html_favicon = 'favicon.ico'
 html_logo = "logo-line.png"
 
 html_theme_options = {
-    'logo_only': True,
+    "navbar_start": ["navbar-logo"],
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/balouf/gismo",
+            "icon": "fa-brands fa-github",
+        },
+    ],
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
