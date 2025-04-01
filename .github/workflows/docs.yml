@@ -24,13 +24,14 @@ jobs:
         with:
           version: "0.6.11"
 
-      - name: Install dependencies
-        run: |
-          sudo apt install pandoc
-          uv sync --all-extras
+      - name: Setup Pandoc
+        uses: pandoc/actions/setup@v1
+        with:
+          version: '3.6.3'
 
       - name: Build Sphinx documentation
         run: |
+          uv sync --all-extras
           uv run sphinx-build -a -E -b html docs build
 
       - name: Deploy Sphinx documentation on Github Pages
