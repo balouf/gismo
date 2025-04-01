@@ -51,6 +51,9 @@ en-core-web-sm = { url = "https://github.com/explosion/spacy-models/releases/dow
 
 [dependency-groups]
 dev = [
+    "ipython>=8.34.0",
+    "nbsphinx>=0.9.7",
+    "pydata-sphinx-theme>=0.16.1",
     "pytest-cov>=6.1.0",
 ]
 
@@ -66,24 +69,3 @@ directory = "cov"
 
 [tool.pytest.ini_options]
 addopts = "--doctest-modules --ignore=hooks --cov --cov-config=pyproject.toml --cov-report xml --cov-report html --showlocals --capture=no --exitfirst --failed-first"
-
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-skipsdist = true
-
-[gh-actions]
-python =
-    3.10: py310
-    3.11: py311
-    3.12: py312
-
-[testenv]
-passenv = PYTHON_VERSION
-setenv =
-    NUMBA_DISABLE_JIT=1
-allowlist_externals = uv
-commands =
-    uv sync -v
-    pytest
-"""
