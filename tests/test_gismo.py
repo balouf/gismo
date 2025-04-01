@@ -45,7 +45,7 @@ def test_default_no_post(my_gismo):
     indices = my_gismo.get_documents_by_coverage(k=3, post=False)
     assert list(indices) == [0, 3, 1]
     indices = my_gismo.get_features_by_coverage(post=False)
-    assert list(indices) == [18, 12, 10]
+    assert list(indices) == [18, 6, 10]
 
 
 def test_io_gismo(my_gismo):

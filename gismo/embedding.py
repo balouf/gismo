@@ -236,8 +236,8 @@ class Embedding(MixInIO):
         >>> embedding = Embedding()
         >>> embedding.fit_transform(corpus)
         >>> embedding.x  # doctest: +NORMALIZE_WHITESPACE
-        <5x21 sparse matrix of type '<class 'numpy.float64'>'
-            with 25 stored elements in Compressed Sparse Row format>
+        <Compressed Sparse Row sparse matrix of dtype 'float64'
+    	with 25 stored elements and shape (5, 21)>
         >>> list(embedding.features[:8])
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
         """
