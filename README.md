@@ -1,34 +1,19 @@
-:::{image} https://github.com/balouf/gismo/raw/master/docs/logo-line.png
-:alt: Gismo logo
-:target: https://balouf.github.io/gismo/
-:::
+[![Gismo logo](https://github.com/balouf/gismo/raw/master/docs/logo-line.png)](https://balouf.github.io/gismo/)
 
 # A Generic Information Search... With a Mind of its Own!
 
-:::{image} https://img.shields.io/pypi/v/gismo.svg
-:target: https://pypi.python.org/pypi/gismo
-:::
 
-:::{image} https://github.com/balouf/gismo/workflows/build/badge.svg?branch=master
-:alt: Build Status
-:target: https://github.com/balouf/gismo/actions?query=workflow%3Abuild
-:::
+[![Pypi badge](https://img.shields.io/pypi/v/gismo.svg)](https://pypi.python.org/pypi/gismo)
+[![Build badge](https://github.com/balouf/gismo/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/balouf/gismo/actions?query=workflow%3Abuild)
+[![Documentation badge](https://github.com/balouf/gismo/actions/workflows/docs.yml/badge.svg?branch=master)](https://github.com/balouf/gismo/actions?query=workflow%3Adocs)
+[![Coverage](https://codecov.io/gh/balouf/gismo/branch/master/graphs/badge.svg)](https://codecov.io/gh/balouf/gismo/branch/master)
 
-:::{image} https://github.com/balouf/gismo/workflows/docs/badge.svg?branch=master
-:alt: Documentation Status
-:target: https://github.com/balouf/gismo/actions?query=workflow%3Adocs
-:::
-
-:::{image} https://codecov.io/gh/balouf/gismo/branch/master/graphs/badge.svg
-:alt: Code Coverage
-:target: https://codecov.io/gh/balouf/gismo/branch/master
-:::
 
 GISMO is a NLP tool to rank and organize a corpus of documents according to a query.
 
 Gismo stands for Generic Information Search... with a Mind of its Own.
 
-- Free software: GNU General Public License v3
+- Free software: MIT License
 - Github: <https://github.com/balouf/gismo/>
 - Documentation: <https://balouf.github.io/gismo/>
 

@@ -53,7 +53,7 @@ def get_reuters_news(url=URL):
 
     Example
     ---------
-    Cf :py:class:`~gismo.sentencizer.md.Sentencizer`
+    Cf :py:class:`~gismo.sentencizer.Sentencizer`
     """
     r=requests.get(url)
     with ZipFile(io.BytesIO(r.content)) as z:

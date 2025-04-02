@@ -54,8 +54,10 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon'
               'IPython.sphinxext.ipython_console_highlighting', 'sphinx.ext.intersphinx',
               'sphinx.ext.imgconverter', 'myst_parser']
 
+# MYST configuration
 myst_enable_extensions = ['linkify', 'dollarmath', 'colon_fence']
 myst_heading_anchors = 3
+myst_links_external_new_tab = True
 
 # Add the possibility to access python documentation.
 intersphinx_mapping = {'python':('https://docs.python.org/3', None),
