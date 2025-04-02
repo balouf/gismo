@@ -55,7 +55,7 @@ class Gismo(MixInIO):
     >>> gismo.get_documents_by_rank()
     [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}, {'title': 'Fourth Document', 'content': 'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.'}, {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
 
-    Post processing functions can be used to tweak the returned object (the underlying ranking is unchanged)
+    Post-processing functions can be used to tweak the returned object (the underlying ranking is unchanged)
 
     >>> gismo.post_documents_item = partial(post_documents_item_content, max_size=44)
     >>> gismo.get_documents_by_rank()

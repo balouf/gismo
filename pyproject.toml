@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "gismo"
-version = "0.4.3"
+version = "0.5.0"
 description = "GISMO is a NLP tool to rank and organize a corpus of documents according to a query."
 keywords = ["NLP", "Random Walk", "D-Iteration", "TF-I[D]TF"]
 readme = "README.md"

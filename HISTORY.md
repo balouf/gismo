@@ -4,15 +4,17 @@
 
 * Rethink distortion on both vectors normalization and IDTF/query trade-off.
 * Accelerate similarity computation (currently sklearn-based) in clustering.
-
-
-## 0.4.X (2023-0X-XX) (tentative)
-
-* Switch to uv/pyproject for package management
-
 * Context manager for FileSource (e.g. ``with FileSource(...) as source:``)
-* 3.9 compatibility issues rechecked
-* Wheels
+
+
+## 0.5.0 (2025-04-02)
+
+Lots of internal upgrades
+
+* Dependencies cleaning/upgrade. Current Python compatibility is `3.10` -> `3.12`
+* Switch to uv/pyproject for package management
+* Installation of Spacy is now optional, use `pip install gismo[spacy]` to install it
+* Switch documentation to Sphinx+Myst
 * Minor change in test_dblp.py
 
 
