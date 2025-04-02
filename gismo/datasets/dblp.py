@@ -150,7 +150,7 @@ def url2source(url, fields=None):
     >>> art['authors']
     ['Maria Potop-Butucaru', 'Michel Raynal', 'Sébastien Tixeuil']
     >>> art['urls']
-    ['https://doi.org/10.1109/NBiS.2011.55', 'http://doi.ieeecomputersociety.org/10.1109/NBiS.2011.55']
+    ['https://doi.org/10.1109/NBiS.2011.55', 'https://doi.ieeecomputersociety.org/10.1109/NBiS.2011.55']
     """
     if fields is None:
         fields = DEFAULT_FIELDS

@@ -1,8 +1,10 @@
 """Top-level package for GISMO."""
+from importlib.metadata import metadata
 
-__author__ = """Fabien Mathieu"""
-__email__ = 'fabien.mathieu@normalesup.org'
-__version__ = '0.4.3'
+infos = metadata(__name__)
+__author__ = infos['Author']
+__email__ = infos['Author-Email']
+__version__ = infos['Version']
 
 
 from gismo.corpus import Corpus

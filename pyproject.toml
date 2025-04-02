@@ -1,0 +1,72 @@
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "gismo"
+version = "0.5.0"
+description = "GISMO is a NLP tool to rank and organize a corpus of documents according to a query."
+keywords = ["NLP", "Random Walk", "D-Iteration", "TF-I[D]TF"]
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+authors = [
+    {name = "Fabien Mathieu", email = "fabien.mathieu@normalesup.org"}
+]
+maintainers = [
+    {name = "Fabien Mathieu", email = "fabien.mathieu@normalesup.org"}
+]
+license = "MIT"
+classifiers = [
+"Development Status :: 4 - Beta",
+"Intended Audience :: Developers",
+"Topic :: Software Development :: Build Tools",
+'Natural Language :: English',
+'Programming Language :: Python :: 3',
+'Programming Language :: Python :: 3.10',
+'Programming Language :: Python :: 3.11',
+'Programming Language :: Python :: 3.12',
+]
+dependencies = [
+    "beautifulsoup4>=4.13.3",
+    "dill>=0.3.9",
+    "lxml>=5.3.1",
+    "numba>=0.61.0",
+    "requests>=2.32.3",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.2",
+]
+
+[project.optional-dependencies]
+spacy = [
+    "en-core-web-sm",
+    "spacy>=3.8.4,<3.9",
+]
+
+[project.urls]
+Documentation = "https://balouf.github.io/gismo/"
+Repository = "https://github.com/balouf/gismo/"
+
+[tool.uv.sources]
+en-core-web-sm = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0.tar.gz" }
+
+[dependency-groups]
+dev = [
+    "ipython>=8.34.0",
+    "myst-parser[linkify]>=4.0.1",
+    "nbsphinx>=0.9.7",
+    "pydata-sphinx-theme>=0.16.1",
+    "pytest-cov>=6.1.0",
+]
+
+[tool.coverage.report]
+skip_empty = true
+
+[tool.coverage.run]
+branch = true
+source = ["gismo"]
+
+[tool.coverage.html]
+directory = "cov"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --ignore=hooks --cov --cov-config=pyproject.toml --cov-report xml --cov-report html --showlocals --capture=no --exitfirst --failed-first"

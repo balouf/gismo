@@ -13,35 +13,30 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9, "3.10"]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 tox codecov
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.6.11"
 
-    - name: Lint with flake8
+    - name: Run tests
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        uv sync --all-extras
+        uv run pytest
 
-    - name: Run tests with tox
-      run: |
-        tox -e py
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+    - name: Upload coverage reports to Codecov with GitHub Action on Python 3.12
+      uses: codecov/codecov-action@v4
+      if: ${{ matrix.python-version == '3.12' }}
       with:
         file: ./coverage.xml
+        token: ${{ secrets.CODECOV_TOKEN }} # required

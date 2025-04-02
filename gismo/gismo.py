@@ -55,7 +55,7 @@ class Gismo(MixInIO):
     >>> gismo.get_documents_by_rank()
     [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}, {'title': 'Fourth Document', 'content': 'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.'}, {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
 
-    Post processing functions can be used to tweak the returned object (the underlying ranking is unchanged)
+    Post-processing functions can be used to tweak the returned object (the underlying ranking is unchanged)
 
     >>> gismo.post_documents_item = partial(post_documents_item_content, max_size=44)
     >>> gismo.get_documents_by_rank()
@@ -64,7 +64,7 @@ class Gismo(MixInIO):
     Ranking also works on features.
 
     >>> gismo.get_features_by_rank()
-    ['mogwaï', 'gizmo', 'is', 'in', 'demon', 'chinese', 'folklore']
+    ['mogwaï', 'gizmo', 'is', 'chinese', 'demon', 'in', 'folklore']
 
     Clustering organizes results can provide additional hints on their relationships.
 
@@ -83,9 +83,9 @@ class Gismo(MixInIO):
     -- gizmo (R: 0.12; S: 0.99)
     -- is (R: 0.03; S: 0.99)
     - F: 1.00. R: 0.02. S: 0.07.
-    -- in (R: 0.00; S: 0.07)
-    -- demon (R: 0.00; S: 0.07)
     -- chinese (R: 0.00; S: 0.07)
+    -- demon (R: 0.00; S: 0.07)
+    -- in (R: 0.00; S: 0.07)
     -- folklore (R: 0.00; S: 0.07)
 
     As an alternative to a textual query, the :meth:`~gismo.gismo.Gismo.rank` method can directly use a vector
@@ -93,15 +93,15 @@ class Gismo(MixInIO):
 
     >>> z, s = gismo.embedding.query_projection("gizmo chinese folklore")
     >>> z # doctest: +NORMALIZE_WHITESPACE
-    <1x36 sparse matrix of type '<class 'numpy.float64'>'
-    	with 3 stored elements in Compressed Sparse Row format>
+     <Compressed Sparse Row sparse matrix of dtype 'float64'
+        with 3 stored elements and shape (1, 36)>
     >>> s = gismo.rank(z=z)
     >>> s
     True
     >>> gismo.get_documents_by_rank(k=2)
     ['In chinese folklore, a Mogwaï is a demon.', 'Gizmo is a Mogwaï.']
     >>> gismo.get_features_by_rank()
-    ['mogwaï', 'in', 'chinese', 'folklore', 'demon', 'gizmo', 'is']
+    ['mogwaï', 'chinese', 'folklore', 'in', 'demon', 'gizmo', 'is']
 
     The class also offers :meth:`~gismo.gismo.Gismo.get_documents_by_coverage` and
     :meth:`~gismo.gismo.Gismo.get_features_by_coverage` that yield
@@ -138,10 +138,10 @@ class Gismo(MixInIO):
     The same principle applies for features.
 
     >>> gismo.get_features_by_rank()
-    ['mogwaï', 'gizmo', 'is', 'in', 'chinese', 'folklore', 'demon']
+    ['mogwaï', 'gizmo', 'is', 'chinese', 'demon', 'in', 'folklore']
 
     >>> gismo.get_features_by_coverage()
-    ['mogwaï', 'this', 'in', 'by', 'gizmo', 'is', 'chinese']
+    ['mogwaï', 'about', 'chinese', 'and', 'gizmo', 'is', 'demon']
     """
 
     def __init__(self, corpus=None, embedding=None, **kwargs):
@@ -484,7 +484,7 @@ class XGismo(Gismo):
 
     >>> success = xgismo.rank("Anne_Bouillard", y=False)
     >>> xgismo.get_documents_by_rank()
-    ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Thomas Deiß', 'Philippe Sehier', 'Dmitry Lebedev']
+    ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiß', 'Dmitry Lebedev']
     """
     def __init__(self, x_embedding=None, y_embedding=None, filename=None, path=".", **kwargs):
         if filename is not None:
