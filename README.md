@@ -6,8 +6,7 @@
 [![Pypi badge](https://img.shields.io/pypi/v/gismo.svg)](https://pypi.python.org/pypi/gismo)
 [![Build badge](https://github.com/balouf/gismo/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/balouf/gismo/actions?query=workflow%3Abuild)
 [![Documentation badge](https://github.com/balouf/gismo/actions/workflows/docs.yml/badge.svg?branch=master)](https://github.com/balouf/gismo/actions?query=workflow%3Adocs)
-[![Coverage](https://codecov.io/gh/balouf/gismo/branch/master/graphs/badge.svg)](https://codecov.io/gh/balouf/gismo/branch/master)
-
+[![codecov](https://codecov.io/gh/balouf/gismo/graph/badge.svg?token=TTMRW7XYS5)](https://codecov.io/gh/balouf/gismo)
 
 GISMO is a NLP tool to rank and organize a corpus of documents according to a query.
 
@@ -47,6 +46,10 @@ look at the other [tutorials] or directly the [reference] section.
 Thomas Bonald, Anne Bouillard, Marc-Olivier Buob, Dohy Hong.
 
 This package was created with [Cookiecutter] and the [francois-durand/package_helper] project template.
+
+# Coverage
+
+[![codecov](https://codecov.io/gh/balouf/gismo/graphs/tree.svg?token=TTMRW7XYS5)](https://codecov.io/gh/balouf/gismo)
 
 [cookiecutter]: https://github.com/audreyr/cookiecutter
 [francois-durand/package_helper]: https://github.com/francois-durand/package_helper
