@@ -1,13 +1,9 @@
-=======
-Credits
-=======
+# Credits
 
-Development Lead
-----------------
+## Development Lead
 
 * Fabien Mathieu <fabien.mathieu@normalesup.org>
 
-Contributors
-------------
+## Contributors
 
 None yet. Why not be the first?

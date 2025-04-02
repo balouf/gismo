@@ -61,7 +61,7 @@ Minor update.
 * Full refactoring of get_*** and post_*** methods and objects.
   * The good news is that they are now more natural, self-describing, and unified.
   * The bad news is that there is no backward-compatibility with previous Gismo versions. Hopefully this refactoring
-    will last for some time!
+  will last for some time!
 * Gismo logo added!
 
 ## 0.3.1 (2020-06-12)
