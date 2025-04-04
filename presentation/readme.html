@@ -31,6 +31,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -41,6 +42,8 @@
     <script src="../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'presentation/readme';</script>
     <link rel="icon" href="../_static/favicon.ico"/>
@@ -377,7 +380,8 @@
 <p><a class="reference external" href="https://pypi.python.org/pypi/gismo" rel="noreferer noopener" target="_blank"><img alt="Pypi badge" src="https://img.shields.io/pypi/v/gismo.svg" /></a>
 <a class="reference external" href="https://github.com/balouf/gismo/actions?query=workflow%3Abuild" rel="noreferer noopener" target="_blank"><img alt="Build badge" src="https://github.com/balouf/gismo/actions/workflows/build.yml/badge.svg?branch=master" /></a>
 <a class="reference external" href="https://github.com/balouf/gismo/actions?query=workflow%3Adocs" rel="noreferer noopener" target="_blank"><img alt="Documentation badge" src="https://github.com/balouf/gismo/actions/workflows/docs.yml/badge.svg?branch=master" /></a>
-<a class="reference external" href="https://codecov.io/gh/balouf/gismo" rel="noreferer noopener" target="_blank"><img alt="codecov" src="https://codecov.io/gh/balouf/gismo/graph/badge.svg?token=TTMRW7XYS5" /></a></p>
+<a class="reference external" href="https://codecov.io/gh/balouf/gismo" rel="noreferer noopener" target="_blank"><img alt="codecov" src="https://codecov.io/gh/balouf/gismo/graph/badge.svg?token=TTMRW7XYS5" /></a>
+<a class="reference external" href="https://opensource.org/licenses/MIT" rel="noreferer noopener" target="_blank"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a></p>
 <p>GISMO is a NLP tool to rank and organize a corpus of documents according to a query.</p>
 <p>Gismo stands for Generic Information Search… with a Mind of its Own.</p>
 <ul class="simple">
@@ -390,7 +394,7 @@
 <p>Gismo combines three main ideas:</p>
 <ul class="simple">
 <li><p><strong>TF-IDTF</strong>: a symmetric version of the TF-IDF embedding.</p></li>
-<li><p><strong>DIteration</strong>: a fast, push-based, variant of the PageRank algorithm.</p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1202.1163" rel="noreferer noopener" target="_blank"><strong>DIteration</strong></a>: a fast, push-based, variant of the PageRank algorithm.</p></li>
 <li><p><strong>Fuzzy dendrogram</strong>: a variant of the Louvain clustering algorithm.</p></li>
 </ul>
 </section>
@@ -400,8 +404,16 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>gismo
 </pre></div>
 </div>
-<p>Import gismo in a Python project:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gs</span>
+<p>Use gismo in a Python project:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">toy_source_dict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">Gismo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">toy_source_dict</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">CountVectorizer</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">embedding</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Mogwaï&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">()</span>
+<span class="go">[&#39;mogwaï&#39;, &#39;gizmo&#39;, &#39;chinese&#39;, &#39;in&#39;, &#39;demon&#39;, &#39;folklore&#39;, &#39;is&#39;]</span>
 </pre></div>
 </div>
 <p>To get the hang of a typical Gismo workflow, you can check the <a class="reference external" href="https://balouf.github.io/gismo/tutorials/tutorial_toy_example.html" rel="noreferer noopener" target="_blank">Toy Example</a> notebook. For more advanced uses,
@@ -409,7 +421,7 @@ look at the other <a class="reference external" href="https://balouf.github.io/g
 </section>
 <section id="credits">
 <h2>Credits<a class="headerlink" href="#credits" title="Link to this heading">#</a></h2>
-<p>Thomas Bonald, Anne Bouillard, Marc-Olivier Buob, Dohy Hong.</p>
+<p>Thomas Bonald, Anne Bouillard, Marc-Olivier Buob, Dohy Hong for their helpful contribution.</p>
 <p>This package was created with <a class="reference external" href="https://github.com/audreyr/cookiecutter" rel="noreferer noopener" target="_blank">Cookiecutter</a> and the <a class="reference external" href="https://github.com/francois-durand/package_helper" rel="noreferer noopener" target="_blank">francois-durand/package_helper</a> project template.</p>
 </section>
 </section>

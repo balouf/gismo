@@ -32,10 +32,10 @@ Or download the [tarball]:
 $ curl -OJL https://github.com/balouf/gismo/tarball/master
 ```
 
-Once you have a copy of the source, you can install it with:
+Once you have a copy of the source, you can install it from the package directory with:
 
 ```console
-$ python setup.py install
+$ pip install .
 ```
 
 [github repo]: https://github.com/balouf/gismo

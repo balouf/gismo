@@ -31,6 +31,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
   
   <!-- So that users can add custom icons -->
@@ -42,6 +43,8 @@
     <script src="../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -383,6 +386,30 @@
 <li><p>The embedding fuels a query-based ranking function;</p></li>
 <li><p>The best results of a query can be organized in a hierarchical way.</p></li>
 </ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">toy_source_dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">Gismo</span>
+<span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">toy_source_dict</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+<span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">CountVectorizer</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+<span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+<span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">embedding</span><span class="p">)</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Mogwaï&quot;</span><span class="p">)</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;mogwaï&#39;, &#39;gizmo&#39;, &#39;chinese&#39;, &#39;in&#39;, &#39;demon&#39;, &#39;folklore&#39;, &#39;is&#39;]
+</pre></div></div>
+</div>
 <section id="Source">
 <h2>Source<a class="headerlink" href="#Source" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
@@ -418,7 +445,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span>
 <span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">toy_source_dict</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">corpus</span><span class="o">.</span><span class="n">iterate_text</span><span class="p">()))</span>
 </pre></div>
@@ -445,8 +472,7 @@ In chinese folklore, a Mogwaï is a demon.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.embedding</span><span class="w"> </span><span class="kn">import</span> <span class="n">Embedding</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">CountVectorizer</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">CountVectorizer</span>
 <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 <span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer</span><span class="p">)</span>
 </pre></div>
@@ -533,8 +559,8 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;5x36 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
-        with 47 stored elements in Compressed Sparse Row format&gt;
+&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;
+        with 47 stored elements and shape (5, 36)&gt;
 </pre></div></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">y</span></code> is a stochastic csr matrix that represents features as vectors of documents.</p>
@@ -552,8 +578,8 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;36x5 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
-        with 47 stored elements in Compressed Sparse Row format&gt;
+&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;
+        with 47 stored elements and shape (36, 5)&gt;
 </pre></div></div>
 </div>
 </section>
@@ -564,7 +590,7 @@ In chinese folklore, a Mogwaï is a demon.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gismo</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gismo</span>
 <span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">embedding</span><span class="p">)</span>
 </pre></div>
 </div>

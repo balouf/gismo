@@ -31,6 +31,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
   
   <!-- So that users can add custom icons -->
@@ -42,6 +43,8 @@
     <script src="../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -385,14 +388,10 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">CountVectorizer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics.pairwise</span><span class="w"> </span><span class="kn">import</span> <span class="n">cosine_similarity</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">,</span> <span class="n">Gismo</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">gismo.datasets.acm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_acm</span><span class="p">,</span> <span class="n">flatten_acm</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.embedding</span><span class="w"> </span><span class="kn">import</span> <span class="n">Embedding</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gismo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_features_cluster_print</span><span class="p">,</span> <span class="n">post_documents_cluster_print</span>
 </pre></div>
 </div>
@@ -445,8 +444,8 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;234x6929 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
-        with 28014 stored elements in Compressed Sparse Row format&gt;
+&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;
+        with 28014 stored elements and shape (234, 6929)&gt;
 </pre></div></div>
 </div>
 <p>We see from <code class="docutils literal notranslate"><span class="pre">embedding.x</span></code> that the embedding links 234 documents to 6,936 features. There are 28,041 weights: in average, each document is linked to more than 100 features, each feature is linked to 4 documents.</p>

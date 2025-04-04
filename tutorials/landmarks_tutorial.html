@@ -31,6 +31,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
   
   <!-- So that users can add custom icons -->
@@ -42,6 +43,8 @@
     <script src="../_static/documentation_options.js?v=1dd76d02"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -383,18 +386,40 @@
 <section id="List-of-DBLP-researchers">
 <h3>List of DBLP researchers<a class="headerlink" href="#List-of-DBLP-researchers" title="Link to this heading">#</a></h3>
 <p>First, we open the DBLP database (see the <a class="reference external" href="https://balouf.github.io/gismo/tutorials/tutorial_dblp.html">DBLP Tutorial</a> to get your copy of the database).</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../../../../../../Datasets/DBLP&quot;</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../../../../../Datasets/DBLP&quot;</span><span class="p">)</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">gismo.filesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileSource</span>
 <span class="n">source</span> <span class="o">=</span> <span class="n">FileSource</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">FileNotFoundError</span>                         Traceback (most recent call last)
+Cell <span class="ansi-green-intense-fg ansi-bold">In[1], line 6</span>
+<span class="ansi-green-fg">      3</span> path <span style="color: rgb(98,98,98)">=</span> Path(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">../../../../../Datasets/DBLP</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">      5</span> <span class="ansi-bold" style="color: rgb(0,135,0)">from</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-bold" style="color: rgb(0,0,255)">gismo</span><span class="ansi-bold" style="color: rgb(0,0,255)">.</span><span class="ansi-bold" style="color: rgb(0,0,255)">filesource</span><span style="color: rgb(188,188,188)"> </span><span class="ansi-bold" style="color: rgb(0,135,0)">import</span> FileSource
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 6</span> source <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">FileSource</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">filename</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">dblp</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">path</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">path</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-intense-fg ansi-bold">~\git\packages\gismo\gismo\filesource.py:90</span>, in <span class="ansi-cyan-fg">FileSource.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, filename, path, load_source)</span>
+<span class="ansi-green-fg">     88</span> data <span style="color: rgb(98,98,98)">=</span> path <span style="color: rgb(98,98,98)">/</span> Path(<span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>filename<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">.data</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-fg">     89</span> <span style="color: rgb(95,135,135)"># load index</span>
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 90</span> <span class="ansi-bold" style="color: rgb(0,135,0)">with</span> <span class="ansi-yellow-bg" style="color: rgb(0,135,0)">open</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">index</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">rb</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span> <span class="ansi-bold" style="color: rgb(0,135,0)">as</span> f:
+<span class="ansi-green-fg">     91</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>index <span style="color: rgb(98,98,98)">=</span> pickle<span style="color: rgb(98,98,98)">.</span>load(f)
+<span class="ansi-green-fg">     92</span> <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>n <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(0,135,0)">len</span>(<span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>index) <span style="color: rgb(98,98,98)">-</span> <span style="color: rgb(98,98,98)">1</span>
+
+<span class="ansi-red-intense-fg ansi-bold">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;..\\..\\..\\..\\..\\Datasets\\DBLP\\dblp.index&#39;
+</pre></div></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">source</span></code> is a list-like object whose entries are dicts that describe articles.</p>
 <div class="nbinput docutils container">
