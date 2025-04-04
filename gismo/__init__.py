@@ -8,6 +8,7 @@ __version__ = infos['Version']
 
 
 from gismo.corpus import Corpus
-from gismo.embedding import Embedding
+from gismo.embedding import Embedding, CountVectorizer
+from gismo.clustering import cosine_similarity
 from gismo.diteration import DIteration
 from gismo.gismo import Gismo, XGismo
