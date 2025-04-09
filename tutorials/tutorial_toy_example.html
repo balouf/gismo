@@ -387,7 +387,7 @@
 <li><p>The best results of a query can be organized in a hierarchical way.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">toy_source_dict</span>
@@ -402,7 +402,7 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -413,7 +413,7 @@
 <section id="Source">
 <h2>Source<a class="headerlink" href="#Source" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">toy_source_dict</span>
@@ -422,7 +422,7 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -442,7 +442,7 @@
 <h2>Corpus<a class="headerlink" href="#Corpus" title="Link to this heading">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">to_text</span></code> parameter tells how to turn a source object into text (<code class="docutils literal notranslate"><span class="pre">str</span></code>). <code class="docutils literal notranslate"><span class="pre">iterate_text</span></code> allows to iterate over the textified objects.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span>
@@ -469,7 +469,7 @@ In chinese folklore, a Mogwaï is a demon.
 <p>The Gismo embedding relies on sklearn’s <code class="docutils literal notranslate"><span class="pre">CountVectorizer</span></code> to extract features (words) from text. If no vectorizer is provided to the constructor, a default one will be provided, but it is good practice to shape one’s own vectorizer to have a fine control of the parameters.</p>
 <p>Note: always set <code class="docutils literal notranslate"><span class="pre">dtype=float</span></code> when building your vectorizer, as the default <code class="docutils literal notranslate"><span class="pre">int</span></code> type will break things.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">CountVectorizer</span>
@@ -484,7 +484,7 @@ In chinese folklore, a Mogwaï is a demon.
 <li><p><code class="docutils literal notranslate"><span class="pre">transform</span></code> computes the ITF weights of the documents and the embeddings of documents and features.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
@@ -493,7 +493,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 <p>After fitting a corpus, the features can be accessed through <code class="docutils literal notranslate"><span class="pre">features</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
@@ -501,7 +501,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -511,7 +511,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 <p>After transformation, a dual embedding is available between the <code class="docutils literal notranslate"><span class="pre">èmbedding.n</span></code> documents and the <code class="docutils literal notranslate"><span class="pre">embedding.m</span></code> features.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding</span><span class="o">.</span><span class="n">n</span>
@@ -519,7 +519,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -528,7 +528,7 @@ In chinese folklore, a Mogwaï is a demon.
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding</span><span class="o">.</span><span class="n">m</span>
@@ -536,7 +536,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -546,7 +546,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">x</span></code> is a stochastic csr matrix that represents documents as vectors of features.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span>
@@ -554,7 +554,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -565,7 +565,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">y</span></code> is a stochastic csr matrix that represents features as vectors of documents.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding</span><span class="o">.</span><span class="n">y</span>
@@ -573,7 +573,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -587,7 +587,7 @@ In chinese folklore, a Mogwaï is a demon.
 <h2>Ranking<a class="headerlink" href="#Ranking" title="Link to this heading">#</a></h2>
 <p>To be able to rank documents according to a specific query, we construct a Gismo object from a corpus and an embedding.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gismo</span>
@@ -597,7 +597,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 <p>A query is made by using the <code class="docutils literal notranslate"><span class="pre">rank</span></code> method.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Gizmo&quot;</span><span class="p">)</span>
@@ -605,7 +605,7 @@ In chinese folklore, a Mogwaï is a demon.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -615,7 +615,7 @@ True
 </div>
 <p>Results ordered by ranking (e.g. relevance to the query) are accessed through the <code class="docutils literal notranslate"><span class="pre">get_documents_by_rank</span></code> and <code class="docutils literal notranslate"><span class="pre">get_features_by_rank</span></code> methods. The number of returned results can be given in the parameters.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -623,7 +623,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -640,7 +640,7 @@ True
 </div>
 <p>If not specified, the number of documents is automatically estimated.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
@@ -648,7 +648,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -658,7 +658,7 @@ True
 </div>
 <p>As the dataset is small here, the default estimator is very conservative. We can use <code class="docutils literal notranslate"><span class="pre">target_k</span></code> to tune that.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">target_k</span> <span class="o">=</span> <span class="mf">.2</span>
@@ -667,7 +667,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -680,7 +680,7 @@ True
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">()</span>
@@ -688,7 +688,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -698,7 +698,7 @@ True
 </div>
 <p>By default, outputs are lists of raw documents and features. It can be convenient to post-process them by setting <code class="docutils literal notranslate"><span class="pre">post_documents_item</span></code> and <code class="docutils literal notranslate"><span class="pre">post_features_item</span></code>. Gismo provides a few basic post-processing functions.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_documents_item_content</span>
@@ -707,7 +707,7 @@ True
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
@@ -715,7 +715,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -727,7 +727,7 @@ True
 </div>
 <p>The ranking algorithm is hosted inside gismo.diteration. Runtime parameters are managed insode gismo.parameters. One of the most important parameter is <code class="docutils literal notranslate"><span class="pre">alpha</span></code> <span class="math notranslate nohighlight">\(\in [0,1]\)</span>, which controls the <em>range</em> of the underlying graph diffusion. Small values of <code class="docutils literal notranslate"><span class="pre">alpha</span></code> will yield results close to the initial. Larger values will take more into account the relationships between documents and features.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">.8</span>
@@ -737,7 +737,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -752,7 +752,7 @@ True
 <h2>Clustering<a class="headerlink" href="#Clustering" title="Link to this heading">#</a></h2>
 <p>Gismo can organize the best results into a tree through the <code class="docutils literal notranslate"><span class="pre">get_documents_by_cluster</span></code> and <code class="docutils literal notranslate"><span class="pre">get_features_by_cluster</span></code> methods. It is recommended to set post-processing functions.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_documents_cluster_print</span><span class="p">,</span> <span class="n">post_features_cluster_print</span>
@@ -762,7 +762,7 @@ True
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -787,7 +787,7 @@ True
 <p>Note: for each leaf (documents here), the post-processing indicates the <strong>R</strong>elevance (ranking weight) and <strong>S</strong>imilarity (cosine similarity) with respect to the query. For internal nodes (cluster of documents), a <strong>F</strong>ocus value indicates how similar the documents inside the cluster are.</p>
 <p>The depth of the tree is controlled by a <code class="docutils literal notranslate"><span class="pre">resolution</span></code> parameter <span class="math notranslate nohighlight">\(\in [0, 1]\)</span>. Low resolution yields a flat tree (star structure).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.01</span><span class="p">)</span>
@@ -809,7 +809,7 @@ True
 </div>
 <p>High resolution yields, up to ties, to a binary tree (dendrogram).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.9</span><span class="p">)</span>
@@ -834,7 +834,7 @@ True
 </div>
 <p>The principle is the same for features.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>

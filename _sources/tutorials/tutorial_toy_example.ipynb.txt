@@ -28,8 +28,13 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 29,
-   "metadata": {},
+   "execution_count": 1,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:37:41.661661Z",
+     "start_time": "2025-04-09T08:37:03.153769Z"
+    }
+   },
    "outputs": [
     {
      "data": {
@@ -37,7 +42,7 @@
        "['mogwaï', 'gizmo', 'chinese', 'in', 'demon', 'folklore', 'is']"
       ]
      },
-     "execution_count": 29,
+     "execution_count": 1,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -62,11 +67,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 2,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:31.094544Z",
-     "start_time": "2022-12-27T10:55:28.290059Z"
+     "end_time": "2025-04-09T08:37:41.692493Z",
+     "start_time": "2025-04-09T08:37:41.671692Z"
     }
    },
    "outputs": [
@@ -83,7 +88,7 @@
        "  'content': 'In chinese folklore, a Mogwaï is a demon.'}]"
       ]
      },
-     "execution_count": 1,
+     "execution_count": 2,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -109,11 +114,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 3,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:31.109639Z",
-     "start_time": "2022-12-27T10:55:31.097544Z"
+     "end_time": "2025-04-09T08:37:41.726112Z",
+     "start_time": "2025-04-09T08:37:41.705350Z"
     }
    },
    "outputs": [
@@ -153,11 +158,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 4,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:31.125547Z",
-     "start_time": "2022-12-27T10:55:31.111546Z"
+     "end_time": "2025-04-09T08:37:41.748408Z",
+     "start_time": "2025-04-09T08:37:41.734408Z"
     }
    },
    "outputs": [],
@@ -178,11 +183,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": 5,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:33.434965Z",
-     "start_time": "2022-12-27T10:55:31.129548Z"
+     "end_time": "2025-04-09T08:37:41.775876Z",
+     "start_time": "2025-04-09T08:37:41.757870Z"
     }
    },
    "outputs": [],
@@ -199,11 +204,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 6,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:33.450227Z",
-     "start_time": "2022-12-27T10:55:33.438618Z"
+     "end_time": "2025-04-09T08:37:41.801179Z",
+     "start_time": "2025-04-09T08:37:41.785920Z"
     }
    },
    "outputs": [
@@ -213,7 +218,7 @@
        "'about, and, another, at, blade, by, chinese, comparing, demon, folklore, gizmo, gremlins, in, inside, is, long, lot, makes, mogwaï, movie, of, point, reference, sentence, shadoks, side, some, star, stuff, the, this, to, very, wars, with, yoda'"
       ]
      },
-     "execution_count": 5,
+     "execution_count": 6,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -231,11 +236,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 7,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:33.482581Z",
-     "start_time": "2022-12-27T10:55:33.452755Z"
+     "end_time": "2025-04-09T08:37:41.823949Z",
+     "start_time": "2025-04-09T08:37:41.809959Z"
     }
    },
    "outputs": [
@@ -245,7 +250,7 @@
        "5"
       ]
      },
-     "execution_count": 6,
+     "execution_count": 7,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -256,11 +261,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 8,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:33.497588Z",
-     "start_time": "2022-12-27T10:55:33.485594Z"
+     "end_time": "2025-04-09T08:37:41.848264Z",
+     "start_time": "2025-04-09T08:37:41.831947Z"
     }
    },
    "outputs": [
@@ -270,7 +275,7 @@
        "36"
       ]
      },
-     "execution_count": 7,
+     "execution_count": 8,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -288,11 +293,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 9,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:33.513615Z",
-     "start_time": "2022-12-27T10:55:33.500597Z"
+     "end_time": "2025-04-09T08:37:41.878450Z",
+     "start_time": "2025-04-09T08:37:41.866061Z"
     }
    },
    "outputs": [
@@ -303,7 +308,7 @@
        "\twith 47 stored elements and shape (5, 36)>"
       ]
      },
-     "execution_count": 8,
+     "execution_count": 9,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -321,11 +326,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": 10,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:33.529700Z",
-     "start_time": "2022-12-27T10:55:33.515506Z"
+     "end_time": "2025-04-09T08:37:41.908710Z",
+     "start_time": "2025-04-09T08:37:41.889467Z"
     }
    },
    "outputs": [
@@ -336,7 +341,7 @@
        "\twith 47 stored elements and shape (36, 5)>"
       ]
      },
-     "execution_count": 9,
+     "execution_count": 10,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -361,11 +366,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": 11,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:33.545662Z",
-     "start_time": "2022-12-27T10:55:33.534692Z"
+     "end_time": "2025-04-09T08:37:41.931328Z",
+     "start_time": "2025-04-09T08:37:41.916868Z"
     }
    },
    "outputs": [],
@@ -383,11 +388,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": 12,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.759533Z",
-     "start_time": "2022-12-27T10:55:33.550653Z"
+     "end_time": "2025-04-09T08:37:41.962923Z",
+     "start_time": "2025-04-09T08:37:41.939052Z"
     }
    },
    "outputs": [
@@ -397,7 +402,7 @@
        "True"
       ]
      },
-     "execution_count": 11,
+     "execution_count": 12,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -415,11 +420,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": 13,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.774833Z",
-     "start_time": "2022-12-27T10:55:34.764537Z"
+     "end_time": "2025-04-09T08:37:41.990374Z",
+     "start_time": "2025-04-09T08:37:41.971950Z"
     }
    },
    "outputs": [
@@ -436,7 +441,7 @@
        "  'content': 'This is another sentence about Shadoks.'}]"
       ]
      },
-     "execution_count": 12,
+     "execution_count": 13,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -454,11 +459,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
+   "execution_count": 14,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.806278Z",
-     "start_time": "2022-12-27T10:55:34.777638Z"
+     "end_time": "2025-04-09T08:37:42.013844Z",
+     "start_time": "2025-04-09T08:37:41.998400Z"
     }
    },
    "outputs": [
@@ -468,7 +473,7 @@
        "[{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}]"
       ]
      },
-     "execution_count": 13,
+     "execution_count": 14,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -486,11 +491,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
+   "execution_count": 15,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.822299Z",
-     "start_time": "2022-12-27T10:55:34.808278Z"
+     "end_time": "2025-04-09T08:37:42.038264Z",
+     "start_time": "2025-04-09T08:37:42.020863Z"
     }
    },
    "outputs": [
@@ -504,7 +509,7 @@
        "  'content': 'In chinese folklore, a Mogwaï is a demon.'}]"
       ]
      },
-     "execution_count": 14,
+     "execution_count": 15,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -516,11 +521,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
+   "execution_count": 16,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.838278Z",
-     "start_time": "2022-12-27T10:55:34.824278Z"
+     "end_time": "2025-04-09T08:37:42.060087Z",
+     "start_time": "2025-04-09T08:37:42.046565Z"
     }
    },
    "outputs": [
@@ -530,7 +535,7 @@
        "['mogwaï', 'gizmo', 'is', 'in', 'demon', 'chinese', 'folklore']"
       ]
      },
-     "execution_count": 15,
+     "execution_count": 16,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -548,11 +553,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 16,
+   "execution_count": 17,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.854117Z",
-     "start_time": "2022-12-27T10:55:34.840273Z"
+     "end_time": "2025-04-09T08:37:42.079733Z",
+     "start_time": "2025-04-09T08:37:42.069105Z"
     }
    },
    "outputs": [],
@@ -563,11 +568,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
+   "execution_count": 18,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.869088Z",
-     "start_time": "2022-12-27T10:55:34.857088Z"
+     "end_time": "2025-04-09T08:37:42.102036Z",
+     "start_time": "2025-04-09T08:37:42.089285Z"
     }
    },
    "outputs": [
@@ -579,7 +584,7 @@
        " 'In chinese folklore, a Mogwaï is a demon.']"
       ]
      },
-     "execution_count": 17,
+     "execution_count": 18,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -597,11 +602,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": 19,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.884678Z",
-     "start_time": "2022-12-27T10:55:34.871097Z"
+     "end_time": "2025-04-09T08:37:42.129537Z",
+     "start_time": "2025-04-09T08:37:42.112052Z"
     }
    },
    "outputs": [
@@ -613,7 +618,7 @@
        " 'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.']"
       ]
      },
-     "execution_count": 18,
+     "execution_count": 19,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -640,11 +645,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
+   "execution_count": 20,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:34.900725Z",
-     "start_time": "2022-12-27T10:55:34.886689Z"
+     "end_time": "2025-04-09T08:37:42.147440Z",
+     "start_time": "2025-04-09T08:37:42.137900Z"
     }
    },
    "outputs": [],
@@ -656,11 +661,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
+   "execution_count": 21,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:35.076160Z",
-     "start_time": "2022-12-27T10:55:34.904729Z"
+     "end_time": "2025-04-09T08:37:42.694688Z",
+     "start_time": "2025-04-09T08:37:42.154971Z"
     }
    },
    "outputs": [
@@ -699,11 +704,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 21,
+   "execution_count": 22,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:35.107696Z",
-     "start_time": "2022-12-27T10:55:35.080224Z"
+     "end_time": "2025-04-09T08:37:42.734248Z",
+     "start_time": "2025-04-09T08:37:42.701795Z"
     }
    },
    "outputs": [
@@ -733,11 +738,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
+   "execution_count": 23,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:35.138582Z",
-     "start_time": "2022-12-27T10:55:35.110704Z"
+     "end_time": "2025-04-09T08:37:42.772333Z",
+     "start_time": "2025-04-09T08:37:42.741783Z"
     }
    },
    "outputs": [
@@ -770,11 +775,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 23,
+   "execution_count": 24,
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2022-12-27T10:55:35.169617Z",
-     "start_time": "2022-12-27T10:55:35.142580Z"
+     "end_time": "2025-04-09T08:37:42.816898Z",
+     "start_time": "2025-04-09T08:37:42.781818Z"
     }
    },
    "outputs": [
@@ -818,7 +823,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.12.8"
+   "version": "3.11.4"
   },
   "toc": {
    "base_numbering": 1,
