@@ -1,8 +1,7 @@
-import zlib
+import zstandard as zstd
 import json
 import io
 import dill as pickle
-import numpy as np
 from pathlib import Path
 from gismo.corpus import toy_source_dict
 
@@ -28,9 +27,11 @@ def create_file_source(source=None, filename='mysource', path='.'):
     data_file = path / Path(f"{filename}.data")
     index_file = path / Path(f"{filename}.index")
     indices = [0]
+    cctx = zstd.ZstdCompressor(level=3)
     with open(data_file, "wb") as f:
         for item in source:
-            f.write(zlib.compress(json.dumps(item).encode('utf8')))
+            f.write(cctx.compress(json.dumps(item).encode('utf8')))
+            # f.write(zlib.compress(json.dumps(item).encode('utf8')))
             indices.append(f.tell())
     with open(index_file, "wb") as f:
         pickle.dump(indices, f)
@@ -60,6 +61,7 @@ class FileSource:
 
     Examples
     ---------
+
     >>> import tempfile
     >>> with tempfile.TemporaryDirectory() as dirname:
     ...    create_file_source(filename='mysource', path=dirname)
@@ -68,24 +70,26 @@ class FileSource:
     >>> content[:3]
     ['Gizmo is a Mogwaï.', 'This is a sentence about Blade.', 'This is another sentence about Shadoks.']
 
-    Note: when source is read from file (``load_source=False``, default behavior), you need to close the source afterwards
-    to avoid pending file handles.
+    Note: when source is read from file (``load_source=False``, default behavior), you need to close the source
+    afterward to avoid pending file handles. Or use a context manager.
 
     >>> with tempfile.TemporaryDirectory() as dirname:
     ...    create_file_source(filename='mysource', path=dirname)
-    ...    source = FileSource(filename='mysource', path=dirname)
-    ...    size = len(source)
-    ...    item = source[0]
-    ...    source.close()
+    ...    with FileSource(filename='mysource', path=dirname) as source:
+    ...        size = len(source)
+    ...        items = [source[i] for i in range(0, size, 2)]
     >>> size
     5
-    >>> item
-    {'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'}
+    >>> items  # doctest: +NORMALIZE_WHITESPACE
+    [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'},
+    {'title': 'Third Document', 'content': 'This is another sentence about Shadoks.'},
+    {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
     """
     def __init__(self, filename="mysource", path='.', load_source=False):
         path = Path(path)
         index = path / Path(f"{filename}.index")
         data = path / Path(f"{filename}.data")
+        self.dctx = zstd.ZstdDecompressor()
         # load index
         with open(index, "rb") as f:
             self.index = pickle.load(f)
@@ -98,7 +102,7 @@ class FileSource:
 
     def __getitem__(self, i):
         self.f.seek(self.index[i])
-        line = zlib.decompress(self.f.read(self.index[i + 1] - self.index[i])).decode('utf8')
+        line = self.dctx.decompress(self.f.read(self.index[i + 1] - self.index[i])).decode('utf8')
         return json.loads(line)
 
     def __iter__(self):
@@ -109,7 +113,7 @@ class FileSource:
     def __next__(self):
         if self.i == self.n:
             raise StopIteration
-        line = zlib.decompress(self.f.read(self.index[self.i + 1] - self.index[self.i])).decode('utf8')
+        line = self.dctx.decompress(self.f.read(self.index[self.i + 1] - self.index[self.i])).decode('utf8')
         self.i += 1
         return json.loads(line)
 
@@ -120,3 +124,9 @@ class FileSource:
         if self.f:
             self.f.close()
             self.f = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()

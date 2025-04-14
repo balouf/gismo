@@ -1,7 +1,7 @@
 import io
 from pathlib import Path
 import requests
-import zlib
+import zstandard as zstd
 import json
 import dill as pickle
 import numpy as np
@@ -135,7 +135,7 @@ def url2source(url, fields=None):
     ----------
     url: str
         the URL to fetch.
-    fields: set
+    fields: :class:`set`
         Set of DBLP fields to capture.
 
     Returns
@@ -162,7 +162,7 @@ def url2source(url, fields=None):
     return source
 
 
-def element_to_filesource(elt, data_handler, index, fields):
+def element_to_filesource(elt, data_handler, index, fields, cctx):
     """
     * Converts the xml element ``elt`` into a dict if it is an article.
     * Compress and write the dict in ``data_handler``
@@ -176,8 +176,10 @@ def element_to_filesource(elt, data_handler, index, fields):
         Where the compressed data will be stored. Must be writable.
     index:
         a list that contains the initial position of the data_handler for all previously processed elements.
-    fields: set
+    fields: :class:`set`
         Set of fields to retrieve.
+    cctx: :class:`~zstandard.ZstdCompressor`
+        Compressor to use.
 
     Returns
     -------
@@ -187,7 +189,7 @@ def element_to_filesource(elt, data_handler, index, fields):
     dic = xml_element_to_dict(elt=elt, fields=fields)
     if dic is None:
         return True
-    data_handler.write(zlib.compress(json.dumps(dic).encode('utf8')))
+    data_handler.write(cctx.compress(json.dumps(dic).encode('utf8')))
     index.append(data_handler.tell())
     return True
 
@@ -306,7 +308,8 @@ class Dblp:
                 index = [0]
                 with open(self.dblp_data, "wb") as g:
                     context = etree.iterparse(f, events=('start', 'end',), load_dtd=True)
-                    fast_iter(context, element_to_filesource, d=d, data_handler=g, index=index, fields=fields)
+                    fast_iter(context, element_to_filesource, d=d, data_handler=g, index=index, fields=fields,
+                              cctx=zstd.ZstdCompressor(level=3))
                 print(f"Building Index.")
                 with open(self.dblp_index, "wb") as g:
                     pickle.dump(np.array(index), g)

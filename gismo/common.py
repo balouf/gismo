@@ -3,7 +3,7 @@
 #
 # GISMO: a Generic Information Search with a Mind of its Own
 
-import gzip
+import zstandard as zstd
 import errno
 import os
 import dill as pickle
@@ -17,7 +17,7 @@ class MixInIO:
     Provide basic save/load capacities to other classes.
     """
 
-    def dump(self, filename: str, path='.', overwrite=False, compress=True):
+    def dump(self, filename: str, path='.', overwrite=False, compress=True, stemize=True):
         """
         Save instance to file.
 
@@ -27,10 +27,12 @@ class MixInIO:
             The stem of the filename.
         path: :py:class:`str` or :py:class:`~pathlib.Path`, optional
             The location path.
-        overwrite: bool
+        overwrite: bool, default=False
             Should existing file be erased if it exists?
-        compress: bool
-            Should gzip compression be used?
+        compress: bool, default=True
+            Should Zstd compression be used?
+        stemize: bool, default=True
+            Trim any extension (e.g. .xxx)
 
         Examples
         ----------
@@ -45,9 +47,9 @@ class MixInIO:
         ...     dir_content = [file.name for file in Path(tmpdirname).glob('*')]
         ...     v2 = ToyClass.load(filename='myfile', path=Path(tmpdirname))
         ...     v1.dump(filename='myfile', compress=True, path=tmpdirname) # doctest.ELLIPSIS
-        File ...myfile.pkl.gz already exists! Use overwrite option to overwrite.
+        File ...myfile.pkl.zst already exists! Use overwrite option to overwrite.
         >>> dir_content
-        ['myfile.pkl.gz']
+        ['myfile.pkl.zst']
         >>> v2.value
         42
 
@@ -74,16 +76,20 @@ class MixInIO:
         FileNotFoundError: [Errno 2] No such file or directory: ...
         """
         path = Path(path)
-        destination = path / Path(filename).stem
+        fn = Path(filename)
+        if stemize:
+            fn = Path(fn.stem)
         if compress:
-            destination = destination.with_suffix(".pkl.gz")
+            destination = path / (fn.name + ".pkl.zst")
             if destination.exists() and not overwrite:
                 print(f"File {destination} already exists! Use overwrite option to overwrite.")
             else:
-                with gzip.open(destination, "wb") as f:
-                    pickle.dump(self, f)
+                with open(destination, 'wb') as f:
+                    cctx = zstd.ZstdCompressor(level=3)
+                    with cctx.stream_writer(f) as z:
+                        pickle.dump(self, z, protocol=5)
         else:
-            destination = destination.with_suffix(".pkl")
+            destination = path / (fn.name + ".pkl")
             if destination.exists() and not overwrite:
                 print(f"File {destination} already exists! Use overwrite option to overwrite.")
             else:
@@ -108,10 +114,12 @@ class MixInIO:
             with open(dest, 'rb') as f:
                 return pickle.load(f)
         else:
-            dest = dest.with_suffix('.pkl.gz')
+            dest = dest.with_suffix('.pkl.zst')
             if dest.exists():
-                with gzip.open(dest) as f:
-                    return pickle.load(f)
+                dctx = zstd.ZstdDecompressor()
+                # Load compressed data
+                with open(dest, "rb") as f, dctx.stream_reader(f) as z:
+                    return pickle.load(z)
             else:
                 raise FileNotFoundError(
                     errno.ENOENT, os.strerror(errno.ENOENT), dest)

@@ -11,13 +11,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 from gismo.common import MixInIO, toy_source_text
 from gismo.corpus import Corpus
+from gismo.csr_compress import compress_csr
 
 
 # 1-norm for diffusion (input is X or Y indptr and data, inplace modification)
 @njit
 def l1_normalize(indptr, data):
     """
-    Computes L1 norm on sparse embedding (x or y) and applies inplace normalization.
+    Applies L1-normalization on sparse embedding (x or y).
 
     Parameters
     ----------
@@ -28,23 +29,14 @@ def l1_normalize(indptr, data):
 
     Returns
     -------
-    l1_norm: :class:`~numpy.ndarray`
-        L1 norms of all vectors of the embedding before normalization.
-    """
-
-    """
-    Normalize inplace the embedding (X or Y)
-    :param indptr: the pointers of the vector
-    :param data:  the data of the vector
-    :return: the l1 norm. Data is normalized in place
+    None
     """
     n = len(indptr) - 1
-    l1_norms = np.zeros(n)
+    l1 = 0.0
     for i in range(n):
-        l1_norms[i] = np.sum(data[indptr[i]:indptr[i + 1]])
-        if l1_norms[i] > 0:
-            data[indptr[i]:indptr[i + 1]] /= l1_norms[i]
-    return l1_norms
+        l1 = np.sum(data[indptr[i]:indptr[i + 1]])
+        if l1 > 0:
+            data[indptr[i]:indptr[i + 1]] /= l1
 
 
 # Note: the use of external embedding breaks a symmetry between X and Y. IDF needs to be stored if one wants to switch.
@@ -207,9 +199,7 @@ class Embedding(MixInIO):
         self.n = 0  # Number of documents
         self.m = 0  # Number of features
         self.x = None  # TF-IDTF X embedding of documents into features, normalized
-        self.x_norm = None  # memory of X norm for hierarchical merge
         self.y = None  # Y embedding of features into documents
-        self.y_norm = None  # memory of Y norm for hierarchical merge
         self.idf = None  # idf vector
         self.features = None  # vocabulary list
         self._result_found = True  # keep track of projection successes
@@ -232,6 +222,7 @@ class Embedding(MixInIO):
 
         Example
         -------
+
         >>> corpus=Corpus(toy_source_text)
         >>> embedding = Embedding()
         >>> embedding.fit_transform(corpus)
@@ -240,6 +231,20 @@ class Embedding(MixInIO):
     	with 25 stored elements and shape (5, 21)>
         >>> list(embedding.features[:8])
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
+
+        Note that if a corpus is very large,
+        there is the possibility to perform a lossy compression of the dual embeddings.
+
+        >>> embedding.compress(min_degree=1, ratio=.5)
+
+        The actual compression is hard to assess. It depends on the embedding and can differ between x and y.
+
+        >>> embedding.x  # doctest: +NORMALIZE_WHITESPACE
+        <Compressed Sparse Row sparse matrix of dtype 'float64'
+            with 12 stored elements and shape (5, 21)>
+        >>> embedding.y  # doctest: +NORMALIZE_WHITESPACE
+        <Compressed Sparse Row sparse matrix of dtype 'float64'
+            with 22 stored elements and shape (21, 5)>
         """
         if self.vectorizer is None:
             self.vectorizer = auto_vect(corpus)
@@ -269,8 +274,8 @@ class Embedding(MixInIO):
         # Transpose y
         self.y = self.y.T
         # Normalize
-        self.x_norm = l1_normalize(indptr=self.x.indptr, data=self.x.data)
-        self.y_norm = l1_normalize(indptr=self.y.indptr, data=self.y.data)
+        l1_normalize(indptr=self.x.indptr, data=self.x.data)
+        l1_normalize(indptr=self.y.indptr, data=self.y.data)
 
     def fit(self, corpus):
         """
@@ -390,8 +395,8 @@ class Embedding(MixInIO):
         # Transpose y
         self.y = self.y.T
         # Normalize
-        self.x_norm = l1_normalize(indptr=self.x.indptr, data=self.x.data)
-        self.y_norm = l1_normalize(indptr=self.y.indptr, data=self.y.data)
+        l1_normalize(indptr=self.x.indptr, data=self.x.data)
+        l1_normalize(indptr=self.y.indptr, data=self.y.data)
 
     def query_projection(self, query):
         """
@@ -434,3 +439,23 @@ class Embedding(MixInIO):
         else:
             self._result_found = True
         return z, self._result_found
+
+    def compress(self, ratio=.8, min_degree=10, max_degree=None):
+        """
+        Inplace lossy compression of x and y. Compression is performed row by row.
+
+        Parameters
+        ----------
+        ratio: :class:`float`, default .8
+            Target compression ratio (quantity of weights to preserve).
+        min_degree: :class:`int`, default 10
+            Don't compress rows with less than `mi_degree` entries.
+        max_degree: class:`int`, optional
+            If set, rows are allowed at most `max_degree` entries.
+
+        Returns
+        -------
+        None
+        """
+        compress_csr(self.x, ratio=ratio, min_degree=min_degree, max_degree=max_degree)
+        compress_csr(self.y, ratio=ratio, min_degree=min_degree, max_degree=max_degree)

@@ -495,9 +495,7 @@ class XGismo(Gismo):
             embedding.m = y_embedding.m
             embedding.features = y_embedding.features
             embedding.x = np.dot(x_embedding.y, y_embedding.x)
-            embedding.x_norm = np.ones(embedding.n)
             embedding.y = np.dot(y_embedding.y, x_embedding.x)
-            embedding.y_norm = np.ones(embedding.m)
             embedding.idf = y_embedding.idf
             super().__init__(corpus=Corpus(x_embedding.features, to_text=lambda x: x), embedding=embedding, **kwargs)
 

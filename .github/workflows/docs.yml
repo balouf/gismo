@@ -22,7 +22,7 @@ jobs:
       - name: Set up uv
         uses: astral-sh/setup-uv@v5
         with:
-          version: "0.6.11"
+          version: "0.6.13"
 
       - name: Setup Pandoc
         uses: pandoc/actions/setup@v1
@@ -41,3 +41,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
           folder: build/
+          single-commit: true

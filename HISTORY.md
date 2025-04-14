@@ -4,8 +4,14 @@
 
 * Rethink distortion on both vectors normalization and IDTF/query trade-off.
 * Accelerate similarity computation (currently sklearn-based) in clustering.
-* Context manager for FileSource (e.g. ``with FileSource(...) as source:``)
 
+
+## 0.5.1 (2025-04-14)
+
+* Lossy compression of the embeddings! Smaller and faster gismos at price of (small) quality deterioration.
+* Use Zstandard as main lossless compression tool for faster (de)compression.
+* Context manager for FileSource (e.g. ``with FileSource(...) as source:``)
+* Dead code: removed attributes that store L1-norms inside `Embedding` as they are not used anymore.
 
 ## 0.5.0 (2025-04-02)
 

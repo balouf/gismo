@@ -1,10 +1,6 @@
-import requests
-import urllib
 import pkgutil
 import gzip
 import json
-
-from bs4 import BeautifulSoup as bs
 
 
 def get_acm_from_package():
