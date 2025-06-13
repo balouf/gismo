@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gismo.csr_compress &#8212; GISMO 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gismo/csr_compress';</script>
+    <link rel="icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo-line.png" class="logo__image only-light" alt="GISMO 0.5.2 documentation - Home"/>
+    <img src="../../_static/logo-line.png" class="logo__image only-dark pst-js-only" alt="GISMO 0.5.2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gismo.csr_compress</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gismo.csr_compress</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="kn">import</span> <span class="n">njit</span>
+
+
+<div class="viewcode-block" id="compress_csr">
+<a class="viewcode-back" href="../../reference/embedding.html#gismo.csr_compress.compress_csr">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compress_csr</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">min_degree</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_degree</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inplace lossy compression of CSR matrix. Compression is performed row by row.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mat: :class:`~scipy.sparse.csr_matrix`</span>
+<span class="sd">        Matrix to compress. It is assumed that the weights are non-negative and normalized (sum of a non-null row is 1).</span>
+<span class="sd">    ratio: :class:`float`, default .8</span>
+<span class="sd">        Target compression ratio (quantity of weights to preserve).</span>
+<span class="sd">    min_degree: :class:`int`, default 10</span>
+<span class="sd">        Don&#39;t compress rows with less than `mi_degree` entries.</span>
+<span class="sd">    max_degree: class:`int`, optional</span>
+<span class="sd">        If set, rows are allowed at most `max_degree` entries.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Start with a full matrix with a csr representation:</span>
+
+<span class="sd">    &gt;&gt;&gt; from scipy.sparse import csr_matrix</span>
+<span class="sd">    &gt;&gt;&gt; from gismo.embedding import l1_normalize</span>
+<span class="sd">    &gt;&gt;&gt; np.random.seed(42)</span>
+<span class="sd">    &gt;&gt;&gt; x = csr_matrix(np.random.rand(10, 10))</span>
+<span class="sd">    &gt;&gt;&gt; l1_normalize(x.indptr, x.data)</span>
+<span class="sd">    &gt;&gt;&gt; x  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="sd">        with 100 stored elements and shape (10, 10)&gt;</span>
+<span class="sd">    &gt;&gt;&gt; x.toarray()</span>
+<span class="sd">    array([[0.07200801, 0.18278161, 0.14073106, 0.11509637, 0.0299957 ,</span>
+<span class="sd">            0.02999106, 0.01116699, 0.16652855, 0.11556865, 0.13613201],</span>
+<span class="sd">           [0.00520773, 0.24538041, 0.21060217, 0.05372031, 0.04600045,</span>
+<span class="sd">            0.04640006, 0.07697116, 0.13275971, 0.10927907, 0.07367894],</span>
+<span class="sd">           [0.15281528, 0.03483974, 0.07296552, 0.09150188, 0.11390722,</span>
+<span class="sd">            0.19610414, 0.04987017, 0.12843427, 0.1479604 , 0.01160137],</span>
+<span class="sd">           [0.11929704, 0.03348399, 0.01277348, 0.18632243, 0.18961076,</span>
+<span class="sd">            0.15873628, 0.05981372, 0.01917882, 0.13435547, 0.086428  ],</span>
+<span class="sd">           [0.03016589, 0.12239978, 0.00850029, 0.22476941, 0.06396626,</span>
+<span class="sd">            0.16376487, 0.07704997, 0.12855247, 0.135138  , 0.04569305],</span>
+<span class="sd">           [0.16851056, 0.13471549, 0.16328177, 0.15551799, 0.10391301,</span>
+<span class="sd">            0.16021865, 0.0153797 , 0.03406116, 0.00786035, 0.05654132],</span>
+<span class="sd">           [0.08316254, 0.05805864, 0.17731912, 0.07633199, 0.06010957,</span>
+<span class="sd">            0.11611685, 0.03015256, 0.17164043, 0.01595108, 0.21115723],</span>
+<span class="sd">           [0.16981899, 0.04369819, 0.00121433, 0.17932246, 0.15544009,</span>
+<span class="sd">            0.16031091, 0.16960471, 0.01628265, 0.07882771, 0.02547996],</span>
+<span class="sd">           [0.16460084, 0.11886802, 0.06310494, 0.01212109, 0.05930686,</span>
+<span class="sd">            0.0620151 , 0.13914183, 0.12158739, 0.16919868, 0.09005523],</span>
+<span class="sd">           [0.02655733, 0.15838451, 0.16894139, 0.12463829, 0.17120245,</span>
+<span class="sd">            0.1096532 , 0.11607906, 0.09494058, 0.00564462, 0.02395858]])</span>
+
+<span class="sd">    A hard compression:</span>
+
+<span class="sd">    &gt;&gt;&gt; y = x.copy()</span>
+<span class="sd">    &gt;&gt;&gt; compress_csr(y, ratio=.5, min_degree=2)</span>
+<span class="sd">    &gt;&gt;&gt; y  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="sd">        with 35 stored elements and shape (10, 10)&gt;</span>
+
+<span class="sd">    Here we keep 50% of the information with 35% of the entries.</span>
+
+<span class="sd">    &gt;&gt;&gt; y.toarray()</span>
+<span class="sd">    array([[0.        , 0.29190263, 0.22474781, 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.26594645, 0.        , 0.21740311],</span>
+<span class="sd">           [0.        , 0.41678747, 0.35771537, 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.22549715, 0.        , 0.        ],</span>
+<span class="sd">           [0.24438164, 0.        , 0.        , 0.        , 0.        ,</span>
+<span class="sd">            0.31360902, 0.        , 0.20539161, 0.23661773, 0.        ],</span>
+<span class="sd">           [0.        , 0.        , 0.        , 0.34848152, 0.35463173,</span>
+<span class="sd">            0.29688675, 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.        , 0.        , 0.        , 0.42921769, 0.        ,</span>
+<span class="sd">            0.31272397, 0.        , 0.        , 0.25805835, 0.        ],</span>
+<span class="sd">           [0.26023632, 0.        , 0.25216133, 0.24017148, 0.        ,</span>
+<span class="sd">            0.24743086, 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.        , 0.        , 0.31657526, 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.30643686, 0.        , 0.37698787],</span>
+<span class="sd">           [0.32736433, 0.        , 0.        , 0.34568442, 0.        ,</span>
+<span class="sd">            0.        , 0.32695126, 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.27685935, 0.        , 0.        , 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.23403718, 0.20451054, 0.28459294, 0.        ],</span>
+<span class="sd">           [0.        , 0.25416076, 0.27110146, 0.20000797, 0.27472981,</span>
+<span class="sd">            0.        , 0.        , 0.        , 0.        , 0.        ]])</span>
+
+<span class="sd">    Harder (re-compression):</span>
+
+<span class="sd">    &gt;&gt;&gt; compress_csr(y, ratio=.5, min_degree=1)</span>
+<span class="sd">    &gt;&gt;&gt; y  #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="sd">        with 20 stored elements and shape (10, 10)&gt;</span>
+
+<span class="sd">    &gt;&gt;&gt; y.toarray()</span>
+<span class="sd">    array([[0.        , 0.52326452, 0.        , 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.47673548, 0.        , 0.        ],</span>
+<span class="sd">           [0.        , 0.5381355 , 0.4618645 , 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.43796726, 0.        , 0.        , 0.        , 0.        ,</span>
+<span class="sd">            0.56203274, 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.        , 0.        , 0.        , 0.49562644, 0.50437356,</span>
+<span class="sd">            0.        , 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.        , 0.        , 0.        , 0.57850599, 0.        ,</span>
+<span class="sd">            0.42149401, 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.50787961, 0.        , 0.49212039, 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.        , 0.        , 0.45644765, 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.        , 0.        , 0.54355235],</span>
+<span class="sd">           [0.48639022, 0.        , 0.        , 0.51360978, 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="sd">           [0.49311287, 0.        , 0.        , 0.        , 0.        ,</span>
+<span class="sd">            0.        , 0.        , 0.        , 0.50688713, 0.        ],</span>
+<span class="sd">           [0.        , 0.        , 0.49667631, 0.        , 0.50332369,</span>
+<span class="sd">            0.        , 0.        , 0.        , 0.        , 0.        ]])</span>
+
+
+<span class="sd">    A soft compression:</span>
+
+<span class="sd">    &gt;&gt;&gt; y = x.copy()</span>
+<span class="sd">    &gt;&gt;&gt; compress_csr(y, ratio=.98, min_degree=7)</span>
+<span class="sd">    &gt;&gt;&gt; y  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="sd">        with 89 stored elements and shape (10, 10)&gt;</span>
+<span class="sd">    &gt;&gt;&gt; y.toarray()</span>
+<span class="sd">    array([[0.0728212 , 0.18484578, 0.14232035, 0.11639616, 0.03033444,</span>
+<span class="sd">            0.03032975, 0.        , 0.16840917, 0.11687378, 0.13766936],</span>
+<span class="sd">           [0.        , 0.24666498, 0.21170467, 0.05400154, 0.04624126,</span>
+<span class="sd">            0.04664296, 0.0773741 , 0.1334547 , 0.10985114, 0.07406465],</span>
+<span class="sd">           [0.15460896, 0.03524867, 0.07382196, 0.09257589, 0.11524421,</span>
+<span class="sd">            0.19840592, 0.05045552, 0.12994178, 0.14969709, 0.        ],</span>
+<span class="sd">           [0.12084059, 0.03391723, 0.        , 0.18873321, 0.19206409,</span>
+<span class="sd">            0.16079013, 0.06058764, 0.01942697, 0.13609386, 0.08754628],</span>
+<span class="sd">           [0.03042451, 0.12344914, 0.        , 0.22669639, 0.06451465,</span>
+<span class="sd">            0.16516886, 0.07771054, 0.12965457, 0.13629656, 0.04608479],</span>
+<span class="sd">           [0.1698456 , 0.13578279, 0.16457539, 0.1567501 , 0.10473628,</span>
+<span class="sd">            0.161488  , 0.01550155, 0.03433102, 0.        , 0.05698928],</span>
+<span class="sd">           [0.08451057, 0.05899975, 0.18019339, 0.07756931, 0.06108393,</span>
+<span class="sd">            0.11799906, 0.03064132, 0.17442265, 0.        , 0.21458001],</span>
+<span class="sd">           [0.17284322, 0.04447639, 0.        , 0.18251594, 0.15820826,</span>
+<span class="sd">            0.16316582, 0.17262513, 0.        , 0.08023152, 0.02593372],</span>
+<span class="sd">           [0.16662046, 0.12032651, 0.06387923, 0.        , 0.06003454,</span>
+<span class="sd">            0.06277602, 0.14084908, 0.12307925, 0.17127472, 0.09116019],</span>
+<span class="sd">           [0.02670808, 0.1592836 , 0.16990041, 0.12534582, 0.17217431,</span>
+<span class="sd">            0.11027566, 0.116738  , 0.09547953, 0.        , 0.02409458]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="n">max_degree</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">max_degree</span> <span class="o">=</span> <span class="n">m</span>
+    <span class="n">pt</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">dat</span> <span class="o">=</span> <span class="n">jit_compress</span><span class="p">(</span>
+        <span class="n">mat</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">mat</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">mat</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">min_degree</span><span class="p">,</span> <span class="n">max_degree</span>
+    <span class="p">)</span>
+    <span class="n">mat</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">mat</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">mat</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pt</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">dat</span></div>
+
+
+
+<span class="nd">@njit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">jit_compress</span><span class="p">(</span><span class="n">ptrs</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">datas</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">min_degree</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="n">in_start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">out_start</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">in_end</span> <span class="o">=</span> <span class="n">ptrs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">in_end</span> <span class="o">&gt;</span> <span class="n">in_start</span><span class="p">:</span>
+            <span class="n">dat</span> <span class="o">=</span> <span class="n">datas</span><span class="p">[</span><span class="n">in_start</span><span class="p">:</span><span class="n">in_end</span><span class="p">]</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">in_start</span><span class="p">:</span><span class="n">in_end</span><span class="p">]</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span>
+
+            <span class="n">cov</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">dat</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">order</span><span class="p">):</span>
+                <span class="n">cov</span> <span class="o">+=</span> <span class="n">dat</span><span class="p">[</span><span class="n">w</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="n">min_degree</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">cov</span> <span class="o">&gt;=</span> <span class="n">target</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="n">m</span><span class="p">):</span>
+                    <span class="k">break</span>
+
+            <span class="n">out_end</span> <span class="o">=</span> <span class="n">out_start</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">datas</span><span class="p">[</span><span class="n">out_start</span><span class="p">:</span><span class="n">out_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[</span><span class="n">order</span><span class="p">[:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">/</span> <span class="n">cov</span>
+            <span class="n">indices</span><span class="p">[</span><span class="n">out_start</span><span class="p">:</span><span class="n">out_end</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="n">order</span><span class="p">[:</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+
+        <span class="n">ptrs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_end</span>
+        <span class="n">in_start</span> <span class="o">=</span> <span class="n">in_end</span>
+        <span class="n">out_start</span> <span class="o">=</span> <span class="n">out_end</span>
+    <span class="k">return</span> <span class="n">ptrs</span><span class="p">,</span> <span class="n">indices</span><span class="p">[:</span><span class="n">out_start</span><span class="p">],</span> <span class="n">datas</span><span class="p">[:</span><span class="n">out_start</span><span class="p">]</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

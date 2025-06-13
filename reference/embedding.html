@@ -1,0 +1,974 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Embedding &#8212; GISMO 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/embedding';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="D-Iteration" href="diteration.html" />
+    <link rel="prev" title="Corpus" href="corpus.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-line.png" class="logo__image only-light" alt="GISMO 0.5.2 documentation - Home"/>
+    <img src="../_static/logo-line.png" class="logo__image only-dark pst-js-only" alt="GISMO 0.5.2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="corpus.html">Corpus</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Embedding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diteration.html">D-Iteration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gismo.html">Gismo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="landmarks.html">Landmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="post-processing.html">Post Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filesource.html">FileSource</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sentencizer.html">Sentencizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">Common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Embedding</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="embedding">
+<h1>Embedding<a class="headerlink" href="#embedding" title="Link to this heading">#</a></h1>
+<p>This module can create and manipulate TF-IDTF embeddings out of a corpus.</p>
+<dl class="py class" id="module-gismo.embedding">
+<dt class="sig sig-object py" id="gismo.embedding.Embedding">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismo.embedding.</span></span><span class="sig-name descname"><span class="pre">Embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vectorizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#Embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.Embedding" title="Link to this definition">#</a></dt>
+<dd><p>This class leverages the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a>
+class to build the dual embedding of a <a class="reference internal" href="corpus.html#gismo.corpus.Corpus" title="gismo.corpus.Corpus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Corpus</span></code></a>.</p>
+<ul class="simple">
+<li><p>Documents are embedded in the space of features;</p></li>
+<li><p>Features are embedded in the space of documents.</p></li>
+</ul>
+<p>See the examples and methods below for all usages of the class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vectorizer</strong> (<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a>, optional) – Custom <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a>
+to override default behavior (recommended).
+Having a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a>
+adapted to the <a class="reference internal" href="corpus.html#gismo.corpus.Corpus" title="gismo.corpus.Corpus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Corpus</span></code></a> is good practice.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gismo.embedding.Embedding.compress">
+<span class="sig-name descname"><span class="pre">compress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#Embedding.compress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.Embedding.compress" title="Link to this definition">#</a></dt>
+<dd><p>Inplace lossy compression of x and y. Compression is performed row by row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, default .8) – Target compression ratio (quantity of weights to preserve).</p></li>
+<li><p><strong>min_degree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, default 10) – Don’t compress rows with less than <cite>mi_degree</cite> entries.</p></li>
+<li><p><strong>max_degree</strong> (class:<cite>int</cite>, optional) – If set, rows are allowed at most <cite>max_degree</cite> entries.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismo.embedding.Embedding.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#Embedding.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.Embedding.fit" title="Link to this definition">#</a></dt>
+<dd><p>Learn features from a corpus of documents.</p>
+<ul class="simple">
+<li><p>If not yet set, a default <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a> is created.</p></li>
+<li><p>Features are computed and stored.</p></li>
+<li><p>Inverse-Document-Frequency weights of features are computed.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>corpus</strong> (<a class="reference internal" href="corpus.html#gismo.corpus.Corpus" title="gismo.corpus.Corpus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Corpus</span></code></a>) – The corpus to ingest.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">=</span><span class="n">Corpus</span><span class="p">(</span><span class="n">toy_source_text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">embedding</span><span class="o">.</span><span class="n">idf</span><span class="p">)</span>
+<span class="go">21</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
+<span class="go">[&#39;blade&#39;, &#39;chinese&#39;, &#39;comparing&#39;, &#39;demon&#39;, &#39;folklore&#39;, &#39;gizmo&#39;, &#39;gremlins&#39;, &#39;inside&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismo.embedding.Embedding.fit_ext">
+<span class="sig-name descname"><span class="pre">fit_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">embedding</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#Embedding.fit_ext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.Embedding.fit_ext" title="Link to this definition">#</a></dt>
+<dd><p>Use learned features from another <a class="reference internal" href="#gismo.embedding.Embedding" title="gismo.embedding.Embedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Embedding</span></code></a>.
+This is useful for the fast creation of local embeddings
+(e.g. at sentence level) out of a global embedding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>embedding</strong> (<a class="reference internal" href="#gismo.embedding.Embedding" title="gismo.embedding.Embedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Embedding</span></code></a>) – External embedding to copy.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">=</span><span class="n">Corpus</span><span class="p">(</span><span class="n">toy_source_text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">other_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">other_embedding</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">fit_ext</span><span class="p">(</span><span class="n">other_embedding</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">embedding</span><span class="o">.</span><span class="n">idf</span><span class="p">)</span>
+<span class="go">21</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
+<span class="go">[&#39;blade&#39;, &#39;chinese&#39;, &#39;comparing&#39;, &#39;demon&#39;, &#39;folklore&#39;, &#39;gizmo&#39;, &#39;gremlins&#39;, &#39;inside&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismo.embedding.Embedding.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#Embedding.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.Embedding.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Ingest a corpus of documents.</p>
+<ul class="simple">
+<li><p>If not yet set, a default <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a> is created.</p></li>
+<li><p>Features are computed and stored (fit).</p></li>
+<li><p>Inverse-Document-Frequency weights of features are computed (fit).</p></li>
+<li><p>TF-IDF embedding of documents is computed and stored (transform).</p></li>
+<li><p>TF-ITF embedding of features is computed and stored (transform).</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>corpus</strong> (<a class="reference internal" href="corpus.html#gismo.corpus.Corpus" title="gismo.corpus.Corpus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Corpus</span></code></a>) – The corpus to ingest.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">=</span><span class="n">Corpus</span><span class="p">(</span><span class="n">toy_source_text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span>  
+<span class="go">&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="go">with 25 stored elements and shape (5, 21)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
+<span class="go">[&#39;blade&#39;, &#39;chinese&#39;, &#39;comparing&#39;, &#39;demon&#39;, &#39;folklore&#39;, &#39;gizmo&#39;, &#39;gremlins&#39;, &#39;inside&#39;]</span>
+</pre></div>
+</div>
+<p>Note that if a corpus is very large,
+there is the possibility to perform a lossy compression of the dual embeddings.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">min_degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The actual compression is hard to assess. It depends on the embedding and can differ between x and y.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span>  
+<span class="go">&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="go">    with 12 stored elements and shape (5, 21)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">y</span>  
+<span class="go">&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="go">    with 22 stored elements and shape (21, 5)&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismo.embedding.Embedding.query_projection">
+<span class="sig-name descname"><span class="pre">query_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#Embedding.query_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.Embedding.query_projection" title="Link to this definition">#</a></dt>
+<dd><p>Project a query in the feature space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Text to project.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.15.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">csr_matrix</span></code></a>) – result of the query projection (IDF distribution if query does not match any feature).</p></li>
+<li><p><strong>success</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – projection success (<code class="docutils literal notranslate"><span class="pre">True</span></code> if at least one feature been found).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">=</span><span class="n">Corpus</span><span class="p">(</span><span class="n">toy_source_text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">query_projection</span><span class="p">(</span><span class="s2">&quot;Gizmo is not Yoda but he rocks!&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">data</span><span class="p">)):</span>
+<span class="gp">... </span>   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">z</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">z</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> 
+<span class="go">gizmo: 0.3868528072...</span>
+<span class="go">yoda: 0.6131471927...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">success</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">embedding</span><span class="o">.</span><span class="n">query_projection</span><span class="p">(</span><span class="s2">&quot;That content does not intersect toy corpus&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">success</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismo.embedding.Embedding.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#Embedding.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.Embedding.transform" title="Link to this definition">#</a></dt>
+<dd><p>Ingest a corpus of documents using existing features.
+Requires that the embedding has been fitted beforehand.</p>
+<ul class="simple">
+<li><p>TF-IDF embedding of documents is computed and stored.</p></li>
+<li><p>TF-ITF embedding of features is computed and stored.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>corpus</strong> (<a class="reference internal" href="corpus.html#gismo.corpus.Corpus" title="gismo.corpus.Corpus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Corpus</span></code></a>) – The corpus to ingest.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span><span class="o">=</span><span class="n">Corpus</span><span class="p">(</span><span class="n">toy_source_text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">embedding</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">indices</span><span class="p">[:</span><span class="mi">8</span><span class="p">]]</span>
+<span class="go">[&#39;gizmo&#39;, &#39;mogwaï&#39;, &#39;blade&#39;, &#39;sentence&#39;, &#39;sentence&#39;, &#39;shadoks&#39;, &#39;comparing&#39;, &#39;gizmo&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">small_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">([</span><span class="s2">&quot;I only talk about Yoda&quot;</span><span class="p">,</span> <span class="s2">&quot;Gizmo forever!&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">small_corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">embedding</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span>
+<span class="go">[&#39;yoda&#39;, &#39;gizmo&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismo.embedding.auto_vect">
+<span class="sig-prename descclassname"><span class="pre">gismo.embedding.</span></span><span class="sig-name descname"><span class="pre">auto_vect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corpus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#auto_vect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.auto_vect" title="Link to this definition">#</a></dt>
+<dd><p>Creates a default <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a>
+compatible with the
+<a class="reference internal" href="#gismo.embedding.Embedding" title="gismo.embedding.Embedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Embedding</span></code></a> constructor.
+For not-too-small corpi, a slight frequency-filter is applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>corpus</strong> (<a class="reference internal" href="corpus.html#gismo.corpus.Corpus" title="gismo.corpus.Corpus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Corpus</span></code></a>, optional) – The corpus for which the
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a>
+is intended.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a>
+object compatible with the
+<a class="reference internal" href="#gismo.embedding.Embedding" title="gismo.embedding.Embedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Embedding</span></code></a> constructor.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismo.embedding.idf_fit">
+<span class="sig-prename descclassname"><span class="pre">gismo.embedding.</span></span><span class="sig-name descname"><span class="pre">idf_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indptr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#idf_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.idf_fit" title="Link to this definition">#</a></dt>
+<dd><p>Computes the Inverse-Document-Frequency vector on sparse embedding y.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indptr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Pointers of the embedding y (e.g. y.indptr).</p></li>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of documents.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>idf_vector</strong> – IDF vector of size <cite>m</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismo.embedding.idf_transform">
+<span class="sig-prename descclassname"><span class="pre">gismo.embedding.</span></span><span class="sig-name descname"><span class="pre">idf_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indptr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idf_vector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#idf_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.idf_transform" title="Link to this definition">#</a></dt>
+<dd><p>Applies inplace Inverse-Document-Frequency transformation on sparse embedding y.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indptr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Pointers of the embedding y (e.g. y.indptr).</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Values of the embedding y (e.g. y.data).</p></li>
+<li><p><strong>idf_vector</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – IDF vector of the embedding, obtained from <a class="reference internal" href="#gismo.embedding.idf_fit" title="gismo.embedding.idf_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">idf_fit()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismo.embedding.itf_fit_transform">
+<span class="sig-prename descclassname"><span class="pre">gismo.embedding.</span></span><span class="sig-name descname"><span class="pre">itf_fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indptr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#itf_fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.itf_fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Applies inplace Inverse-Term-Frequency transformation on sparse embedding x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indptr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Pointers of the embedding (e.g. x.indptr).</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Values of the embedding  (e.g. x.data).</p></li>
+<li><p><strong>m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of features</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismo.embedding.l1_normalize">
+<span class="sig-prename descclassname"><span class="pre">gismo.embedding.</span></span><span class="sig-name descname"><span class="pre">l1_normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indptr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#l1_normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.l1_normalize" title="Link to this definition">#</a></dt>
+<dd><p>Applies L1-normalization on sparse embedding (x or y).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indptr</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Pointers of the embedding (e.g. x.indptr).</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Values of the embedding  (e.g. x.data).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismo.embedding.query_shape">
+<span class="sig-prename descclassname"><span class="pre">gismo.embedding.</span></span><span class="sig-name descname"><span class="pre">query_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/embedding.html#query_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.embedding.query_shape" title="Link to this definition">#</a></dt>
+<dd><p>Applies inplace logarithmic smoothing, IDF weighting, and normalization
+to the output of the
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CountVectorizer</span></code></a>
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer.transform" title="(in scikit-learn v1.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform()</span></code></a> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indices</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Indice attribute of the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.15.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">csr_matrix</span></code></a> obtained from
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer.transform" title="(in scikit-learn v1.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform()</span></code></a>.</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – Data attribute of the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.15.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">csr_matrix</span></code></a> obtained from
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer.transform" title="(in scikit-learn v1.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform()</span></code></a>.</p></li>
+<li><p><strong>idf</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – IDF vector of the embedding, obtained from <a class="reference internal" href="#gismo.embedding.idf_fit" title="gismo.embedding.idf_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">idf_fit()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>norm</strong> – The norm of the vector before normalization.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function" id="module-gismo.csr_compress">
+<dt class="sig sig-object py" id="gismo.csr_compress.compress_csr">
+<span class="sig-prename descclassname"><span class="pre">gismo.csr_compress.</span></span><span class="sig-name descname"><span class="pre">compress_csr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_degree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/csr_compress.html#compress_csr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.csr_compress.compress_csr" title="Link to this definition">#</a></dt>
+<dd><p>Inplace lossy compression of CSR matrix. Compression is performed row by row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mat</strong> (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.15.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">csr_matrix</span></code></a>) – Matrix to compress. It is assumed that the weights are non-negative and normalized (sum of a non-null row is 1).</p></li>
+<li><p><strong>ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, default .8) – Target compression ratio (quantity of weights to preserve).</p></li>
+<li><p><strong>min_degree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, default 10) – Don’t compress rows with less than <cite>mi_degree</cite> entries.</p></li>
+<li><p><strong>max_degree</strong> (class:<cite>int</cite>, optional) – If set, rows are allowed at most <cite>max_degree</cite> entries.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Start with a full matrix with a csr representation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.embedding</span><span class="w"> </span><span class="kn">import</span> <span class="n">l1_normalize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l1_normalize</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">indptr</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span>  
+<span class="go">&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="go">    with 100 stored elements and shape (10, 10)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="go">array([[0.07200801, 0.18278161, 0.14073106, 0.11509637, 0.0299957 ,</span>
+<span class="go">        0.02999106, 0.01116699, 0.16652855, 0.11556865, 0.13613201],</span>
+<span class="go">       [0.00520773, 0.24538041, 0.21060217, 0.05372031, 0.04600045,</span>
+<span class="go">        0.04640006, 0.07697116, 0.13275971, 0.10927907, 0.07367894],</span>
+<span class="go">       [0.15281528, 0.03483974, 0.07296552, 0.09150188, 0.11390722,</span>
+<span class="go">        0.19610414, 0.04987017, 0.12843427, 0.1479604 , 0.01160137],</span>
+<span class="go">       [0.11929704, 0.03348399, 0.01277348, 0.18632243, 0.18961076,</span>
+<span class="go">        0.15873628, 0.05981372, 0.01917882, 0.13435547, 0.086428  ],</span>
+<span class="go">       [0.03016589, 0.12239978, 0.00850029, 0.22476941, 0.06396626,</span>
+<span class="go">        0.16376487, 0.07704997, 0.12855247, 0.135138  , 0.04569305],</span>
+<span class="go">       [0.16851056, 0.13471549, 0.16328177, 0.15551799, 0.10391301,</span>
+<span class="go">        0.16021865, 0.0153797 , 0.03406116, 0.00786035, 0.05654132],</span>
+<span class="go">       [0.08316254, 0.05805864, 0.17731912, 0.07633199, 0.06010957,</span>
+<span class="go">        0.11611685, 0.03015256, 0.17164043, 0.01595108, 0.21115723],</span>
+<span class="go">       [0.16981899, 0.04369819, 0.00121433, 0.17932246, 0.15544009,</span>
+<span class="go">        0.16031091, 0.16960471, 0.01628265, 0.07882771, 0.02547996],</span>
+<span class="go">       [0.16460084, 0.11886802, 0.06310494, 0.01212109, 0.05930686,</span>
+<span class="go">        0.0620151 , 0.13914183, 0.12158739, 0.16919868, 0.09005523],</span>
+<span class="go">       [0.02655733, 0.15838451, 0.16894139, 0.12463829, 0.17120245,</span>
+<span class="go">        0.1096532 , 0.11607906, 0.09494058, 0.00564462, 0.02395858]])</span>
+</pre></div>
+</div>
+<p>A hard compression:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compress_csr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">min_degree</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>  
+<span class="go">&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="go">    with 35 stored elements and shape (10, 10)&gt;</span>
+</pre></div>
+</div>
+<p>Here we keep 50% of the information with 35% of the entries.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="go">array([[0.        , 0.29190263, 0.22474781, 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.26594645, 0.        , 0.21740311],</span>
+<span class="go">       [0.        , 0.41678747, 0.35771537, 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.22549715, 0.        , 0.        ],</span>
+<span class="go">       [0.24438164, 0.        , 0.        , 0.        , 0.        ,</span>
+<span class="go">        0.31360902, 0.        , 0.20539161, 0.23661773, 0.        ],</span>
+<span class="go">       [0.        , 0.        , 0.        , 0.34848152, 0.35463173,</span>
+<span class="go">        0.29688675, 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.        , 0.        , 0.        , 0.42921769, 0.        ,</span>
+<span class="go">        0.31272397, 0.        , 0.        , 0.25805835, 0.        ],</span>
+<span class="go">       [0.26023632, 0.        , 0.25216133, 0.24017148, 0.        ,</span>
+<span class="go">        0.24743086, 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.        , 0.        , 0.31657526, 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.30643686, 0.        , 0.37698787],</span>
+<span class="go">       [0.32736433, 0.        , 0.        , 0.34568442, 0.        ,</span>
+<span class="go">        0.        , 0.32695126, 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.27685935, 0.        , 0.        , 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.23403718, 0.20451054, 0.28459294, 0.        ],</span>
+<span class="go">       [0.        , 0.25416076, 0.27110146, 0.20000797, 0.27472981,</span>
+<span class="go">        0.        , 0.        , 0.        , 0.        , 0.        ]])</span>
+</pre></div>
+</div>
+<p>Harder (re-compression):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compress_csr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">min_degree</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>  
+<span class="go">&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="go">    with 20 stored elements and shape (10, 10)&gt;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="go">array([[0.        , 0.52326452, 0.        , 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.47673548, 0.        , 0.        ],</span>
+<span class="go">       [0.        , 0.5381355 , 0.4618645 , 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.43796726, 0.        , 0.        , 0.        , 0.        ,</span>
+<span class="go">        0.56203274, 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.        , 0.        , 0.        , 0.49562644, 0.50437356,</span>
+<span class="go">        0.        , 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.        , 0.        , 0.        , 0.57850599, 0.        ,</span>
+<span class="go">        0.42149401, 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.50787961, 0.        , 0.49212039, 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.        , 0.        , 0.45644765, 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.        , 0.        , 0.54355235],</span>
+<span class="go">       [0.48639022, 0.        , 0.        , 0.51360978, 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.        , 0.        , 0.        ],</span>
+<span class="go">       [0.49311287, 0.        , 0.        , 0.        , 0.        ,</span>
+<span class="go">        0.        , 0.        , 0.        , 0.50688713, 0.        ],</span>
+<span class="go">       [0.        , 0.        , 0.49667631, 0.        , 0.50332369,</span>
+<span class="go">        0.        , 0.        , 0.        , 0.        , 0.        ]])</span>
+</pre></div>
+</div>
+<p>A soft compression:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compress_csr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">.98</span><span class="p">,</span> <span class="n">min_degree</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span>  
+<span class="go">&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="go">    with 89 stored elements and shape (10, 10)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="go">array([[0.0728212 , 0.18484578, 0.14232035, 0.11639616, 0.03033444,</span>
+<span class="go">        0.03032975, 0.        , 0.16840917, 0.11687378, 0.13766936],</span>
+<span class="go">       [0.        , 0.24666498, 0.21170467, 0.05400154, 0.04624126,</span>
+<span class="go">        0.04664296, 0.0773741 , 0.1334547 , 0.10985114, 0.07406465],</span>
+<span class="go">       [0.15460896, 0.03524867, 0.07382196, 0.09257589, 0.11524421,</span>
+<span class="go">        0.19840592, 0.05045552, 0.12994178, 0.14969709, 0.        ],</span>
+<span class="go">       [0.12084059, 0.03391723, 0.        , 0.18873321, 0.19206409,</span>
+<span class="go">        0.16079013, 0.06058764, 0.01942697, 0.13609386, 0.08754628],</span>
+<span class="go">       [0.03042451, 0.12344914, 0.        , 0.22669639, 0.06451465,</span>
+<span class="go">        0.16516886, 0.07771054, 0.12965457, 0.13629656, 0.04608479],</span>
+<span class="go">       [0.1698456 , 0.13578279, 0.16457539, 0.1567501 , 0.10473628,</span>
+<span class="go">        0.161488  , 0.01550155, 0.03433102, 0.        , 0.05698928],</span>
+<span class="go">       [0.08451057, 0.05899975, 0.18019339, 0.07756931, 0.06108393,</span>
+<span class="go">        0.11799906, 0.03064132, 0.17442265, 0.        , 0.21458001],</span>
+<span class="go">       [0.17284322, 0.04447639, 0.        , 0.18251594, 0.15820826,</span>
+<span class="go">        0.16316582, 0.17262513, 0.        , 0.08023152, 0.02593372],</span>
+<span class="go">       [0.16662046, 0.12032651, 0.06387923, 0.        , 0.06003454,</span>
+<span class="go">        0.06277602, 0.14084908, 0.12307925, 0.17127472, 0.09116019],</span>
+<span class="go">       [0.02670808, 0.1592836 , 0.16990041, 0.12534582, 0.17217431,</span>
+<span class="go">        0.11027566, 0.116738  , 0.09547953, 0.        , 0.02409458]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="corpus.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Corpus</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="diteration.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">D-Iteration</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.Embedding"><code class="docutils literal notranslate"><span class="pre">Embedding</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.Embedding.compress"><code class="docutils literal notranslate"><span class="pre">Embedding.compress()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.Embedding.fit"><code class="docutils literal notranslate"><span class="pre">Embedding.fit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.Embedding.fit_ext"><code class="docutils literal notranslate"><span class="pre">Embedding.fit_ext()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.Embedding.fit_transform"><code class="docutils literal notranslate"><span class="pre">Embedding.fit_transform()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.Embedding.query_projection"><code class="docutils literal notranslate"><span class="pre">Embedding.query_projection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.Embedding.transform"><code class="docutils literal notranslate"><span class="pre">Embedding.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.auto_vect"><code class="docutils literal notranslate"><span class="pre">auto_vect()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.idf_fit"><code class="docutils literal notranslate"><span class="pre">idf_fit()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.idf_transform"><code class="docutils literal notranslate"><span class="pre">idf_transform()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.itf_fit_transform"><code class="docutils literal notranslate"><span class="pre">itf_fit_transform()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.l1_normalize"><code class="docutils literal notranslate"><span class="pre">l1_normalize()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.embedding.query_shape"><code class="docutils literal notranslate"><span class="pre">query_shape()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.csr_compress.compress_csr"><code class="docutils literal notranslate"><span class="pre">compress_csr()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/embedding.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

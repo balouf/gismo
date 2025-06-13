@@ -1,0 +1,1876 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Landmarks Tutorial &#8212; GISMO 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/landmarks_tutorial';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reference" href="../reference/index.html" />
+    <link rel="prev" title="DBLP exploration" href="tutorial_dblp.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-line.png" class="logo__image only-light" alt="GISMO 0.5.2 documentation - Home"/>
+    <img src="../_static/logo-line.png" class="logo__image only-dark pst-js-only" alt="GISMO 0.5.2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorial_toy_example.html">Toy example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_acm.html">ACM categories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_dblp.html">DBLP exploration</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Landmarks Tutorial</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Landmarks Tutorial</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Landmarks-Tutorial">
+<h1>Landmarks Tutorial<a class="headerlink" href="#Landmarks-Tutorial" title="Link to this heading">#</a></h1>
+<p>In this notebook, we will use the landmarks submodule of Gismo to give an interactive description of ACM topics and researchers of the NPA laboratory (<a class="reference external" href="https://www-npa.lip6.fr/">https://www-npa.lip6.fr/</a>).</p>
+<p>This notebook can be used as a blueprint to analyze other group of people under the scope of a topic classification.</p>
+<p>Before starting this topic, it is recommended to have looked at the <a class="reference external" href="https://balouf.github.io/gismo/tutorials/tutorial_acm.html">ACM</a> and <a class="reference external" href="https://balouf.github.io/gismo/tutorials/tutorial_dblp.html">DBLP</a> tutorials.</p>
+<section id="NPA-Researchers">
+<h2>NPA Researchers<a class="headerlink" href="#NPA-Researchers" title="Link to this heading">#</a></h2>
+<p>In this section, we bind the NPA researchers with their DBLP id.</p>
+<section id="List-of-DBLP-researchers">
+<h3>List of DBLP researchers<a class="headerlink" href="#List-of-DBLP-researchers" title="Link to this heading">#</a></h3>
+<p>First, we open the DBLP database (see the <a class="reference external" href="https://balouf.github.io/gismo/tutorials/tutorial_dblp.html">DBLP Tutorial</a> to get your copy of the database).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../../../../../Datasets/DBLP&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.filesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileSource</span>
+
+<span class="n">source</span> <span class="o">=</span> <span class="n">FileSource</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">source</span></code> is a list-like object whose entries are dicts that describe articles.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source</span><span class="p">[</span><span class="mi">1234567</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;type&#39;: &#39;article&#39;,
+ &#39;authors&#39;: [&#39;Hans Solli-Sæther&#39;, &#39;Petter Gottschalk&#39;],
+ &#39;title&#39;: &#39;The Modeling Process for Stage Models.&#39;,
+ &#39;year&#39;: &#39;2010&#39;,
+ &#39;venue&#39;: &#39;J. Organ. Comput. Electron. Commer.&#39;}
+</pre></div></div>
+</div>
+<p>Let’s extract the set of authors. Each author is lowered and spaces are replaced with underscore for better later processing.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dblp_authors</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">paper</span> <span class="ow">in</span> <span class="n">source</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">paper</span><span class="p">[</span><span class="s2">&quot;authors&quot;</span><span class="p">]}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Fabien_Mathieu&quot;</span> <span class="ow">in</span> <span class="n">dblp_authors</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Fabin_Mathieu&quot;</span> <span class="ow">in</span> <span class="n">dblp_authors</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+</section>
+<section id="List-of-NPA-Members">
+<h3>List of NPA Members<a class="headerlink" href="#List-of-NPA-Members" title="Link to this heading">#</a></h3>
+<p>First we get a copy of the NPA webpage that tells its researchers and feed it to BeautifulSoup</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bs4</span><span class="w"> </span><span class="kn">import</span> <span class="n">BeautifulSoup</span> <span class="k">as</span> <span class="n">bs</span>
+
+<span class="n">soup</span> <span class="o">=</span> <span class="n">bs</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://www.lip6.fr/recherche/team_membres.php?id=760&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">parse_people_str</span><span class="p">(</span><span class="n">txt</span><span class="p">):</span>
+    <span class="n">sp</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\xa0</span><span class="s2">&quot;</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">txt</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="n">people</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_people_str</span><span class="p">(</span><span class="n">td</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">td</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">td</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<p>We make a function to convert table rows of the HTML page into researcher dict. Each dict will have a <em>name</em> (display name) and a <em>dblp</em> (DBLP id) entry.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">bof.fuzz</span><span class="w"> </span><span class="kn">import</span> <span class="n">Process</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">Process</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">dblp_authors</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">name2dict</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dblp_authors</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Soup 2 dict conversion</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: soup</span>
+<span class="sd">        The row to convert</span>
+<span class="sd">    dblp_authors: set</span>
+<span class="sd">        The list of DBLP authors</span>
+<span class="sd">    manual: dict</span>
+<span class="sd">        Manual associations between name and id</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        A dict shaped like {&#39;name&#39;: &quot;John Doe&quot;, &#39;dblp&#39;: &quot;john_doe&quot;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">manual</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">manual</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># manual association</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">manual</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;dblp&quot;</span><span class="p">:</span> <span class="n">manual</span><span class="p">[</span><span class="n">name</span><span class="p">]}</span>
+    <span class="c1"># Attempt direct transformation</span>
+    <span class="n">dblp</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    <span class="c1"># If result exists in dblp, return that</span>
+    <span class="k">if</span> <span class="n">dblp</span> <span class="ow">in</span> <span class="n">dblp_authors</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;dblp&quot;</span><span class="p">:</span> <span class="n">dblp</span><span class="p">}</span>
+    <span class="c1"># last chance: use bof to guess the good answer.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No direct dblp entry found for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">, start fuzzy search&quot;</span><span class="p">)</span>
+    <span class="n">candidate</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">extractOne</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">))</span>
+    <span class="c1">#     candidates = get_close_matches(name.lower().replace(&quot; &quot;, &quot;_&quot;), candidates, cutoff=0.3)</span>
+    <span class="k">if</span> <span class="n">candidate</span> <span class="ow">and</span> <span class="n">candidate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found candidate: </span><span class="si">{</span><span class="n">candidate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">dblp</span> <span class="o">=</span> <span class="n">candidate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;dblp&quot;</span><span class="p">:</span> <span class="n">dblp</span><span class="p">}</span>
+    <span class="c1"># If all failed, return empty id</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;dblp&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>The manual override below was actually populated by executing the cell afterwards and iterating until all things were OK.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">manual</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Giovanni Pau&quot;</span><span class="p">:</span> <span class="s2">&quot;Giovanni_Pau_0001&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>The actual construction of the list of NPA researchers.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">npa</span> <span class="o">=</span> <span class="p">[</span><span class="n">name2dict</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">dblp_authors</span><span class="p">,</span> <span class="n">manual</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">people</span><span class="p">]</span>
+<span class="n">npa</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">npa</span> <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;dblp&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;Guillaume&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No direct dblp entry found for Capucine Barré, start fuzzy search
+No direct dblp entry found for Ufuk Bombar, start fuzzy search
+No direct dblp entry found for Mateus Da Silva Gilbert, start fuzzy search
+Found candidate: (&#39;Mateus_da_Silva_Gilbert&#39;, 100.0)
+No direct dblp entry found for Lorenzo Di Filippo, start fuzzy search
+No direct dblp entry found for Stefan Galkiewicz, start fuzzy search
+No direct dblp entry found for Dimitrios Kefalas, start fuzzy search
+Found candidate: (&#39;Dimitris_Kefalas&#39;, 69.1358024691358)
+No direct dblp entry found for Guillaume Nibert, start fuzzy search
+Found candidate: (&#39;Guillaume_Gibert&#39;, 63.75)
+No direct dblp entry found for Elif Ebru Ohri, start fuzzy search
+No direct dblp entry found for Giuliano Prestes Fittipaldi, start fuzzy search
+Found candidate: (&#39;Giuliano_Fittipaldi&#39;, 61.016949152542374)
+No direct dblp entry found for Saied Kazemi, start fuzzy search
+Found candidate: (&#39;Saied_Kazeminejad&#39;, 68.1159420289855)
+No direct dblp entry found for Émilie Mespoulhes, start fuzzy search
+No direct dblp entry found for Hassane Rahich, start fuzzy search
+No direct dblp entry found for Frédéric Vaissade, start fuzzy search
+No direct dblp entry found for Taha Mohsen Zaidi, start fuzzy search
+No direct dblp entry found for Thi-Mai-Trang Nguyen, start fuzzy search
+Found candidate: (&#39;Thi-Trang_Nguyen&#39;, 73.80952380952381)
+No direct dblp entry found for José-Marcos Nogueira, start fuzzy search
+Found candidate: (&#39;Marcos_Nogueira&#39;, 73.80952380952381)
+No direct dblp entry found for Andrea Richa, start fuzzy search
+Found candidate: (&#39;Andrea_Richaud&#39;, 83.92857142857143)
+No direct dblp entry found for Téo Lohrer, start fuzzy search
+No direct dblp entry found for James Kurose, start fuzzy search
+Found candidate: (&#39;James_F._Kurose&#39;, 61.76470588235294)
+No direct dblp entry found for Ufuk Bombar, start fuzzy search
+No direct dblp entry found for Liuba Shira, start fuzzy search
+Found candidate: (&#39;Liuba_Shrira&#39;, 60.714285714285715)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">npa</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;name&#39;: &#39;Sébastien Baey&#39;, &#39;dblp&#39;: &#39;Sébastien_Baey&#39;},
+ {&#39;name&#39;: &#39;Bruno Baynat&#39;, &#39;dblp&#39;: &#39;Bruno_Baynat&#39;},
+ {&#39;name&#39;: &#39;Quentin Bramas&#39;, &#39;dblp&#39;: &#39;Quentin_Bramas&#39;},
+ {&#39;name&#39;: &#39;Binh-Minh Bui-Xuan&#39;, &#39;dblp&#39;: &#39;Binh-Minh_Bui-Xuan&#39;},
+ {&#39;name&#39;: &#39;Marcelo Dias de Amorim&#39;, &#39;dblp&#39;: &#39;Marcelo_Dias_de_Amorim&#39;},
+ {&#39;name&#39;: &#39;Serge Fdida&#39;, &#39;dblp&#39;: &#39;Serge_Fdida&#39;},
+ {&#39;name&#39;: &#39;Anne Fladenmuller&#39;, &#39;dblp&#39;: &#39;Anne_Fladenmuller&#39;},
+ {&#39;name&#39;: &#39;Francesca Fossati&#39;, &#39;dblp&#39;: &#39;Francesca_Fossati&#39;},
+ {&#39;name&#39;: &#39;Olivier Fourmaux&#39;, &#39;dblp&#39;: &#39;Olivier_Fourmaux&#39;},
+ {&#39;name&#39;: &#39;Timur Friedman&#39;, &#39;dblp&#39;: &#39;Timur_Friedman&#39;},
+ {&#39;name&#39;: &#39;Brigitte Kervella&#39;, &#39;dblp&#39;: &#39;Brigitte_Kervella&#39;},
+ {&#39;name&#39;: &#39;Naceur Malouch&#39;, &#39;dblp&#39;: &#39;Naceur_Malouch&#39;},
+ {&#39;name&#39;: &#39;Maria Potop-Butucaru&#39;, &#39;dblp&#39;: &#39;Maria_Potop-Butucaru&#39;},
+ {&#39;name&#39;: &#39;Guy Pujolle&#39;, &#39;dblp&#39;: &#39;Guy_Pujolle&#39;},
+ {&#39;name&#39;: &#39;Kim Loan Thai&#39;, &#39;dblp&#39;: &#39;Kim_Loan_Thai&#39;},
+ {&#39;name&#39;: &#39;Sébastien Tixeuil&#39;, &#39;dblp&#39;: &#39;Sébastien_Tixeuil&#39;},
+ {&#39;name&#39;: &#39;Bilel Zaghdoudi&#39;, &#39;dblp&#39;: &#39;Bilel_Zaghdoudi&#39;},
+ {&#39;name&#39;: &#39;Solayman Ayoubi&#39;, &#39;dblp&#39;: &#39;Solayman_Ayoubi&#39;},
+ {&#39;name&#39;: &#39;Lionel Beltrando&#39;, &#39;dblp&#39;: &#39;Lionel_Beltrando&#39;},
+ {&#39;name&#39;: &#39;Mateus Da Silva Gilbert&#39;, &#39;dblp&#39;: &#39;Mateus_da_Silva_Gilbert&#39;},
+ {&#39;name&#39;: &#39;Cherifa Hamroun&#39;, &#39;dblp&#39;: &#39;Cherifa_Hamroun&#39;},
+ {&#39;name&#39;: &#39;Dimitrios Kefalas&#39;, &#39;dblp&#39;: &#39;Dimitris_Kefalas&#39;},
+ {&#39;name&#39;: &#39;Mohamed Amine Legheraba&#39;, &#39;dblp&#39;: &#39;Mohamed_Amine_Legheraba&#39;},
+ {&#39;name&#39;: &#39;Alexandre Pham&#39;, &#39;dblp&#39;: &#39;Alexandre_Pham&#39;},
+ {&#39;name&#39;: &#39;Giuliano Prestes Fittipaldi&#39;, &#39;dblp&#39;: &#39;Giuliano_Fittipaldi&#39;},
+ {&#39;name&#39;: &#39;Hugo Rimlinger&#39;, &#39;dblp&#39;: &#39;Hugo_Rimlinger&#39;},
+ {&#39;name&#39;: &#39;Alexandros Stoltidis&#39;, &#39;dblp&#39;: &#39;Alexandros_Stoltidis&#39;},
+ {&#39;name&#39;: &#39;Massinissa Tighilt&#39;, &#39;dblp&#39;: &#39;Massinissa_Tighilt&#39;},
+ {&#39;name&#39;: &#39;Theodoros Tsourdinis&#39;, &#39;dblp&#39;: &#39;Theodoros_Tsourdinis&#39;},
+ {&#39;name&#39;: &#39;Florent Krasnopol&#39;, &#39;dblp&#39;: &#39;Florent_Krasnopol&#39;},
+ {&#39;name&#39;: &#39;Saied Kazemi&#39;, &#39;dblp&#39;: &#39;Saied_Kazeminejad&#39;},
+ {&#39;name&#39;: &#39;Elena Nardi&#39;, &#39;dblp&#39;: &#39;Elena_Nardi&#39;},
+ {&#39;name&#39;: &#39;Nicolas Peugnet&#39;, &#39;dblp&#39;: &#39;Nicolas_Peugnet&#39;},
+ {&#39;name&#39;: &#39;Anastasios Giovanidis&#39;, &#39;dblp&#39;: &#39;Anastasios_Giovanidis&#39;},
+ {&#39;name&#39;: &#39;Fabien Mathieu&#39;, &#39;dblp&#39;: &#39;Fabien_Mathieu&#39;},
+ {&#39;name&#39;: &#39;Thi-Mai-Trang Nguyen&#39;, &#39;dblp&#39;: &#39;Thi-Trang_Nguyen&#39;},
+ {&#39;name&#39;: &#39;Ciro Scognamiglio&#39;, &#39;dblp&#39;: &#39;Ciro_Scognamiglio&#39;},
+ {&#39;name&#39;: &#39;Lélia Blin&#39;, &#39;dblp&#39;: &#39;Lélia_Blin&#39;},
+ {&#39;name&#39;: &#39;José-Marcos Nogueira&#39;, &#39;dblp&#39;: &#39;Marcos_Nogueira&#39;},
+ {&#39;name&#39;: &#39;Andrea Richa&#39;, &#39;dblp&#39;: &#39;Andrea_Richaud&#39;},
+ {&#39;name&#39;: &#39;Miguel Elias Mitre Campista&#39;,
+  &#39;dblp&#39;: &#39;Miguel_Elias_Mitre_Campista&#39;},
+ {&#39;name&#39;: &#39;James Kurose&#39;, &#39;dblp&#39;: &#39;James_F._Kurose&#39;},
+ {&#39;name&#39;: &#39;Ciro Scognamiglio&#39;, &#39;dblp&#39;: &#39;Ciro_Scognamiglio&#39;},
+ {&#39;name&#39;: &#39;Liuba Shira&#39;, &#39;dblp&#39;: &#39;Liuba_Shrira&#39;},
+ {&#39;name&#39;: &#39;Maurice Herlihy&#39;, &#39;dblp&#39;: &#39;Maurice_Herlihy&#39;},
+ {&#39;name&#39;: &#39;Dipankar Raychaudhuri&#39;, &#39;dblp&#39;: &#39;Dipankar_Raychaudhuri&#39;},
+ {&#39;name&#39;: &#39;Boris Chan Yip Hon&#39;, &#39;dblp&#39;: &#39;Boris_Chan_Yip_Hon&#39;}]
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="DBLP-Gismo">
+<h2>DBLP Gismo<a class="headerlink" href="#DBLP-Gismo" title="Link to this heading">#</a></h2>
+<p>In this Section, we use Landmarks to construct a small XGismo focused around the NPA researchers. In details:</p>
+<ul class="simple">
+<li><p>We construct a large Gismo between articles and researchers, exactly like in the DBLP tutorial;</p></li>
+<li><p>We use landmarks to extract a (much smaller) list of articles based on collaboration proximity.</p></li>
+<li><p>We build a XGismo between researchers and keywords from this smaller source.</p></li>
+</ul>
+<section id="Construction-of-a-full-Gismo-on-authors">
+<h3>Construction of a full Gismo on authors<a class="headerlink" href="#Construction-of-a-full-Gismo-on-authors" title="Link to this heading">#</a></h3>
+<p>This part is similar to the one from the DBLP tutorial.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">Gismo</span>
+
+<span class="n">vectorizer_author</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">preprocessor</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">to_authors_text</span><span class="p">(</span><span class="n">dic</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">a</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;authors&quot;</span><span class="p">]])</span>
+
+
+<span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="n">to_authors_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer_author</span><span class="p">)</span>
+    <span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+    <span class="n">embedding</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;dblp_aut_embedding&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\loufa\AppData\Local\Programs\Python\Python312\Lib\site-packages\sklearn\feature_extraction\text.py:517: UserWarning: The parameter &#39;token_pattern&#39; will not be used since &#39;tokenizer&#39; is not None&#39;
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">embedding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Given the size of the dataset, processing a query can take about one second.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Fabien_Mathieu&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_features_cluster_print</span>
+
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_print</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.02. R: 0.26. S: 0.72.
+- F: 0.02. R: 0.25. S: 0.71.
+-- F: 0.03. R: 0.24. S: 0.70.
+--- F: 0.07. R: 0.22. S: 0.67.
+---- F: 0.07. R: 0.19. S: 0.60.
+----- F: 0.37. R: 0.18. S: 0.55.
+------ Fabien_Mathieu (R: 0.11; S: 1.00)
+------ F: 0.61. R: 0.03. S: 0.37.
+------- François_Durand (R: 0.02; S: 0.44)
+------- Ludovic_Noirie (R: 0.01; S: 0.32)
+------- Emma_Caizergues (R: 0.01; S: 0.26)
+------ F: 0.61. R: 0.03. S: 0.39.
+------- Laurent_Viennot (R: 0.02; S: 0.44)
+------- F: 0.70. R: 0.02. S: 0.34.
+-------- Diego_Perino (R: 0.01; S: 0.39)
+-------- Yacine_Boufkhad (R: 0.01; S: 0.28)
+----- F: 0.33. R: 0.01. S: 0.28.
+------ The_Dang_Huynh (R: 0.01; S: 0.27)
+------ Dohy_Hong (R: 0.00; S: 0.17)
+---- F: 0.25. R: 0.03. S: 0.36.
+----- F: 0.77. R: 0.02. S: 0.34.
+------ Julien_Reynier (R: 0.01; S: 0.35)
+------ Fabien_de_Montgolfier (R: 0.01; S: 0.36)
+------ Anh-Tuan_Gai (R: 0.00; S: 0.28)
+----- Gheorghe_Postelnicu (R: 0.00; S: 0.17)
+--- F: 0.40. R: 0.02. S: 0.32.
+---- F: 0.58. R: 0.02. S: 0.31.
+----- Céline_Comte (R: 0.01; S: 0.31)
+----- Thomas_Bonald (R: 0.01; S: 0.23)
+---- Anne_Bouillard (R: 0.00; S: 0.20)
+--- Nidhi_Hegde_0001 (R: 0.00; S: 0.20)
+-- F: 1.00. R: 0.01. S: 0.23.
+--- Ilkka_Norros (R: 0.01; S: 0.23)
+--- François_Baccelli (R: 0.00; S: 0.23)
+- Mohamed_Bouklit (R: 0.01; S: 0.18)
+</pre></div></div>
+</div>
+</section>
+<section id="Using-landmarks-to-shrink-a-source">
+<h3>Using landmarks to shrink a source<a class="headerlink" href="#Using-landmarks-to-shrink-a-source" title="Link to this heading">#</a></h3>
+<p>To reduce the size of the dataset, we make landmarks out of the researchers, and we credit each entry with a budget of 2,000 articles.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.landmarks</span><span class="w"> </span><span class="kn">import</span> <span class="n">Landmarks</span>
+
+<span class="n">npa_landmarks_full</span> <span class="o">=</span> <span class="n">Landmarks</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">npa</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;dblp&quot;</span><span class="p">],</span> <span class="n">x_density</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We launch the computation of the source. This takes a couple of minutes, as a ranking diffusion needs to be performed for all researchers.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">()</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;Gismo&quot;</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reduced_source</span> <span class="o">=</span> <span class="n">npa_landmarks_full</span><span class="o">.</span><span class="n">get_reduced_source</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+INFO:Gismo:Start computation of 47 landmarks.
+DEBUG:Gismo:Processing Sébastien_Baey.
+DEBUG:Gismo:Landmarks of Sébastien_Baey computed.
+DEBUG:Gismo:Processing Bruno_Baynat.
+DEBUG:Gismo:Landmarks of Bruno_Baynat computed.
+DEBUG:Gismo:Processing Quentin_Bramas.
+DEBUG:Gismo:Landmarks of Quentin_Bramas computed.
+DEBUG:Gismo:Processing Binh-Minh_Bui-Xuan.
+DEBUG:Gismo:Landmarks of Binh-Minh_Bui-Xuan computed.
+DEBUG:Gismo:Processing Marcelo_Dias_de_Amorim.
+DEBUG:Gismo:Landmarks of Marcelo_Dias_de_Amorim computed.
+DEBUG:Gismo:Processing Serge_Fdida.
+DEBUG:Gismo:Landmarks of Serge_Fdida computed.
+DEBUG:Gismo:Processing Anne_Fladenmuller.
+DEBUG:Gismo:Landmarks of Anne_Fladenmuller computed.
+DEBUG:Gismo:Processing Francesca_Fossati.
+DEBUG:Gismo:Landmarks of Francesca_Fossati computed.
+DEBUG:Gismo:Processing Olivier_Fourmaux.
+DEBUG:Gismo:Landmarks of Olivier_Fourmaux computed.
+DEBUG:Gismo:Processing Timur_Friedman.
+DEBUG:Gismo:Landmarks of Timur_Friedman computed.
+DEBUG:Gismo:Processing Brigitte_Kervella.
+DEBUG:Gismo:Landmarks of Brigitte_Kervella computed.
+DEBUG:Gismo:Processing Naceur_Malouch.
+DEBUG:Gismo:Landmarks of Naceur_Malouch computed.
+DEBUG:Gismo:Processing Maria_Potop-Butucaru.
+DEBUG:Gismo:Landmarks of Maria_Potop-Butucaru computed.
+DEBUG:Gismo:Processing Guy_Pujolle.
+DEBUG:Gismo:Landmarks of Guy_Pujolle computed.
+DEBUG:Gismo:Processing Kim_Loan_Thai.
+DEBUG:Gismo:Landmarks of Kim_Loan_Thai computed.
+DEBUG:Gismo:Processing Sébastien_Tixeuil.
+DEBUG:Gismo:Landmarks of Sébastien_Tixeuil computed.
+DEBUG:Gismo:Processing Bilel_Zaghdoudi.
+DEBUG:Gismo:Landmarks of Bilel_Zaghdoudi computed.
+DEBUG:Gismo:Processing Solayman_Ayoubi.
+DEBUG:Gismo:Landmarks of Solayman_Ayoubi computed.
+DEBUG:Gismo:Processing Lionel_Beltrando.
+DEBUG:Gismo:Landmarks of Lionel_Beltrando computed.
+DEBUG:Gismo:Processing Mateus_da_Silva_Gilbert.
+DEBUG:Gismo:Landmarks of Mateus_da_Silva_Gilbert computed.
+DEBUG:Gismo:Processing Cherifa_Hamroun.
+DEBUG:Gismo:Landmarks of Cherifa_Hamroun computed.
+DEBUG:Gismo:Processing Dimitris_Kefalas.
+DEBUG:Gismo:Landmarks of Dimitris_Kefalas computed.
+DEBUG:Gismo:Processing Mohamed_Amine_Legheraba.
+DEBUG:Gismo:Landmarks of Mohamed_Amine_Legheraba computed.
+DEBUG:Gismo:Processing Alexandre_Pham.
+DEBUG:Gismo:Landmarks of Alexandre_Pham computed.
+DEBUG:Gismo:Processing Giuliano_Fittipaldi.
+DEBUG:Gismo:Landmarks of Giuliano_Fittipaldi computed.
+DEBUG:Gismo:Processing Hugo_Rimlinger.
+DEBUG:Gismo:Landmarks of Hugo_Rimlinger computed.
+DEBUG:Gismo:Processing Alexandros_Stoltidis.
+DEBUG:Gismo:Landmarks of Alexandros_Stoltidis computed.
+DEBUG:Gismo:Processing Massinissa_Tighilt.
+DEBUG:Gismo:Landmarks of Massinissa_Tighilt computed.
+DEBUG:Gismo:Processing Theodoros_Tsourdinis.
+DEBUG:Gismo:Landmarks of Theodoros_Tsourdinis computed.
+DEBUG:Gismo:Processing Florent_Krasnopol.
+DEBUG:Gismo:Landmarks of Florent_Krasnopol computed.
+DEBUG:Gismo:Processing Saied_Kazeminejad.
+DEBUG:Gismo:Landmarks of Saied_Kazeminejad computed.
+DEBUG:Gismo:Processing Elena_Nardi.
+DEBUG:Gismo:Landmarks of Elena_Nardi computed.
+DEBUG:Gismo:Processing Nicolas_Peugnet.
+DEBUG:Gismo:Landmarks of Nicolas_Peugnet computed.
+DEBUG:Gismo:Processing Anastasios_Giovanidis.
+DEBUG:Gismo:Landmarks of Anastasios_Giovanidis computed.
+DEBUG:Gismo:Processing Fabien_Mathieu.
+DEBUG:Gismo:Landmarks of Fabien_Mathieu computed.
+DEBUG:Gismo:Processing Thi-Trang_Nguyen.
+DEBUG:Gismo:Landmarks of Thi-Trang_Nguyen computed.
+DEBUG:Gismo:Processing Ciro_Scognamiglio.
+DEBUG:Gismo:Landmarks of Ciro_Scognamiglio computed.
+DEBUG:Gismo:Processing Lélia_Blin.
+DEBUG:Gismo:Landmarks of Lélia_Blin computed.
+DEBUG:Gismo:Processing Marcos_Nogueira.
+DEBUG:Gismo:Landmarks of Marcos_Nogueira computed.
+DEBUG:Gismo:Processing Andrea_Richaud.
+DEBUG:Gismo:Landmarks of Andrea_Richaud computed.
+DEBUG:Gismo:Processing Miguel_Elias_Mitre_Campista.
+DEBUG:Gismo:Landmarks of Miguel_Elias_Mitre_Campista computed.
+DEBUG:Gismo:Processing James_F._Kurose.
+DEBUG:Gismo:Landmarks of James_F._Kurose computed.
+DEBUG:Gismo:Processing Ciro_Scognamiglio.
+DEBUG:Gismo:Landmarks of Ciro_Scognamiglio computed.
+DEBUG:Gismo:Processing Liuba_Shrira.
+DEBUG:Gismo:Landmarks of Liuba_Shrira computed.
+DEBUG:Gismo:Processing Maurice_Herlihy.
+DEBUG:Gismo:Landmarks of Maurice_Herlihy computed.
+DEBUG:Gismo:Processing Dipankar_Raychaudhuri.
+DEBUG:Gismo:Landmarks of Dipankar_Raychaudhuri computed.
+DEBUG:Gismo:Processing Boris_Chan_Yip_Hon.
+DEBUG:Gismo:Landmarks of Boris_Chan_Yip_Hon computed.
+INFO:Gismo:All landmarks are built.
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source length went down from </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">reduced_source</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Source length went down from 7513218 to 50350.
+</pre></div></div>
+</div>
+<p>Instead of 7,500,000 all purposes articles, we now have 50,000 articles lying in the neighborhood of the considered researchers. We now can close the file descriptor as we won’t need further access to the original source.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Building-a-small-XGismo">
+<h3>Building a small XGismo<a class="headerlink" href="#Building-a-small-XGismo" title="Link to this heading">#</a></h3>
+<section id="Author-Embedding">
+<h4>Author Embedding<a class="headerlink" href="#Author-Embedding" title="Link to this heading">#</a></h4>
+<p>Author embedding takes a couple of seconds instead of a couple of minutes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reduced_corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">reduced_source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="n">to_authors_text</span><span class="p">)</span>
+<span class="n">reduced_author_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer_author</span><span class="p">)</span>
+<span class="n">reduced_author_embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">reduced_corpus</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\loufa\AppData\Local\Programs\Python\Python312\Lib\site-packages\sklearn\feature_extraction\text.py:517: UserWarning: The parameter &#39;token_pattern&#39; will not be used since &#39;tokenizer&#39; is not None&#39;
+  warnings.warn(
+</pre></div></div>
+</div>
+</section>
+<section id="Sanity-Check">
+<h4>Sanity Check<a class="headerlink" href="#Sanity-Check" title="Link to this heading">#</a></h4>
+<p>We can rebuild a small author Gismo. This part is merely a sanity check to verify that the reduction didn’t change too much things in the vicinity of the NPA..</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reduced_gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">reduced_corpus</span><span class="p">,</span> <span class="n">reduced_author_embedding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Ranking is nearly instant.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reduced_gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Fabien_Mathieu&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>The results are almost identical to what was returned by the full Gismo.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_features_cluster_print</span>
+
+<span class="n">reduced_gismo</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_print</span>
+<span class="n">reduced_gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.02. R: 0.25. S: 0.72.
+- F: 0.02. R: 0.25. S: 0.70.
+-- F: 0.03. R: 0.24. S: 0.70.
+--- F: 0.06. R: 0.22. S: 0.67.
+---- F: 0.07. R: 0.19. S: 0.60.
+----- F: 0.37. R: 0.18. S: 0.55.
+------ Fabien_Mathieu (R: 0.11; S: 1.00)
+------ F: 0.61. R: 0.03. S: 0.37.
+------- François_Durand (R: 0.02; S: 0.44)
+------- Ludovic_Noirie (R: 0.01; S: 0.32)
+------- Emma_Caizergues (R: 0.01; S: 0.27)
+------ F: 0.60. R: 0.03. S: 0.39.
+------- Laurent_Viennot (R: 0.01; S: 0.44)
+------- F: 0.68. R: 0.02. S: 0.33.
+-------- Diego_Perino (R: 0.01; S: 0.39)
+-------- Yacine_Boufkhad (R: 0.01; S: 0.27)
+----- F: 0.33. R: 0.01. S: 0.28.
+------ The_Dang_Huynh (R: 0.01; S: 0.27)
+------ Dohy_Hong (R: 0.00; S: 0.17)
+---- F: 0.26. R: 0.03. S: 0.35.
+----- F: 0.77. R: 0.02. S: 0.34.
+------ Julien_Reynier (R: 0.01; S: 0.35)
+------ Fabien_de_Montgolfier (R: 0.01; S: 0.35)
+------ Anh-Tuan_Gai (R: 0.01; S: 0.27)
+----- Gheorghe_Postelnicu (R: 0.00; S: 0.17)
+--- F: 0.58. R: 0.02. S: 0.31.
+---- Céline_Comte (R: 0.01; S: 0.31)
+---- Thomas_Bonald (R: 0.00; S: 0.23)
+--- Nidhi_Hegde_0001 (R: 0.00; S: 0.20)
+-- F: 1.00. R: 0.01. S: 0.23.
+--- Ilkka_Norros (R: 0.01; S: 0.23)
+--- François_Baccelli (R: 0.00; S: 0.23)
+- Mohamed_Bouklit (R: 0.01; S: 0.18)
+</pre></div></div>
+</div>
+</section>
+<section id="Word-Embedding">
+<h4>Word Embedding<a class="headerlink" href="#Word-Embedding" title="Link to this heading">#</a></h4>
+<p>Now we build the word embedding, with the spacy add-on. Takes a couple of minutes instead of a couple of hours.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spacy</span>
+
+<span class="c1"># Initialize spacy &#39;en&#39; model, keeping only tagger component needed for lemmatization</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;en_core_web_sm&quot;</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;parser&quot;</span><span class="p">,</span> <span class="s2">&quot;ner&quot;</span><span class="p">])</span>
+<span class="c1"># Who cares about DET and such?</span>
+<span class="n">keep</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ADJ&quot;</span><span class="p">,</span> <span class="s2">&quot;NOUN&quot;</span><span class="p">,</span> <span class="s2">&quot;NUM&quot;</span><span class="p">,</span> <span class="s2">&quot;PROPN&quot;</span><span class="p">,</span> <span class="s2">&quot;SYM&quot;</span><span class="p">,</span> <span class="s2">&quot;VERB&quot;</span><span class="p">}</span>
+
+<span class="n">preprocessor</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">txt</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">token</span><span class="o">.</span><span class="n">lemma_</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">nlp</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">pos_</span> <span class="ow">in</span> <span class="n">keep</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">is_stop</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">vectorizer_text</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">preprocessor</span><span class="o">=</span><span class="n">preprocessor</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reduced_corpus</span><span class="o">.</span><span class="n">to_text</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span>
+<span class="n">reduced_word_embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer_text</span><span class="p">)</span>
+<span class="n">reduced_word_embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">reduced_corpus</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Gathering-pieces-together">
+<h4>Gathering pieces together<a class="headerlink" href="#Gathering-pieces-together" title="Link to this heading">#</a></h4>
+<p>We can combine the reduced embeddings to build a XGismo between authors and words.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">XGismo</span>
+
+<span class="n">xgismo</span> <span class="o">=</span> <span class="n">XGismo</span><span class="p">(</span>
+    <span class="n">x_embedding</span><span class="o">=</span><span class="n">reduced_author_embedding</span><span class="p">,</span> <span class="n">y_embedding</span><span class="o">=</span><span class="n">reduced_word_embedding</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We can save this for later use.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;reduced_npa_xgismo&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The file should be about 32 Mb, whereas a full-size DBLP XGismo is about 4 Gb. What about speed and quality of results?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Anne_Bouillard&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Anne_Bouillard&#39;,
+ &#39;Bruno_Gaujal&#39;,
+ &#39;François_Baccelli&#39;,
+ &#39;Paul_Nikolaus&#39;,
+ &#39;Jens_B._Schmitt&#39;,
+ &#39;Ana_Busic&#39;,
+ &#39;Eric_Thierry&#39;,
+ &#39;Ke_Feng&#39;,
+ &#39;Giovanni_Stea&#39;,
+ &#39;Zhen_Liu_0001&#39;,
+ &#39;Seyed_Mohammadhossein_Tabatabaee&#39;,
+ &#39;Aurore_Junier&#39;,
+ &#39;Jean-Yves_Le_Boudec&#39;,
+ &#39;Christelle_Rovetta&#39;,
+ &#39;Jean_Mairesse&#39;,
+ &#39;Oded_Goldreich_0001&#39;,
+ &#39;Yves_Dallery&#39;,
+ &#39;Donald_F._Towsley&#39;,
+ &#39;Leandros_Tassiulas&#39;,
+ &#39;Nissim_Francez&#39;]
+</pre></div></div>
+</div>
+<p>Let’s try some more elaborate display.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">post_documents_cluster_print</span><span class="p">,</span>
+    <span class="n">post_features_cluster_print</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">xgismo</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">distortion</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">xgismo</span><span class="o">.</span><span class="n">post_documents_cluster</span> <span class="o">=</span> <span class="n">post_documents_cluster_print</span>
+<span class="n">xgismo</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_print</span>
+<span class="n">xgismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.06. R: 0.09. S: 0.82.
+- F: 0.60. R: 0.06. S: 0.76.
+-- F: 0.69. R: 0.06. S: 0.76.
+--- F: 0.85. R: 0.06. S: 0.75.
+---- F: 0.92. R: 0.05. S: 0.75.
+----- Anne_Bouillard (R: 0.03; S: 0.79)
+----- Paul_Nikolaus (R: 0.00; S: 0.73)
+----- Jens_B._Schmitt (R: 0.00; S: 0.73)
+----- Eric_Thierry (R: 0.00; S: 0.75)
+----- Ke_Feng (R: 0.00; S: 0.70)
+---- Bruno_Gaujal (R: 0.01; S: 0.75)
+--- Aurore_Junier (R: 0.00; S: 0.66)
+-- François_Baccelli (R: 0.00; S: 0.59)
+-- Nissim_Francez (R: 0.00; S: 0.49)
+- F: 0.17. R: 0.02. S: 0.43.
+-- F: 0.55. R: 0.01. S: 0.26.
+--- F: 0.55. R: 0.01. S: 0.25.
+---- Ana_Busic (R: 0.00; S: 0.33)
+---- Zhen_Liu_0001 (R: 0.00; S: 0.33)
+---- Christelle_Rovetta (R: 0.00; S: 0.21)
+---- Donald_F._Towsley (R: 0.00; S: 0.29)
+--- Yves_Dallery (R: 0.00; S: 0.24)
+-- F: 0.28. R: 0.01. S: 0.36.
+--- F: 0.59. R: 0.01. S: 0.35.
+---- Giovanni_Stea (R: 0.00; S: 0.33)
+---- F: 1.00. R: 0.01. S: 0.30.
+----- Seyed_Mohammadhossein_Tabatabaee (R: 0.00; S: 0.30)
+----- Jean-Yves_Le_Boudec (R: 0.00; S: 0.30)
+--- Oded_Goldreich_0001 (R: 0.00; S: 0.27)
+-- Leandros_Tassiulas (R: 0.00; S: 0.31)
+- Jean_Mairesse (R: 0.00; S: 0.27)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">target_k</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">distortion</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.32. R: 0.20. S: 0.94.
+- F: 0.50. R: 0.19. S: 0.94.
+-- F: 0.76. R: 0.18. S: 0.93.
+--- network calculus (R: 0.05; S: 0.91)
+--- calculus (R: 0.05; S: 0.92)
+--- bad case (R: 0.01; S: 0.91)
+--- bad (R: 0.01; S: 0.91)
+--- free choice (R: 0.01; S: 0.82)
+--- stochastic network (R: 0.01; S: 0.90)
+--- multiplexing (R: 0.01; S: 0.89)
+--- closed queue (R: 0.01; S: 0.85)
+-- stochastic (R: 0.01; S: 0.59)
+- monotonicity (R: 0.02; S: 0.36)
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+<section id="Rebuild-landmarks">
+<h2>Rebuild landmarks<a class="headerlink" href="#Rebuild-landmarks" title="Link to this heading">#</a></h2>
+<section id="NPA-landmarks">
+<h3>NPA landmarks<a class="headerlink" href="#NPA-landmarks" title="Link to this heading">#</a></h3>
+<p>We can rebuild NPA landmarks on the XGismo.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">npa_landmarks</span> <span class="o">=</span> <span class="n">Landmarks</span><span class="p">(</span>
+    <span class="n">source</span><span class="o">=</span><span class="n">npa</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;dblp&quot;</span><span class="p">],</span> <span class="n">rank</span><span class="o">=</span><span class="k">lambda</span> <span class="n">g</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">npa_landmarks</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">xgismo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+INFO:Gismo:Start computation of 47 landmarks.
+DEBUG:Gismo:Processing Sébastien_Baey.
+DEBUG:Gismo:Landmarks of Sébastien_Baey computed.
+DEBUG:Gismo:Processing Bruno_Baynat.
+DEBUG:Gismo:Landmarks of Bruno_Baynat computed.
+DEBUG:Gismo:Processing Quentin_Bramas.
+DEBUG:Gismo:Landmarks of Quentin_Bramas computed.
+DEBUG:Gismo:Processing Binh-Minh_Bui-Xuan.
+DEBUG:Gismo:Landmarks of Binh-Minh_Bui-Xuan computed.
+DEBUG:Gismo:Processing Marcelo_Dias_de_Amorim.
+DEBUG:Gismo:Landmarks of Marcelo_Dias_de_Amorim computed.
+DEBUG:Gismo:Processing Serge_Fdida.
+DEBUG:Gismo:Landmarks of Serge_Fdida computed.
+DEBUG:Gismo:Processing Anne_Fladenmuller.
+DEBUG:Gismo:Landmarks of Anne_Fladenmuller computed.
+DEBUG:Gismo:Processing Francesca_Fossati.
+DEBUG:Gismo:Landmarks of Francesca_Fossati computed.
+DEBUG:Gismo:Processing Olivier_Fourmaux.
+DEBUG:Gismo:Landmarks of Olivier_Fourmaux computed.
+DEBUG:Gismo:Processing Timur_Friedman.
+DEBUG:Gismo:Landmarks of Timur_Friedman computed.
+DEBUG:Gismo:Processing Brigitte_Kervella.
+DEBUG:Gismo:Landmarks of Brigitte_Kervella computed.
+DEBUG:Gismo:Processing Naceur_Malouch.
+DEBUG:Gismo:Landmarks of Naceur_Malouch computed.
+DEBUG:Gismo:Processing Maria_Potop-Butucaru.
+DEBUG:Gismo:Landmarks of Maria_Potop-Butucaru computed.
+DEBUG:Gismo:Processing Guy_Pujolle.
+DEBUG:Gismo:Landmarks of Guy_Pujolle computed.
+DEBUG:Gismo:Processing Kim_Loan_Thai.
+DEBUG:Gismo:Landmarks of Kim_Loan_Thai computed.
+DEBUG:Gismo:Processing Sébastien_Tixeuil.
+DEBUG:Gismo:Landmarks of Sébastien_Tixeuil computed.
+DEBUG:Gismo:Processing Bilel_Zaghdoudi.
+DEBUG:Gismo:Landmarks of Bilel_Zaghdoudi computed.
+DEBUG:Gismo:Processing Solayman_Ayoubi.
+DEBUG:Gismo:Landmarks of Solayman_Ayoubi computed.
+DEBUG:Gismo:Processing Lionel_Beltrando.
+DEBUG:Gismo:Landmarks of Lionel_Beltrando computed.
+DEBUG:Gismo:Processing Mateus_da_Silva_Gilbert.
+DEBUG:Gismo:Landmarks of Mateus_da_Silva_Gilbert computed.
+DEBUG:Gismo:Processing Cherifa_Hamroun.
+DEBUG:Gismo:Landmarks of Cherifa_Hamroun computed.
+DEBUG:Gismo:Processing Dimitris_Kefalas.
+DEBUG:Gismo:Landmarks of Dimitris_Kefalas computed.
+DEBUG:Gismo:Processing Mohamed_Amine_Legheraba.
+DEBUG:Gismo:Landmarks of Mohamed_Amine_Legheraba computed.
+DEBUG:Gismo:Processing Alexandre_Pham.
+DEBUG:Gismo:Landmarks of Alexandre_Pham computed.
+DEBUG:Gismo:Processing Giuliano_Fittipaldi.
+DEBUG:Gismo:Landmarks of Giuliano_Fittipaldi computed.
+DEBUG:Gismo:Processing Hugo_Rimlinger.
+DEBUG:Gismo:Landmarks of Hugo_Rimlinger computed.
+DEBUG:Gismo:Processing Alexandros_Stoltidis.
+DEBUG:Gismo:Landmarks of Alexandros_Stoltidis computed.
+DEBUG:Gismo:Processing Massinissa_Tighilt.
+DEBUG:Gismo:Landmarks of Massinissa_Tighilt computed.
+DEBUG:Gismo:Processing Theodoros_Tsourdinis.
+DEBUG:Gismo:Landmarks of Theodoros_Tsourdinis computed.
+DEBUG:Gismo:Processing Florent_Krasnopol.
+DEBUG:Gismo:Landmarks of Florent_Krasnopol computed.
+DEBUG:Gismo:Processing Saied_Kazeminejad.
+DEBUG:Gismo:Landmarks of Saied_Kazeminejad computed.
+DEBUG:Gismo:Processing Elena_Nardi.
+DEBUG:Gismo:Landmarks of Elena_Nardi computed.
+DEBUG:Gismo:Processing Nicolas_Peugnet.
+DEBUG:Gismo:Landmarks of Nicolas_Peugnet computed.
+DEBUG:Gismo:Processing Anastasios_Giovanidis.
+DEBUG:Gismo:Landmarks of Anastasios_Giovanidis computed.
+DEBUG:Gismo:Processing Fabien_Mathieu.
+DEBUG:Gismo:Landmarks of Fabien_Mathieu computed.
+DEBUG:Gismo:Processing Thi-Trang_Nguyen.
+DEBUG:Gismo:Landmarks of Thi-Trang_Nguyen computed.
+DEBUG:Gismo:Processing Ciro_Scognamiglio.
+DEBUG:Gismo:Landmarks of Ciro_Scognamiglio computed.
+DEBUG:Gismo:Processing Lélia_Blin.
+DEBUG:Gismo:Landmarks of Lélia_Blin computed.
+DEBUG:Gismo:Processing Marcos_Nogueira.
+DEBUG:Gismo:Landmarks of Marcos_Nogueira computed.
+DEBUG:Gismo:Processing Andrea_Richaud.
+DEBUG:Gismo:Landmarks of Andrea_Richaud computed.
+DEBUG:Gismo:Processing Miguel_Elias_Mitre_Campista.
+DEBUG:Gismo:Landmarks of Miguel_Elias_Mitre_Campista computed.
+DEBUG:Gismo:Processing James_F._Kurose.
+DEBUG:Gismo:Landmarks of James_F._Kurose computed.
+DEBUG:Gismo:Processing Ciro_Scognamiglio.
+DEBUG:Gismo:Landmarks of Ciro_Scognamiglio computed.
+DEBUG:Gismo:Processing Liuba_Shrira.
+DEBUG:Gismo:Landmarks of Liuba_Shrira computed.
+DEBUG:Gismo:Processing Maurice_Herlihy.
+DEBUG:Gismo:Landmarks of Maurice_Herlihy computed.
+DEBUG:Gismo:Processing Dipankar_Raychaudhuri.
+DEBUG:Gismo:Landmarks of Dipankar_Raychaudhuri computed.
+DEBUG:Gismo:Processing Boris_Chan_Yip_Hon.
+DEBUG:Gismo:Landmarks of Boris_Chan_Yip_Hon computed.
+INFO:Gismo:All landmarks are built.
+</pre></div></div>
+</div>
+<p>We can extract the NPA researchers that the most similar to a given researcher (not necessarily from NPA).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Anne_Bouillard&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">npa_landmarks</span><span class="o">.</span><span class="n">post_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+<span class="n">npa_landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">xgismo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Fabien Mathieu&#39;,
+ &#39;Bruno Baynat&#39;,
+ &#39;Florent Krasnopol&#39;,
+ &#39;James Kurose&#39;,
+ &#39;Nicolas Peugnet&#39;,
+ &#39;Mohamed Amine Legheraba&#39;,
+ &#39;Giuliano Prestes Fittipaldi&#39;,
+ &#39;Massinissa Tighilt&#39;,
+ &#39;Timur Friedman&#39;,
+ &#39;Anastasios Giovanidis&#39;,
+ &#39;Guy Pujolle&#39;,
+ &#39;Marcelo Dias de Amorim&#39;,
+ &#39;Maurice Herlihy&#39;,
+ &#39;Quentin Bramas&#39;,
+ &#39;Serge Fdida&#39;,
+ &#39;Maria Potop-Butucaru&#39;,
+ &#39;Sébastien Tixeuil&#39;,
+ &#39;Lélia Blin&#39;,
+ &#39;Binh-Minh Bui-Xuan&#39;,
+ &#39;Anne Fladenmuller&#39;,
+ &#39;Sébastien Baey&#39;,
+ &#39;Naceur Malouch&#39;,
+ &#39;Dipankar Raychaudhuri&#39;,
+ &#39;Kim Loan Thai&#39;]
+</pre></div></div>
+</div>
+<p>We can also use a keyword query, and organize the results in clusters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Anne_Bouillard&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_landmarks_cluster_print</span>
+
+<span class="n">npa_landmarks</span><span class="o">.</span><span class="n">post_cluster</span> <span class="o">=</span> <span class="n">post_landmarks_cluster_print</span>
+<span class="n">npa_landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_cluster</span><span class="p">(</span><span class="n">xgismo</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">target_k</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.05.
+- F: 0.06.
+-- F: 0.08.
+--- F: 0.10.
+---- F: 0.15.
+----- F: 0.33.
+------ Fabien Mathieu
+------ F: 0.46.
+------- Bruno Baynat
+------- F: 0.52.
+-------- F: 0.52.
+--------- James Kurose
+--------- Guy Pujolle
+-------- F: 0.64.
+--------- Timur Friedman
+--------- Marcelo Dias de Amorim
+------- Anastasios Giovanidis
+------- Quentin Bramas
+------ Maurice Herlihy
+----- Giuliano Prestes Fittipaldi
+---- Nicolas Peugnet
+--- Massinissa Tighilt
+-- Florent Krasnopol
+- Mohamed Amine Legheraba
+</pre></div></div>
+</div>
+</section>
+<section id="ACM-landmarks">
+<h3>ACM landmarks<a class="headerlink" href="#ACM-landmarks" title="Link to this heading">#</a></h3>
+<p>We can build other landmarks using the ACM categories. This will enable to describe things in term of categories.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.datasets.acm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_acm</span><span class="p">,</span> <span class="n">flatten_acm</span>
+
+<span class="n">acm</span> <span class="o">=</span> <span class="n">flatten_acm</span><span class="p">(</span><span class="n">get_acm</span><span class="p">(),</span> <span class="n">min_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">acm_landmarks</span> <span class="o">=</span> <span class="n">Landmarks</span><span class="p">(</span><span class="n">acm</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="n">acm_landmarks</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">xgismo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+INFO:Gismo:Start computation of 113 landmarks.
+INFO:Gismo:All landmarks are built.
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Fabien_Mathieu&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">acm_landmarks</span><span class="o">.</span><span class="n">post_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+<span class="n">acm_landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">xgismo</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">target_k</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Machine learning algorithms&#39;,
+ &#39;Discrete mathematics&#39;,
+ &#39;Graph theory&#39;,
+ &#39;Models of computation&#39;,
+ &#39;Computational complexity and cryptography&#39;,
+ &#39;Theory of computation&#39;,
+ &#39;Symbolic and algebraic algorithms&#39;,
+ &#39;Mathematics of computing&#39;,
+ &#39;Symbolic and algebraic manipulation&#39;,
+ &#39;Power and energy&#39;,
+ &#39;Architectures&#39;,
+ &#39;Software system structures&#39;,
+ &#39;Software organization and properties&#39;,
+ &#39;Design and analysis of algorithms&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;combinatorics&quot;</span><span class="p">)</span>
+<span class="n">acm_landmarks</span><span class="o">.</span><span class="n">post_cluster</span> <span class="o">=</span> <span class="n">post_landmarks_cluster_print</span>
+<span class="n">acm_landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_cluster</span><span class="p">(</span><span class="n">xgismo</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">target_k</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.36.
+- F: 0.99.
+-- Discrete mathematics
+-- Mathematics of computing
+-- Graph theory
+-- Visualization
+-- Simulation types and techniques
+-- Modeling and simulation
+- F: 0.41.
+-- F: 0.96.
+--- Symbolic and algebraic algorithms
+--- Symbolic and algebraic manipulation
+--- Mathematical analysis
+-- F: 0.75.
+--- Models of computation
+--- Computational complexity and cryptography
+</pre></div></div>
+</div>
+<p>Note that we fully ignore the original ACM category hierarchy. Instead, Gismo builds its own hierarchy tailored to the query.</p>
+</section>
+<section id="Combining-landmarks">
+<h3>Combining landmarks<a class="headerlink" href="#Combining-landmarks" title="Link to this heading">#</a></h3>
+<p>Through the <code class="docutils literal notranslate"><span class="pre">post_processing</span></code> methods, we can intricate multiple landmarks. For example, the following method associates NPA researchers and keywords to a tree of ACM categories.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">auto_k</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">post_cluster_acm</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">kw_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">mts_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">tk_kw</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">kw_size</span>
+    <span class="n">tk_mts</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">mts_size</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">x_direction</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">kws_view</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">:]</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">kws_view</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">max_k</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">tk_kw</span><span class="p">)</span>
+    <span class="n">keywords</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">xgismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kws_view</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">kws_view</span><span class="o">.</span><span class="n">data</span><span class="p">)[:</span><span class="n">k</span><span class="p">]]</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;|</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">depth</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cluster</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="n">post_cluster_acm</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">domain</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">cluster</span><span class="o">.</span><span class="n">indice</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">researchers</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">npa_landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span>
+                <span class="n">cluster</span><span class="p">,</span> <span class="n">target_k</span><span class="o">=</span><span class="n">tk_mts</span><span class="p">,</span> <span class="n">distortion</span><span class="o">=</span><span class="mf">0.5</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;|</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">depth</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">domain</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">researchers</span><span class="si">}</span><span class="s2">) (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keywords</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;combinatorics&quot;</span><span class="p">)</span>
+<span class="n">acm_landmarks</span><span class="o">.</span><span class="n">post_cluster</span> <span class="o">=</span> <span class="n">post_cluster_acm</span>
+<span class="n">acm_landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_cluster</span><span class="p">(</span><span class="n">xgismo</span><span class="p">,</span> <span class="n">target_k</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+|
+|-
+|-- Discrete mathematics (Fabien Mathieu, Sébastien Tixeuil, Andrea Richa) (combinatoric, walk, type, complexity)
+|-- Mathematics of computing (Fabien Mathieu) (combinatoric, type, complexity, walk, algorithms)
+|-- Graph theory (Fabien Mathieu) (complexity, combinatoric, walk, degree, algorithms, random, enumeration, type)
+|-- Visualization (Fabien Mathieu, Elena Nardi) (analytic, type, walk, complexity, algorithms)
+|-- Simulation types and techniques (Fabien Mathieu, Elena Nardi) (type, analytic, complexity, datum, risk, algorithms)
+|-- Modeling and simulation (Fabien Mathieu, Elena Nardi) (type, analytic, complexity, datum, risk, algorithms)
+|-
+|--
+|--- Symbolic and algebraic algorithms (Fabien Mathieu, Binh-Minh Bui-Xuan, Florent Krasnopol, Bruno Baynat) (symbolic, algebra, combinatoric, type, calculus, complexity, algorithms)
+|--- Symbolic and algebraic manipulation (Fabien Mathieu, Binh-Minh Bui-Xuan, Florent Krasnopol) (symbolic, algebra, combinatoric, type, calculus, complexity, algorithms, functions)
+|--- Mathematical analysis (Fabien Mathieu, Binh-Minh Bui-Xuan, Florent Krasnopol) (type, complexity, differential, algorithms, functions, constraint, symbolic, calculus)
+|--
+|--- Models of computation (Fabien Mathieu, Elena Nardi, Binh-Minh Bui-Xuan, Maurice Herlihy, Maria Potop-Butucaru) (complexity, type, algorithms, calculus, functions)
+|--- Computational complexity and cryptography (Elena Nardi, Binh-Minh Bui-Xuan, Maria Potop-Butucaru, Maurice Herlihy, Liuba Shira) (complexity, algorithms, functions, type, random)
+</pre></div></div>
+</div>
+<p>Conversely, one can associate ACM categories and keywords to a tree of NPA researchers.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">post_cluster_npa</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">kw_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">acm_size</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="n">tk_kw</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">kw_size</span>
+    <span class="n">tk_acm</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">acm_size</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">x_direction</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">kws_view</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">:]</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">kws_view</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">max_k</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">tk_kw</span><span class="p">)</span>
+    <span class="n">keywords</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">xgismo</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">kws_view</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">kws_view</span><span class="o">.</span><span class="n">data</span><span class="p">)[:</span><span class="n">k</span><span class="p">]]</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;|</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">depth</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cluster</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="n">post_cluster_npa</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">researcher</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">cluster</span><span class="o">.</span><span class="n">indice</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">domains</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">acm_landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span>
+                <span class="n">cluster</span><span class="p">,</span> <span class="n">target_k</span><span class="o">=</span><span class="n">tk_acm</span><span class="p">,</span> <span class="n">distortion</span><span class="o">=</span><span class="mf">0.5</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;|</span><span class="si">{</span><span class="s1">&#39;-&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">depth</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">researcher</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">domains</span><span class="si">}</span><span class="s2">) (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keywords</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xgismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Anne_Bouillard&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">npa_landmarks</span><span class="o">.</span><span class="n">post_cluster</span> <span class="o">=</span> <span class="n">post_cluster_npa</span>
+<span class="n">npa_landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_cluster</span><span class="p">(</span><span class="n">xgismo</span><span class="p">,</span> <span class="n">target_k</span><span class="o">=</span><span class="mf">1.4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+|
+|-
+|--
+|---
+|----
+|----- Fabien Mathieu (Symbolic and algebraic algorithms, Symbolic and algebraic manipulation, Models of computation, Computational complexity and cryptography, Discrete mathematics, Graph theory, Mathematical analysis, Mathematics of computing) (network calculus, calculus, space, aggregate)
+|----- Bruno Baynat (Symbolic and algebraic algorithms, Models of computation, Symbolic and algebraic manipulation, Computational complexity and cryptography) (closed, queue, markovian, burstiness, queue network, modeling, closed queue, trade)
+|----- James Kurose (Models of computation) (end, delay, end end, comparison, routing)
+|---- Massinissa Tighilt (Models of computation, Symbolic and algebraic algorithms, Computational complexity and cryptography, Symbolic and algebraic manipulation) (periodic, computation)
+|--- Florent Krasnopol (Logic, Compilers, Knowledge representation and reasoning) (generation, order, calculus, automatic)
+|--- Giuliano Prestes Fittipaldi (Hardware test) (pattern, impact)
+|-- Nicolas Peugnet (Software verification and validation) (case, architecture)
+|- Mohamed Amine Legheraba (Computational complexity and cryptography, Models of computation) (sampling)
+</pre></div></div>
+</div>
+<p>That’s all for this tutorial!</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tutorial_dblp.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">DBLP exploration</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../reference/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#NPA-Researchers">NPA Researchers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#List-of-DBLP-researchers">List of DBLP researchers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#List-of-NPA-Members">List of NPA Members</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#DBLP-Gismo">DBLP Gismo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Construction-of-a-full-Gismo-on-authors">Construction of a full Gismo on authors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Using-landmarks-to-shrink-a-source">Using landmarks to shrink a source</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Building-a-small-XGismo">Building a small XGismo</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#Author-Embedding">Author Embedding</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#Sanity-Check">Sanity Check</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#Word-Embedding">Word Embedding</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#Gathering-pieces-together">Gathering pieces together</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Rebuild-landmarks">Rebuild landmarks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#NPA-landmarks">NPA landmarks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ACM-landmarks">ACM landmarks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Combining-landmarks">Combining landmarks</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/landmarks_tutorial.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

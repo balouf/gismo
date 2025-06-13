@@ -1,0 +1,1954 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Landmarks Tutorial"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In this notebook, we will use the landmarks submodule of Gismo to give an interactive description of ACM topics and researchers of the NPA laboratory (https://www-npa.lip6.fr/).\n",
+    "\n",
+    "This notebook can be used as a blueprint to analyze other group of people under the scope of a topic classification.\n",
+    "\n",
+    "Before starting this topic, it is recommended to have looked at the [ACM](https://balouf.github.io/gismo/tutorials/tutorial_acm.html) and [DBLP](https://balouf.github.io/gismo/tutorials/tutorial_dblp.html) tutorials."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## NPA Researchers"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In this section, we bind the NPA researchers with their DBLP id."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### List of DBLP researchers"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "First, we open the DBLP database (see the [DBLP Tutorial](https://balouf.github.io/gismo/tutorials/tutorial_dblp.html) to get your copy of the database)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:12:44.477605Z",
+     "start_time": "2025-04-09T11:12:26.145499Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from pathlib import Path\n",
+    "\n",
+    "path = Path(\"../../../../../Datasets/DBLP\")\n",
+    "\n",
+    "from gismo.filesource import FileSource\n",
+    "\n",
+    "source = FileSource(filename=\"dblp\", path=path)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "``source`` is a list-like object whose entries are dicts that describe articles."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:12:44.497985Z",
+     "start_time": "2025-04-09T11:12:44.481652Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'type': 'article',\n",
+       " 'authors': ['Hans Solli-Sæther', 'Petter Gottschalk'],\n",
+       " 'title': 'The Modeling Process for Stage Models.',\n",
+       " 'year': '2010',\n",
+       " 'venue': 'J. Organ. Comput. Electron. Commer.'}"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "source[1234567]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's extract the set of authors. Each author is lowered and spaces are replaced with underscore for better later processing."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:14:45.220782Z",
+     "start_time": "2025-04-09T11:12:44.506155Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "dblp_authors = {a.replace(\" \", \"_\") for paper in source for a in paper[\"authors\"]}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:14:45.232023Z",
+     "start_time": "2025-04-09T11:14:45.224794Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "\"Fabien_Mathieu\" in dblp_authors"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:14:45.264749Z",
+     "start_time": "2025-04-09T11:14:45.234634Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "False"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "\"Fabin_Mathieu\" in dblp_authors"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### List of NPA Members"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "First we get a copy of the NPA webpage that tells its researchers and feed it to BeautifulSoup"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:14:46.627624Z",
+     "start_time": "2025-04-09T11:14:45.266761Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import requests\n",
+    "from bs4 import BeautifulSoup as bs\n",
+    "\n",
+    "soup = bs(requests.get(\"https://www.lip6.fr/recherche/team_membres.php?id=760\").text)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:14:46.642094Z",
+     "start_time": "2025-04-09T11:14:46.630634Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "def parse_people_str(txt):\n",
+    "    sp = \"\\xa0\"\n",
+    "    n, s = txt.split(sp)\n",
+    "    return f\"{s} {n}\"\n",
+    "\n",
+    "\n",
+    "people = [parse_people_str(td(\"a\")[1].text) for td in soup.table(\"td\") if td(\"a\")]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We make a function to convert table rows of the HTML page into researcher dict. Each dict will have a *name* (display name) and a *dblp* (DBLP id) entry."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:42.708637Z",
+     "start_time": "2025-04-09T11:14:46.645631Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from bof.fuzz import Process\n",
+    "\n",
+    "p = Process()\n",
+    "p.fit(list(dblp_authors))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:43.075061Z",
+     "start_time": "2025-04-09T11:17:42.730654Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "def name2dict(name, dblp_authors, manual=None):\n",
+    "    \"\"\"\n",
+    "    Soup 2 dict conversion\n",
+    "\n",
+    "    Parameters\n",
+    "    ----------\n",
+    "    name: soup\n",
+    "        The row to convert\n",
+    "    dblp_authors: set\n",
+    "        The list of DBLP authors\n",
+    "    manual: dict\n",
+    "        Manual associations between name and id\n",
+    "\n",
+    "    Returns\n",
+    "    -------\n",
+    "    dict\n",
+    "        A dict shaped like {'name': \"John Doe\", 'dblp': \"john_doe\"}\n",
+    "    \"\"\"\n",
+    "    if manual is None:\n",
+    "        manual = {}\n",
+    "    # manual association\n",
+    "    if name in manual:\n",
+    "        return {\"name\": name, \"dblp\": manual[name]}\n",
+    "    # Attempt direct transformation\n",
+    "    dblp = name.replace(\" \", \"_\")\n",
+    "    # If result exists in dblp, return that\n",
+    "    if dblp in dblp_authors:\n",
+    "        return {\"name\": name, \"dblp\": dblp}\n",
+    "    # last chance: use bof to guess the good answer.\n",
+    "    print(f\"No direct dblp entry found for {name}, start fuzzy search\")\n",
+    "    candidate = p.extractOne(name.lower().replace(\" \", \"_\"))\n",
+    "    #     candidates = get_close_matches(name.lower().replace(\" \", \"_\"), candidates, cutoff=0.3)\n",
+    "    if candidate and candidate[1] > 60:\n",
+    "        print(f\"Found candidate: {candidate}\")\n",
+    "        dblp = candidate[0]\n",
+    "        return {\"name\": name, \"dblp\": dblp}\n",
+    "    # If all failed, return empty id\n",
+    "    return {\"name\": name, \"dblp\": \"\"}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The manual override below was actually populated by executing the cell afterwards and iterating until all things were OK."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:43.088555Z",
+     "start_time": "2025-04-09T11:17:43.078625Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "manual = {\"Giovanni Pau\": \"Giovanni_Pau_0001\"}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The actual construction of the list of NPA researchers."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:44.499269Z",
+     "start_time": "2025-04-09T11:17:43.093562Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "No direct dblp entry found for Capucine Barré, start fuzzy search\n",
+      "No direct dblp entry found for Ufuk Bombar, start fuzzy search\n",
+      "No direct dblp entry found for Mateus Da Silva Gilbert, start fuzzy search\n",
+      "Found candidate: ('Mateus_da_Silva_Gilbert', 100.0)\n",
+      "No direct dblp entry found for Lorenzo Di Filippo, start fuzzy search\n",
+      "No direct dblp entry found for Stefan Galkiewicz, start fuzzy search\n",
+      "No direct dblp entry found for Dimitrios Kefalas, start fuzzy search\n",
+      "Found candidate: ('Dimitris_Kefalas', 69.1358024691358)\n",
+      "No direct dblp entry found for Guillaume Nibert, start fuzzy search\n",
+      "Found candidate: ('Guillaume_Gibert', 63.75)\n",
+      "No direct dblp entry found for Elif Ebru Ohri, start fuzzy search\n",
+      "No direct dblp entry found for Giuliano Prestes Fittipaldi, start fuzzy search\n",
+      "Found candidate: ('Giuliano_Fittipaldi', 61.016949152542374)\n",
+      "No direct dblp entry found for Saied Kazemi, start fuzzy search\n",
+      "Found candidate: ('Saied_Kazeminejad', 68.1159420289855)\n",
+      "No direct dblp entry found for Émilie Mespoulhes, start fuzzy search\n",
+      "No direct dblp entry found for Hassane Rahich, start fuzzy search\n",
+      "No direct dblp entry found for Frédéric Vaissade, start fuzzy search\n",
+      "No direct dblp entry found for Taha Mohsen Zaidi, start fuzzy search\n",
+      "No direct dblp entry found for Thi-Mai-Trang Nguyen, start fuzzy search\n",
+      "Found candidate: ('Thi-Trang_Nguyen', 73.80952380952381)\n",
+      "No direct dblp entry found for José-Marcos Nogueira, start fuzzy search\n",
+      "Found candidate: ('Marcos_Nogueira', 73.80952380952381)\n",
+      "No direct dblp entry found for Andrea Richa, start fuzzy search\n",
+      "Found candidate: ('Andrea_Richaud', 83.92857142857143)\n",
+      "No direct dblp entry found for Téo Lohrer, start fuzzy search\n",
+      "No direct dblp entry found for James Kurose, start fuzzy search\n",
+      "Found candidate: ('James_F._Kurose', 61.76470588235294)\n",
+      "No direct dblp entry found for Ufuk Bombar, start fuzzy search\n",
+      "No direct dblp entry found for Liuba Shira, start fuzzy search\n",
+      "Found candidate: ('Liuba_Shrira', 60.714285714285715)\n"
+     ]
+    }
+   ],
+   "source": [
+    "npa = [name2dict(name, dblp_authors, manual) for name in people]\n",
+    "npa = [c for c in npa if c[\"dblp\"] and \"Guillaume\" not in c[\"name\"]]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:44.513105Z",
+     "start_time": "2025-04-09T11:17:44.501867Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': 'Sébastien Baey', 'dblp': 'Sébastien_Baey'},\n",
+       " {'name': 'Bruno Baynat', 'dblp': 'Bruno_Baynat'},\n",
+       " {'name': 'Quentin Bramas', 'dblp': 'Quentin_Bramas'},\n",
+       " {'name': 'Binh-Minh Bui-Xuan', 'dblp': 'Binh-Minh_Bui-Xuan'},\n",
+       " {'name': 'Marcelo Dias de Amorim', 'dblp': 'Marcelo_Dias_de_Amorim'},\n",
+       " {'name': 'Serge Fdida', 'dblp': 'Serge_Fdida'},\n",
+       " {'name': 'Anne Fladenmuller', 'dblp': 'Anne_Fladenmuller'},\n",
+       " {'name': 'Francesca Fossati', 'dblp': 'Francesca_Fossati'},\n",
+       " {'name': 'Olivier Fourmaux', 'dblp': 'Olivier_Fourmaux'},\n",
+       " {'name': 'Timur Friedman', 'dblp': 'Timur_Friedman'},\n",
+       " {'name': 'Brigitte Kervella', 'dblp': 'Brigitte_Kervella'},\n",
+       " {'name': 'Naceur Malouch', 'dblp': 'Naceur_Malouch'},\n",
+       " {'name': 'Maria Potop-Butucaru', 'dblp': 'Maria_Potop-Butucaru'},\n",
+       " {'name': 'Guy Pujolle', 'dblp': 'Guy_Pujolle'},\n",
+       " {'name': 'Kim Loan Thai', 'dblp': 'Kim_Loan_Thai'},\n",
+       " {'name': 'Sébastien Tixeuil', 'dblp': 'Sébastien_Tixeuil'},\n",
+       " {'name': 'Bilel Zaghdoudi', 'dblp': 'Bilel_Zaghdoudi'},\n",
+       " {'name': 'Solayman Ayoubi', 'dblp': 'Solayman_Ayoubi'},\n",
+       " {'name': 'Lionel Beltrando', 'dblp': 'Lionel_Beltrando'},\n",
+       " {'name': 'Mateus Da Silva Gilbert', 'dblp': 'Mateus_da_Silva_Gilbert'},\n",
+       " {'name': 'Cherifa Hamroun', 'dblp': 'Cherifa_Hamroun'},\n",
+       " {'name': 'Dimitrios Kefalas', 'dblp': 'Dimitris_Kefalas'},\n",
+       " {'name': 'Mohamed Amine Legheraba', 'dblp': 'Mohamed_Amine_Legheraba'},\n",
+       " {'name': 'Alexandre Pham', 'dblp': 'Alexandre_Pham'},\n",
+       " {'name': 'Giuliano Prestes Fittipaldi', 'dblp': 'Giuliano_Fittipaldi'},\n",
+       " {'name': 'Hugo Rimlinger', 'dblp': 'Hugo_Rimlinger'},\n",
+       " {'name': 'Alexandros Stoltidis', 'dblp': 'Alexandros_Stoltidis'},\n",
+       " {'name': 'Massinissa Tighilt', 'dblp': 'Massinissa_Tighilt'},\n",
+       " {'name': 'Theodoros Tsourdinis', 'dblp': 'Theodoros_Tsourdinis'},\n",
+       " {'name': 'Florent Krasnopol', 'dblp': 'Florent_Krasnopol'},\n",
+       " {'name': 'Saied Kazemi', 'dblp': 'Saied_Kazeminejad'},\n",
+       " {'name': 'Elena Nardi', 'dblp': 'Elena_Nardi'},\n",
+       " {'name': 'Nicolas Peugnet', 'dblp': 'Nicolas_Peugnet'},\n",
+       " {'name': 'Anastasios Giovanidis', 'dblp': 'Anastasios_Giovanidis'},\n",
+       " {'name': 'Fabien Mathieu', 'dblp': 'Fabien_Mathieu'},\n",
+       " {'name': 'Thi-Mai-Trang Nguyen', 'dblp': 'Thi-Trang_Nguyen'},\n",
+       " {'name': 'Ciro Scognamiglio', 'dblp': 'Ciro_Scognamiglio'},\n",
+       " {'name': 'Lélia Blin', 'dblp': 'Lélia_Blin'},\n",
+       " {'name': 'José-Marcos Nogueira', 'dblp': 'Marcos_Nogueira'},\n",
+       " {'name': 'Andrea Richa', 'dblp': 'Andrea_Richaud'},\n",
+       " {'name': 'Miguel Elias Mitre Campista',\n",
+       "  'dblp': 'Miguel_Elias_Mitre_Campista'},\n",
+       " {'name': 'James Kurose', 'dblp': 'James_F._Kurose'},\n",
+       " {'name': 'Ciro Scognamiglio', 'dblp': 'Ciro_Scognamiglio'},\n",
+       " {'name': 'Liuba Shira', 'dblp': 'Liuba_Shrira'},\n",
+       " {'name': 'Maurice Herlihy', 'dblp': 'Maurice_Herlihy'},\n",
+       " {'name': 'Dipankar Raychaudhuri', 'dblp': 'Dipankar_Raychaudhuri'},\n",
+       " {'name': 'Boris Chan Yip Hon', 'dblp': 'Boris_Chan_Yip_Hon'}]"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "npa"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## DBLP Gismo"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In this Section, we use Landmarks to construct a small XGismo focused around the NPA researchers. In details:\n",
+    "- We construct a large Gismo between articles and researchers, exactly like in the DBLP tutorial;\n",
+    "- We use landmarks to extract a (much smaller) list of articles based on collaboration proximity.\n",
+    "- We build a XGismo between researchers and keywords from this smaller source."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Construction of a full Gismo on authors"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This part is similar to the one from the DBLP tutorial."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:44.528288Z",
+     "start_time": "2025-04-09T11:17:44.516115Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from gismo import Corpus, Embedding, CountVectorizer, Gismo\n",
+    "\n",
+    "vectorizer_author = CountVectorizer(\n",
+    "    dtype=float, preprocessor=lambda x: x, tokenizer=lambda x: x.split(\" \")\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:44.547507Z",
+     "start_time": "2025-04-09T11:17:44.530798Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "def to_authors_text(dic):\n",
+    "    return \" \".join([a.replace(\" \", \"_\") for a in dic[\"authors\"]])\n",
+    "\n",
+    "\n",
+    "corpus = Corpus(source, to_text=to_authors_text)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:56.213491Z",
+     "start_time": "2025-04-09T11:17:44.554515Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\Users\\loufa\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\sklearn\\feature_extraction\\text.py:517: UserWarning: The parameter 'token_pattern' will not be used since 'tokenizer' is not None'\n",
+      "  warnings.warn(\n"
+     ]
+    }
+   ],
+   "source": [
+    "try:\n",
+    "    embedding = Embedding.load(filename=\"dblp_aut_embedding\", path=path)\n",
+    "except:\n",
+    "    embedding = Embedding(vectorizer=vectorizer_author)\n",
+    "    embedding.fit_transform(corpus)\n",
+    "    embedding.dump(filename=\"dblp_aut_embedding\", path=path)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:17:56.226506Z",
+     "start_time": "2025-04-09T11:17:56.217576Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "gismo = Gismo(corpus, embedding)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Given the size of the dataset, processing a query can take about one second."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:18:10.379962Z",
+     "start_time": "2025-04-09T11:17:56.229061Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.rank(\"Fabien_Mathieu\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:18:10.899328Z",
+     "start_time": "2025-04-09T11:18:10.383976Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.02. R: 0.26. S: 0.72.\n",
+      "- F: 0.02. R: 0.25. S: 0.71.\n",
+      "-- F: 0.03. R: 0.24. S: 0.70.\n",
+      "--- F: 0.07. R: 0.22. S: 0.67.\n",
+      "---- F: 0.07. R: 0.19. S: 0.60.\n",
+      "----- F: 0.37. R: 0.18. S: 0.55.\n",
+      "------ Fabien_Mathieu (R: 0.11; S: 1.00)\n",
+      "------ F: 0.61. R: 0.03. S: 0.37.\n",
+      "------- François_Durand (R: 0.02; S: 0.44)\n",
+      "------- Ludovic_Noirie (R: 0.01; S: 0.32)\n",
+      "------- Emma_Caizergues (R: 0.01; S: 0.26)\n",
+      "------ F: 0.61. R: 0.03. S: 0.39.\n",
+      "------- Laurent_Viennot (R: 0.02; S: 0.44)\n",
+      "------- F: 0.70. R: 0.02. S: 0.34.\n",
+      "-------- Diego_Perino (R: 0.01; S: 0.39)\n",
+      "-------- Yacine_Boufkhad (R: 0.01; S: 0.28)\n",
+      "----- F: 0.33. R: 0.01. S: 0.28.\n",
+      "------ The_Dang_Huynh (R: 0.01; S: 0.27)\n",
+      "------ Dohy_Hong (R: 0.00; S: 0.17)\n",
+      "---- F: 0.25. R: 0.03. S: 0.36.\n",
+      "----- F: 0.77. R: 0.02. S: 0.34.\n",
+      "------ Julien_Reynier (R: 0.01; S: 0.35)\n",
+      "------ Fabien_de_Montgolfier (R: 0.01; S: 0.36)\n",
+      "------ Anh-Tuan_Gai (R: 0.00; S: 0.28)\n",
+      "----- Gheorghe_Postelnicu (R: 0.00; S: 0.17)\n",
+      "--- F: 0.40. R: 0.02. S: 0.32.\n",
+      "---- F: 0.58. R: 0.02. S: 0.31.\n",
+      "----- Céline_Comte (R: 0.01; S: 0.31)\n",
+      "----- Thomas_Bonald (R: 0.01; S: 0.23)\n",
+      "---- Anne_Bouillard (R: 0.00; S: 0.20)\n",
+      "--- Nidhi_Hegde_0001 (R: 0.00; S: 0.20)\n",
+      "-- F: 1.00. R: 0.01. S: 0.23.\n",
+      "--- Ilkka_Norros (R: 0.01; S: 0.23)\n",
+      "--- François_Baccelli (R: 0.00; S: 0.23)\n",
+      "- Mohamed_Bouklit (R: 0.01; S: 0.18)\n"
+     ]
+    }
+   ],
+   "source": [
+    "from gismo.post_processing import post_features_cluster_print\n",
+    "\n",
+    "gismo.post_features_cluster = post_features_cluster_print\n",
+    "gismo.get_features_by_cluster()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Using landmarks to shrink a source"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To reduce the size of the dataset, we make landmarks out of the researchers, and we credit each entry with a budget of 2,000 articles."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:18:10.914705Z",
+     "start_time": "2025-04-09T11:18:10.902431Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from gismo.landmarks import Landmarks\n",
+    "\n",
+    "npa_landmarks_full = Landmarks(source=npa, to_text=lambda x: x[\"dblp\"], x_density=2000)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We launch the computation of the source. This takes a couple of minutes, as a ranking diffusion needs to be performed for all researchers."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:18:10.929480Z",
+     "start_time": "2025-04-09T11:18:10.920748Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import logging\n",
+    "\n",
+    "logging.basicConfig()\n",
+    "log = logging.getLogger(\"Gismo\")\n",
+    "log.setLevel(level=logging.DEBUG)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:21:55.126012Z",
+     "start_time": "2025-04-09T11:18:10.933383Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:Gismo:Start computation of 47 landmarks.\n",
+      "DEBUG:Gismo:Processing Sébastien_Baey.\n",
+      "DEBUG:Gismo:Landmarks of Sébastien_Baey computed.\n",
+      "DEBUG:Gismo:Processing Bruno_Baynat.\n",
+      "DEBUG:Gismo:Landmarks of Bruno_Baynat computed.\n",
+      "DEBUG:Gismo:Processing Quentin_Bramas.\n",
+      "DEBUG:Gismo:Landmarks of Quentin_Bramas computed.\n",
+      "DEBUG:Gismo:Processing Binh-Minh_Bui-Xuan.\n",
+      "DEBUG:Gismo:Landmarks of Binh-Minh_Bui-Xuan computed.\n",
+      "DEBUG:Gismo:Processing Marcelo_Dias_de_Amorim.\n",
+      "DEBUG:Gismo:Landmarks of Marcelo_Dias_de_Amorim computed.\n",
+      "DEBUG:Gismo:Processing Serge_Fdida.\n",
+      "DEBUG:Gismo:Landmarks of Serge_Fdida computed.\n",
+      "DEBUG:Gismo:Processing Anne_Fladenmuller.\n",
+      "DEBUG:Gismo:Landmarks of Anne_Fladenmuller computed.\n",
+      "DEBUG:Gismo:Processing Francesca_Fossati.\n",
+      "DEBUG:Gismo:Landmarks of Francesca_Fossati computed.\n",
+      "DEBUG:Gismo:Processing Olivier_Fourmaux.\n",
+      "DEBUG:Gismo:Landmarks of Olivier_Fourmaux computed.\n",
+      "DEBUG:Gismo:Processing Timur_Friedman.\n",
+      "DEBUG:Gismo:Landmarks of Timur_Friedman computed.\n",
+      "DEBUG:Gismo:Processing Brigitte_Kervella.\n",
+      "DEBUG:Gismo:Landmarks of Brigitte_Kervella computed.\n",
+      "DEBUG:Gismo:Processing Naceur_Malouch.\n",
+      "DEBUG:Gismo:Landmarks of Naceur_Malouch computed.\n",
+      "DEBUG:Gismo:Processing Maria_Potop-Butucaru.\n",
+      "DEBUG:Gismo:Landmarks of Maria_Potop-Butucaru computed.\n",
+      "DEBUG:Gismo:Processing Guy_Pujolle.\n",
+      "DEBUG:Gismo:Landmarks of Guy_Pujolle computed.\n",
+      "DEBUG:Gismo:Processing Kim_Loan_Thai.\n",
+      "DEBUG:Gismo:Landmarks of Kim_Loan_Thai computed.\n",
+      "DEBUG:Gismo:Processing Sébastien_Tixeuil.\n",
+      "DEBUG:Gismo:Landmarks of Sébastien_Tixeuil computed.\n",
+      "DEBUG:Gismo:Processing Bilel_Zaghdoudi.\n",
+      "DEBUG:Gismo:Landmarks of Bilel_Zaghdoudi computed.\n",
+      "DEBUG:Gismo:Processing Solayman_Ayoubi.\n",
+      "DEBUG:Gismo:Landmarks of Solayman_Ayoubi computed.\n",
+      "DEBUG:Gismo:Processing Lionel_Beltrando.\n",
+      "DEBUG:Gismo:Landmarks of Lionel_Beltrando computed.\n",
+      "DEBUG:Gismo:Processing Mateus_da_Silva_Gilbert.\n",
+      "DEBUG:Gismo:Landmarks of Mateus_da_Silva_Gilbert computed.\n",
+      "DEBUG:Gismo:Processing Cherifa_Hamroun.\n",
+      "DEBUG:Gismo:Landmarks of Cherifa_Hamroun computed.\n",
+      "DEBUG:Gismo:Processing Dimitris_Kefalas.\n",
+      "DEBUG:Gismo:Landmarks of Dimitris_Kefalas computed.\n",
+      "DEBUG:Gismo:Processing Mohamed_Amine_Legheraba.\n",
+      "DEBUG:Gismo:Landmarks of Mohamed_Amine_Legheraba computed.\n",
+      "DEBUG:Gismo:Processing Alexandre_Pham.\n",
+      "DEBUG:Gismo:Landmarks of Alexandre_Pham computed.\n",
+      "DEBUG:Gismo:Processing Giuliano_Fittipaldi.\n",
+      "DEBUG:Gismo:Landmarks of Giuliano_Fittipaldi computed.\n",
+      "DEBUG:Gismo:Processing Hugo_Rimlinger.\n",
+      "DEBUG:Gismo:Landmarks of Hugo_Rimlinger computed.\n",
+      "DEBUG:Gismo:Processing Alexandros_Stoltidis.\n",
+      "DEBUG:Gismo:Landmarks of Alexandros_Stoltidis computed.\n",
+      "DEBUG:Gismo:Processing Massinissa_Tighilt.\n",
+      "DEBUG:Gismo:Landmarks of Massinissa_Tighilt computed.\n",
+      "DEBUG:Gismo:Processing Theodoros_Tsourdinis.\n",
+      "DEBUG:Gismo:Landmarks of Theodoros_Tsourdinis computed.\n",
+      "DEBUG:Gismo:Processing Florent_Krasnopol.\n",
+      "DEBUG:Gismo:Landmarks of Florent_Krasnopol computed.\n",
+      "DEBUG:Gismo:Processing Saied_Kazeminejad.\n",
+      "DEBUG:Gismo:Landmarks of Saied_Kazeminejad computed.\n",
+      "DEBUG:Gismo:Processing Elena_Nardi.\n",
+      "DEBUG:Gismo:Landmarks of Elena_Nardi computed.\n",
+      "DEBUG:Gismo:Processing Nicolas_Peugnet.\n",
+      "DEBUG:Gismo:Landmarks of Nicolas_Peugnet computed.\n",
+      "DEBUG:Gismo:Processing Anastasios_Giovanidis.\n",
+      "DEBUG:Gismo:Landmarks of Anastasios_Giovanidis computed.\n",
+      "DEBUG:Gismo:Processing Fabien_Mathieu.\n",
+      "DEBUG:Gismo:Landmarks of Fabien_Mathieu computed.\n",
+      "DEBUG:Gismo:Processing Thi-Trang_Nguyen.\n",
+      "DEBUG:Gismo:Landmarks of Thi-Trang_Nguyen computed.\n",
+      "DEBUG:Gismo:Processing Ciro_Scognamiglio.\n",
+      "DEBUG:Gismo:Landmarks of Ciro_Scognamiglio computed.\n",
+      "DEBUG:Gismo:Processing Lélia_Blin.\n",
+      "DEBUG:Gismo:Landmarks of Lélia_Blin computed.\n",
+      "DEBUG:Gismo:Processing Marcos_Nogueira.\n",
+      "DEBUG:Gismo:Landmarks of Marcos_Nogueira computed.\n",
+      "DEBUG:Gismo:Processing Andrea_Richaud.\n",
+      "DEBUG:Gismo:Landmarks of Andrea_Richaud computed.\n",
+      "DEBUG:Gismo:Processing Miguel_Elias_Mitre_Campista.\n",
+      "DEBUG:Gismo:Landmarks of Miguel_Elias_Mitre_Campista computed.\n",
+      "DEBUG:Gismo:Processing James_F._Kurose.\n",
+      "DEBUG:Gismo:Landmarks of James_F._Kurose computed.\n",
+      "DEBUG:Gismo:Processing Ciro_Scognamiglio.\n",
+      "DEBUG:Gismo:Landmarks of Ciro_Scognamiglio computed.\n",
+      "DEBUG:Gismo:Processing Liuba_Shrira.\n",
+      "DEBUG:Gismo:Landmarks of Liuba_Shrira computed.\n",
+      "DEBUG:Gismo:Processing Maurice_Herlihy.\n",
+      "DEBUG:Gismo:Landmarks of Maurice_Herlihy computed.\n",
+      "DEBUG:Gismo:Processing Dipankar_Raychaudhuri.\n",
+      "DEBUG:Gismo:Landmarks of Dipankar_Raychaudhuri computed.\n",
+      "DEBUG:Gismo:Processing Boris_Chan_Yip_Hon.\n",
+      "DEBUG:Gismo:Landmarks of Boris_Chan_Yip_Hon computed.\n",
+      "INFO:Gismo:All landmarks are built.\n"
+     ]
+    }
+   ],
+   "source": [
+    "reduced_source = npa_landmarks_full.get_reduced_source(gismo)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:21:55.133425Z",
+     "start_time": "2025-04-09T11:21:55.129026Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Source length went down from 7513218 to 50350.\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(f\"Source length went down from {len(source)} to {len(reduced_source)}.\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Instead of 7,500,000 all purposes articles, we now have 50,000 articles lying in the neighborhood of the considered researchers. We now can close the file descriptor as we won't need further access to the original source."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:21:55.149822Z",
+     "start_time": "2025-04-09T11:21:55.135554Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "source.close()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Building a small XGismo"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Author Embedding"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Author embedding takes a couple of seconds instead of a couple of minutes."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:21:59.564886Z",
+     "start_time": "2025-04-09T11:21:55.153857Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\Users\\loufa\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\sklearn\\feature_extraction\\text.py:517: UserWarning: The parameter 'token_pattern' will not be used since 'tokenizer' is not None'\n",
+      "  warnings.warn(\n"
+     ]
+    }
+   ],
+   "source": [
+    "reduced_corpus = Corpus(reduced_source, to_text=to_authors_text)\n",
+    "reduced_author_embedding = Embedding(vectorizer=vectorizer_author)\n",
+    "reduced_author_embedding.fit_transform(reduced_corpus)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Sanity Check"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can rebuild a small author Gismo. This part is merely a sanity check to verify that the reduction didn't change too much things in the vicinity of the NPA.."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:21:59.572468Z",
+     "start_time": "2025-04-09T11:21:59.566893Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "reduced_gismo = Gismo(reduced_corpus, reduced_author_embedding)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Ranking is nearly instant."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:21:59.659006Z",
+     "start_time": "2025-04-09T11:21:59.577188Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "reduced_gismo.rank(\"Fabien_Mathieu\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The results are almost identical to what was returned by the full Gismo."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:21:59.713498Z",
+     "start_time": "2025-04-09T11:21:59.668073Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.02. R: 0.25. S: 0.72.\n",
+      "- F: 0.02. R: 0.25. S: 0.70.\n",
+      "-- F: 0.03. R: 0.24. S: 0.70.\n",
+      "--- F: 0.06. R: 0.22. S: 0.67.\n",
+      "---- F: 0.07. R: 0.19. S: 0.60.\n",
+      "----- F: 0.37. R: 0.18. S: 0.55.\n",
+      "------ Fabien_Mathieu (R: 0.11; S: 1.00)\n",
+      "------ F: 0.61. R: 0.03. S: 0.37.\n",
+      "------- François_Durand (R: 0.02; S: 0.44)\n",
+      "------- Ludovic_Noirie (R: 0.01; S: 0.32)\n",
+      "------- Emma_Caizergues (R: 0.01; S: 0.27)\n",
+      "------ F: 0.60. R: 0.03. S: 0.39.\n",
+      "------- Laurent_Viennot (R: 0.01; S: 0.44)\n",
+      "------- F: 0.68. R: 0.02. S: 0.33.\n",
+      "-------- Diego_Perino (R: 0.01; S: 0.39)\n",
+      "-------- Yacine_Boufkhad (R: 0.01; S: 0.27)\n",
+      "----- F: 0.33. R: 0.01. S: 0.28.\n",
+      "------ The_Dang_Huynh (R: 0.01; S: 0.27)\n",
+      "------ Dohy_Hong (R: 0.00; S: 0.17)\n",
+      "---- F: 0.26. R: 0.03. S: 0.35.\n",
+      "----- F: 0.77. R: 0.02. S: 0.34.\n",
+      "------ Julien_Reynier (R: 0.01; S: 0.35)\n",
+      "------ Fabien_de_Montgolfier (R: 0.01; S: 0.35)\n",
+      "------ Anh-Tuan_Gai (R: 0.01; S: 0.27)\n",
+      "----- Gheorghe_Postelnicu (R: 0.00; S: 0.17)\n",
+      "--- F: 0.58. R: 0.02. S: 0.31.\n",
+      "---- Céline_Comte (R: 0.01; S: 0.31)\n",
+      "---- Thomas_Bonald (R: 0.00; S: 0.23)\n",
+      "--- Nidhi_Hegde_0001 (R: 0.00; S: 0.20)\n",
+      "-- F: 1.00. R: 0.01. S: 0.23.\n",
+      "--- Ilkka_Norros (R: 0.01; S: 0.23)\n",
+      "--- François_Baccelli (R: 0.00; S: 0.23)\n",
+      "- Mohamed_Bouklit (R: 0.01; S: 0.18)\n"
+     ]
+    }
+   ],
+   "source": [
+    "from gismo.post_processing import post_features_cluster_print\n",
+    "\n",
+    "reduced_gismo.post_features_cluster = post_features_cluster_print\n",
+    "reduced_gismo.get_features_by_cluster()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Word Embedding"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we build the word embedding, with the spacy add-on. Takes a couple of minutes instead of a couple of hours."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:22:03.904584Z",
+     "start_time": "2025-04-09T11:21:59.716983Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import spacy\n",
+    "\n",
+    "# Initialize spacy 'en' model, keeping only tagger component needed for lemmatization\n",
+    "nlp = spacy.load(\"en_core_web_sm\", disable=[\"parser\", \"ner\"])\n",
+    "# Who cares about DET and such?\n",
+    "keep = {\"ADJ\", \"NOUN\", \"NUM\", \"PROPN\", \"SYM\", \"VERB\"}\n",
+    "\n",
+    "preprocessor = lambda txt: \" \".join(\n",
+    "    [\n",
+    "        token.lemma_.lower()\n",
+    "        for token in nlp(txt)\n",
+    "        if token.pos_ in keep and not token.is_stop\n",
+    "    ]\n",
+    ")\n",
+    "vectorizer_text = CountVectorizer(\n",
+    "    dtype=float, min_df=5, max_df=0.02, ngram_range=(1, 3), preprocessor=preprocessor\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:23.281686Z",
+     "start_time": "2025-04-09T11:22:03.906618Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "reduced_corpus.to_text = lambda e: e[\"title\"]\n",
+    "reduced_word_embedding = Embedding(vectorizer=vectorizer_text)\n",
+    "reduced_word_embedding.fit_transform(reduced_corpus)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Gathering pieces together"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can combine the reduced embeddings to build a XGismo between authors and words."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:23.399465Z",
+     "start_time": "2025-04-09T11:25:23.284202Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from gismo.gismo import XGismo\n",
+    "\n",
+    "xgismo = XGismo(\n",
+    "    x_embedding=reduced_author_embedding, y_embedding=reduced_word_embedding\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can save this for later use."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:32.435119Z",
+     "start_time": "2025-04-09T11:25:23.401999Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "xgismo.dump(filename=\"reduced_npa_xgismo\", path=path, overwrite=True)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The file should be about 32 Mb, whereas a full-size DBLP XGismo is about 4 Gb. What about speed and quality of results?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:32.594261Z",
+     "start_time": "2025-04-09T11:25:32.439272Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 32,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "xgismo.rank(\"Anne_Bouillard\", y=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:32.604159Z",
+     "start_time": "2025-04-09T11:25:32.597772Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Anne_Bouillard',\n",
+       " 'Bruno_Gaujal',\n",
+       " 'François_Baccelli',\n",
+       " 'Paul_Nikolaus',\n",
+       " 'Jens_B._Schmitt',\n",
+       " 'Ana_Busic',\n",
+       " 'Eric_Thierry',\n",
+       " 'Ke_Feng',\n",
+       " 'Giovanni_Stea',\n",
+       " 'Zhen_Liu_0001',\n",
+       " 'Seyed_Mohammadhossein_Tabatabaee',\n",
+       " 'Aurore_Junier',\n",
+       " 'Jean-Yves_Le_Boudec',\n",
+       " 'Christelle_Rovetta',\n",
+       " 'Jean_Mairesse',\n",
+       " 'Oded_Goldreich_0001',\n",
+       " 'Yves_Dallery',\n",
+       " 'Donald_F._Towsley',\n",
+       " 'Leandros_Tassiulas',\n",
+       " 'Nissim_Francez']"
+      ]
+     },
+     "execution_count": 33,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "xgismo.get_documents_by_rank()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's try some more elaborate display."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:32.653390Z",
+     "start_time": "2025-04-09T11:25:32.607222Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.06. R: 0.09. S: 0.82.\n",
+      "- F: 0.60. R: 0.06. S: 0.76.\n",
+      "-- F: 0.69. R: 0.06. S: 0.76.\n",
+      "--- F: 0.85. R: 0.06. S: 0.75.\n",
+      "---- F: 0.92. R: 0.05. S: 0.75.\n",
+      "----- Anne_Bouillard (R: 0.03; S: 0.79)\n",
+      "----- Paul_Nikolaus (R: 0.00; S: 0.73)\n",
+      "----- Jens_B._Schmitt (R: 0.00; S: 0.73)\n",
+      "----- Eric_Thierry (R: 0.00; S: 0.75)\n",
+      "----- Ke_Feng (R: 0.00; S: 0.70)\n",
+      "---- Bruno_Gaujal (R: 0.01; S: 0.75)\n",
+      "--- Aurore_Junier (R: 0.00; S: 0.66)\n",
+      "-- François_Baccelli (R: 0.00; S: 0.59)\n",
+      "-- Nissim_Francez (R: 0.00; S: 0.49)\n",
+      "- F: 0.17. R: 0.02. S: 0.43.\n",
+      "-- F: 0.55. R: 0.01. S: 0.26.\n",
+      "--- F: 0.55. R: 0.01. S: 0.25.\n",
+      "---- Ana_Busic (R: 0.00; S: 0.33)\n",
+      "---- Zhen_Liu_0001 (R: 0.00; S: 0.33)\n",
+      "---- Christelle_Rovetta (R: 0.00; S: 0.21)\n",
+      "---- Donald_F._Towsley (R: 0.00; S: 0.29)\n",
+      "--- Yves_Dallery (R: 0.00; S: 0.24)\n",
+      "-- F: 0.28. R: 0.01. S: 0.36.\n",
+      "--- F: 0.59. R: 0.01. S: 0.35.\n",
+      "---- Giovanni_Stea (R: 0.00; S: 0.33)\n",
+      "---- F: 1.00. R: 0.01. S: 0.30.\n",
+      "----- Seyed_Mohammadhossein_Tabatabaee (R: 0.00; S: 0.30)\n",
+      "----- Jean-Yves_Le_Boudec (R: 0.00; S: 0.30)\n",
+      "--- Oded_Goldreich_0001 (R: 0.00; S: 0.27)\n",
+      "-- Leandros_Tassiulas (R: 0.00; S: 0.31)\n",
+      "- Jean_Mairesse (R: 0.00; S: 0.27)\n"
+     ]
+    }
+   ],
+   "source": [
+    "from gismo.post_processing import (\n",
+    "    post_documents_cluster_print,\n",
+    "    post_features_cluster_print,\n",
+    ")\n",
+    "\n",
+    "xgismo.parameters.distortion = 1.0\n",
+    "xgismo.post_documents_cluster = post_documents_cluster_print\n",
+    "xgismo.post_features_cluster = post_features_cluster_print\n",
+    "xgismo.get_documents_by_cluster()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:32.676550Z",
+     "start_time": "2025-04-09T11:25:32.655885Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.32. R: 0.20. S: 0.94.\n",
+      "- F: 0.50. R: 0.19. S: 0.94.\n",
+      "-- F: 0.76. R: 0.18. S: 0.93.\n",
+      "--- network calculus (R: 0.05; S: 0.91)\n",
+      "--- calculus (R: 0.05; S: 0.92)\n",
+      "--- bad case (R: 0.01; S: 0.91)\n",
+      "--- bad (R: 0.01; S: 0.91)\n",
+      "--- free choice (R: 0.01; S: 0.82)\n",
+      "--- stochastic network (R: 0.01; S: 0.90)\n",
+      "--- multiplexing (R: 0.01; S: 0.89)\n",
+      "--- closed queue (R: 0.01; S: 0.85)\n",
+      "-- stochastic (R: 0.01; S: 0.59)\n",
+      "- monotonicity (R: 0.02; S: 0.36)\n"
+     ]
+    }
+   ],
+   "source": [
+    "xgismo.get_features_by_cluster(target_k=1.5, resolution=0.5, distortion=0.5)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Rebuild landmarks"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### NPA landmarks"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can rebuild NPA landmarks on the XGismo."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:40.130146Z",
+     "start_time": "2025-04-09T11:25:32.680583Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:Gismo:Start computation of 47 landmarks.\n",
+      "DEBUG:Gismo:Processing Sébastien_Baey.\n",
+      "DEBUG:Gismo:Landmarks of Sébastien_Baey computed.\n",
+      "DEBUG:Gismo:Processing Bruno_Baynat.\n",
+      "DEBUG:Gismo:Landmarks of Bruno_Baynat computed.\n",
+      "DEBUG:Gismo:Processing Quentin_Bramas.\n",
+      "DEBUG:Gismo:Landmarks of Quentin_Bramas computed.\n",
+      "DEBUG:Gismo:Processing Binh-Minh_Bui-Xuan.\n",
+      "DEBUG:Gismo:Landmarks of Binh-Minh_Bui-Xuan computed.\n",
+      "DEBUG:Gismo:Processing Marcelo_Dias_de_Amorim.\n",
+      "DEBUG:Gismo:Landmarks of Marcelo_Dias_de_Amorim computed.\n",
+      "DEBUG:Gismo:Processing Serge_Fdida.\n",
+      "DEBUG:Gismo:Landmarks of Serge_Fdida computed.\n",
+      "DEBUG:Gismo:Processing Anne_Fladenmuller.\n",
+      "DEBUG:Gismo:Landmarks of Anne_Fladenmuller computed.\n",
+      "DEBUG:Gismo:Processing Francesca_Fossati.\n",
+      "DEBUG:Gismo:Landmarks of Francesca_Fossati computed.\n",
+      "DEBUG:Gismo:Processing Olivier_Fourmaux.\n",
+      "DEBUG:Gismo:Landmarks of Olivier_Fourmaux computed.\n",
+      "DEBUG:Gismo:Processing Timur_Friedman.\n",
+      "DEBUG:Gismo:Landmarks of Timur_Friedman computed.\n",
+      "DEBUG:Gismo:Processing Brigitte_Kervella.\n",
+      "DEBUG:Gismo:Landmarks of Brigitte_Kervella computed.\n",
+      "DEBUG:Gismo:Processing Naceur_Malouch.\n",
+      "DEBUG:Gismo:Landmarks of Naceur_Malouch computed.\n",
+      "DEBUG:Gismo:Processing Maria_Potop-Butucaru.\n",
+      "DEBUG:Gismo:Landmarks of Maria_Potop-Butucaru computed.\n",
+      "DEBUG:Gismo:Processing Guy_Pujolle.\n",
+      "DEBUG:Gismo:Landmarks of Guy_Pujolle computed.\n",
+      "DEBUG:Gismo:Processing Kim_Loan_Thai.\n",
+      "DEBUG:Gismo:Landmarks of Kim_Loan_Thai computed.\n",
+      "DEBUG:Gismo:Processing Sébastien_Tixeuil.\n",
+      "DEBUG:Gismo:Landmarks of Sébastien_Tixeuil computed.\n",
+      "DEBUG:Gismo:Processing Bilel_Zaghdoudi.\n",
+      "DEBUG:Gismo:Landmarks of Bilel_Zaghdoudi computed.\n",
+      "DEBUG:Gismo:Processing Solayman_Ayoubi.\n",
+      "DEBUG:Gismo:Landmarks of Solayman_Ayoubi computed.\n",
+      "DEBUG:Gismo:Processing Lionel_Beltrando.\n",
+      "DEBUG:Gismo:Landmarks of Lionel_Beltrando computed.\n",
+      "DEBUG:Gismo:Processing Mateus_da_Silva_Gilbert.\n",
+      "DEBUG:Gismo:Landmarks of Mateus_da_Silva_Gilbert computed.\n",
+      "DEBUG:Gismo:Processing Cherifa_Hamroun.\n",
+      "DEBUG:Gismo:Landmarks of Cherifa_Hamroun computed.\n",
+      "DEBUG:Gismo:Processing Dimitris_Kefalas.\n",
+      "DEBUG:Gismo:Landmarks of Dimitris_Kefalas computed.\n",
+      "DEBUG:Gismo:Processing Mohamed_Amine_Legheraba.\n",
+      "DEBUG:Gismo:Landmarks of Mohamed_Amine_Legheraba computed.\n",
+      "DEBUG:Gismo:Processing Alexandre_Pham.\n",
+      "DEBUG:Gismo:Landmarks of Alexandre_Pham computed.\n",
+      "DEBUG:Gismo:Processing Giuliano_Fittipaldi.\n",
+      "DEBUG:Gismo:Landmarks of Giuliano_Fittipaldi computed.\n",
+      "DEBUG:Gismo:Processing Hugo_Rimlinger.\n",
+      "DEBUG:Gismo:Landmarks of Hugo_Rimlinger computed.\n",
+      "DEBUG:Gismo:Processing Alexandros_Stoltidis.\n",
+      "DEBUG:Gismo:Landmarks of Alexandros_Stoltidis computed.\n",
+      "DEBUG:Gismo:Processing Massinissa_Tighilt.\n",
+      "DEBUG:Gismo:Landmarks of Massinissa_Tighilt computed.\n",
+      "DEBUG:Gismo:Processing Theodoros_Tsourdinis.\n",
+      "DEBUG:Gismo:Landmarks of Theodoros_Tsourdinis computed.\n",
+      "DEBUG:Gismo:Processing Florent_Krasnopol.\n",
+      "DEBUG:Gismo:Landmarks of Florent_Krasnopol computed.\n",
+      "DEBUG:Gismo:Processing Saied_Kazeminejad.\n",
+      "DEBUG:Gismo:Landmarks of Saied_Kazeminejad computed.\n",
+      "DEBUG:Gismo:Processing Elena_Nardi.\n",
+      "DEBUG:Gismo:Landmarks of Elena_Nardi computed.\n",
+      "DEBUG:Gismo:Processing Nicolas_Peugnet.\n",
+      "DEBUG:Gismo:Landmarks of Nicolas_Peugnet computed.\n",
+      "DEBUG:Gismo:Processing Anastasios_Giovanidis.\n",
+      "DEBUG:Gismo:Landmarks of Anastasios_Giovanidis computed.\n",
+      "DEBUG:Gismo:Processing Fabien_Mathieu.\n",
+      "DEBUG:Gismo:Landmarks of Fabien_Mathieu computed.\n",
+      "DEBUG:Gismo:Processing Thi-Trang_Nguyen.\n",
+      "DEBUG:Gismo:Landmarks of Thi-Trang_Nguyen computed.\n",
+      "DEBUG:Gismo:Processing Ciro_Scognamiglio.\n",
+      "DEBUG:Gismo:Landmarks of Ciro_Scognamiglio computed.\n",
+      "DEBUG:Gismo:Processing Lélia_Blin.\n",
+      "DEBUG:Gismo:Landmarks of Lélia_Blin computed.\n",
+      "DEBUG:Gismo:Processing Marcos_Nogueira.\n",
+      "DEBUG:Gismo:Landmarks of Marcos_Nogueira computed.\n",
+      "DEBUG:Gismo:Processing Andrea_Richaud.\n",
+      "DEBUG:Gismo:Landmarks of Andrea_Richaud computed.\n",
+      "DEBUG:Gismo:Processing Miguel_Elias_Mitre_Campista.\n",
+      "DEBUG:Gismo:Landmarks of Miguel_Elias_Mitre_Campista computed.\n",
+      "DEBUG:Gismo:Processing James_F._Kurose.\n",
+      "DEBUG:Gismo:Landmarks of James_F._Kurose computed.\n",
+      "DEBUG:Gismo:Processing Ciro_Scognamiglio.\n",
+      "DEBUG:Gismo:Landmarks of Ciro_Scognamiglio computed.\n",
+      "DEBUG:Gismo:Processing Liuba_Shrira.\n",
+      "DEBUG:Gismo:Landmarks of Liuba_Shrira computed.\n",
+      "DEBUG:Gismo:Processing Maurice_Herlihy.\n",
+      "DEBUG:Gismo:Landmarks of Maurice_Herlihy computed.\n",
+      "DEBUG:Gismo:Processing Dipankar_Raychaudhuri.\n",
+      "DEBUG:Gismo:Landmarks of Dipankar_Raychaudhuri computed.\n",
+      "DEBUG:Gismo:Processing Boris_Chan_Yip_Hon.\n",
+      "DEBUG:Gismo:Landmarks of Boris_Chan_Yip_Hon computed.\n",
+      "INFO:Gismo:All landmarks are built.\n"
+     ]
+    }
+   ],
+   "source": [
+    "npa_landmarks = Landmarks(\n",
+    "    source=npa, to_text=lambda x: x[\"dblp\"], rank=lambda g, q: g.rank(q, y=False)\n",
+    ")\n",
+    "npa_landmarks.fit(xgismo)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can extract the NPA researchers that the most similar to a given researcher (not necessarily from NPA)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:40.319042Z",
+     "start_time": "2025-04-09T11:25:40.133170Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Fabien Mathieu',\n",
+       " 'Bruno Baynat',\n",
+       " 'Florent Krasnopol',\n",
+       " 'James Kurose',\n",
+       " 'Nicolas Peugnet',\n",
+       " 'Mohamed Amine Legheraba',\n",
+       " 'Giuliano Prestes Fittipaldi',\n",
+       " 'Massinissa Tighilt',\n",
+       " 'Timur Friedman',\n",
+       " 'Anastasios Giovanidis',\n",
+       " 'Guy Pujolle',\n",
+       " 'Marcelo Dias de Amorim',\n",
+       " 'Maurice Herlihy',\n",
+       " 'Quentin Bramas',\n",
+       " 'Serge Fdida',\n",
+       " 'Maria Potop-Butucaru',\n",
+       " 'Sébastien Tixeuil',\n",
+       " 'Lélia Blin',\n",
+       " 'Binh-Minh Bui-Xuan',\n",
+       " 'Anne Fladenmuller',\n",
+       " 'Sébastien Baey',\n",
+       " 'Naceur Malouch',\n",
+       " 'Dipankar Raychaudhuri',\n",
+       " 'Kim Loan Thai']"
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "xgismo.rank(\"Anne_Bouillard\", y=False)\n",
+    "npa_landmarks.post_item = lambda l, i: l[i][\"name\"]\n",
+    "npa_landmarks.get_landmarks_by_rank(xgismo)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can also use a keyword query, and organize the results in clusters."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:40.602120Z",
+     "start_time": "2025-04-09T11:25:40.321056Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.05. \n",
+      "- F: 0.06. \n",
+      "-- F: 0.08. \n",
+      "--- F: 0.10. \n",
+      "---- F: 0.15. \n",
+      "----- F: 0.33. \n",
+      "------ Fabien Mathieu \n",
+      "------ F: 0.46. \n",
+      "------- Bruno Baynat \n",
+      "------- F: 0.52. \n",
+      "-------- F: 0.52. \n",
+      "--------- James Kurose \n",
+      "--------- Guy Pujolle \n",
+      "-------- F: 0.64. \n",
+      "--------- Timur Friedman \n",
+      "--------- Marcelo Dias de Amorim \n",
+      "------- Anastasios Giovanidis \n",
+      "------- Quentin Bramas \n",
+      "------ Maurice Herlihy \n",
+      "----- Giuliano Prestes Fittipaldi \n",
+      "---- Nicolas Peugnet \n",
+      "--- Massinissa Tighilt \n",
+      "-- Florent Krasnopol \n",
+      "- Mohamed Amine Legheraba \n"
+     ]
+    }
+   ],
+   "source": [
+    "xgismo.rank(\"Anne_Bouillard\", y=False)\n",
+    "from gismo.post_processing import post_landmarks_cluster_print\n",
+    "\n",
+    "npa_landmarks.post_cluster = post_landmarks_cluster_print\n",
+    "npa_landmarks.get_landmarks_by_cluster(xgismo, balance=0.5, target_k=1.2)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### ACM landmarks"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can build other landmarks using the ACM categories. This will enable to describe things in term of categories."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:40.626656Z",
+     "start_time": "2025-04-09T11:25:40.607132Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from gismo.datasets.acm import get_acm, flatten_acm\n",
+    "\n",
+    "acm = flatten_acm(get_acm(), min_size=10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:40.635731Z",
+     "start_time": "2025-04-09T11:25:40.629665Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "acm_landmarks = Landmarks(acm, to_text=lambda e: e[\"query\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:57.747904Z",
+     "start_time": "2025-04-09T11:25:40.638739Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:Gismo:Start computation of 113 landmarks.\n",
+      "INFO:Gismo:All landmarks are built.\n"
+     ]
+    }
+   ],
+   "source": [
+    "log.setLevel(logging.INFO)\n",
+    "acm_landmarks.fit(xgismo)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:57.919356Z",
+     "start_time": "2025-04-09T11:25:57.750912Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Machine learning algorithms',\n",
+       " 'Discrete mathematics',\n",
+       " 'Graph theory',\n",
+       " 'Models of computation',\n",
+       " 'Computational complexity and cryptography',\n",
+       " 'Theory of computation',\n",
+       " 'Symbolic and algebraic algorithms',\n",
+       " 'Mathematics of computing',\n",
+       " 'Symbolic and algebraic manipulation',\n",
+       " 'Power and energy',\n",
+       " 'Architectures',\n",
+       " 'Software system structures',\n",
+       " 'Software organization and properties',\n",
+       " 'Design and analysis of algorithms']"
+      ]
+     },
+     "execution_count": 42,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "xgismo.rank(\"Fabien_Mathieu\", y=False)\n",
+    "acm_landmarks.post_item = lambda l, i: l[i][\"name\"]\n",
+    "acm_landmarks.get_landmarks_by_rank(xgismo, balance=0.5, target_k=1.2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:58.098779Z",
+     "start_time": "2025-04-09T11:25:57.922814Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.36. \n",
+      "- F: 0.99. \n",
+      "-- Discrete mathematics \n",
+      "-- Mathematics of computing \n",
+      "-- Graph theory \n",
+      "-- Visualization \n",
+      "-- Simulation types and techniques \n",
+      "-- Modeling and simulation \n",
+      "- F: 0.41. \n",
+      "-- F: 0.96. \n",
+      "--- Symbolic and algebraic algorithms \n",
+      "--- Symbolic and algebraic manipulation \n",
+      "--- Mathematical analysis \n",
+      "-- F: 0.75. \n",
+      "--- Models of computation \n",
+      "--- Computational complexity and cryptography \n"
+     ]
+    }
+   ],
+   "source": [
+    "xgismo.rank(\"combinatorics\")\n",
+    "acm_landmarks.post_cluster = post_landmarks_cluster_print\n",
+    "acm_landmarks.get_landmarks_by_cluster(xgismo, balance=0.5, target_k=1.5)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Note that we fully ignore the original ACM category hierarchy. Instead, Gismo builds its own hierarchy tailored to the query."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Combining landmarks"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Through the ``post_processing`` methods, we can intricate multiple landmarks. For example, the following method associates NPA researchers and keywords to a tree of ACM categories."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:58.112686Z",
+     "start_time": "2025-04-09T11:25:58.102795Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from gismo.common import auto_k\n",
+    "import numpy as np\n",
+    "\n",
+    "\n",
+    "def post_cluster_acm(l, cluster, depth=0, kw_size=0.3, mts_size=0.5):\n",
+    "    tk_kw = 1 / kw_size\n",
+    "    tk_mts = 1 / mts_size\n",
+    "    n = l.x_direction.shape[0]\n",
+    "\n",
+    "    kws_view = cluster.vector[0, n:]\n",
+    "    k = auto_k(data=kws_view.data, max_k=100, target=tk_kw)\n",
+    "    keywords = [\n",
+    "        xgismo.embedding.features[i]\n",
+    "        for i in kws_view.indices[np.argsort(-kws_view.data)[:k]]\n",
+    "    ]\n",
+    "\n",
+    "    if len(cluster.children) > 0:\n",
+    "        print(f\"|{'-' * depth}\")\n",
+    "        for c in cluster.children:\n",
+    "            post_cluster_acm(l, c, depth=depth + 1)\n",
+    "    else:\n",
+    "        domain = l[cluster.indice][\"name\"]\n",
+    "        researchers = \", \".join(\n",
+    "            npa_landmarks.get_landmarks_by_rank(\n",
+    "                cluster, target_k=tk_mts, distortion=0.5\n",
+    "            )\n",
+    "        )\n",
+    "        print(f\"|{'-' * depth} {domain} ({researchers}) ({', '.join(keywords)})\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:58.349378Z",
+     "start_time": "2025-04-09T11:25:58.115888Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "|\n",
+      "|-\n",
+      "|-- Discrete mathematics (Fabien Mathieu, Sébastien Tixeuil, Andrea Richa) (combinatoric, walk, type, complexity)\n",
+      "|-- Mathematics of computing (Fabien Mathieu) (combinatoric, type, complexity, walk, algorithms)\n",
+      "|-- Graph theory (Fabien Mathieu) (complexity, combinatoric, walk, degree, algorithms, random, enumeration, type)\n",
+      "|-- Visualization (Fabien Mathieu, Elena Nardi) (analytic, type, walk, complexity, algorithms)\n",
+      "|-- Simulation types and techniques (Fabien Mathieu, Elena Nardi) (type, analytic, complexity, datum, risk, algorithms)\n",
+      "|-- Modeling and simulation (Fabien Mathieu, Elena Nardi) (type, analytic, complexity, datum, risk, algorithms)\n",
+      "|-\n",
+      "|--\n",
+      "|--- Symbolic and algebraic algorithms (Fabien Mathieu, Binh-Minh Bui-Xuan, Florent Krasnopol, Bruno Baynat) (symbolic, algebra, combinatoric, type, calculus, complexity, algorithms)\n",
+      "|--- Symbolic and algebraic manipulation (Fabien Mathieu, Binh-Minh Bui-Xuan, Florent Krasnopol) (symbolic, algebra, combinatoric, type, calculus, complexity, algorithms, functions)\n",
+      "|--- Mathematical analysis (Fabien Mathieu, Binh-Minh Bui-Xuan, Florent Krasnopol) (type, complexity, differential, algorithms, functions, constraint, symbolic, calculus)\n",
+      "|--\n",
+      "|--- Models of computation (Fabien Mathieu, Elena Nardi, Binh-Minh Bui-Xuan, Maurice Herlihy, Maria Potop-Butucaru) (complexity, type, algorithms, calculus, functions)\n",
+      "|--- Computational complexity and cryptography (Elena Nardi, Binh-Minh Bui-Xuan, Maria Potop-Butucaru, Maurice Herlihy, Liuba Shira) (complexity, algorithms, functions, type, random)\n"
+     ]
+    }
+   ],
+   "source": [
+    "xgismo.rank(\"combinatorics\")\n",
+    "acm_landmarks.post_cluster = post_cluster_acm\n",
+    "acm_landmarks.get_landmarks_by_cluster(xgismo, target_k=1.5)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Conversely, one can associate ACM categories and keywords to a tree of NPA researchers."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:58.363094Z",
+     "start_time": "2025-04-09T11:25:58.353406Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "def post_cluster_npa(l, cluster, depth=0, kw_size=0.3, acm_size=0.5):\n",
+    "    tk_kw = 1 / kw_size\n",
+    "    tk_acm = 1 / acm_size\n",
+    "    n = l.x_direction.shape[0]\n",
+    "\n",
+    "    kws_view = cluster.vector[0, n:]\n",
+    "    k = auto_k(data=kws_view.data, max_k=100, target=tk_kw)\n",
+    "    keywords = [\n",
+    "        xgismo.embedding.features[i]\n",
+    "        for i in kws_view.indices[np.argsort(-kws_view.data)[:k]]\n",
+    "    ]\n",
+    "\n",
+    "    if len(cluster.children) > 0:\n",
+    "        print(f\"|{'-' * depth}\")\n",
+    "        for c in cluster.children:\n",
+    "            post_cluster_npa(l, c, depth=depth + 1)\n",
+    "    else:\n",
+    "        researcher = l[cluster.indice][\"name\"]\n",
+    "        domains = \", \".join(\n",
+    "            acm_landmarks.get_landmarks_by_rank(\n",
+    "                cluster, target_k=tk_acm, distortion=0.5\n",
+    "            )\n",
+    "        )\n",
+    "        print(f\"|{'-' * depth} {researcher} ({domains}) ({', '.join(keywords)})\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T11:25:58.680609Z",
+     "start_time": "2025-04-09T11:25:58.366116Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "|\n",
+      "|-\n",
+      "|--\n",
+      "|---\n",
+      "|----\n",
+      "|----- Fabien Mathieu (Symbolic and algebraic algorithms, Symbolic and algebraic manipulation, Models of computation, Computational complexity and cryptography, Discrete mathematics, Graph theory, Mathematical analysis, Mathematics of computing) (network calculus, calculus, space, aggregate)\n",
+      "|----- Bruno Baynat (Symbolic and algebraic algorithms, Models of computation, Symbolic and algebraic manipulation, Computational complexity and cryptography) (closed, queue, markovian, burstiness, queue network, modeling, closed queue, trade)\n",
+      "|----- James Kurose (Models of computation) (end, delay, end end, comparison, routing)\n",
+      "|---- Massinissa Tighilt (Models of computation, Symbolic and algebraic algorithms, Computational complexity and cryptography, Symbolic and algebraic manipulation) (periodic, computation)\n",
+      "|--- Florent Krasnopol (Logic, Compilers, Knowledge representation and reasoning) (generation, order, calculus, automatic)\n",
+      "|--- Giuliano Prestes Fittipaldi (Hardware test) (pattern, impact)\n",
+      "|-- Nicolas Peugnet (Software verification and validation) (case, architecture)\n",
+      "|- Mohamed Amine Legheraba (Computational complexity and cryptography, Models of computation) (sampling)\n"
+     ]
+    }
+   ],
+   "source": [
+    "xgismo.rank(\"Anne_Bouillard\", y=False)\n",
+    "npa_landmarks.post_cluster = post_cluster_npa\n",
+    "npa_landmarks.get_landmarks_by_cluster(xgismo, target_k=1.4)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "That's all for this tutorial!"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.8"
+  },
+  "toc": {
+   "base_numbering": 1,
+   "nav_menu": {},
+   "number_sections": true,
+   "sideBar": true,
+   "skip_h1_title": true,
+   "title_cell": "Table of Contents",
+   "title_sidebar": "Contents",
+   "toc_cell": false,
+   "toc_position": {},
+   "toc_section_display": true,
+   "toc_window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

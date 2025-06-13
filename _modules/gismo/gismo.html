@@ -1,0 +1,1055 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gismo.gismo &#8212; GISMO 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gismo/gismo';</script>
+    <link rel="icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo-line.png" class="logo__image only-light" alt="GISMO 0.5.2 documentation - Home"/>
+    <img src="../../_static/logo-line.png" class="logo__image only-dark pst-js-only" alt="GISMO 0.5.2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gismo.gismo</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gismo.gismo</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Main module.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">vstack</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">MixInIO</span><span class="p">,</span> <span class="n">toy_source_dict</span><span class="p">,</span> <span class="n">auto_k</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.datasets.dblp</span><span class="w"> </span><span class="kn">import</span> <span class="n">url2source</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.embedding</span><span class="w"> </span><span class="kn">import</span> <span class="n">Embedding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.diteration</span><span class="w"> </span><span class="kn">import</span> <span class="n">DIteration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parameters</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.clustering</span><span class="w"> </span><span class="kn">import</span> <span class="n">subspace_clusterize</span><span class="p">,</span> <span class="n">covering_order</span><span class="p">,</span> <span class="n">subspace_distortion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">post_documents_item_raw</span><span class="p">,</span>
+    <span class="n">post_documents_item_content</span><span class="p">,</span>
+    <span class="n">post_documents_cluster_json</span><span class="p">,</span>
+    <span class="n">post_features_item_raw</span><span class="p">,</span>
+    <span class="n">post_features_cluster_json</span><span class="p">,</span>
+    <span class="n">post_documents_cluster_print</span><span class="p">,</span>
+    <span class="n">post_features_cluster_print</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="Gismo">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Gismo</span><span class="p">(</span><span class="n">MixInIO</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gismo mixes a corpus and its embedding to provide search and structure methods.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    corpus: Corpus</span>
+<span class="sd">        Defines the documents of the gismo.</span>
+<span class="sd">    embedding: Embedding</span>
+<span class="sd">        Defines the embedding of the gismo.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Custom default runtime parameters.</span>
+<span class="sd">        You just need to specify the parameters that differ from :obj:`~gismo.parameters.DEFAULT_PARAMETERS`.</span>
+
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    The Corpus class defines how documents of a source should be converted to plain text.</span>
+
+<span class="sd">    &gt;&gt;&gt; corpus = Corpus(toy_source_dict, lambda x: x[&#39;content&#39;])</span>
+
+<span class="sd">    The Embedding class extracts features (e.g. words) and computes weights between documents and features.</span>
+
+<span class="sd">    &gt;&gt;&gt; vectorizer = CountVectorizer(dtype=float)</span>
+<span class="sd">    &gt;&gt;&gt; embedding = Embedding(vectorizer=vectorizer)</span>
+<span class="sd">    &gt;&gt;&gt; embedding.fit_transform(corpus)</span>
+<span class="sd">    &gt;&gt;&gt; embedding.m # number of features</span>
+<span class="sd">    36</span>
+
+<span class="sd">    The Gismo class combines them for performing queries.</span>
+<span class="sd">    After a query is performed, one can ask for the best items.</span>
+<span class="sd">    The number of items to return can be specified with parameter ``k`` or automatically adjusted.</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo = Gismo(corpus, embedding)</span>
+<span class="sd">    &gt;&gt;&gt; success = gismo.rank(&quot;Gizmo&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; gismo.parameters.target_k = .2 # The toy dataset is very small, so we lower the auto_k parameter.</span>
+<span class="sd">    &gt;&gt;&gt; gismo.get_documents_by_rank()</span>
+<span class="sd">    [{&#39;title&#39;: &#39;First Document&#39;, &#39;content&#39;: &#39;Gizmo is a Mogwaï.&#39;}, {&#39;title&#39;: &#39;Fourth Document&#39;, &#39;content&#39;: &#39;This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.&#39;}, {&#39;title&#39;: &#39;Fifth Document&#39;, &#39;content&#39;: &#39;In chinese folklore, a Mogwaï is a demon.&#39;}]</span>
+
+<span class="sd">    Post-processing functions can be used to tweak the returned object (the underlying ranking is unchanged)</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo.post_documents_item = partial(post_documents_item_content, max_size=44)</span>
+<span class="sd">    &gt;&gt;&gt; gismo.get_documents_by_rank()</span>
+<span class="sd">    [&#39;Gizmo is a Mogwaï.&#39;, &#39;This very long sentence, with a lot of stuff&#39;, &#39;In chinese folklore, a Mogwaï is a demon.&#39;]</span>
+
+<span class="sd">    Ranking also works on features.</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo.get_features_by_rank()</span>
+<span class="sd">    [&#39;mogwaï&#39;, &#39;gizmo&#39;, &#39;is&#39;, &#39;chinese&#39;, &#39;demon&#39;, &#39;in&#39;, &#39;folklore&#39;]</span>
+
+<span class="sd">    Clustering organizes results can provide additional hints on their relationships.</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo.post_documents_cluster = post_documents_cluster_print</span>
+<span class="sd">    &gt;&gt;&gt; gismo.get_documents_by_cluster(resolution=.9) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">     F: 0.60. R: 0.65. S: 0.98.</span>
+<span class="sd">    - F: 0.71. R: 0.57. S: 0.98.</span>
+<span class="sd">    -- Gizmo is a Mogwaï. (R: 0.54; S: 0.99)</span>
+<span class="sd">    -- In chinese folklore, a Mogwaï is a demon. (R: 0.04; S: 0.71)</span>
+<span class="sd">    - This very long sentence, with a lot of stuff (R: 0.08; S: 0.69)</span>
+<span class="sd">    &gt;&gt;&gt; gismo.post_features_cluster = post_features_cluster_print</span>
+<span class="sd">    &gt;&gt;&gt; gismo.get_features_by_cluster() # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">     F: 0.03. R: 0.29. S: 0.98.</span>
+<span class="sd">    - F: 1.00. R: 0.27. S: 0.99.</span>
+<span class="sd">    -- mogwaï (R: 0.12; S: 0.99)</span>
+<span class="sd">    -- gizmo (R: 0.12; S: 0.99)</span>
+<span class="sd">    -- is (R: 0.03; S: 0.99)</span>
+<span class="sd">    - F: 1.00. R: 0.02. S: 0.07.</span>
+<span class="sd">    -- chinese (R: 0.00; S: 0.07)</span>
+<span class="sd">    -- demon (R: 0.00; S: 0.07)</span>
+<span class="sd">    -- in (R: 0.00; S: 0.07)</span>
+<span class="sd">    -- folklore (R: 0.00; S: 0.07)</span>
+
+<span class="sd">    As an alternative to a textual query, the :meth:`~gismo.gismo.Gismo.rank` method can directly use a vector</span>
+<span class="sd">    `z` as input.</span>
+
+<span class="sd">    &gt;&gt;&gt; z, s = gismo.embedding.query_projection(&quot;gizmo chinese folklore&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; z # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">     &lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;</span>
+<span class="sd">        with 3 stored elements and shape (1, 36)&gt;</span>
+<span class="sd">    &gt;&gt;&gt; s = gismo.rank(z=z)</span>
+<span class="sd">    &gt;&gt;&gt; s</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; gismo.get_documents_by_rank(k=2)</span>
+<span class="sd">    [&#39;In chinese folklore, a Mogwaï is a demon.&#39;, &#39;Gizmo is a Mogwaï.&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; gismo.get_features_by_rank()</span>
+<span class="sd">    [&#39;mogwaï&#39;, &#39;chinese&#39;, &#39;folklore&#39;, &#39;in&#39;, &#39;demon&#39;, &#39;gizmo&#39;, &#39;is&#39;]</span>
+
+<span class="sd">    The class also offers :meth:`~gismo.gismo.Gismo.get_documents_by_coverage` and</span>
+<span class="sd">    :meth:`~gismo.gismo.Gismo.get_features_by_coverage` that yield</span>
+<span class="sd">    a list of results obtained from a Covering-like traversal of the ranked cluster.</span>
+
+<span class="sd">    To demonstrate it, we first add an outsider document to the corpus and rebuild Gismo.</span>
+
+<span class="sd">    &gt;&gt;&gt; new_entry = {&#39;title&#39;: &#39;Minority Report&#39;, &#39;content&#39;: &#39;Totally unrelated stuff.&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; corpus = Corpus(toy_source_dict+[new_entry], lambda x: x[&#39;content&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; vectorizer = CountVectorizer(dtype=float)</span>
+<span class="sd">    &gt;&gt;&gt; embedding = Embedding(vectorizer=vectorizer)</span>
+<span class="sd">    &gt;&gt;&gt; embedding.fit_transform(corpus)</span>
+<span class="sd">    &gt;&gt;&gt; gismo = Gismo(corpus, embedding)</span>
+<span class="sd">    &gt;&gt;&gt; gismo.post_documents_item = post_documents_item_content</span>
+<span class="sd">    &gt;&gt;&gt; success = gismo.rank(&quot;Gizmo&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; gismo.parameters.target_k = .3</span>
+
+<span class="sd">    Remind the classical rank-based result.</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo.get_documents_by_rank()</span>
+<span class="sd">    [&#39;Gizmo is a Mogwaï.&#39;, &#39;This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.&#39;, &#39;In chinese folklore, a Mogwaï is a demon.&#39;]</span>
+
+<span class="sd">    Gismo can use the cluster to propose alternate results that try to cover more subjects.</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo.get_documents_by_coverage()</span>
+<span class="sd">    [&#39;Gizmo is a Mogwaï.&#39;, &#39;Totally unrelated stuff.&#39;, &#39;This is a sentence about Blade.&#39;]</span>
+
+<span class="sd">    Note how the new entry, which has nothing to do with the rest, is pushed into the results.</span>
+<span class="sd">    By setting the ``wide`` option to False, we get an alternative that focuses on mainstream results.</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo.get_documents_by_coverage(wide=False)</span>
+<span class="sd">    [&#39;Gizmo is a Mogwaï.&#39;, &#39;This is a sentence about Blade.&#39;, &#39;This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.&#39;]</span>
+
+<span class="sd">    The same principle applies for features.</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo.get_features_by_rank()</span>
+<span class="sd">    [&#39;mogwaï&#39;, &#39;gizmo&#39;, &#39;is&#39;, &#39;chinese&#39;, &#39;demon&#39;, &#39;in&#39;, &#39;folklore&#39;]</span>
+
+<span class="sd">    &gt;&gt;&gt; gismo.get_features_by_coverage()</span>
+<span class="sd">    [&#39;mogwaï&#39;, &#39;about&#39;, &#39;chinese&#39;, &#39;and&#39;, &#39;gizmo&#39;, &#39;is&#39;, &#39;demon&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">embedding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span> <span class="o">=</span> <span class="n">DIteration</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">embedding</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">embedding</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="n">post_documents_item_raw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_features_item</span> <span class="o">=</span> <span class="n">post_features_item_raw</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_documents_cluster</span> <span class="o">=</span> <span class="n">post_documents_cluster_json</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_json</span>
+
+    <span class="c1"># Ranking Part</span>
+<div class="viewcode-block" id="Gismo.rank">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.rank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs the Diteration using query as starting point</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query: str</span>
+<span class="sd">            Text that starts DIteration</span>
+<span class="sd">        z: :class:`~scipy.sparse.csr_matrix`, optional</span>
+<span class="sd">            Query vector to use in place of the textual query</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        success: bool</span>
+<span class="sd">            success of the query projection. If projection fails, a ranking on uniform distribution is performed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">z</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">query_projection</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">z</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span>
+            <span class="n">n_iter</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;n_iter&quot;</span><span class="p">],</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">],</span>
+            <span class="n">memory</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;memory&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">success</span></div>
+
+
+<div class="viewcode-block" id="Gismo.get_documents_by_rank">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.get_documents_by_rank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_documents_by_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of top documents according to the current ranking.</span>
+<span class="sd">        By default, the documents are post_processed through the post_documents_item method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k: int, optional</span>
+<span class="sd">            Number of documents to output. If not set, k is automatically computed</span>
+<span class="sd">            using the max_k and target_k runtime parameters.</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_relevance</span><span class="p">,</span>
+                <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_order</span><span class="p">,</span>
+                <span class="n">max_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;max_k&quot;</span><span class="p">],</span>
+                <span class="n">target</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;target_k&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">post_documents_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_order</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_order</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Gismo.get_features_by_rank">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.get_features_by_rank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_features_by_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of top features according to the current ranking.</span>
+<span class="sd">        By default, the features are post_processed through the post_features_item method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k: int, optional</span>
+<span class="sd">            Number of documents to output. If not set, k is automatically computed</span>
+<span class="sd">            using the max_k and target_k runtime parameters.</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_relevance</span><span class="p">,</span>
+                <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_order</span><span class="p">,</span>
+                <span class="n">max_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;max_k&quot;</span><span class="p">],</span>
+                <span class="n">target</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;target_k&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">post_features_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_order</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_order</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span></div>
+
+
+    <span class="c1"># Cluster part</span>
+<div class="viewcode-block" id="Gismo.get_documents_by_cluster_from_indices">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.get_documents_by_cluster_from_indices">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_documents_by_cluster_from_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a cluster of documents.</span>
+<span class="sd">        The cluster is by default post_processed through the post_documents_cluster method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: list of int</span>
+<span class="sd">            The indices of documents to be processed. It is assumed that the documents</span>
+<span class="sd">            are sorted by importance.</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">subspace</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;distortion&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">subspace_distortion</span><span class="p">(</span>
+                <span class="n">indices</span><span class="o">=</span><span class="n">subspace</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">subspace</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                <span class="n">relevance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_relevance</span><span class="p">,</span>
+                <span class="n">distortion</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;distortion&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="n">cluster</span> <span class="o">=</span> <span class="n">subspace_clusterize</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;resolution&quot;</span><span class="p">],</span> <span class="n">indices</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_documents_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cluster</span></div>
+
+
+<div class="viewcode-block" id="Gismo.get_documents_by_cluster">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.get_documents_by_cluster">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_documents_by_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a cluster of the best ranked documents.</span>
+<span class="sd">        The cluster is by default post_processed through the post_documents_cluster method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k: int, optional</span>
+<span class="sd">            Number of documents to output. If not set, k is automatically computed</span>
+<span class="sd">            using the max_k and target_k runtime parameters.</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_relevance</span><span class="p">,</span>
+                <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_order</span><span class="p">,</span>
+                <span class="n">max_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;max_k&quot;</span><span class="p">],</span>
+                <span class="n">target</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;target_k&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_documents_by_cluster_from_indices</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_order</span><span class="p">[:</span><span class="n">k</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Gismo.get_features_by_cluster_from_indices">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.get_features_by_cluster_from_indices">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_features_by_cluster_from_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a cluster of features.</span>
+<span class="sd">        The cluster is by default post_processed through the post_features_cluster method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: list of int</span>
+<span class="sd">            The indices of features to be processed. It is assumed that the features</span>
+<span class="sd">            are sorted by importance.</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">subspace</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;distortion&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">subspace_distortion</span><span class="p">(</span>
+                <span class="n">indices</span><span class="o">=</span><span class="n">subspace</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">subspace</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                <span class="n">relevance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_relevance</span><span class="p">,</span>
+                <span class="n">distortion</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;distortion&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="n">cluster</span> <span class="o">=</span> <span class="n">subspace_clusterize</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;resolution&quot;</span><span class="p">],</span> <span class="n">indices</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">post_features_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cluster</span></div>
+
+
+<div class="viewcode-block" id="Gismo.get_features_by_cluster">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.get_features_by_cluster">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_features_by_cluster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a cluster of the best ranked features.</span>
+<span class="sd">        The cluster is by default post_processed through the post_features_cluster method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k: int, optional</span>
+<span class="sd">            Number of documents to output. If not set, k is automatically computed</span>
+<span class="sd">            using the max_k and target_k runtime parameters.</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_relevance</span><span class="p">,</span>
+                <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_order</span><span class="p">,</span>
+                <span class="n">max_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;max_k&quot;</span><span class="p">],</span>
+                <span class="n">target</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;target_k&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_features_by_cluster_from_indices</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_order</span><span class="p">[:</span><span class="n">k</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># Covering part</span>
+
+<div class="viewcode-block" id="Gismo.get_documents_by_coverage">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.get_documents_by_coverage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_documents_by_coverage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of top covering documents.</span>
+<span class="sd">        By default, the documents are post_processed through the post_documents_item method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k: int, optional</span>
+<span class="sd">            Number of documents to output. If not set, k is automatically computed</span>
+<span class="sd">            using the max_k and target_k runtime parameters.</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_relevance</span><span class="p">,</span>
+                <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">x_order</span><span class="p">,</span>
+                <span class="n">max_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;max_k&quot;</span><span class="p">],</span>
+                <span class="n">target</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;target_k&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="n">p</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">cluster</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;stretch&quot;</span><span class="p">]),</span> <span class="o">**</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">covering_order</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">wide</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;wide&quot;</span><span class="p">])[:</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">post</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">post_documents_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">indices</span></div>
+
+
+<div class="viewcode-block" id="Gismo.get_features_by_coverage">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.Gismo.get_features_by_coverage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_features_by_coverage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of top covering features.</span>
+<span class="sd">        By default, the features are post_processed through the post_features_item method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k: int, optional</span>
+<span class="sd">            Number of documents to output. If not set, k is automatically computed</span>
+<span class="sd">            using the max_k and target_k runtime parameters.</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">auto_k</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_relevance</span><span class="p">,</span>
+                <span class="n">order</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="o">.</span><span class="n">y_order</span><span class="p">,</span>
+                <span class="n">max_k</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;max_k&quot;</span><span class="p">],</span>
+                <span class="n">target</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;target_k&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="n">p</span><span class="p">[</span><span class="s2">&quot;post&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">cluster</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;stretch&quot;</span><span class="p">]),</span> <span class="o">**</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">covering_order</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">wide</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;wide&quot;</span><span class="p">])[:</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">post</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">post_features_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">indices</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="XGismo">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.XGismo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">XGismo</span><span class="p">(</span><span class="n">Gismo</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given two distinct embeddings base on the same set of documents, builds a new gismo.</span>
+<span class="sd">    The features of ``x_embedding`` are the corpus of this new gismo.</span>
+<span class="sd">    The features of ``y_embedding`` are the features of this new gismo.</span>
+<span class="sd">    The dual embedding of the new gismo is obtained by crossing the two input dual embeddings.</span>
+
+<span class="sd">    xgismo behaves essentially as a gismo object. The main difference is an additional parameter ``y`` for the</span>
+<span class="sd">    rank method, to control if the query projection should be performed on the ``y_embedding`` or on the</span>
+<span class="sd">    ``x_embedding``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_embedding: Embedding</span>
+<span class="sd">        The *left* embedding, which defines the documents of the xgismo.</span>
+<span class="sd">    y_embedding: Embedding</span>
+<span class="sd">        The *right* embedding, which defines the features of the xgismo.</span>
+<span class="sd">    filename: str, optional</span>
+<span class="sd">                If set, will load xgismo from file.</span>
+<span class="sd">    path: str or Path, optional</span>
+<span class="sd">        Directory where the xgismo is to be loaded from.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        Custom default runtime parameters.</span>
+<span class="sd">        You just need to specify the parameters that differ from :class:`~gismo.parameters.DEFAULT_PARAMETERS`.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    One the main use case for XGismo consists in transforming a list of articles into a Gismo that relates authors</span>
+<span class="sd">    and the words they use. Let&#39;s start by retrieving a few articles.</span>
+
+<span class="sd">    &gt;&gt;&gt; toy_url = &quot;https://dblp.org/pers/xx/m/Mathieu:Fabien.xml&quot;</span>
+<span class="sd">    &gt;&gt;&gt; source = [a for a in url2source(toy_url) if int(a[&#39;year&#39;])&lt;2023]</span>
+
+<span class="sd">    Then we build the embedding of words.</span>
+
+<span class="sd">    &gt;&gt;&gt; corpus = Corpus(source, to_text=lambda x: x[&#39;title&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; w_count = CountVectorizer(dtype=float, stop_words=&#39;english&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; w_embedding = Embedding(w_count)</span>
+<span class="sd">    &gt;&gt;&gt; w_embedding.fit_transform(corpus)</span>
+
+<span class="sd">    And the embedding of authors.</span>
+
+<span class="sd">    &gt;&gt;&gt; to_authors_text = lambda dic: &quot; &quot;.join([a.replace(&#39; &#39;, &#39;_&#39;) for a in dic[&#39;authors&#39;]])</span>
+<span class="sd">    &gt;&gt;&gt; corpus.to_text = to_authors_text</span>
+<span class="sd">    &gt;&gt;&gt; a_count = CountVectorizer(dtype=float, preprocessor=lambda x:x, tokenizer=lambda x: x.split(&#39; &#39;))</span>
+<span class="sd">    &gt;&gt;&gt; a_embedding = Embedding(a_count)</span>
+<span class="sd">    &gt;&gt;&gt; a_embedding.fit_transform(corpus)</span>
+
+<span class="sd">    We can now combine the two embeddings in one xgismo.</span>
+
+<span class="sd">    &gt;&gt;&gt; xgismo = XGismo(a_embedding, w_embedding)</span>
+<span class="sd">    &gt;&gt;&gt; xgismo.post_documents_item = lambda g, i: g.corpus[i].replace(&#39;_&#39;, &#39; &#39;)</span>
+
+<span class="sd">    We can use xgismo to query keyword(s).</span>
+
+<span class="sd">    &gt;&gt;&gt; success = xgismo.rank(&quot;Pagerank&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; xgismo.get_documents_by_rank()</span>
+<span class="sd">    [&#39;Mohamed Bouklit&#39;, &#39;Dohy Hong&#39;, &#39;The Dang Huynh&#39;]</span>
+
+<span class="sd">    We can use it to query researcher(s).</span>
+
+<span class="sd">    &gt;&gt;&gt; success = xgismo.rank(&quot;Anne_Bouillard&quot;, y=False)</span>
+<span class="sd">    &gt;&gt;&gt; xgismo.get_documents_by_rank()</span>
+<span class="sd">    [&#39;Anne Bouillard&#39;, &#39;Elie de Panafieu&#39;, &#39;Céline Comte&#39;, &#39;Philippe Sehier&#39;, &#39;Thomas Deiß&#39;, &#39;Dmitry Lebedev&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">x_embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_embedding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+            <span class="n">embedding</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">x_embedding</span><span class="o">.</span><span class="n">m</span>
+            <span class="n">embedding</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">y_embedding</span><span class="o">.</span><span class="n">m</span>
+            <span class="n">embedding</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">y_embedding</span><span class="o">.</span><span class="n">features</span>
+            <span class="n">embedding</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x_embedding</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">y_embedding</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">embedding</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_embedding</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">x_embedding</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">embedding</span><span class="o">.</span><span class="n">idf</span> <span class="o">=</span> <span class="n">y_embedding</span><span class="o">.</span><span class="n">idf</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+                <span class="n">corpus</span><span class="o">=</span><span class="n">Corpus</span><span class="p">(</span><span class="n">x_embedding</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">),</span>
+                <span class="n">embedding</span><span class="o">=</span><span class="n">embedding</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_projection</span> <span class="o">=</span> <span class="n">x_embedding</span><span class="o">.</span><span class="n">query_projection</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_projection</span> <span class="o">=</span> <span class="n">y_embedding</span><span class="o">.</span><span class="n">query_projection</span>
+
+<div class="viewcode-block" id="XGismo.rank">
+<a class="viewcode-back" href="../../reference/gismo.html#gismo.gismo.XGismo.rank">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs the DIteration using query as starting point.</span>
+<span class="sd">        ``query`` can be evaluated on features (``y=True``) or documents (``y=False``).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query: str</span>
+<span class="sd">           Text that starts DIteration</span>
+<span class="sd">        y: bool</span>
+<span class="sd">           Determines if query should be evaluated on features (``True``) or documents (``False``).</span>
+<span class="sd">        kwargs: dict, optional</span>
+<span class="sd">            Custom runtime parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        success: bool</span>
+<span class="sd">            success of the query projection. If projection fails, a ranking on uniform distribution is performed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">y</span><span class="p">:</span>
+            <span class="n">z</span><span class="p">,</span> <span class="n">found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_projection</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">z</span><span class="p">,</span> <span class="n">found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_projection</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">_result_found</span> <span class="o">=</span> <span class="n">found</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diteration</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">z</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span>
+            <span class="n">n_iter</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;n_iter&quot;</span><span class="p">],</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+            <span class="n">memory</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;memory&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">found</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

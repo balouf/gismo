@@ -1,0 +1,729 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Landmarks &#8212; GISMO 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/landmarks';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Post Processing" href="post-processing.html" />
+    <link rel="prev" title="Gismo" href="gismo.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-line.png" class="logo__image only-light" alt="GISMO 0.5.2 documentation - Home"/>
+    <img src="../_static/logo-line.png" class="logo__image only-dark pst-js-only" alt="GISMO 0.5.2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="corpus.html">Corpus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="embedding.html">Embedding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diteration.html">D-Iteration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gismo.html">Gismo</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Landmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="post-processing.html">Post Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filesource.html">FileSource</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sentencizer.html">Sentencizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="common.html">Common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Landmarks</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="landmarks">
+<h1>Landmarks<a class="headerlink" href="#landmarks" title="Link to this heading">#</a></h1>
+<p>Introduced in v0.4, this high-level module allows deeper analysis of a small corpus by using individual query results for the embedding.</p>
+<dl class="py class" id="module-gismo.landmarks">
+<dt class="sig sig-object py" id="gismo.landmarks.Landmarks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismo.landmarks.</span></span><span class="sig-name descname"><span class="pre">Landmarks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/landmarks.html#Landmarks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.landmarks.Landmarks" title="Link to this definition">#</a></dt>
+<dd><p>The <cite>Landmarks</cite> class is a subclass <a class="reference internal" href="corpus.html#gismo.corpus.Corpus" title="gismo.corpus.Corpus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Corpus</span></code></a>.
+It offers the capability to batch-rank all its entries against a <a class="reference internal" href="gismo.html#gismo.gismo.Gismo" title="gismo.gismo.Gismo"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gismo</span></code></a> instance.
+After it has been processed, a <cite>Landmarks</cite> can be used to analyze/classify
+<a class="reference internal" href="gismo.html#gismo.gismo.Gismo" title="gismo.gismo.Gismo"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gismo</span></code></a> queries, <a class="reference internal" href="clustering.html#gismo.clustering.Cluster" title="gismo.clustering.Cluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cluster</span></code></a>,
+or <a class="reference internal" href="#gismo.landmarks.Landmarks" title="gismo.landmarks.Landmarks"><code class="xref py py-class docutils literal notranslate"><span class="pre">Landmarks</span></code></a>.</p>
+<p>Landmarks also offers the possibility to reduce a source or a gismo to its neighborhood.
+This can be useful if the source is huge and one wants something smaller for performance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – The list of items that form Landmarks.</p></li>
+<li><p><strong>to_text</strong> (<em>function</em>) – The function that transforms an item into text</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Custom default runtime parameters.
+You just need to specify the parameters that differ from <a class="reference internal" href="parameters.html#gismo.parameters.DEFAULT_LANDMARKS_PARAMETERS" title="gismo.parameters.DEFAULT_LANDMARKS_PARAMETERS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_LANDMARKS_PARAMETERS</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Landmarks lean on a Gismo. We can use a toy Gismo to start with.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">toy_source_text</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">embedding</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">toy_source_text</span><span class="p">)</span> 
+<span class="go">[&#39;Gizmo is a Mogwaï.&#39;,</span>
+<span class="go">&#39;This is a sentence about Blade.&#39;,</span>
+<span class="go">&#39;This is another sentence about Shadoks.&#39;,</span>
+<span class="go">&#39;This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the Gremlins movie by comparing Gizmo and Yoda.&#39;,</span>
+<span class="go">&#39;In chinese folklore, a Mogwaï is a demon.&#39;]</span>
+</pre></div>
+</div>
+<p>Landmarks are constructed exactly like a Gismo object, with a source and a <cite>to_text</cite> function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks_source</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Movies&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Star Wars, Gremlins, and Blade are movies.&#39;</span><span class="p">},</span>
+<span class="gp">... </span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Gremlins&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;The Gremlins movie features a Mogwai.&#39;</span><span class="p">},</span>
+<span class="gp">... </span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Star Wars&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;The Star Wars movies feature Yoda.&#39;</span><span class="p">},</span>
+<span class="gp">... </span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Shadoks&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Shadoks is a French sarcastic show.&#39;</span><span class="p">},]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span> <span class="o">=</span> <span class="n">Landmarks</span><span class="p">(</span><span class="n">landmarks_source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#gismo.landmarks.Landmarks.fit" title="gismo.landmarks.Landmarks.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a> method compute gismo queries for all landmarks and retain the results.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We run the request <em>Yoda</em> and look at the key landmarks.
+Note that <em>Gremlins</em> comes before <em>Star Wars</em>. This is actually <em>correct</em> in this small dataset:
+the word <cite>Yoda</cite> only exists in one sentence, which contains the words <cite>Gremlins</cite> and <cite>Gizmo</cite>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">success</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">&#39;yoda&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span> 
+<span class="go">[{&#39;name&#39;: &#39;Gremlins&#39;, &#39;content&#39;: &#39;The Gremlins movie features a Mogwai.&#39;},</span>
+<span class="go">{&#39;name&#39;: &#39;Star Wars&#39;, &#39;content&#39;: &#39;The Star Wars movies feature Yoda.&#39;},</span>
+<span class="go">{&#39;name&#39;: &#39;Movies&#39;, &#39;content&#39;: &#39;Star Wars, Gremlins, and Blade are movies.&#39;}]</span>
+</pre></div>
+</div>
+<p>For better readibility, we set the item post_processing to return the <cite>name</cite> of a landmark item.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">post_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">lmk</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">lmk</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+<span class="go">[&#39;Gremlins&#39;, &#39;Star Wars&#39;, &#39;Movies&#39;]</span>
+</pre></div>
+</div>
+<p>The balance adjusts between documents and features spaces.
+A balance set to 1.0 focuses only on documents.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">success</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">&#39;blade&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">gismo</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">[&#39;Movies&#39;]</span>
+</pre></div>
+</div>
+<p>A balance set to 0.0 focuses only on features.
+For <em>blade</em>, this triggers <em>Shadoks</em> as a secondary result, because of the shared word <em>sentence</em>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">gismo</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">[&#39;Movies&#39;, &#39;Shadoks&#39;]</span>
+</pre></div>
+</div>
+<p>Landmarks can be used to analyze landmarks.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">landmarks</span><span class="p">)</span>
+<span class="go">[&#39;Gremlins&#39;, &#39;Star Wars&#39;]</span>
+</pre></div>
+</div>
+<p>See again how balance can change things.
+Here a balance set to 0.0 (using only features) fully changes the results.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">landmarks</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">[&#39;Shadoks&#39;]</span>
+</pre></div>
+</div>
+<p>Like for <a class="reference internal" href="gismo.html#gismo.gismo.Gismo" title="gismo.gismo.Gismo"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gismo</span></code></a>, landmarks can provide clusters.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">success</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">&#39;gizmo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_cluster</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span> 
+<span class="go">{&#39;landmark&#39;: {&#39;name&#39;: &#39;Gremlins&#39;,</span>
+<span class="go">              &#39;content&#39;: &#39;The Gremlins movie features a Mogwai.&#39;},</span>
+<span class="go">              &#39;focus&#39;: np.float64(0.999998...),</span>
+<span class="go">              &#39;children&#39;: [{&#39;landmark&#39;: {&#39;name&#39;: &#39;Gremlins&#39;,</span>
+<span class="go">              &#39;content&#39;: &#39;The Gremlins movie features a Mogwai.&#39;},</span>
+<span class="go">              &#39;focus&#39;: 1.0, &#39;children&#39;: []},</span>
+<span class="go">              {&#39;landmark&#39;: {&#39;name&#39;: &#39;Star Wars&#39;, &#39;content&#39;: &#39;The Star Wars movies feature Yoda.&#39;},</span>
+<span class="go">              &#39;focus&#39;: 1.0, &#39;children&#39;: []},</span>
+<span class="go">              {&#39;landmark&#39;: {&#39;name&#39;: &#39;Movies&#39;, &#39;content&#39;: &#39;Star Wars, Gremlins, and Blade are movies.&#39;},</span>
+<span class="go">              &#39;focus&#39;: 1.0, &#39;children&#39;: []}]}</span>
+</pre></div>
+</div>
+<p>We can set the <cite>post_cluster</cite> attribute to customize the output. Gismo provides a simple display.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_landmarks_cluster_print</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">post_cluster</span> <span class="o">=</span> <span class="n">post_landmarks_cluster_print</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_cluster</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span> 
+<span class="go">F: 1.00.</span>
+<span class="go">- Gremlins</span>
+<span class="go">- Star Wars</span>
+<span class="go">- Movies</span>
+</pre></div>
+</div>
+<p>Like for <a class="reference internal" href="gismo.html#gismo.gismo.Gismo" title="gismo.gismo.Gismo"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gismo</span></code></a>, parameters like <cite>k</cite>, <cite>distortion</cite>, or <cite>resolution</cite> can be used.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_cluster</span><span class="p">(</span><span class="n">gismo</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">distortion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">.9</span><span class="p">)</span> 
+<span class="go">F: 0.03.</span>
+<span class="go">- F: 0.93.</span>
+<span class="go">-- F: 1.00.</span>
+<span class="go">--- Gremlins</span>
+<span class="go">--- Star Wars</span>
+<span class="go">-- Movies</span>
+<span class="go">- Shadoks</span>
+</pre></div>
+</div>
+<p>Note that a <a class="reference internal" href="clustering.html#gismo.clustering.Cluster" title="gismo.clustering.Cluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cluster</span></code></a> can also be used as reference for the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_landmarks_by_rank()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_landmarks_by_cluster()</span></code> methods.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cluster</span> <span class="o">=</span> <span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_cluster</span><span class="p">(</span><span class="n">gismo</span><span class="p">,</span> <span class="n">post</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+<span class="go">[&#39;Gremlins&#39;, &#39;Star Wars&#39;, &#39;Movies&#39;]</span>
+</pre></div>
+</div>
+<p>Yet, you cannot use anything as reference. For example, you cannot use a string as such.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="s2">&quot;Landmarks do not use external queries (pass them to a gismo&quot;</span><span class="p">)</span>  <span class="c1"># doctest.ELLIPSIS</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">TypeError</span>: <span class="n">bad operand type for unary -: &#39;NoneType&#39;</span>
+</pre></div>
+</div>
+<p>Last but not least, landmarks can be used to reduce the size of a source or a <a class="reference internal" href="gismo.html#gismo.gismo.Gismo" title="gismo.gismo.Gismo"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gismo</span></code></a>.
+The reduction is controlled by the <cite>x_density</cite> attribute that tells the number of documents each landmark will
+allow to keep.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">x_density</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reduced_gismo</span> <span class="o">=</span> <span class="n">landmarks</span><span class="o">.</span><span class="n">get_reduced_gismo</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reduced_gismo</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">source</span> 
+<span class="go">[&#39;This is another sentence about Shadoks.&#39;,</span>
+<span class="go">&#39;This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side reference to the</span>
+<span class="go">Gremlins movie by comparing Gizmo and Yoda.&#39;]</span>
+</pre></div>
+</div>
+<p>Side remark #1: in the constructor, <cite>to_text</cite> indicates how to convert an item to <cite>str</cite>, while <cite>ranking_function</cite>
+specifies how to run a query on a <a class="reference internal" href="gismo.html#gismo.gismo.Gismo" title="gismo.gismo.Gismo"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gismo</span></code></a>. Yet, it is possible to have the text conversion
+handled by the <cite>ranking_function</cite>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span> <span class="o">=</span> <span class="n">Landmarks</span><span class="p">(</span><span class="n">landmarks_source</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="k">lambda</span> <span class="n">g</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">success</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">&#39;yoda&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">post_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">lmk</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">lmk</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+<span class="go">[&#39;Star Wars&#39;, &#39;Movies&#39;, &#39;Gremlins&#39;]</span>
+</pre></div>
+</div>
+<p>However, this is bad practice. When you only need to customize the way an item is converted to text, you should
+stick to <cite>to_text</cite>. <cite>ranking_function</cite> is for more elaborated filters that require to change the default way
+gismo does queries.</p>
+<p>Side remark #2: if a landmark item query fails (its text does not intersect the gismo features),
+the default uniform projection will be used and a warning will be issued. This may yield to
+undesired results.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks_source</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;unrelated&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;unrelated.&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span> <span class="o">=</span> <span class="n">Landmarks</span><span class="p">(</span><span class="n">landmarks_source</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">success</span> <span class="o">=</span> <span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">&#39;gizmo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">post_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">lmk</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">lmk</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">landmarks</span><span class="o">.</span><span class="n">get_landmarks_by_rank</span><span class="p">(</span><span class="n">gismo</span><span class="p">)</span>
+<span class="go">[&#39;Shadoks&#39;, &#39;unrelated&#39;]</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gismo.landmarks.Landmarks.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gismo</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/landmarks.html#Landmarks.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.landmarks.Landmarks.fit" title="Link to this definition">#</a></dt>
+<dd><p>Runs gismo queries on all landmarks.
+The relevance results are used to build two set of vectors:
+<cite>x_vectors</cite> is the vectors on the document space;
+<cite>y_vectors</cite> is the vectors on the document space.
+On each space, vectors are summed to build a direction, which is a sort of
+vector summary of the landmarks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gismo</strong> (<a class="reference internal" href="gismo.html#gismo.gismo.Gismo" title="gismo.gismo.Gismo"><em>Gismo</em></a>) – The Gismo on which vectors will be computed.</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Custom Landmarks runtime parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismo.landmarks.get_direction">
+<span class="sig-prename descclassname"><span class="pre">gismo.landmarks.</span></span><span class="sig-name descname"><span class="pre">get_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">balance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismo/landmarks.html#get_direction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismo.landmarks.get_direction" title="Link to this definition">#</a></dt>
+<dd><p>Converts a reference object into a <cite>n+m</cite> direction (dense or sparse depending on reference type).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference</strong> (<a class="reference internal" href="gismo.html#gismo.gismo.Gismo" title="gismo.gismo.Gismo"><em>Gismo</em></a><em> or </em><a class="reference internal" href="#gismo.landmarks.Landmarks" title="gismo.landmarks.Landmarks"><em>Landmarks</em></a><em> or </em><a class="reference internal" href="clustering.html#gismo.clustering.Cluster" title="gismo.clustering.Cluster"><em>Cluster</em></a><em> or </em><em>np.ndarray</em><em> or </em><em>csr_matrix.</em>) – The object from which a direction will be extracted.</p></li>
+<li><p><strong>balance</strong> (<em>float in range</em><em> [</em><em>0.0</em><em>, </em><em>1.0</em><em>]</em>) – The trade-off between documents and features.
+Set to 0.0, only the feature space will be used.
+Set to 1.0, only the document space will be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <cite>n+m</cite> direction.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray or csr_matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gismo.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Gismo</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="post-processing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Post Processing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.landmarks.Landmarks"><code class="docutils literal notranslate"><span class="pre">Landmarks</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.landmarks.Landmarks.fit"><code class="docutils literal notranslate"><span class="pre">Landmarks.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gismo.landmarks.get_direction"><code class="docutils literal notranslate"><span class="pre">get_direction()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/landmarks.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

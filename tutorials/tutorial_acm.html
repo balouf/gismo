@@ -1,0 +1,1228 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ACM categories &#8212; GISMO 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/tutorial_acm';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DBLP exploration" href="tutorial_dblp.html" />
+    <link rel="prev" title="Toy example" href="tutorial_toy_example.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-line.png" class="logo__image only-light" alt="GISMO 0.5.2 documentation - Home"/>
+    <img src="../_static/logo-line.png" class="logo__image only-dark pst-js-only" alt="GISMO 0.5.2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorial_toy_example.html">Toy example</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">ACM categories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_dblp.html">DBLP exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="landmarks_tutorial.html">Landmarks Tutorial</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">ACM categories</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ACM-categories">
+<h1>ACM categories<a class="headerlink" href="#ACM-categories" title="Link to this heading">#</a></h1>
+<p>This tutorial shows how ACM categories can be studied with Gismo.</p>
+<p>If you have never used Gismo before, you may want to start with the <em>Toy example tutorial</em>.</p>
+<p>Imagine that you want to submit an article and are asked to provide an ACM category and some generic keywords. Let see how Gismo can help you.</p>
+<p>Here, <em>documents</em> are ACM categories. The <em>features</em> of a category will be the words of its name along with the words of the name of its descendants.</p>
+<section id="Initialisation">
+<h2>Initialisation<a class="headerlink" href="#Initialisation" title="Link to this heading">#</a></h2>
+<p>First, we load the required package.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span><span class="p">,</span> <span class="n">Embedding</span><span class="p">,</span> <span class="n">CountVectorizer</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">,</span> <span class="n">Gismo</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.datasets.acm</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_acm</span><span class="p">,</span> <span class="n">flatten_acm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.post_processing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">post_features_cluster_print</span><span class="p">,</span>
+    <span class="n">post_documents_cluster_print</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Then, we load the ACM source. Note that we flatten the source, i.e. the existing hierarchy is discarded, as Gismo will provide its own dynamic, query-based, structure.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">acm</span> <span class="o">=</span> <span class="n">flatten_acm</span><span class="p">(</span><span class="n">get_acm</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<p>Each category in the <code class="docutils literal notranslate"><span class="pre">acm</span></code> list is a dict with <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">query</span></code>. We build a corpus that will tell Gismo that the content of a category is its <code class="docutils literal notranslate"><span class="pre">query</span></code> value.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">(</span><span class="n">acm</span><span class="p">,</span> <span class="n">to_text</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>We build an embedding on top of that corpus.</p>
+<ul class="simple">
+<li><p>We set <code class="docutils literal notranslate"><span class="pre">min_df=3</span></code> to exclude rare features;</p></li>
+<li><p>We set <code class="docutils literal notranslate"><span class="pre">ngram_range=(1,</span> <span class="pre">3)</span></code> to include bi-grams and tri-grams in the embedding.</p></li>
+<li><p>We manually pick a few common words to exclude from the embedding.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+    <span class="n">min_df</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="s2">&quot;by&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer</span><span class="p">)</span>
+<span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding</span><span class="o">.</span><span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;Compressed Sparse Row sparse matrix of dtype &#39;float64&#39;
+        with 28014 stored elements and shape (234, 6929)&gt;
+</pre></div></div>
+</div>
+<p>We see from <code class="docutils literal notranslate"><span class="pre">embedding.x</span></code> that the embedding links 234 documents to 6,936 features. There are 28,041 weights: in average, each document is linked to more than 100 features, each feature is linked to 4 documents.</p>
+<p>Now, we initiate the gismo object, and customize post_processers to ease the display.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">embedding</span><span class="p">)</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_cluster</span> <span class="o">=</span> <span class="n">post_documents_cluster_print</span>
+<span class="n">gismo</span><span class="o">.</span><span class="n">post_features_cluster</span> <span class="o">=</span> <span class="n">post_features_cluster_print</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Machine-Learning-query">
+<h2>Machine Learning query<a class="headerlink" href="#Machine-Learning-query" title="Link to this heading">#</a></h2>
+<p>We perform the query <em>Machine learning</em>. The returned <code class="docutils literal notranslate"><span class="pre">True</span></code> tells that some of the query features were found in the corpus’ features.</p>
+<p><strong>Remark:</strong> For this tutorial, we just enter a few words, but at the start of this Notebook, we talked about submitting an article. As a query can be as long as you want, you can call the <code class="docutils literal notranslate"><span class="pre">rank</span></code> method with the full textual content of your article if you want to.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Machine learning&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>What are the best ACM categories for an article on <em>Machine Learning</em>?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Machine learning&#39;,
+ &#39;Computing methodologies&#39;,
+ &#39;Machine learning algorithms&#39;,
+ &#39;Learning paradigms&#39;,
+ &#39;Machine learning theory&#39;,
+ &#39;Machine learning approaches&#39;,
+ &#39;Theory and algorithms for application domains&#39;,
+ &#39;Theory of computation&#39;,
+ &#39;Natural language processing&#39;,
+ &#39;Artificial intelligence&#39;,
+ &#39;Learning settings&#39;,
+ &#39;Supervised learning&#39;,
+ &#39;Reinforcement learning&#39;,
+ &#39;Education&#39;,
+ &#39;Dynamic programming for Markov decision processes&#39;,
+ &#39;Unsupervised learning&#39;]
+</pre></div></div>
+</div>
+<p>Sounds nice. How are the top 10 domains related in the context of <em>Machine Learning</em>?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.06. R: 0.52. S: 0.75.
+- F: 0.63. R: 0.48. S: 0.73.
+-- F: 0.78. R: 0.41. S: 0.70.
+--- F: 0.98. R: 0.16. S: 0.85.
+---- Machine learning (R: 0.09; S: 0.84)
+---- Computing methodologies (R: 0.06; S: 0.87)
+--- Learning paradigms (R: 0.06; S: 0.62)
+--- F: 0.94. R: 0.14. S: 0.63.
+---- Machine learning theory (R: 0.06; S: 0.61)
+---- Theory and algorithms for application domains (R: 0.05; S: 0.64)
+---- Theory of computation (R: 0.04; S: 0.66)
+--- Machine learning approaches (R: 0.05; S: 0.54)
+-- Machine learning algorithms (R: 0.06; S: 0.60)
+- F: 0.66. R: 0.04. S: 0.23.
+-- Natural language processing (R: 0.03; S: 0.21)
+-- Artificial intelligence (R: 0.02; S: 0.30)
+</pre></div></div>
+</div>
+<p>OK! Let’s decode this:</p>
+<ul class="simple">
+<li><p>Mainstream we have two main groups</p>
+<ul>
+<li><p>the practical fields (methodology, paradigms)</p></li>
+<li><p>the theoretical fields</p></li>
+</ul>
+</li>
+<li><p>If you don’t want to decide, you can go with approaches/algorithms.</p></li>
+<li><p>But maybe your article uses machine learning to achieve NLP or AI?</p></li>
+</ul>
+<p>Now, let’s look at the main keywords.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;learning&#39;,
+ &#39;reinforcement&#39;,
+ &#39;reinforcement learning&#39;,
+ &#39;decision&#39;,
+ &#39;supervised learning&#39;,
+ &#39;supervised&#39;,
+ &#39;machine&#39;,
+ &#39;iteration&#39;,
+ &#39;learning learning&#39;,
+ &#39;machine learning&#39;,
+ &#39;markov decision&#39;,
+ &#39;markov decision processes&#39;,
+ &#39;decision processes&#39;,
+ &#39;dynamic programming&#39;,
+ &#39;processes&#39;,
+ &#39;markov&#39;,
+ &#39;methods&#39;,
+ &#39;learning multi&#39;,
+ &#39;multi agent&#39;,
+ &#39;multi&#39;,
+ &#39;dynamic&#39;,
+ &#39;agent&#39;]
+</pre></div></div>
+</div>
+<p>Let’s organize them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.82. R: 0.02. S: 0.95.
+- F: 0.89. R: 0.02. S: 0.95.
+-- learning (R: 0.00; S: 0.96)
+-- reinforcement (R: 0.00; S: 0.83)
+-- reinforcement learning (R: 0.00; S: 0.83)
+-- decision (R: 0.00; S: 0.96)
+-- supervised learning (R: 0.00; S: 0.81)
+-- supervised (R: 0.00; S: 0.81)
+-- machine (R: 0.00; S: 0.95)
+-- iteration (R: 0.00; S: 0.68)
+-- machine learning (R: 0.00; S: 0.93)
+-- markov decision (R: 0.00; S: 0.89)
+-- markov decision processes (R: 0.00; S: 0.89)
+-- decision processes (R: 0.00; S: 0.89)
+-- dynamic programming (R: 0.00; S: 0.70)
+-- processes (R: 0.00; S: 0.89)
+-- markov (R: 0.00; S: 0.89)
+-- methods (R: 0.00; S: 0.86)
+-- learning multi (R: 0.00; S: 0.82)
+-- multi agent (R: 0.00; S: 0.82)
+-- multi (R: 0.00; S: 0.85)
+-- dynamic (R: 0.00; S: 0.71)
+-- agent (R: 0.00; S: 0.82)
+- learning learning (R: 0.00; S: 0.75)
+</pre></div></div>
+</div>
+<p>Hum, not very informative. Let’s increase the resolution to get more structure!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.73. R: 0.02. S: 0.95.
+- F: 0.79. R: 0.02. S: 0.91.
+-- F: 0.94. R: 0.01. S: 0.93.
+--- F: 0.96. R: 0.01. S: 0.96.
+---- F: 0.96. R: 0.00. S: 0.97.
+----- learning (R: 0.00; S: 0.96)
+----- decision (R: 0.00; S: 0.96)
+---- F: 0.99. R: 0.00. S: 0.94.
+----- machine (R: 0.00; S: 0.95)
+----- machine learning (R: 0.00; S: 0.93)
+--- F: 0.96. R: 0.01. S: 0.89.
+---- F: 0.99. R: 0.00. S: 0.89.
+----- F: 1.00. R: 0.00. S: 0.89.
+------ markov decision (R: 0.00; S: 0.89)
+------ markov decision processes (R: 0.00; S: 0.89)
+------ decision processes (R: 0.00; S: 0.89)
+------ markov (R: 0.00; S: 0.89)
+----- processes (R: 0.00; S: 0.89)
+---- methods (R: 0.00; S: 0.86)
+-- F: 0.99. R: 0.00. S: 0.69.
+--- iteration (R: 0.00; S: 0.68)
+--- dynamic programming (R: 0.00; S: 0.70)
+--- dynamic (R: 0.00; S: 0.71)
+-- learning learning (R: 0.00; S: 0.75)
+- F: 0.95. R: 0.01. S: 0.85.
+-- F: 0.99. R: 0.00. S: 0.83.
+--- F: 1.00. R: 0.00. S: 0.83.
+---- reinforcement (R: 0.00; S: 0.83)
+---- reinforcement learning (R: 0.00; S: 0.83)
+--- multi (R: 0.00; S: 0.85)
+-- F: 0.97. R: 0.00. S: 0.82.
+--- F: 1.00. R: 0.00. S: 0.81.
+---- supervised learning (R: 0.00; S: 0.81)
+---- supervised (R: 0.00; S: 0.81)
+--- learning multi (R: 0.00; S: 0.82)
+-- F: 1.00. R: 0.00. S: 0.82.
+--- multi agent (R: 0.00; S: 0.82)
+--- agent (R: 0.00; S: 0.82)
+</pre></div></div>
+</div>
+<p>Rough analysis:</p>
+<ul class="simple">
+<li><p>Machine learning is about… Machine learning, which seems related to decision. Markov decision process and dynamic programming seem to matter.</p></li>
+<li><p>Reinforcement learning and supervised learning seem to be special categories of interest. Seems that multi-agents are involved.</p></li>
+</ul>
+</section>
+<section id="P2P-query">
+<h2>P2P query<a class="headerlink" href="#P2P-query" title="Link to this heading">#</a></h2>
+<p>We perform the query <em>P2P</em>. The returned <code class="docutils literal notranslate"><span class="pre">False</span></code> tells that P2P is not a feature of the corpus (it’s a small corpus after all, made only of catagory titles).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;P2P&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<p>Let’s try to avoid the acronym. Ok, now it works.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Peer-to-peer&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>What are the best ACM categories for an article on <em>P2P</em>?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Network protocols&#39;,
+ &#39;Distributed architectures&#39;,
+ &#39;Networks&#39;,
+ &#39;Network types&#39;,
+ &#39;Search engine architectures and scalability&#39;,
+ &#39;Software architectures&#39;,
+ &#39;Software system structures&#39;,
+ &#39;Architectures&#39;,
+ &#39;Computer systems organization&#39;,
+ &#39;Software organization and properties&#39;,
+ &#39;Information retrieval&#39;,
+ &#39;Software and its engineering&#39;,
+ &#39;Information systems&#39;]
+</pre></div></div>
+</div>
+<p>Sounds nice. How are these domains related in the context of <em>P2P</em>?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.34. R: 0.59. S: 0.79.
+- F: 0.90. R: 0.12. S: 0.60.
+-- Network protocols (R: 0.06; S: 0.58)
+-- Networks (R: 0.06; S: 0.71)
+- F: 0.59. R: 0.47. S: 0.69.
+-- F: 0.84. R: 0.31. S: 0.66.
+--- F: 0.89. R: 0.15. S: 0.64.
+---- Distributed architectures (R: 0.06; S: 0.62)
+---- Architectures (R: 0.04; S: 0.64)
+---- Computer systems organization (R: 0.04; S: 0.67)
+--- F: 0.89. R: 0.16. S: 0.62.
+---- Software architectures (R: 0.05; S: 0.56)
+---- Software system structures (R: 0.05; S: 0.65)
+---- Software organization and properties (R: 0.04; S: 0.68)
+---- Software and its engineering (R: 0.03; S: 0.70)
+-- Network types (R: 0.05; S: 0.52)
+-- F: 0.80. R: 0.11. S: 0.52.
+--- F: 0.95. R: 0.09. S: 0.50.
+---- Search engine architectures and scalability (R: 0.05; S: 0.50)
+---- Information retrieval (R: 0.04; S: 0.52)
+--- Information systems (R: 0.02; S: 0.65)
+</pre></div></div>
+</div>
+<p>OK! Let’s decode this. P2P relates to:</p>
+<ul class="simple">
+<li><p>Network protocols</p></li>
+<li><p>Architectures, with two main groups</p>
+<ul>
+<li><p>the design fields (<em>distributed architecture</em>, <em>organization</em>)</p></li>
+<li><p>the implementation fields (<em>software</em>)</p></li>
+</ul>
+</li>
+<li><p>Inside architectures, but a little bit isolated, <em>search engine architectures and scalability</em> + <em>Information retrieval / systems</em> calls for the scalable property of P2P networks. Specifically, a P2P expert will recognize Distributed Hash Tables, one of the main theoretical and practical success of P2P.</p></li>
+</ul>
+<p>Now, let’s look at the main keywords.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;peer&#39;,
+ &#39;protocols&#39;,
+ &#39;protocol&#39;,
+ &#39;peer peer&#39;,
+ &#39;architectures&#39;,
+ &#39;network&#39;,
+ &#39;link&#39;,
+ &#39;architectures tier&#39;,
+ &#39;architectures tier architectures&#39;,
+ &#39;tier architectures&#39;]
+</pre></div></div>
+</div>
+<p>Let’s organize them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.63. R: 0.03. S: 0.92.
+- F: 1.00. R: 0.01. S: 0.97.
+-- peer (R: 0.01; S: 0.97)
+-- peer peer (R: 0.00; S: 0.97)
+- F: 0.84. R: 0.01. S: 0.57.
+-- F: 1.00. R: 0.01. S: 0.49.
+--- protocols (R: 0.00; S: 0.48)
+--- protocol (R: 0.00; S: 0.49)
+-- network (R: 0.00; S: 0.62)
+-- link (R: 0.00; S: 0.61)
+- F: 0.95. R: 0.01. S: 0.69.
+-- architectures (R: 0.00; S: 0.79)
+-- architectures tier (R: 0.00; S: 0.67)
+-- architectures tier architectures (R: 0.00; S: 0.67)
+-- tier architectures (R: 0.00; S: 0.67)
+</pre></div></div>
+</div>
+<p>Rough analysis:</p>
+<ul class="simple">
+<li><p>One cluster about network protocols</p></li>
+<li><p>One cluster about architectures</p></li>
+</ul>
+</section>
+<section id="PageRank-query">
+<h2>PageRank query<a class="headerlink" href="#PageRank-query" title="Link to this heading">#</a></h2>
+<p>We perform the query <em>PageRank</em>. The returned <code class="docutils literal notranslate"><span class="pre">False</span></code> tells that <em>PageRank</em> is not a feature of the corpus (it’s a small corpus after all, made only of catagory titles).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;Pagerank&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<p>Let’s try to avoid the copyright infrigment. Ok, now it works.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s2">&quot;ranking the web&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>What are the best ACM categories for an article on <em>PageRank</em>?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;Web searching and information discovery&#39;,
+ &#39;World Wide Web&#39;,
+ &#39;Information systems&#39;,
+ &#39;Web applications&#39;,
+ &#39;Supervised learning&#39;,
+ &#39;Retrieval models and ranking&#39;,
+ &#39;Learning paradigms&#39;,
+ &#39;Information retrieval&#39;,
+ &#39;Machine learning&#39;,
+ &#39;Web mining&#39;,
+ &#39;Web services&#39;,
+ &#39;Web data description languages&#39;,
+ &#39;Computing methodologies&#39;,
+ &#39;Security and privacy&#39;,
+ &#39;Internet communications tools&#39;,
+ &#39;Networks&#39;,
+ &#39;Software and application security&#39;,
+ &#39;Network security&#39;,
+ &#39;Specialized information retrieval&#39;,
+ &#39;Network types&#39;,
+ &#39;Interaction paradigms&#39;,
+ &#39;Middleware for databases&#39;,
+ &#39;Network properties&#39;,
+ &#39;Human computer interaction (HCI)&#39;]
+</pre></div></div>
+</div>
+<p>Sounds nice. How are these domains related in the context of <em>PageRank</em>?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.13. R: 0.43. S: 0.78.
+- F: 0.45. R: 0.27. S: 0.68.
+-- F: 0.81. R: 0.21. S: 0.70.
+--- Web searching and information discovery (R: 0.08; S: 0.62)
+--- F: 0.91. R: 0.13. S: 0.81.
+---- World Wide Web (R: 0.08; S: 0.79)
+---- Information systems (R: 0.05; S: 0.85)
+-- Web applications (R: 0.05; S: 0.49)
+-- Web mining (R: 0.02; S: 0.34)
+- F: 0.27. R: 0.16. S: 0.48.
+-- F: 0.92. R: 0.09. S: 0.42.
+--- Supervised learning (R: 0.04; S: 0.41)
+--- Learning paradigms (R: 0.03; S: 0.43)
+--- Machine learning (R: 0.02; S: 0.43)
+-- F: 0.81. R: 0.07. S: 0.37.
+--- Retrieval models and ranking (R: 0.04; S: 0.34)
+--- Information retrieval (R: 0.03; S: 0.45)
+</pre></div></div>
+</div>
+<p>Hum, maybe somethin more compact. Let’s lower the resolution (default resolution is 0.7).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_documents_by_cluster</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.13. R: 0.43. S: 0.78.
+- F: 0.45. R: 0.27. S: 0.68.
+-- F: 0.81. R: 0.21. S: 0.70.
+--- Web searching and information discovery (R: 0.08; S: 0.62)
+--- World Wide Web (R: 0.08; S: 0.79)
+--- Information systems (R: 0.05; S: 0.85)
+-- Web applications (R: 0.05; S: 0.49)
+-- Web mining (R: 0.02; S: 0.34)
+- F: 0.27. R: 0.16. S: 0.48.
+-- F: 0.92. R: 0.09. S: 0.42.
+--- Supervised learning (R: 0.04; S: 0.41)
+--- Learning paradigms (R: 0.03; S: 0.43)
+--- Machine learning (R: 0.02; S: 0.43)
+-- F: 0.81. R: 0.07. S: 0.37.
+--- Retrieval models and ranking (R: 0.04; S: 0.34)
+--- Information retrieval (R: 0.03; S: 0.45)
+</pre></div></div>
+</div>
+<p>Better! Let’s broadly decode this:</p>
+<ul class="simple">
+<li><p>One cluster of categories is about the Web &amp; Search</p></li>
+<li><p>One cluster is about how-to:</p></li>
+<li><p>learning techniques</p></li>
+<li><p>information retrieval.</p></li>
+</ul>
+<p>Now, let’s look at the main keywords.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_rank</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;web&#39;,
+ &#39;ranking&#39;,
+ &#39;learning&#39;,
+ &#39;social&#39;,
+ &#39;supervised learning&#39;,
+ &#39;supervised&#39;,
+ &#39;discovery&#39;,
+ &#39;security&#39;,
+ &#39;site&#39;,
+ &#39;rank&#39;,
+ &#39;search&#39;,
+ &#39;learning rank&#39;]
+</pre></div></div>
+</div>
+<p>Let’s organize them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gismo</span><span class="o">.</span><span class="n">get_features_by_cluster</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ F: 0.01. R: 0.02. S: 0.93.
+- F: 0.13. R: 0.01. S: 0.93.
+-- F: 0.87. R: 0.01. S: 0.86.
+--- F: 0.87. R: 0.01. S: 0.85.
+---- web (R: 0.00; S: 0.86)
+---- ranking (R: 0.00; S: 0.91)
+---- social (R: 0.00; S: 0.84)
+---- discovery (R: 0.00; S: 0.80)
+---- site (R: 0.00; S: 0.77)
+--- search (R: 0.00; S: 0.83)
+-- F: 0.90. R: 0.01. S: 0.47.
+--- learning (R: 0.00; S: 0.44)
+--- supervised learning (R: 0.00; S: 0.35)
+--- supervised (R: 0.00; S: 0.35)
+--- rank (R: 0.00; S: 0.51)
+--- learning rank (R: 0.00; S: 0.50)
+- security (R: 0.00; S: 0.14)
+</pre></div></div>
+</div>
+<p>Rough analysis:</p>
+<ul class="simple">
+<li><p>One cluster about the Web</p></li>
+<li><p>One cluster about learning</p></li>
+<li><p>One lone wolf: security</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tutorial_toy_example.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Toy example</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tutorial_dblp.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">DBLP exploration</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Initialisation">Initialisation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Machine-Learning-query">Machine Learning query</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#P2P-query">P2P query</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#PageRank-query">PageRank query</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/tutorial_acm.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

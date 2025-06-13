@@ -1,0 +1,803 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gismo.clustering &#8212; GISMO 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gismo/clustering';</script>
+    <link rel="icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo-line.png" class="logo__image only-light" alt="GISMO 0.5.2 documentation - Home"/>
+    <img src="../../_static/logo-line.png" class="logo__image only-dark pst-js-only" alt="GISMO 0.5.2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gismo.clustering</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gismo.clustering</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">heapq</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics.pairwise</span><span class="w"> </span><span class="kn">import</span> <span class="n">cosine_similarity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">vstack</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="kn">import</span> <span class="n">njit</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">RESOLUTION</span><span class="p">,</span> <span class="n">WIDE</span>
+
+
+<div class="viewcode-block" id="Cluster">
+<a class="viewcode-back" href="../../reference/clustering.html#gismo.clustering.Cluster">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cluster</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The &#39;Cluster&#39; class is used for internal representation of hierarchical cluster. It stores</span>
+<span class="sd">    the attributes that describe a clustering structure and provides cluster basic addition</span>
+<span class="sd">    for merge operations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indice: int</span>
+<span class="sd">        Index of the head (main element) of the cluster.</span>
+<span class="sd">    rank: int</span>
+<span class="sd">        The ranking order of a cluster.</span>
+<span class="sd">    vector: :class:`~scipy.sparse.csr_matrix`</span>
+<span class="sd">        The vector representation of the cluster.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indice: int</span>
+<span class="sd">        Index of the head (main element) of the cluster.</span>
+<span class="sd">    rank: int</span>
+<span class="sd">        The ranking order of a cluster.</span>
+<span class="sd">    vector: :class:`~scipy.sparse.csr_matrix`</span>
+<span class="sd">        The vector representation of the cluster.</span>
+<span class="sd">    intersection_vector: :class:`~scipy.sparse.csr_matrix` (deprecated)</span>
+<span class="sd">        The vector representation of the common points of a cluster.</span>
+<span class="sd">    members: list of int</span>
+<span class="sd">        The indices of the cluster elements.</span>
+<span class="sd">    focus: float in range [0.0, 1.0]</span>
+<span class="sd">        The consistency of the cluster (higher focus means that elements are more similar).</span>
+<span class="sd">    children: list of :class:`~gismo.clustering.Cluster`</span>
+<span class="sd">        The subclusters.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    ---------</span>
+<span class="sd">    &gt;&gt;&gt; from scipy.sparse import csr_matrix</span>
+<span class="sd">    &gt;&gt;&gt; c1 = Cluster(indice=0, rank=1, vector=csr_matrix([1.0, 0.0, 1.0]))</span>
+<span class="sd">    &gt;&gt;&gt; c2 = Cluster(indice=5, rank=0, vector=csr_matrix([1.0, 1.0, 0.0]))</span>
+<span class="sd">    &gt;&gt;&gt; c3 = c1+c2</span>
+<span class="sd">    &gt;&gt;&gt; c3.members</span>
+<span class="sd">    [0, 5]</span>
+<span class="sd">    &gt;&gt;&gt; c3.indice</span>
+<span class="sd">    5</span>
+<span class="sd">    &gt;&gt;&gt; c3.vector.toarray()</span>
+<span class="sd">    array([[2., 1., 1.]])</span>
+<span class="sd">    &gt;&gt;&gt; c3.intersection_vector.toarray()</span>
+<span class="sd">    array([[1., 0., 0.]])</span>
+<span class="sd">    &gt;&gt;&gt; c1 == sum([c1])</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indice</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indice</span> <span class="o">=</span> <span class="n">indice</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="n">indice</span><span class="p">]</span> <span class="k">if</span> <span class="n">indice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">focus</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="o">=</span> <span class="n">vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intersection_vector</span> <span class="o">=</span> <span class="n">vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Cluster</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">&lt;</span> <span class="n">cluster</span><span class="o">.</span><span class="n">rank</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">indice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indice</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">indice</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">indice</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">rank</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">+</span> <span class="n">cluster</span><span class="o">.</span><span class="n">members</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">focus</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">focus</span><span class="p">,</span> <span class="n">cluster</span><span class="o">.</span><span class="n">focus</span><span class="p">)</span>  <span class="c1"># Don&#39;t forget external focus</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="o">+</span> <span class="n">cluster</span><span class="o">.</span><span class="n">vector</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">intersection_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intersection_vector</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+            <span class="n">cluster</span><span class="o">.</span><span class="n">intersection_vector</span>
+        <span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Better update sons list outside class definition</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="merge_clusters">
+<a class="viewcode-back" href="../../reference/clustering.html#gismo.clustering.merge_clusters">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_clusters</span><span class="p">(</span><span class="n">cluster_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">focus</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Complete merge operation. In addition to the basic merge provided by</span>
+<span class="sd">    :class:`~gismo.clustering.Cluster`, it ensures the following:</span>
+
+<span class="sd">    * Consistency of focus by integrating the extra-focus (typically given by :func:`~gismo.clustering.subspace_partition`).</span>
+<span class="sd">    * Children (the members of the list) are sorted according to their respective rank.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cluster_list: list of :class:`~gismo.clustering.Cluster`</span>
+<span class="sd">        The clusters to merge into one cluster.</span>
+<span class="sd">    focus: float</span>
+<span class="sd">        Evaluation of the focus (similarity) between clusters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`~gismo.clustering.Cluster`</span>
+<span class="sd">        The cluster merging the list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cluster_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cluster_list</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">focus</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">focus</span><span class="p">,</span> <span class="n">focus</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">cluster_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">rank</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<div class="viewcode-block" id="subspace_partition">
+<a class="viewcode-back" href="../../reference/clustering.html#gismo.clustering.subspace_partition">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">subspace_partition</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">RESOLUTION</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Proposes a partition of the subspace that merges together vectors with a similar direction.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subspace: :class:`~numpy.ndarray`, :class:`~scipy.sparse.csr_matrix`</span>
+<span class="sd">        A ``k x m`` matrix seen as a list of ``k`` ``m``-dimensional vectors sorted by importance order.</span>
+<span class="sd">    resolution: float in range [0.0, 1.0]</span>
+<span class="sd">        How strict the merging should be. ``0.0`` will merge all items together, while ``1.0``</span>
+<span class="sd">        will only merge mutually closest items.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        A list of subsets that form a partition. Each subset is represented by a pair ``(p, f)``. ``p``</span>
+<span class="sd">        is the set of indices of the subset, ``f`` is the typical similarity of the partition (called `focus`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Applying a square distortion to resolution gives a more linear behavior in practice.</span>
+    <span class="n">resolution</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">resolution</span> <span class="o">-</span> <span class="n">resolution</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">subspace</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">similarity_matrix</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">subspace</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">similarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">closest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">local_similarity</span> <span class="o">=</span> <span class="p">[</span><span class="n">similarity</span><span class="p">[</span><span class="n">closest</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="n">partition</span> <span class="o">=</span> <span class="p">[{</span><span class="n">i</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="n">heads</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">cluster_similarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">sij</span> <span class="o">=</span> <span class="n">similarity_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="n">master</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">heads</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">heads</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">slave</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">heads</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">heads</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">sij</span> <span class="o">&gt;=</span> <span class="n">resolution</span> <span class="o">*</span> <span class="n">local_similarity</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">cluster_similarity</span><span class="p">[</span><span class="n">master</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">cluster_similarity</span><span class="p">[</span><span class="n">master</span><span class="p">],</span> <span class="n">sij</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">master</span> <span class="o">!=</span> <span class="n">slave</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">partition</span><span class="p">[</span><span class="n">slave</span><span class="p">]:</span>
+                        <span class="n">heads</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">master</span>
+                    <span class="n">partition</span><span class="p">[</span><span class="n">master</span><span class="p">]</span> <span class="o">|=</span> <span class="n">partition</span><span class="p">[</span><span class="n">slave</span><span class="p">]</span>
+                    <span class="n">partition</span><span class="p">[</span><span class="n">slave</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">partition</span><span class="p">,</span> <span class="n">cluster_similarity</span><span class="p">)</span> <span class="k">if</span> <span class="n">c</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="rec_clusterize">
+<a class="viewcode-back" href="../../reference/clustering.html#gismo.clustering.rec_clusterize">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">rec_clusterize</span><span class="p">(</span><span class="n">cluster_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">RESOLUTION</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Auxiliary recursive function for clustering.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cluster_list: list of :class:`~gismo.clustering.Cluster`</span>
+<span class="sd">        Current aggregation state.</span>
+<span class="sd">    resolution: float in range [0.0, 1.0]</span>
+<span class="sd">        Sets the lazyness of aggregation. A &#39;resolution&#39; set to 0.0 yields a one-step clustering</span>
+<span class="sd">        (*star* structure), while a &#39;resolution &#39; set to 1.0 yields, up to tie similarities, a binary tree</span>
+<span class="sd">        (*dendrogram*).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of :class:`~gismo.clustering.Cluster`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cluster_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cluster_list</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">partition</span> <span class="o">=</span> <span class="n">subspace_partition</span><span class="p">(</span>
+            <span class="n">vstack</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">vector</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cluster_list</span><span class="p">]),</span> <span class="n">resolution</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">rec_clusterize</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">merge_clusters</span><span class="p">([</span><span class="n">cluster_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">partition</span><span class="p">],</span>
+            <span class="n">resolution</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="subspace_clusterize">
+<a class="viewcode-back" href="../../reference/clustering.html#gismo.clustering.subspace_clusterize">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">subspace_clusterize</span><span class="p">(</span><span class="n">subspace</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">RESOLUTION</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a subspace (matrix seen as a list of vectors) to a Cluster object (hierarchical clustering).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subspace: :class:`~numpy.ndarray`, :class:`~scipy.sparse.csr_matrix`</span>
+<span class="sd">        A ``k x m`` matrix seen as a list of ``k`` ``m``-dimensional vectors sorted by importance order.</span>
+<span class="sd">    resolution: float in range [0.0, 1.0]</span>
+<span class="sd">        Sets the lazyness of aggregation. A &#39;resolution&#39; set to 0.0 yields a one-step clustering</span>
+<span class="sd">        (*star* structure), while a &#39;resolution &#39; set to 1.0 yields, up to tie similarities, a binary tree</span>
+<span class="sd">        (*dendrogram*).</span>
+<span class="sd">    indices: list, optional</span>
+<span class="sd">        Indicates the index for each element of the subspace. Used when &#39;subspace&#39;</span>
+<span class="sd">        is extracted from a larger space (e.g. X or Y). If not set, indices are set to ``range(k)``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Cluster</span>
+<span class="sd">        A cluster whose leaves are the `k` vectors from &#39;subspace&#39;.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    _________</span>
+
+<span class="sd">    &gt;&gt;&gt; from gismo.corpus import Corpus, toy_source_text</span>
+<span class="sd">    &gt;&gt;&gt; from sklearn.feature_extraction.text import CountVectorizer</span>
+<span class="sd">    &gt;&gt;&gt; from gismo.embedding import Embedding</span>
+<span class="sd">    &gt;&gt;&gt; corpus = Corpus(toy_source_text)</span>
+<span class="sd">    &gt;&gt;&gt; vectorizer = CountVectorizer(dtype=float)</span>
+<span class="sd">    &gt;&gt;&gt; embedding = Embedding(vectorizer=vectorizer)</span>
+<span class="sd">    &gt;&gt;&gt; embedding.fit_transform(corpus)</span>
+<span class="sd">    &gt;&gt;&gt; subspace = embedding.x[1:, :]</span>
+<span class="sd">    &gt;&gt;&gt; cluster = subspace_clusterize(subspace)</span>
+<span class="sd">    &gt;&gt;&gt; len(cluster.children)</span>
+<span class="sd">    2</span>
+<span class="sd">    &gt;&gt;&gt; cluster = subspace_clusterize(subspace, resolution=.02)</span>
+<span class="sd">    &gt;&gt;&gt; len(cluster.children)</span>
+<span class="sd">    4</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">subspace</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rec_clusterize</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">Cluster</span><span class="p">(</span><span class="n">indice</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="n">subspace</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="n">resolution</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Covering</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heap</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">used</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heap</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">used</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster</span><span class="p">):</span>
+        <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">focus</span><span class="p">,</span> <span class="n">cluster</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">cluster</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">used</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">used</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">heap</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">core</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">heap</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">indice</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">wide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cluster</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">heap</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">indice</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>
+
+
+<div class="viewcode-block" id="covering_order">
+<a class="viewcode-back" href="../../reference/clustering.html#gismo.clustering.covering_order">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">covering_order</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">wide</span><span class="o">=</span><span class="n">WIDE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Uses a hierarchical cluster to provide an ordering of the items that mixes rank and coverage.</span>
+
+<span class="sd">    This is done by exploring all cluster and subclusters by increasing similarity and rank (lexicographic order).</span>
+<span class="sd">    Two variants are proposed:</span>
+
+<span class="sd">    * `Core`: for each cluster, append its representant to the list if new. Central items tend to have better rank.</span>
+<span class="sd">    * `Wide`: for each cluster, append its children representants to the list if new. Marginal items tend to have better rank.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cluster: :class:`~gismo.clustering.Cluster`</span>
+<span class="sd">        The cluster to explore.</span>
+<span class="sd">    wide: :class:`bool`</span>
+<span class="sd">        Use Wide (``True``) or Core (``False``) variant.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of int</span>
+<span class="sd">        Sorted indices of the items of the cluster.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">wide</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Covering</span><span class="p">()</span><span class="o">.</span><span class="n">wide</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Covering</span><span class="p">()</span><span class="o">.</span><span class="n">core</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="subspace_distortion">
+<a class="viewcode-back" href="../../reference/clustering.html#gismo.clustering.subspace_distortion">[docs]</a>
+<span class="nd">@njit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">subspace_distortion</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">relevance</span><span class="p">,</span> <span class="n">distortion</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply inplace distortion of a subspace with relevance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    indices: :class:`~numpy.ndarray`</span>
+<span class="sd">        Indice attribute of the subspace :class:`~scipy.sparse.csr_matrix`.</span>
+<span class="sd">    data: :class:`~numpy.ndarray`</span>
+<span class="sd">        Data attribute of the subspace :class:`~scipy.sparse.csr_matrix`.</span>
+<span class="sd">    relevance: :class:`~numpy.ndarray`</span>
+<span class="sd">        Relevance values in the embedding space.</span>
+<span class="sd">    distortion: float in [0.0, 1.0]</span>
+<span class="sd">        Power applied to relevance for distortion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">indice</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indices</span><span class="p">):</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">relevance</span><span class="p">[</span><span class="n">indice</span><span class="p">]</span> <span class="o">**</span> <span class="n">distortion</span></div>
+
+
+
+<div class="viewcode-block" id="get_sim">
+<a class="viewcode-back" href="../../reference/clustering.html#gismo.clustering.get_sim">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_sim</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="n">arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple similarity computation between csr_matrix and ndarray.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    csr: :class:`~scipy.sparse.csr_matrix`</span>
+<span class="sd">    arr: :class:`~numpy.ndarray`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">csr</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">arr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">csr</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

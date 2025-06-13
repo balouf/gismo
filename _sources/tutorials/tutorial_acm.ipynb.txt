@@ -1,0 +1,1137 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# ACM categories"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This tutorial shows how ACM categories can be studied with Gismo.\n",
+    "\n",
+    "If you have never used Gismo before, you may want to start with the *Toy example tutorial*.\n",
+    "\n",
+    "Imagine that you want to submit an article and are asked to provide an ACM category and some generic keywords. Let see how Gismo can help you.\n",
+    "\n",
+    "Here, *documents* are ACM categories. The *features* of a category will be the words of its name along with the words of the name of its descendants."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Initialisation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "First, we load the required package."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:37:45.131938Z",
+     "start_time": "2025-04-09T08:37:37.221718Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "from gismo import Corpus, Embedding, CountVectorizer, cosine_similarity, Gismo\n",
+    "import numpy as np\n",
+    "\n",
+    "from gismo.datasets.acm import get_acm, flatten_acm\n",
+    "from gismo.post_processing import (\n",
+    "    post_features_cluster_print,\n",
+    "    post_documents_cluster_print,\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Then, we load the ACM source. Note that we flatten the source, i.e. the existing hierarchy is discarded, as Gismo will provide its own dynamic, query-based, structure."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:37:45.187380Z",
+     "start_time": "2025-04-09T08:37:45.141073Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "acm = flatten_acm(get_acm())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Each category in the ``acm`` list is a dict with ``name`` and ``query``. We build a corpus that will tell Gismo that the content of a category is its ``query`` value."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:37:45.204771Z",
+     "start_time": "2025-04-09T08:37:45.194788Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "corpus = Corpus(acm, to_text=lambda x: x[\"query\"])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We build an embedding on top of that corpus.\n",
+    "- We set ``min_df=3`` to exclude rare features;\n",
+    "- We set ``ngram_range=(1, 3)`` to include bi-grams and tri-grams in the embedding.\n",
+    "- We manually pick a few common words to exclude from the embedding."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:12.394865Z",
+     "start_time": "2025-04-09T08:37:45.218309Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "vectorizer = CountVectorizer(\n",
+    "    min_df=3, ngram_range=(1, 3), dtype=float, stop_words=[\"to\", \"and\", \"by\"]\n",
+    ")\n",
+    "embedding = Embedding(vectorizer=vectorizer)\n",
+    "embedding.fit_transform(corpus)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:12.425326Z",
+     "start_time": "2025-04-09T08:38:12.402889Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<Compressed Sparse Row sparse matrix of dtype 'float64'\n",
+       "\twith 28014 stored elements and shape (234, 6929)>"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "embedding.x"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We see from ``embedding.x`` that the embedding links 234 documents to 6,936 features. There are 28,041 weights: in average, each document is linked to more than 100 features, each feature is linked to 4 documents."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, we initiate the gismo object, and customize post_processers to ease the display."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:12.445230Z",
+     "start_time": "2025-04-09T08:38:12.432711Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "gismo = Gismo(corpus, embedding)\n",
+    "gismo.post_documents_item = lambda g, i: g.corpus[i][\"name\"]\n",
+    "gismo.post_documents_cluster = post_documents_cluster_print\n",
+    "gismo.post_features_cluster = post_features_cluster_print"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Machine Learning query"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We perform the query *Machine learning*. The returned ``True`` tells that some of the query features were found in the corpus' features.\n",
+    "\n",
+    "**Remark:** For this tutorial, we just enter a few words, but at the start of this Notebook, we talked about submitting an article. As a query can be as long as you want, you can call the ``rank`` method with the full textual content of your article if you want to."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.043680Z",
+     "start_time": "2025-04-09T08:38:12.452262Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.rank(\"Machine learning\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "What are the best ACM categories for an article on *Machine Learning*?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.078470Z",
+     "start_time": "2025-04-09T08:38:19.056221Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Machine learning',\n",
+       " 'Computing methodologies',\n",
+       " 'Machine learning algorithms',\n",
+       " 'Learning paradigms',\n",
+       " 'Machine learning theory',\n",
+       " 'Machine learning approaches',\n",
+       " 'Theory and algorithms for application domains',\n",
+       " 'Theory of computation',\n",
+       " 'Natural language processing',\n",
+       " 'Artificial intelligence',\n",
+       " 'Learning settings',\n",
+       " 'Supervised learning',\n",
+       " 'Reinforcement learning',\n",
+       " 'Education',\n",
+       " 'Dynamic programming for Markov decision processes',\n",
+       " 'Unsupervised learning']"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.get_documents_by_rank()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Sounds nice. How are the top 10 domains related in the context of *Machine Learning*?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.575324Z",
+     "start_time": "2025-04-09T08:38:19.088796Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.06. R: 0.52. S: 0.75.\n",
+      "- F: 0.63. R: 0.48. S: 0.73.\n",
+      "-- F: 0.78. R: 0.41. S: 0.70.\n",
+      "--- F: 0.98. R: 0.16. S: 0.85.\n",
+      "---- Machine learning (R: 0.09; S: 0.84)\n",
+      "---- Computing methodologies (R: 0.06; S: 0.87)\n",
+      "--- Learning paradigms (R: 0.06; S: 0.62)\n",
+      "--- F: 0.94. R: 0.14. S: 0.63.\n",
+      "---- Machine learning theory (R: 0.06; S: 0.61)\n",
+      "---- Theory and algorithms for application domains (R: 0.05; S: 0.64)\n",
+      "---- Theory of computation (R: 0.04; S: 0.66)\n",
+      "--- Machine learning approaches (R: 0.05; S: 0.54)\n",
+      "-- Machine learning algorithms (R: 0.06; S: 0.60)\n",
+      "- F: 0.66. R: 0.04. S: 0.23.\n",
+      "-- Natural language processing (R: 0.03; S: 0.21)\n",
+      "-- Artificial intelligence (R: 0.02; S: 0.30)\n"
+     ]
+    }
+   ],
+   "source": [
+    "gismo.get_documents_by_cluster(k=10)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "OK! Let's decode this:\n",
+    "- Mainstream we have two main groups\n",
+    "    - the practical fields (methodology, paradigms)\n",
+    "    - the theoretical fields\n",
+    "- If you don't want to decide, you can go with approaches/algorithms.\n",
+    "- But maybe your article uses machine learning to achieve NLP or AI?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, let's look at the main keywords."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.603354Z",
+     "start_time": "2025-04-09T08:38:19.588343Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['learning',\n",
+       " 'reinforcement',\n",
+       " 'reinforcement learning',\n",
+       " 'decision',\n",
+       " 'supervised learning',\n",
+       " 'supervised',\n",
+       " 'machine',\n",
+       " 'iteration',\n",
+       " 'learning learning',\n",
+       " 'machine learning',\n",
+       " 'markov decision',\n",
+       " 'markov decision processes',\n",
+       " 'decision processes',\n",
+       " 'dynamic programming',\n",
+       " 'processes',\n",
+       " 'markov',\n",
+       " 'methods',\n",
+       " 'learning multi',\n",
+       " 'multi agent',\n",
+       " 'multi',\n",
+       " 'dynamic',\n",
+       " 'agent']"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.get_features_by_rank()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's organize them."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.663526Z",
+     "start_time": "2025-04-09T08:38:19.610375Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.82. R: 0.02. S: 0.95.\n",
+      "- F: 0.89. R: 0.02. S: 0.95.\n",
+      "-- learning (R: 0.00; S: 0.96)\n",
+      "-- reinforcement (R: 0.00; S: 0.83)\n",
+      "-- reinforcement learning (R: 0.00; S: 0.83)\n",
+      "-- decision (R: 0.00; S: 0.96)\n",
+      "-- supervised learning (R: 0.00; S: 0.81)\n",
+      "-- supervised (R: 0.00; S: 0.81)\n",
+      "-- machine (R: 0.00; S: 0.95)\n",
+      "-- iteration (R: 0.00; S: 0.68)\n",
+      "-- machine learning (R: 0.00; S: 0.93)\n",
+      "-- markov decision (R: 0.00; S: 0.89)\n",
+      "-- markov decision processes (R: 0.00; S: 0.89)\n",
+      "-- decision processes (R: 0.00; S: 0.89)\n",
+      "-- dynamic programming (R: 0.00; S: 0.70)\n",
+      "-- processes (R: 0.00; S: 0.89)\n",
+      "-- markov (R: 0.00; S: 0.89)\n",
+      "-- methods (R: 0.00; S: 0.86)\n",
+      "-- learning multi (R: 0.00; S: 0.82)\n",
+      "-- multi agent (R: 0.00; S: 0.82)\n",
+      "-- multi (R: 0.00; S: 0.85)\n",
+      "-- dynamic (R: 0.00; S: 0.71)\n",
+      "-- agent (R: 0.00; S: 0.82)\n",
+      "- learning learning (R: 0.00; S: 0.75)\n"
+     ]
+    }
+   ],
+   "source": [
+    "gismo.get_features_by_cluster()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Hum, not very informative. Let's increase the resolution to get more structure!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.749756Z",
+     "start_time": "2025-04-09T08:38:19.672196Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.73. R: 0.02. S: 0.95.\n",
+      "- F: 0.79. R: 0.02. S: 0.91.\n",
+      "-- F: 0.94. R: 0.01. S: 0.93.\n",
+      "--- F: 0.96. R: 0.01. S: 0.96.\n",
+      "---- F: 0.96. R: 0.00. S: 0.97.\n",
+      "----- learning (R: 0.00; S: 0.96)\n",
+      "----- decision (R: 0.00; S: 0.96)\n",
+      "---- F: 0.99. R: 0.00. S: 0.94.\n",
+      "----- machine (R: 0.00; S: 0.95)\n",
+      "----- machine learning (R: 0.00; S: 0.93)\n",
+      "--- F: 0.96. R: 0.01. S: 0.89.\n",
+      "---- F: 0.99. R: 0.00. S: 0.89.\n",
+      "----- F: 1.00. R: 0.00. S: 0.89.\n",
+      "------ markov decision (R: 0.00; S: 0.89)\n",
+      "------ markov decision processes (R: 0.00; S: 0.89)\n",
+      "------ decision processes (R: 0.00; S: 0.89)\n",
+      "------ markov (R: 0.00; S: 0.89)\n",
+      "----- processes (R: 0.00; S: 0.89)\n",
+      "---- methods (R: 0.00; S: 0.86)\n",
+      "-- F: 0.99. R: 0.00. S: 0.69.\n",
+      "--- iteration (R: 0.00; S: 0.68)\n",
+      "--- dynamic programming (R: 0.00; S: 0.70)\n",
+      "--- dynamic (R: 0.00; S: 0.71)\n",
+      "-- learning learning (R: 0.00; S: 0.75)\n",
+      "- F: 0.95. R: 0.01. S: 0.85.\n",
+      "-- F: 0.99. R: 0.00. S: 0.83.\n",
+      "--- F: 1.00. R: 0.00. S: 0.83.\n",
+      "---- reinforcement (R: 0.00; S: 0.83)\n",
+      "---- reinforcement learning (R: 0.00; S: 0.83)\n",
+      "--- multi (R: 0.00; S: 0.85)\n",
+      "-- F: 0.97. R: 0.00. S: 0.82.\n",
+      "--- F: 1.00. R: 0.00. S: 0.81.\n",
+      "---- supervised learning (R: 0.00; S: 0.81)\n",
+      "---- supervised (R: 0.00; S: 0.81)\n",
+      "--- learning multi (R: 0.00; S: 0.82)\n",
+      "-- F: 1.00. R: 0.00. S: 0.82.\n",
+      "--- multi agent (R: 0.00; S: 0.82)\n",
+      "--- agent (R: 0.00; S: 0.82)\n"
+     ]
+    }
+   ],
+   "source": [
+    "gismo.get_features_by_cluster(resolution=0.9)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Rough analysis:\n",
+    "- Machine learning is about... Machine learning, which seems related to decision. Markov decision process and dynamic programming seem to matter.\n",
+    "- Reinforcement learning and supervised learning seem to be special categories of interest. Seems that multi-agents are involved."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## P2P query"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We perform the query *P2P*. The returned ``False`` tells that P2P is not a feature of the corpus (it's a small corpus after all, made only of catagory titles)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.808216Z",
+     "start_time": "2025-04-09T08:38:19.758135Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "False"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.rank(\"P2P\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's try to avoid the acronym. Ok, now it works."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.845165Z",
+     "start_time": "2025-04-09T08:38:19.816411Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.rank(\"Peer-to-peer\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "What are the best ACM categories for an article on *P2P*?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.870344Z",
+     "start_time": "2025-04-09T08:38:19.853183Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Network protocols',\n",
+       " 'Distributed architectures',\n",
+       " 'Networks',\n",
+       " 'Network types',\n",
+       " 'Search engine architectures and scalability',\n",
+       " 'Software architectures',\n",
+       " 'Software system structures',\n",
+       " 'Architectures',\n",
+       " 'Computer systems organization',\n",
+       " 'Software organization and properties',\n",
+       " 'Information retrieval',\n",
+       " 'Software and its engineering',\n",
+       " 'Information systems']"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.get_documents_by_rank()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Sounds nice. How are these domains related in the context of *P2P*?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.937455Z",
+     "start_time": "2025-04-09T08:38:19.879897Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.34. R: 0.59. S: 0.79.\n",
+      "- F: 0.90. R: 0.12. S: 0.60.\n",
+      "-- Network protocols (R: 0.06; S: 0.58)\n",
+      "-- Networks (R: 0.06; S: 0.71)\n",
+      "- F: 0.59. R: 0.47. S: 0.69.\n",
+      "-- F: 0.84. R: 0.31. S: 0.66.\n",
+      "--- F: 0.89. R: 0.15. S: 0.64.\n",
+      "---- Distributed architectures (R: 0.06; S: 0.62)\n",
+      "---- Architectures (R: 0.04; S: 0.64)\n",
+      "---- Computer systems organization (R: 0.04; S: 0.67)\n",
+      "--- F: 0.89. R: 0.16. S: 0.62.\n",
+      "---- Software architectures (R: 0.05; S: 0.56)\n",
+      "---- Software system structures (R: 0.05; S: 0.65)\n",
+      "---- Software organization and properties (R: 0.04; S: 0.68)\n",
+      "---- Software and its engineering (R: 0.03; S: 0.70)\n",
+      "-- Network types (R: 0.05; S: 0.52)\n",
+      "-- F: 0.80. R: 0.11. S: 0.52.\n",
+      "--- F: 0.95. R: 0.09. S: 0.50.\n",
+      "---- Search engine architectures and scalability (R: 0.05; S: 0.50)\n",
+      "---- Information retrieval (R: 0.04; S: 0.52)\n",
+      "--- Information systems (R: 0.02; S: 0.65)\n"
+     ]
+    }
+   ],
+   "source": [
+    "gismo.get_documents_by_cluster()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "OK! Let's decode this. P2P relates to:\n",
+    "- Network protocols\n",
+    "- Architectures, with two main groups\n",
+    "    - the design fields (*distributed architecture*, *organization*)\n",
+    "    - the implementation fields (*software*)\n",
+    "- Inside architectures, but a little bit isolated, *search engine architectures and scalability* + *Information retrieval / systems*  calls for the scalable property of P2P networks. Specifically, a P2P expert will recognize Distributed Hash Tables, one of the main theoretical and practical success of P2P."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, let's look at the main keywords."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:19.963409Z",
+     "start_time": "2025-04-09T08:38:19.946481Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['peer',\n",
+       " 'protocols',\n",
+       " 'protocol',\n",
+       " 'peer peer',\n",
+       " 'architectures',\n",
+       " 'network',\n",
+       " 'link',\n",
+       " 'architectures tier',\n",
+       " 'architectures tier architectures',\n",
+       " 'tier architectures']"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.get_features_by_rank(k=10)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's organize them."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:20.012892Z",
+     "start_time": "2025-04-09T08:38:19.973436Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.63. R: 0.03. S: 0.92.\n",
+      "- F: 1.00. R: 0.01. S: 0.97.\n",
+      "-- peer (R: 0.01; S: 0.97)\n",
+      "-- peer peer (R: 0.00; S: 0.97)\n",
+      "- F: 0.84. R: 0.01. S: 0.57.\n",
+      "-- F: 1.00. R: 0.01. S: 0.49.\n",
+      "--- protocols (R: 0.00; S: 0.48)\n",
+      "--- protocol (R: 0.00; S: 0.49)\n",
+      "-- network (R: 0.00; S: 0.62)\n",
+      "-- link (R: 0.00; S: 0.61)\n",
+      "- F: 0.95. R: 0.01. S: 0.69.\n",
+      "-- architectures (R: 0.00; S: 0.79)\n",
+      "-- architectures tier (R: 0.00; S: 0.67)\n",
+      "-- architectures tier architectures (R: 0.00; S: 0.67)\n",
+      "-- tier architectures (R: 0.00; S: 0.67)\n"
+     ]
+    }
+   ],
+   "source": [
+    "gismo.get_features_by_cluster(k=10)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Rough analysis:\n",
+    "- One cluster about network protocols\n",
+    "- One cluster about architectures"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## PageRank query"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We perform the query *PageRank*. The returned ``False`` tells that *PageRank* is not a feature of the corpus (it's a small corpus after all, made only of catagory titles)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:20.064083Z",
+     "start_time": "2025-04-09T08:38:20.020444Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "False"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.rank(\"Pagerank\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's try to avoid the copyright infrigment. Ok, now it works."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:20.105607Z",
+     "start_time": "2025-04-09T08:38:20.073082Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.rank(\"ranking the web\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "What are the best ACM categories for an article on *PageRank*?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:20.126905Z",
+     "start_time": "2025-04-09T08:38:20.112892Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['Web searching and information discovery',\n",
+       " 'World Wide Web',\n",
+       " 'Information systems',\n",
+       " 'Web applications',\n",
+       " 'Supervised learning',\n",
+       " 'Retrieval models and ranking',\n",
+       " 'Learning paradigms',\n",
+       " 'Information retrieval',\n",
+       " 'Machine learning',\n",
+       " 'Web mining',\n",
+       " 'Web services',\n",
+       " 'Web data description languages',\n",
+       " 'Computing methodologies',\n",
+       " 'Security and privacy',\n",
+       " 'Internet communications tools',\n",
+       " 'Networks',\n",
+       " 'Software and application security',\n",
+       " 'Network security',\n",
+       " 'Specialized information retrieval',\n",
+       " 'Network types',\n",
+       " 'Interaction paradigms',\n",
+       " 'Middleware for databases',\n",
+       " 'Network properties',\n",
+       " 'Human computer interaction (HCI)']"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.get_documents_by_rank()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Sounds nice. How are these domains related in the context of *PageRank*?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:20.174508Z",
+     "start_time": "2025-04-09T08:38:20.134017Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.13. R: 0.43. S: 0.78.\n",
+      "- F: 0.45. R: 0.27. S: 0.68.\n",
+      "-- F: 0.81. R: 0.21. S: 0.70.\n",
+      "--- Web searching and information discovery (R: 0.08; S: 0.62)\n",
+      "--- F: 0.91. R: 0.13. S: 0.81.\n",
+      "---- World Wide Web (R: 0.08; S: 0.79)\n",
+      "---- Information systems (R: 0.05; S: 0.85)\n",
+      "-- Web applications (R: 0.05; S: 0.49)\n",
+      "-- Web mining (R: 0.02; S: 0.34)\n",
+      "- F: 0.27. R: 0.16. S: 0.48.\n",
+      "-- F: 0.92. R: 0.09. S: 0.42.\n",
+      "--- Supervised learning (R: 0.04; S: 0.41)\n",
+      "--- Learning paradigms (R: 0.03; S: 0.43)\n",
+      "--- Machine learning (R: 0.02; S: 0.43)\n",
+      "-- F: 0.81. R: 0.07. S: 0.37.\n",
+      "--- Retrieval models and ranking (R: 0.04; S: 0.34)\n",
+      "--- Information retrieval (R: 0.03; S: 0.45)\n"
+     ]
+    }
+   ],
+   "source": [
+    "gismo.get_documents_by_cluster(k=10)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Hum, maybe somethin more compact. Let's lower the resolution (default resolution is 0.7)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:20.223143Z",
+     "start_time": "2025-04-09T08:38:20.182833Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.13. R: 0.43. S: 0.78.\n",
+      "- F: 0.45. R: 0.27. S: 0.68.\n",
+      "-- F: 0.81. R: 0.21. S: 0.70.\n",
+      "--- Web searching and information discovery (R: 0.08; S: 0.62)\n",
+      "--- World Wide Web (R: 0.08; S: 0.79)\n",
+      "--- Information systems (R: 0.05; S: 0.85)\n",
+      "-- Web applications (R: 0.05; S: 0.49)\n",
+      "-- Web mining (R: 0.02; S: 0.34)\n",
+      "- F: 0.27. R: 0.16. S: 0.48.\n",
+      "-- F: 0.92. R: 0.09. S: 0.42.\n",
+      "--- Supervised learning (R: 0.04; S: 0.41)\n",
+      "--- Learning paradigms (R: 0.03; S: 0.43)\n",
+      "--- Machine learning (R: 0.02; S: 0.43)\n",
+      "-- F: 0.81. R: 0.07. S: 0.37.\n",
+      "--- Retrieval models and ranking (R: 0.04; S: 0.34)\n",
+      "--- Information retrieval (R: 0.03; S: 0.45)\n"
+     ]
+    }
+   ],
+   "source": [
+    "gismo.get_documents_by_cluster(k=10, resolution=0.6)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Better! Let's broadly decode this:\n",
+    "- One cluster of categories is about the Web & Search\n",
+    "- One cluster is about how-to:\n",
+    " - learning techniques\n",
+    " - information retrieval."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, let's look at the main keywords."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:20.245714Z",
+     "start_time": "2025-04-09T08:38:20.230083Z"
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['web',\n",
+       " 'ranking',\n",
+       " 'learning',\n",
+       " 'social',\n",
+       " 'supervised learning',\n",
+       " 'supervised',\n",
+       " 'discovery',\n",
+       " 'security',\n",
+       " 'site',\n",
+       " 'rank',\n",
+       " 'search',\n",
+       " 'learning rank']"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "gismo.get_features_by_rank()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's organize them."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {
+    "ExecuteTime": {
+     "end_time": "2025-04-09T08:38:20.286068Z",
+     "start_time": "2025-04-09T08:38:20.253730Z"
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " F: 0.01. R: 0.02. S: 0.93.\n",
+      "- F: 0.13. R: 0.01. S: 0.93.\n",
+      "-- F: 0.87. R: 0.01. S: 0.86.\n",
+      "--- F: 0.87. R: 0.01. S: 0.85.\n",
+      "---- web (R: 0.00; S: 0.86)\n",
+      "---- ranking (R: 0.00; S: 0.91)\n",
+      "---- social (R: 0.00; S: 0.84)\n",
+      "---- discovery (R: 0.00; S: 0.80)\n",
+      "---- site (R: 0.00; S: 0.77)\n",
+      "--- search (R: 0.00; S: 0.83)\n",
+      "-- F: 0.90. R: 0.01. S: 0.47.\n",
+      "--- learning (R: 0.00; S: 0.44)\n",
+      "--- supervised learning (R: 0.00; S: 0.35)\n",
+      "--- supervised (R: 0.00; S: 0.35)\n",
+      "--- rank (R: 0.00; S: 0.51)\n",
+      "--- learning rank (R: 0.00; S: 0.50)\n",
+      "- security (R: 0.00; S: 0.14)\n"
+     ]
+    }
+   ],
+   "source": [
+    "gismo.get_features_by_cluster()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Rough analysis:\n",
+    "- One cluster about the Web\n",
+    "- One cluster about learning\n",
+    "- One lone wolf: security"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.8"
+  },
+  "toc": {
+   "base_numbering": 1,
+   "nav_menu": {},
+   "number_sections": true,
+   "sideBar": true,
+   "skip_h1_title": true,
+   "title_cell": "Table of Contents",
+   "title_sidebar": "Contents",
+   "toc_cell": false,
+   "toc_position": {},
+   "toc_section_display": true,
+   "toc_window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

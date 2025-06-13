@@ -1,0 +1,964 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; GISMO 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=8e576371"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo-line.png" class="logo__image only-light" alt="GISMO 0.5.2 documentation - Home"/>
+    <img src="_static/logo-line.png" class="logo__image only-dark pst-js-only" alt="GISMO 0.5.2 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismo" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ | <a href="#X"><strong>X</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.ALPHA">ALPHA (in module gismo.parameters)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/common.html#gismo.common.auto_k">auto_k() (in module gismo.common)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.embedding.auto_vect">auto_vect() (in module gismo.embedding)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.BALANCE">BALANCE (in module gismo.parameters)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.Dblp.build">build() (gismo.datasets.dblp.Dblp method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/clustering.html#gismo.clustering.Cluster.children">children (gismo.clustering.Cluster attribute)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.Cluster">Cluster (class in gismo.clustering)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.embedding.Embedding.compress">compress() (gismo.embedding.Embedding method)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.csr_compress.compress_csr">compress_csr() (in module gismo.csr_compress)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/corpus.html#gismo.corpus.Corpus">Corpus (class in gismo.corpus)</a>
+</li>
+      <li><a href="reference/corpus.html#gismo.corpus.CorpusList">CorpusList (class in gismo.corpus)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.covering_order">covering_order() (in module gismo.clustering)</a>
+</li>
+      <li><a href="reference/filesource.html#gismo.filesource.create_file_source">create_file_source() (in module gismo.filesource)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.Dblp">Dblp (class in gismo.datasets.dblp)</a>
+</li>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.DEFAULT_FIELDS">DEFAULT_FIELDS (in module gismo.datasets.dblp)</a>
+</li>
+      <li><a href="reference/parameters.html#gismo.parameters.DEFAULT_LANDMARKS_PARAMETERS">DEFAULT_LANDMARKS_PARAMETERS (in module gismo.parameters)</a>
+</li>
+      <li><a href="reference/parameters.html#gismo.parameters.DEFAULT_PARAMETERS">DEFAULT_PARAMETERS (in module gismo.parameters)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.DISTORTION">DISTORTION (in module gismo.parameters)</a>
+</li>
+      <li><a href="reference/diteration.html#gismo.diteration.DIteration">DIteration (class in gismo.diteration)</a>
+</li>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.DTD_URL">DTD_URL (in module gismo.datasets.dblp)</a>
+</li>
+      <li><a href="reference/common.html#gismo.common.MixInIO.dump">dump() (gismo.common.MixInIO method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.element_to_filesource">element_to_filesource() (in module gismo.datasets.dblp)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.element_to_source">element_to_source() (in module gismo.datasets.dblp)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.embedding.Embedding">Embedding (class in gismo.embedding)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.fast_iter">fast_iter() (in module gismo.datasets.dblp)</a>
+</li>
+      <li><a href="reference/filesource.html#gismo.filesource.FileSource">FileSource (class in gismo.filesource)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.embedding.Embedding.fit">fit() (gismo.embedding.Embedding method)</a>
+
+      <ul>
+        <li><a href="reference/landmarks.html#gismo.landmarks.Landmarks.fit">(gismo.landmarks.Landmarks method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/embedding.html#gismo.embedding.Embedding.fit_ext">fit_ext() (gismo.embedding.Embedding method)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.embedding.Embedding.fit_transform">fit_transform() (gismo.embedding.Embedding method)</a>
+</li>
+      <li><a href="reference/datasets.html#gismo.datasets.acm.flatten_acm">flatten_acm() (in module gismo.datasets.acm)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.Cluster.focus">focus (gismo.clustering.Cluster attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.acm.get_acm">get_acm() (in module gismo.datasets.acm)</a>
+</li>
+      <li><a href="reference/landmarks.html#gismo.landmarks.get_direction">get_direction() (in module gismo.landmarks)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.get_documents_by_cluster">get_documents_by_cluster() (gismo.gismo.Gismo method)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.get_documents_by_cluster_from_indices">get_documents_by_cluster_from_indices() (gismo.gismo.Gismo method)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.get_documents_by_coverage">get_documents_by_coverage() (gismo.gismo.Gismo method)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.get_documents_by_rank">get_documents_by_rank() (gismo.gismo.Gismo method)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.get_features_by_cluster">get_features_by_cluster() (gismo.gismo.Gismo method)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.get_features_by_cluster_from_indices">get_features_by_cluster_from_indices() (gismo.gismo.Gismo method)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.get_features_by_coverage">get_features_by_coverage() (gismo.gismo.Gismo method)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.get_features_by_rank">get_features_by_rank() (gismo.gismo.Gismo method)</a>
+</li>
+      <li><a href="reference/datasets.html#gismo.datasets.reuters.get_reuters_entry">get_reuters_entry() (in module gismo.datasets.reuters)</a>
+</li>
+      <li><a href="reference/datasets.html#gismo.datasets.reuters.get_reuters_news">get_reuters_news() (in module gismo.datasets.reuters)</a>
+</li>
+      <li><a href="reference/sentencizer.html#gismo.sentencizer.Sentencizer.get_sentences">get_sentences() (gismo.sentencizer.Sentencizer method)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.get_sim">get_sim() (in module gismo.clustering)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo">Gismo (class in gismo.gismo)</a>
+</li>
+      <li>
+    gismo.clustering
+
+      <ul>
+        <li><a href="reference/clustering.html#module-gismo.clustering">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.common
+
+      <ul>
+        <li><a href="reference/common.html#module-gismo.common">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.corpus
+
+      <ul>
+        <li><a href="reference/corpus.html#module-gismo.corpus">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.csr_compress
+
+      <ul>
+        <li><a href="reference/embedding.html#module-gismo.csr_compress">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    gismo.datasets.acm
+
+      <ul>
+        <li><a href="reference/datasets.html#module-gismo.datasets.acm">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.datasets.dblp
+
+      <ul>
+        <li><a href="reference/datasets.html#module-gismo.datasets.dblp">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.datasets.reuters
+
+      <ul>
+        <li><a href="reference/datasets.html#module-gismo.datasets.reuters">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.diteration
+
+      <ul>
+        <li><a href="reference/diteration.html#module-gismo.diteration">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.embedding
+
+      <ul>
+        <li><a href="reference/embedding.html#module-gismo.embedding">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.filesource
+
+      <ul>
+        <li><a href="reference/filesource.html#module-gismo.filesource">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.gismo
+
+      <ul>
+        <li><a href="reference/gismo.html#module-gismo.gismo">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.landmarks
+
+      <ul>
+        <li><a href="reference/landmarks.html#module-gismo.landmarks">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.parameters
+
+      <ul>
+        <li><a href="reference/parameters.html#module-gismo.parameters">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.post_processing
+
+      <ul>
+        <li><a href="reference/post-processing.html#module-gismo.post_processing">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismo.sentencizer
+
+      <ul>
+        <li><a href="reference/sentencizer.html#module-gismo.sentencizer">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/embedding.html#gismo.embedding.idf_fit">idf_fit() (in module gismo.embedding)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.embedding.idf_transform">idf_transform() (in module gismo.embedding)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/clustering.html#gismo.clustering.Cluster.indice">indice (gismo.clustering.Cluster attribute)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.Cluster.intersection_vector">intersection_vector (gismo.clustering.Cluster attribute)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.embedding.itf_fit_transform">itf_fit_transform() (in module gismo.embedding)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/diteration.html#gismo.diteration.jit_diffusion">jit_diffusion() (in module gismo.diteration)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/embedding.html#gismo.embedding.l1_normalize">l1_normalize() (in module gismo.embedding)</a>
+</li>
+      <li><a href="reference/landmarks.html#gismo.landmarks.Landmarks">Landmarks (class in gismo.landmarks)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.LIST_TYPE_FIELDS">LIST_TYPE_FIELDS (in module gismo.datasets.dblp)</a>
+</li>
+      <li><a href="reference/common.html#gismo.common.MixInIO.load">load() (gismo.common.MixInIO class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/sentencizer.html#gismo.sentencizer.Sentencizer.make_sent_gismo">make_sent_gismo() (gismo.sentencizer.Sentencizer method)</a>
+</li>
+      <li><a href="reference/parameters.html#gismo.parameters.MAX_K">MAX_K (in module gismo.parameters)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.Cluster.members">members (gismo.clustering.Cluster attribute)</a>
+</li>
+      <li><a href="reference/parameters.html#gismo.parameters.MEMORY">MEMORY (in module gismo.parameters)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.merge_clusters">merge_clusters() (in module gismo.clustering)</a>
+</li>
+      <li><a href="reference/corpus.html#gismo.corpus.Corpus.merge_new_source">merge_new_source() (gismo.corpus.Corpus method)</a>
+</li>
+      <li><a href="reference/common.html#gismo.common.MixInIO">MixInIO (class in gismo.common)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="reference/clustering.html#module-gismo.clustering">gismo.clustering</a>
+</li>
+        <li><a href="reference/common.html#module-gismo.common">gismo.common</a>
+</li>
+        <li><a href="reference/corpus.html#module-gismo.corpus">gismo.corpus</a>
+</li>
+        <li><a href="reference/embedding.html#module-gismo.csr_compress">gismo.csr_compress</a>
+</li>
+        <li><a href="reference/datasets.html#module-gismo.datasets.acm">gismo.datasets.acm</a>
+</li>
+        <li><a href="reference/datasets.html#module-gismo.datasets.dblp">gismo.datasets.dblp</a>
+</li>
+        <li><a href="reference/datasets.html#module-gismo.datasets.reuters">gismo.datasets.reuters</a>
+</li>
+        <li><a href="reference/diteration.html#module-gismo.diteration">gismo.diteration</a>
+</li>
+        <li><a href="reference/embedding.html#module-gismo.embedding">gismo.embedding</a>
+</li>
+        <li><a href="reference/filesource.html#module-gismo.filesource">gismo.filesource</a>
+</li>
+        <li><a href="reference/gismo.html#module-gismo.gismo">gismo.gismo</a>
+</li>
+        <li><a href="reference/landmarks.html#module-gismo.landmarks">gismo.landmarks</a>
+</li>
+        <li><a href="reference/parameters.html#module-gismo.parameters">gismo.parameters</a>
+</li>
+        <li><a href="reference/post-processing.html#module-gismo.post_processing">gismo.post_processing</a>
+</li>
+        <li><a href="reference/sentencizer.html#module-gismo.sentencizer">gismo.sentencizer</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.N_ITER">N_ITER (in module gismo.parameters)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.OFFSET">OFFSET (in module gismo.parameters)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.Parameters">Parameters (class in gismo.parameters)</a>
+</li>
+      <li><a href="reference/parameters.html#gismo.parameters.POST">POST (in module gismo.parameters)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_documents_cluster_json">post_documents_cluster_json() (in module gismo.post_processing)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_documents_cluster_print">post_documents_cluster_print() (in module gismo.post_processing)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_documents_item_content">post_documents_item_content() (in module gismo.post_processing)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_documents_item_raw">post_documents_item_raw() (in module gismo.post_processing)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_features_cluster_json">post_features_cluster_json() (in module gismo.post_processing)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_features_cluster_print">post_features_cluster_print() (in module gismo.post_processing)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_features_item_raw">post_features_item_raw() (in module gismo.post_processing)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_landmarks_cluster_json">post_landmarks_cluster_json() (in module gismo.post_processing)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_landmarks_cluster_print">post_landmarks_cluster_print() (in module gismo.post_processing)</a>
+</li>
+      <li><a href="reference/post-processing.html#gismo.post_processing.post_landmarks_item_raw">post_landmarks_item_raw() (in module gismo.post_processing)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/embedding.html#gismo.embedding.Embedding.query_projection">query_projection() (gismo.embedding.Embedding method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/embedding.html#gismo.embedding.query_shape">query_shape() (in module gismo.embedding)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/clustering.html#gismo.clustering.Cluster.rank">rank (gismo.clustering.Cluster attribute)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.Gismo.rank">rank() (gismo.gismo.Gismo method)</a>
+
+      <ul>
+        <li><a href="reference/gismo.html#gismo.gismo.XGismo.rank">(gismo.gismo.XGismo method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/clustering.html#gismo.clustering.rec_clusterize">rec_clusterize() (in module gismo.clustering)</a>
+</li>
+      <li><a href="reference/parameters.html#gismo.parameters.RESOLUTION">RESOLUTION (in module gismo.parameters)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/common.html#gismo.common.safe_write">safe_write() (in module gismo.common)</a>
+</li>
+      <li><a href="reference/sentencizer.html#gismo.sentencizer.Sentencizer">Sentencizer (class in gismo.sentencizer)</a>
+</li>
+      <li><a href="reference/sentencizer.html#gismo.sentencizer.Sentencizer.splitter">splitter() (gismo.sentencizer.Sentencizer method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.STRETCH">STRETCH (in module gismo.parameters)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.subspace_clusterize">subspace_clusterize() (in module gismo.clustering)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.subspace_distortion">subspace_distortion() (in module gismo.clustering)</a>
+</li>
+      <li><a href="reference/clustering.html#gismo.clustering.subspace_partition">subspace_partition() (in module gismo.clustering)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.TARGET_K">TARGET_K (in module gismo.parameters)</a>
+</li>
+      <li><a href="reference/common.html#gismo.common.toy_source_dict">toy_source_dict (in module gismo.common)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/common.html#gismo.common.toy_source_text">toy_source_text (in module gismo.common)</a>
+</li>
+      <li><a href="reference/common.html#gismo.common.ToyClass">ToyClass (class in gismo.common)</a>
+</li>
+      <li><a href="reference/embedding.html#gismo.embedding.Embedding.transform">transform() (gismo.embedding.Embedding method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.URL">URL (in module gismo.datasets.dblp)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.url2source">url2source() (in module gismo.datasets.dblp)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/clustering.html#gismo.clustering.Cluster.vector">vector (gismo.clustering.Cluster attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.WIDE">WIDE (in module gismo.parameters)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.X_DENSITY">X_DENSITY (in module gismo.parameters)</a>
+</li>
+      <li><a href="reference/diteration.html#gismo.diteration.DIteration.x_order">x_order (gismo.diteration.DIteration attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/diteration.html#gismo.diteration.DIteration.x_relevance">x_relevance (gismo.diteration.DIteration attribute)</a>
+</li>
+      <li><a href="reference/gismo.html#gismo.gismo.XGismo">XGismo (class in gismo.gismo)</a>
+</li>
+      <li><a href="reference/datasets.html#gismo.datasets.dblp.xml_element_to_dict">xml_element_to_dict() (in module gismo.datasets.dblp)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/parameters.html#gismo.parameters.Y_DENSITY">Y_DENSITY (in module gismo.parameters)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/diteration.html#gismo.diteration.DIteration.y_order">y_order (gismo.diteration.DIteration attribute)</a>
+</li>
+      <li><a href="reference/diteration.html#gismo.diteration.DIteration.y_relevance">y_relevance (gismo.diteration.DIteration attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2020, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
