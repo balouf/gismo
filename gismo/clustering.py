@@ -1,12 +1,9 @@
 import heapq
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.feature_extraction.text import CountVectorizer
-from scipy.sparse import vstack, csr_matrix
+from scipy.sparse import vstack
 from numba import njit
 
-from gismo.corpus import Corpus, toy_source_text
-from gismo.embedding import Embedding
 from gismo.parameters import RESOLUTION, WIDE
 
 
@@ -44,6 +41,7 @@ class Cluster:
 
     Examples
     ---------
+    >>> from scipy.sparse import csr_matrix
     >>> c1 = Cluster(indice=0, rank=1, vector=csr_matrix([1.0, 0.0, 1.0]))
     >>> c2 = Cluster(indice=5, rank=0, vector=csr_matrix([1.0, 1.0, 0.0]))
     >>> c3 = c1+c2
@@ -79,7 +77,9 @@ class Cluster:
         result.members = self.members + cluster.members
         result.focus = min(self.focus, cluster.focus)  # Don't forget external focus
         result.vector = self.vector + cluster.vector
-        result.intersection_vector = self.intersection_vector.multiply(cluster.intersection_vector)
+        result.intersection_vector = self.intersection_vector.multiply(
+            cluster.intersection_vector
+        )
         result.children = []  # Better update sons list outside class definition
         return result
 
@@ -137,7 +137,7 @@ def subspace_partition(subspace, resolution=RESOLUTION):
         is the set of indices of the subset, ``f`` is the typical similarity of the partition (called `focus`).
     """
     # Applying a square distortion to resolution gives a more linear behavior in practice.
-    resolution = 2 * resolution - resolution ** 2
+    resolution = 2 * resolution - resolution**2
     n, _ = subspace.shape
     similarity_matrix = cosine_similarity(subspace, subspace) - 2 * np.identity(n)
     similarity = np.max(similarity_matrix, axis=0)
@@ -184,9 +184,13 @@ def rec_clusterize(cluster_list: list, resolution=RESOLUTION):
     if len(cluster_list) == 1:
         return cluster_list
     else:
-        partition = subspace_partition(vstack([c.vector for c in cluster_list]), resolution)
-        return rec_clusterize([merge_clusters([cluster_list[i] for i in p[0]], p[1]) for p in partition],
-                              resolution)
+        partition = subspace_partition(
+            vstack([c.vector for c in cluster_list]), resolution
+        )
+        return rec_clusterize(
+            [merge_clusters([cluster_list[i] for i in p[0]], p[1]) for p in partition],
+            resolution,
+        )
 
 
 def subspace_clusterize(subspace, resolution=RESOLUTION, indices=None):
@@ -212,6 +216,10 @@ def subspace_clusterize(subspace, resolution=RESOLUTION, indices=None):
 
     Example
     _________
+
+    >>> from gismo.corpus import Corpus, toy_source_text
+    >>> from sklearn.feature_extraction.text import CountVectorizer
+    >>> from gismo.embedding import Embedding
     >>> corpus = Corpus(toy_source_text)
     >>> vectorizer = CountVectorizer(dtype=float)
     >>> embedding = Embedding(vectorizer=vectorizer)
@@ -227,8 +235,13 @@ def subspace_clusterize(subspace, resolution=RESOLUTION, indices=None):
     if indices is None:
         n, _ = subspace.shape
         indices = range(n)
-    return rec_clusterize([Cluster(indice=r, rank=i, vector=subspace[i, :]) for i, r in enumerate(indices)],
-                          resolution)[0]
+    return rec_clusterize(
+        [
+            Cluster(indice=r, rank=i, vector=subspace[i, :])
+            for i, r in enumerate(indices)
+        ],
+        resolution,
+    )[0]
 
 
 class Covering:
@@ -334,4 +347,4 @@ def get_sim(csr, arr):
     -------
     float
     """
-    return csr.dot(arr)[0]/np.linalg.norm(csr.data)/np.linalg.norm(arr)
+    return csr.dot(arr)[0] / np.linalg.norm(csr.data) / np.linalg.norm(arr)

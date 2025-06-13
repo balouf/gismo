@@ -15,7 +15,7 @@ from gismo.gismo import Gismo, XGismo
 
 @fixture()
 def my_gismo():
-    corpus = Corpus(toy_source_dict, lambda x: x['content'])
+    corpus = Corpus(toy_source_dict, lambda x: x["content"])
     vectorizer = CountVectorizer(dtype=float)
     embedding = Embedding(vectorizer=vectorizer)
     embedding.fit_transform(corpus)
@@ -33,7 +33,7 @@ def test_default_cluster_document_post(my_gismo):
 
 def test_default_cluster_features_post(my_gismo):
     cluster = my_gismo.get_features_by_cluster(k=10)
-    assert cluster['feature'] == "mogwaï"
+    assert cluster["feature"] == "mogwaï"
     assert len(cluster["children"]) == 2
 
 
@@ -62,5 +62,4 @@ def test_io_xgismo(my_gismo):
         xgismo.dump(filename="mygismo", path=tmpdirname)
         xgismo2 = XGismo.load(filename="mygismo", path=tmpdirname)
     xgismo2.rank("gizmo")
-    assert xgismo2.get_documents_by_rank() == ['mogwaï', 'gizmo', 'is']
-
+    assert xgismo2.get_documents_by_rank() == ["mogwaï", "gizmo", "is"]

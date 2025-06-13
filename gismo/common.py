@@ -10,6 +10,31 @@ import dill as pickle
 import numpy as np
 
 from pathlib import Path
+from tempfile import NamedTemporaryFile
+from contextlib import contextmanager
+
+
+@contextmanager
+def safe_write(path):
+    """
+    Context manager to write a file in two steps: first use a tmp file,
+    then rename the file if everything went well.
+    In case of error, the temp file is deleted.
+    """
+    path = Path(path)
+    with NamedTemporaryFile(mode="wb", dir=path.parent, delete=False) as tmpfile:
+        tmp_path = Path(tmpfile.name)
+        try:
+            yield tmpfile
+            # Proper closure of temp file
+            tmpfile.close()
+            # Atomic renaming
+            tmp_path.replace(path)
+        except Exception:
+            # Error => delete the temp file
+            if tmp_path.exists():
+                tmp_path.unlink()
+            raise  # Propagate error
 
 
 class MixInIO:
@@ -17,7 +42,9 @@ class MixInIO:
     Provide basic save/load capacities to other classes.
     """
 
-    def dump(self, filename: str, path='.', overwrite=False, compress=True, stemize=True):
+    def dump(
+        self, filename: str, path=".", overwrite=False, compress=True, stemize=True
+    ):
         """
         Save instance to file.
 
@@ -82,22 +109,26 @@ class MixInIO:
         if compress:
             destination = path / (fn.name + ".pkl.zst")
             if destination.exists() and not overwrite:
-                print(f"File {destination} already exists! Use overwrite option to overwrite.")
+                print(
+                    f"File {destination} already exists! Use overwrite option to overwrite."
+                )
             else:
-                with open(destination, 'wb') as f:
+                with safe_write(destination) as f:
                     cctx = zstd.ZstdCompressor(level=3)
                     with cctx.stream_writer(f) as z:
                         pickle.dump(self, z, protocol=5)
         else:
             destination = path / (fn.name + ".pkl")
             if destination.exists() and not overwrite:
-                print(f"File {destination} already exists! Use overwrite option to overwrite.")
+                print(
+                    f"File {destination} already exists! Use overwrite option to overwrite."
+                )
             else:
-                with open(destination, "wb") as f:
+                with safe_write(destination) as f:
                     pickle.dump(self, f)
 
     @classmethod
-    def load(cls, filename: str, path='.'):
+    def load(cls, filename: str, path="."):
         """
         Load instance from file.
 
@@ -111,18 +142,17 @@ class MixInIO:
         path = Path(path)
         dest = path / Path(filename).with_suffix(".pkl")
         if dest.exists():
-            with open(dest, 'rb') as f:
+            with open(dest, "rb") as f:
                 return pickle.load(f)
         else:
-            dest = dest.with_suffix('.pkl.zst')
+            dest = dest.with_suffix(".pkl.zst")
             if dest.exists():
                 dctx = zstd.ZstdDecompressor()
                 # Load compressed data
                 with open(dest, "rb") as f, dctx.stream_reader(f) as z:
                     return pickle.load(z)
             else:
-                raise FileNotFoundError(
-                    errno.ENOENT, os.strerror(errno.ENOENT), dest)
+                raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), dest)
 
 
 class ToyClass(MixInIO):
@@ -161,25 +191,31 @@ def auto_k(data, order=None, max_k=100, target=1.0):
         order = np.argsort(-data)
     ordered_data = data[order[:max_k]]
     max_k = min(max_k, len(data))
-    threshold = np.sum(ordered_data)*target/max_k
+    threshold = np.sum(ordered_data) * target / max_k
     k = int(np.sum(ordered_data >= threshold))
     return max(1, k)
 
 
-toy_source_text = ['Gizmo is a Mogwaï.',
-                   'This is a sentence about Blade.',
-                   'This is another sentence about Shadoks.',
-                   'This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side '
-                   'reference to the Gremlins movie by comparing Gizmo and Yoda.',
-                   'In chinese folklore, a Mogwaï is a demon.']
+toy_source_text = [
+    "Gizmo is a Mogwaï.",
+    "This is a sentence about Blade.",
+    "This is another sentence about Shadoks.",
+    "This very long sentence, with a lot of stuff about Star Wars inside, makes at some point a side "
+    "reference to the Gremlins movie by comparing Gizmo and Yoda.",
+    "In chinese folklore, a Mogwaï is a demon.",
+]
 """A minimal source example where items are :py:obj:`str`."""
 
-toy_source_dict = [{'title': 'First Document', 'content': 'Gizmo is a Mogwaï.'},
-                   {'title': 'Second Document', 'content': 'This is a sentence about Blade.'},
-                   {'title': 'Third Document', 'content': 'This is another sentence about Shadoks.'},
-                   {'title': 'Fourth Document',
-                    'content': 'This very long sentence, with a lot of stuff about Star Wars inside, '
-                               'makes at some point a side reference to the Gremlins movie by '
-                               'comparing Gizmo and Yoda.'},
-                   {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
+toy_source_dict = [
+    {"title": "First Document", "content": "Gizmo is a Mogwaï."},
+    {"title": "Second Document", "content": "This is a sentence about Blade."},
+    {"title": "Third Document", "content": "This is another sentence about Shadoks."},
+    {
+        "title": "Fourth Document",
+        "content": "This very long sentence, with a lot of stuff about Star Wars inside, "
+        "makes at some point a side reference to the Gremlins movie by "
+        "comparing Gizmo and Yoda.",
+    },
+    {"title": "Fifth Document", "content": "In chinese folklore, a Mogwaï is a demon."},
+]
 """A minimal source example where items are :py:obj:`dict` with keys `title` and `content`."""

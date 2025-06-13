@@ -75,7 +75,7 @@ class Sentencizer:
 
     def __init__(self, gismo):
         self.parser = English()
-        self.parser.add_pipe('sentencizer')
+        self.parser.add_pipe("sentencizer")
         self.doc_gismo = gismo
         self.sent_corpus = None
         self.sent_gismo = None
@@ -96,13 +96,18 @@ class Sentencizer:
         Sentencizer
         """
         if type(txt) is str:
-            source = [str(sent).strip() for sent in self.parser(txt).sents if len(sent) > 10]
+            source = [
+                str(sent).strip() for sent in self.parser(txt).sents if len(sent) > 10
+            ]
             self.sent_corpus = Corpus(source, to_text=lambda x: x)
         else:
-            source = [{'source': source[1],
-                       'content': str(sent).strip()} for source in txt
-                      for sent in self.parser(source[0]).sents if len(sent) > 10]
-            self.sent_corpus = Corpus(source, to_text=lambda x: x['content'])
+            source = [
+                {"source": source[1], "content": str(sent).strip()}
+                for source in txt
+                for sent in self.parser(source[0]).sents
+                if len(sent) > 10
+            ]
+            self.sent_corpus = Corpus(source, to_text=lambda x: x["content"])
         return self
 
     def make_sent_gismo(self, query=None, txt=None, k=None, **kwargs):
@@ -133,8 +138,10 @@ class Sentencizer:
         if txt is None:
             if query is not None:
                 self.doc_gismo.rank(query)
-            txt = [(self.doc_gismo.corpus.to_text(self.doc_gismo.corpus[i]), i)
-                   for i in self.doc_gismo.get_documents_by_rank(k, post=False)]
+            txt = [
+                (self.doc_gismo.corpus.to_text(self.doc_gismo.corpus[i]), i)
+                for i in self.doc_gismo.get_documents_by_rank(k, post=False)
+            ]
         self.splitter(txt)
         local_embedding = Embedding()
         local_embedding.fit_ext(self.doc_gismo.embedding)
@@ -144,8 +151,17 @@ class Sentencizer:
         self.sent_gismo.post_documents_item = lambda g, i: g.corpus.to_text(g.corpus[i])
         return self
 
-    def get_sentences(self, query=None, txt=None, k=None, s=None,
-                      resolution=.7, stretch=2.0, wide=True, post=True):
+    def get_sentences(
+        self,
+        query=None,
+        txt=None,
+        k=None,
+        s=None,
+        resolution=0.7,
+        stretch=2.0,
+        wide=True,
+        post=True,
+    ):
         """
         All-in-one method to extract covering sentences from the corpus.
         Computes sentence-level corpus, sentence-level gismo,
@@ -182,5 +198,6 @@ class Sentencizer:
         if query is None:
             query = self.doc_gismo.embedding._query
         self.sent_gismo.rank(query)
-        return self.sent_gismo.get_documents_by_coverage(k=s, resolution=resolution,
-                                                         stretch=stretch, wide=wide, post=post)
+        return self.sent_gismo.get_documents_by_coverage(
+            k=s, resolution=resolution, stretch=stretch, wide=wide, post=post
+        )

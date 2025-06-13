@@ -67,10 +67,11 @@ class Corpus(MixInIO):
     >>> corpus2[0]
     'Gizmo is a Mogwaï.'
     """
+
     def __init__(self, source=None, to_text=None):
         self.source = source
         self.i = 0
-        self.n = 0 if source is None or not hasattr(source, '__len__') else len(source)
+        self.n = 0 if source is None or not hasattr(source, "__len__") else len(source)
         self.iter = None
         if to_text is None:
             self.to_text = lambda x: x
@@ -169,7 +170,7 @@ class CorpusList(MixInIO):
     Fifth Document
     """
 
-    def __init__(self, corpus_list=None, filename=None, path='.'):
+    def __init__(self, corpus_list=None, filename=None, path="."):
         if corpus_list is None or len(corpus_list) == 0:
             print("Please provide a non-empty list of corpi!")
         else:
@@ -181,10 +182,12 @@ class CorpusList(MixInIO):
         return chain.from_iterable([corpus.iterate() for corpus in self.corpus_list])
 
     def iterate_text(self):
-        return chain.from_iterable([corpus.iterate_text() for corpus in self.corpus_list])
+        return chain.from_iterable(
+            [corpus.iterate_text() for corpus in self.corpus_list]
+        )
 
     def __getitem__(self, i):
-        corpus_indice = np.searchsorted(self.cum_n, i, side='right')
+        corpus_indice = np.searchsorted(self.cum_n, i, side="right")
         local_i = i if corpus_indice == 0 else (i - self.cum_n[corpus_indice - 1])
         return self.corpus_list[corpus_indice][local_i]
 

@@ -3,7 +3,7 @@ import logging
 logging.basicConfig()
 log = logging.getLogger("Gismo")
 
-ALPHA = .5
+ALPHA = 0.5
 """
 Default value for damping factor.
 Controls the trade-off between closeness and centrality.
@@ -70,18 +70,19 @@ Controls how much of diteration relevance is mixed into the embedding
 for similarity computation.
 """
 
-DEFAULT_PARAMETERS = {'alpha': ALPHA,
-                      'n_iter': N_ITER,
-                      'offset': OFFSET,
-                      'memory': MEMORY,
-                      'stretch': STRETCH,
-                      'resolution': RESOLUTION,
-                      'max_k': MAX_K,
-                      'target_k': TARGET_K,
-                      'wide': WIDE,
-                      'post': POST,
-                      'distortion': DISTORTION
-                      }
+DEFAULT_PARAMETERS = {
+    "alpha": ALPHA,
+    "n_iter": N_ITER,
+    "offset": OFFSET,
+    "memory": MEMORY,
+    "stretch": STRETCH,
+    "resolution": RESOLUTION,
+    "max_k": MAX_K,
+    "target_k": TARGET_K,
+    "wide": WIDE,
+    "post": POST,
+    "distortion": DISTORTION,
+}
 """
 Dictionary of default `runtime` :class:`~gismo.gismo.Gismo` parameters.
 """
@@ -96,17 +97,17 @@ BALANCE = 0.5
 """Default documents/features trade-off in :class:`~gismo.landmarks.Landmarks`."""
 
 DEFAULT_LANDMARKS_PARAMETERS = {
-    'stretch': STRETCH,
-    'resolution': RESOLUTION,
-    'max_k': MAX_K,
-    'target_k': TARGET_K,
-    'wide': WIDE,
-    'post': POST,
-    'distortion': DISTORTION,
-    'x_density': X_DENSITY,
-    'y_density': Y_DENSITY,
-    'balance': BALANCE,
-    'rank': lambda g, q: g.rank(q)
+    "stretch": STRETCH,
+    "resolution": RESOLUTION,
+    "max_k": MAX_K,
+    "target_k": TARGET_K,
+    "wide": WIDE,
+    "post": POST,
+    "distortion": DISTORTION,
+    "x_density": X_DENSITY,
+    "y_density": Y_DENSITY,
+    "balance": BALANCE,
+    "rank": lambda g, q: g.rank(q),
 }
 """
 Dictionary of default `runtime` :class:`~gismo.landmarks.Landmarks` parameters.

@@ -19,21 +19,22 @@ DTD_URL = "https://dblp.uni-trier.de/xml/dblp.dtd"
 URL of the dtd file (required to correctly parse non-ASCII characters).
 """
 
-DEFAULT_FIELDS = {'type', 'title', 'authors', 'venue', 'year'}
+DEFAULT_FIELDS = {"type", "title", "authors", "venue", "year"}
 """
 Default fields to extract.
 """
 
-LIST_TYPE_FIELDS = {'urls', 'authors'}
+LIST_TYPE_FIELDS = {"urls", "authors"}
 """
 DBLP fields with possibly multiple entries.
 """
 
-FIELD_REDIRECTION = {'journal': 'venue',
-                     'booktitle': 'venue',
-                     'author': 'authors',
-                     'ee': 'urls'
-                     }
+FIELD_REDIRECTION = {
+    "journal": "venue",
+    "booktitle": "venue",
+    "author": "authors",
+    "ee": "urls",
+}
 
 
 def fast_iter(context, func, d=2, **kwargs):
@@ -56,9 +57,9 @@ def fast_iter(context, func, d=2, **kwargs):
     """
     depth = 0
     for event, elem in context:
-        if event == 'start':
+        if event == "start":
             depth += 1
-        if event == 'end':
+        if event == "end":
             depth -= 1
             if depth < d:
                 func(elem, **kwargs)
@@ -66,7 +67,7 @@ def fast_iter(context, func, d=2, **kwargs):
                 # accessed
                 elem.clear()
                 # Also eliminate now-empty references from the root node to elem
-                for ancestor in elem.xpath('ancestor-or-self::*'):
+                for ancestor in elem.xpath("ancestor-or-self::*"):
                     while ancestor.getprevious() is not None:
                         del ancestor.getparent()[0]
     del context
@@ -99,10 +100,12 @@ def xml_element_to_dict(elt, fields):
         if key not in fields or not isinstance(value, str):
             continue
         if key in LIST_TYPE_FIELDS:
-            dic.setdefault(key,[]).append(value)
+            dic.setdefault(key, []).append(value)
         else:
             dic[key] = value
-    if not dic.get('authors') or not all(key in dic for key in ['year', 'title', 'venue']):
+    if not dic.get("authors") or not all(
+        key in dic for key in ["year", "title", "venue"]
+    ):
         return None
     return dic
 
@@ -157,7 +160,13 @@ def url2source(url, fields=None):
     r = requests.get(url)
     source = []
     with io.BytesIO(r.content) as f:
-        context = etree.iterparse(f, events=('start', 'end',))
+        context = etree.iterparse(
+            f,
+            events=(
+                "start",
+                "end",
+            ),
+        )
         fast_iter(context, element_to_source, d=3, source=source, fields=fields)
     return source
 
@@ -189,7 +198,7 @@ def element_to_filesource(elt, data_handler, index, fields, cctx):
     dic = xml_element_to_dict(elt=elt, fields=fields)
     if dic is None:
         return True
-    data_handler.write(cctx.compress(json.dumps(dic).encode('utf8')))
+    data_handler.write(cctx.compress(json.dumps(dic).encode("utf8")))
     index.append(data_handler.tell())
     return True
 
@@ -207,8 +216,8 @@ class Dblp:
     path: str or path, optional
             Destination of the files
     """
-    def __init__(self, dblp_url=URL, filename="dblp",
-                 path="."):
+
+    def __init__(self, dblp_url=URL, filename="dblp", path="."):
         self.dblp_url = dblp_url
         self.path = Path(path)
         self.dblp_xml = self.path / Path(f"{filename}.xml.gz")
@@ -291,26 +300,44 @@ class Dblp:
         if fields is None:
             fields = DEFAULT_FIELDS
         if self.dblp_xml.exists() and not refresh:
-            print(f"File {self.dblp_xml} already exists. Use refresh option to overwrite.")
+            print(
+                f"File {self.dblp_xml} already exists. Use refresh option to overwrite."
+            )
         else:
             print(f"Retrieve {self.dblp_url} from the Internet.")
             self.download()
         if self.dblp_data.exists() and not refresh:
-            print(f"File {self.dblp_data} already exists. Use refresh option to overwrite.")
+            print(
+                f"File {self.dblp_data} already exists. Use refresh option to overwrite."
+            )
         else:
             print(f"Converting DBLP database from {self.dblp_xml} (may take a while).")
             # Download the DTD parser
             r = requests.get("https://dblp.uni-trier.de/xml/dblp.dtd")
-            with open(self.path / Path("dblp.dtd"), 'w') as f:
+            with open(self.path / Path("dblp.dtd"), "w") as f:
                 f.write(r.text)
 
             with gzip.open(self.dblp_xml, "rb") as f:
                 index = [0]
                 with open(self.dblp_data, "wb") as g:
-                    context = etree.iterparse(f, events=('start', 'end',), load_dtd=True)
-                    fast_iter(context, element_to_filesource, d=d, data_handler=g, index=index, fields=fields,
-                              cctx=zstd.ZstdCompressor(level=3))
-                print(f"Building Index.")
+                    context = etree.iterparse(
+                        f,
+                        events=(
+                            "start",
+                            "end",
+                        ),
+                        load_dtd=True,
+                    )
+                    fast_iter(
+                        context,
+                        element_to_filesource,
+                        d=d,
+                        data_handler=g,
+                        index=index,
+                        fields=fields,
+                        cctx=zstd.ZstdCompressor(level=3),
+                    )
+                print("Building Index.")
                 with open(self.dblp_index, "wb") as g:
                     pickle.dump(np.array(index), g)
-                print(f"Conversion done.")
+                print("Conversion done.")

@@ -4,7 +4,7 @@ import json
 
 
 def get_acm_from_package():
-    data = pkgutil.get_data(__package__, 'acm.json.gz')
+    data = pkgutil.get_data(__package__, "acm.json.gz")
     return json.loads(gzip.decompress(data))
 
 
@@ -62,12 +62,18 @@ def flatten_acm(acm, min_size=5, max_depth=100, exclude=None, depth=0):
     """
     if exclude is None:
         exclude = set()
-    result = [{'name': t['name'], 'query': t['query']} for t in acm if t['size'] > min_size]
+    result = [
+        {"name": t["name"], "query": t["query"]} for t in acm if t["size"] > min_size
+    ]
     for t in acm:
-        if len(t['children']) > 0 and depth < max_depth:
-            result += flatten_acm(t['children'], min_size=min_size, max_depth=max_depth, depth=depth + 1)
+        if len(t["children"]) > 0 and depth < max_depth:
+            result += flatten_acm(
+                t["children"], min_size=min_size, max_depth=max_depth, depth=depth + 1
+            )
     if depth == 0:
-        result = [{'name': key, 'query': value}
-                  for key, value in {t['name']: t['query'] for t in result}.items()
-                  if key not in exclude]
+        result = [
+            {"name": key, "query": value}
+            for key, value in {t["name"]: t["query"] for t in result}.items()
+            if key not in exclude
+        ]
     return result

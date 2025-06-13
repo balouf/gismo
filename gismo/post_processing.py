@@ -40,7 +40,7 @@ def post_documents_item_content(gismo, i, max_size=None):
     str
         Content of document i from corpus
     """
-    return gismo.corpus[i]['content'][:max_size]
+    return gismo.corpus[i]["content"][:max_size]
 
 
 def post_features_item_raw(gismo, i):
@@ -78,9 +78,11 @@ def post_documents_cluster_json(gismo, cluster):
     dict
         dictionary with keys 'document', 'focus', and recursive 'children'
     """
-    return {'document': gismo.corpus[cluster.indice],
-            'focus': cluster.focus,
-            'children': [post_documents_cluster_json(gismo, c) for c in cluster.children]}
+    return {
+        "document": gismo.corpus[cluster.indice],
+        "focus": cluster.focus,
+        "children": [post_documents_cluster_json(gismo, c) for c in cluster.children],
+    }
 
 
 def post_documents_cluster_print(gismo, cluster, post_item=None, depth=""):
@@ -103,15 +105,19 @@ def post_documents_cluster_print(gismo, cluster, post_item=None, depth=""):
     sim = get_sim(cluster.vector, gismo.diteration.y_relevance)
     if len(cluster.children) == 0:
         txt = post_item(gismo, cluster.indice)
-        print(f"{depth} {txt} "
-              f"(R: {gismo.diteration.x_relevance[cluster.indice]:.2f}; "
-              f"S: {sim:.2f})")
+        print(
+            f"{depth} {txt} "
+            f"(R: {gismo.diteration.x_relevance[cluster.indice]:.2f}; "
+            f"S: {sim:.2f})"
+        )
     else:
-        print(f"{depth} F: {cluster.focus:.2f}. "
-              f"R: {sum(gismo.diteration.x_relevance[cluster.members]):.2f}. "
-              f"S: {sim:.2f}.")
+        print(
+            f"{depth} F: {cluster.focus:.2f}. "
+            f"R: {sum(gismo.diteration.x_relevance[cluster.members]):.2f}. "
+            f"S: {sim:.2f}."
+        )
     for c in cluster.children:
-        post_documents_cluster_print(gismo, c, post_item=post_item, depth=depth + '-')
+        post_documents_cluster_print(gismo, c, post_item=post_item, depth=depth + "-")
 
 
 def post_features_cluster_json(gismo, cluster):
@@ -130,39 +136,45 @@ def post_features_cluster_json(gismo, cluster):
     dict
         dictionary with keys 'feature', 'focus', and recursive 'children'
     """
-    return {'feature': gismo.embedding.features[cluster.indice],
-            'focus': cluster.focus,
-            'children': [post_features_cluster_json(gismo, c) for c in cluster.children]}
+    return {
+        "feature": gismo.embedding.features[cluster.indice],
+        "focus": cluster.focus,
+        "children": [post_features_cluster_json(gismo, c) for c in cluster.children],
+    }
 
 
 def post_features_cluster_print(gismo, cluster, post_item=None, depth=""):
     """
-        Print an ASCII view of a feature cluster with metrics (focus, relevance, similarity)
+    Print an ASCII view of a feature cluster with metrics (focus, relevance, similarity)
 
-        Parameters
-        ----------
-        gismo: Gismo
-            Gismo instance
-        cluster: Cluster
-            Cluster of features
-        post_item: function, optional
-            Post-processing function for individual features
-        depth: str, optional
-            Current depth string used in recursion
-        """
+    Parameters
+    ----------
+    gismo: Gismo
+        Gismo instance
+    cluster: Cluster
+        Cluster of features
+    post_item: function, optional
+        Post-processing function for individual features
+    depth: str, optional
+        Current depth string used in recursion
+    """
     if post_item is None:
         post_item = gismo.post_features_item
     sim = get_sim(cluster.vector, gismo.diteration.x_relevance)
     if len(cluster.children) == 0:
-        print(f"{depth} {post_item(gismo, cluster.indice)} "
-              f"(R: {gismo.diteration.y_relevance[cluster.indice]:.2f}; "
-              f"S: {sim:.2f})")
+        print(
+            f"{depth} {post_item(gismo, cluster.indice)} "
+            f"(R: {gismo.diteration.y_relevance[cluster.indice]:.2f}; "
+            f"S: {sim:.2f})"
+        )
     else:
-        print(f"{depth} F: {cluster.focus:.2f}. "
-              f"R: {sum(gismo.diteration.y_relevance[cluster.members]):.2f}. "
-              f"S: {sim:.2f}.")
+        print(
+            f"{depth} F: {cluster.focus:.2f}. "
+            f"R: {sum(gismo.diteration.y_relevance[cluster.members]):.2f}. "
+            f"S: {sim:.2f}."
+        )
     for c in cluster.children:
-        post_features_cluster_print(gismo, c, depth=depth + '-')
+        post_features_cluster_print(gismo, c, depth=depth + "-")
 
 
 def post_landmarks_item_raw(landmark, i):
@@ -200,9 +212,13 @@ def post_landmarks_cluster_json(landmark, cluster):
     dict
         A dict with the head landmark, cluster focus, and list of children.
     """
-    return {'landmark': landmark[cluster.indice],
-            'focus': cluster.focus,
-            'children': [post_landmarks_cluster_json(landmark, child) for child in cluster.children]}
+    return {
+        "landmark": landmark[cluster.indice],
+        "focus": cluster.focus,
+        "children": [
+            post_landmarks_cluster_json(landmark, child) for child in cluster.children
+        ],
+    }
 
 
 def post_landmarks_cluster_print(landmark, cluster, post_item=None, depth=""):
@@ -228,4 +244,6 @@ def post_landmarks_cluster_print(landmark, cluster, post_item=None, depth=""):
     else:
         print(f"{depth} F: {cluster.focus:.2f}. ")
     for c in cluster.children:
-        post_landmarks_cluster_print(landmark, c, post_item=post_item, depth=depth + '-')
+        post_landmarks_cluster_print(
+            landmark, c, post_item=post_item, depth=depth + "-"
+        )

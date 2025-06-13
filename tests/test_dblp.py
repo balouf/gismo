@@ -1,7 +1,5 @@
 import tempfile
-import io
 from pathlib import Path
-from pytest import fixture
 
 from gismo.datasets.dblp import Dblp
 
@@ -16,4 +14,4 @@ def test_dblp_download_gz():
         dblp = Dblp(dblp_url=URL, path=Path(tmp))
         dblp.download()
         dest = Path(tmp) / Path("dblp.xml.gz")
-        assert dest.exists() == True
+        assert dest.exists()

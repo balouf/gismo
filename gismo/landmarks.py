@@ -33,10 +33,16 @@ def get_direction(reference, balance):
         A `n+m` direction.
     """
     if isinstance(reference, Gismo):
-        return np.hstack([balance * reference.diteration.x_relevance,
-                          (1 - balance) * reference.diteration.y_relevance])
+        return np.hstack(
+            [
+                balance * reference.diteration.x_relevance,
+                (1 - balance) * reference.diteration.y_relevance,
+            ]
+        )
     if isinstance(reference, Landmarks):
-        return np.hstack([balance * reference.x_direction, (1 - balance) * reference.y_direction])
+        return np.hstack(
+            [balance * reference.x_direction, (1 - balance) * reference.y_direction]
+        )
     if isinstance(reference, Cluster):
         return reference.vector
     return reference
@@ -223,7 +229,9 @@ class Landmarks(Corpus):
     """
 
     def __init__(self, source=None, to_text=None, **kwargs):
-        self.parameters = Parameters(parameter_list=DEFAULT_LANDMARKS_PARAMETERS, **kwargs)
+        self.parameters = Parameters(
+            parameter_list=DEFAULT_LANDMARKS_PARAMETERS, **kwargs
+        )
 
         self.x_vectors = None
         self.y_vectors = None
@@ -239,17 +247,17 @@ class Landmarks(Corpus):
     def embed_entry(self, gismo, entry, **kwargs):
         p = self.parameters(**kwargs)
         log.debug(f"Processing {entry}.")
-        success = p['rank'](gismo, entry)
+        success = p["rank"](gismo, entry)
         if not success:
             log.warning(f"Query {entry} didn't match any feature.")
 
-        indptr = [0, min(p['y_density'], gismo.embedding.m)]
-        indices = gismo.diteration.y_order[:p['y_density']]
+        indptr = [0, min(p["y_density"], gismo.embedding.m)]
+        indices = gismo.diteration.y_order[: p["y_density"]]
         data = gismo.diteration.y_relevance[indices]
         y = csr_matrix((data, indices, indptr), shape=(1, gismo.embedding.m))
 
-        indptr = [0, min(p['x_density'], gismo.embedding.n)]
-        indices = gismo.diteration.x_order[:p['x_density']]
+        indptr = [0, min(p["x_density"], gismo.embedding.n)]
+        indices = gismo.diteration.x_order[: p["x_density"]]
         data = gismo.diteration.x_relevance[indices]
         x = csr_matrix((data, indices, indptr), shape=(1, gismo.embedding.n))
         log.debug(f"Landmarks of {entry} computed.")
@@ -282,48 +290,65 @@ class Landmarks(Corpus):
         self.x_direction = np.squeeze(np.asarray(np.sum(self.x_vectors, axis=0)))
         self.y_vectors = vstack([v[1] for v in xy])
         self.y_direction = np.squeeze(np.asarray(np.sum(self.y_vectors, axis=0)))
-        log.info(f"All landmarks are built.")
+        log.info("All landmarks are built.")
 
     def get_base(self, balance):
-        return csr_matrix(hstack([balance * self.x_vectors, (1 - balance) * self.y_vectors]))
+        return csr_matrix(
+            hstack([balance * self.x_vectors, (1 - balance) * self.y_vectors])
+        )
 
     def get_landmarks_by_rank(self, reference, k=None, base=None, **kwargs):
         p = self.parameters(**kwargs)
         if base is None:
-            base = self.get_base(p['balance'])
-        direction = get_direction(reference, p['balance'])
+            base = self.get_base(p["balance"])
+        direction = get_direction(reference, p["balance"])
         if isinstance(direction, np.ndarray):
             similarities = base.dot(direction)
         elif isinstance(direction, csr_matrix):
             similarities = np.squeeze(base.dot(direction.T).toarray())
         else:
-            log.error("Direction type not supported. Direction must be gismo.gismo.Gismo, gismo.clustering.Cluster, "
-                      "gismo.landmarks.Landmarks, numpy.ndarray or scipy.sparse.csr_matrix.")
+            log.error(
+                "Direction type not supported. Direction must be gismo.gismo.Gismo, gismo.clustering.Cluster, "
+                "gismo.landmarks.Landmarks, numpy.ndarray or scipy.sparse.csr_matrix."
+            )
             similarities = None
         order = np.argsort(-similarities)
         if k is None:
-            k = auto_k(data=similarities, order=order, max_k=p['max_k'], target=p['target_k'])
-        if p['post']:
+            k = auto_k(
+                data=similarities, order=order, max_k=p["max_k"], target=p["target_k"]
+            )
+        if p["post"]:
             return [self.post_item(self, i) for i in order[:k]]
         else:
             return order[:k]
 
     def get_landmarks_by_cluster(self, reference, k=None, **kwargs):
         p = self.parameters(**kwargs)
-        base = self.get_base(p['balance'])
-        direction = get_direction(reference, p['balance'])
-        order = self.get_landmarks_by_rank(reference=direction, k=k, base=base,
-                                           target_k=p['target_k'], max_k=p['max_k'],
-                                           balance=p['balance'], post=False)
-
+        base = self.get_base(p["balance"])
+        direction = get_direction(reference, p["balance"])
+        order = self.get_landmarks_by_rank(
+            reference=direction,
+            k=k,
+            base=base,
+            target_k=p["target_k"],
+            max_k=p["max_k"],
+            balance=p["balance"],
+            post=False,
+        )
 
         subspace = vstack([base[i, :] for i in order])
-        if p['distortion']>0:
-            subspace_distortion(indices=subspace.indices, data=subspace.data,
-                                relevance=direction, distortion=p['distortion'])
+        if p["distortion"] > 0:
+            subspace_distortion(
+                indices=subspace.indices,
+                data=subspace.data,
+                relevance=direction,
+                distortion=p["distortion"],
+            )
 
-        cluster = subspace_clusterize(subspace, resolution=p['resolution'], indices=order)
-        if p['post']:
+        cluster = subspace_clusterize(
+            subspace, resolution=p["resolution"], indices=order
+        )
+        if p["post"]:
             return self.post_cluster(self, cluster)
         else:
             return cluster
@@ -335,8 +360,10 @@ class Landmarks(Corpus):
         return [a for i, a in enumerate(gismo.corpus.source) if i in reduced_indices]
 
     def get_reduced_gismo(self, gismo, rebuild=True):
-        reduced_corpus = Corpus(self.get_reduced_source(gismo, rebuild=rebuild),
-                                to_text=gismo.corpus.to_text)
+        reduced_corpus = Corpus(
+            self.get_reduced_source(gismo, rebuild=rebuild),
+            to_text=gismo.corpus.to_text,
+        )
         reduced_embedding = Embedding(vectorizer=gismo.embedding.vectorizer)
         reduced_embedding.fit_transform(reduced_corpus)
         reduced_gismo = Gismo(reduced_corpus, reduced_embedding)

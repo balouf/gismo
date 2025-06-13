@@ -1,6 +1,7 @@
 """Main module."""
+
 import numpy as np
-from scipy.sparse import vstack, csr_matrix
+from scipy.sparse import vstack
 from sklearn.feature_extraction.text import CountVectorizer
 from functools import partial
 
@@ -11,8 +12,15 @@ from gismo.embedding import Embedding
 from gismo.diteration import DIteration
 from gismo.parameters import Parameters
 from gismo.clustering import subspace_clusterize, covering_order, subspace_distortion
-from gismo.post_processing import post_documents_item_raw, post_documents_item_content, post_documents_cluster_json, \
-    post_features_item_raw, post_features_cluster_json, post_documents_cluster_print, post_features_cluster_print
+from gismo.post_processing import (
+    post_documents_item_raw,
+    post_documents_item_content,
+    post_documents_cluster_json,
+    post_features_item_raw,
+    post_features_cluster_json,
+    post_documents_cluster_print,
+    post_features_cluster_print,
+)
 
 
 class Gismo(MixInIO):
@@ -180,9 +188,15 @@ class Gismo(MixInIO):
             z, success = self.embedding.query_projection(query)
         else:
             success = True
-        self.diteration(self.embedding.x, self.embedding.y, z,
-                        alpha=p['alpha'], n_iter=p['n_iter'],
-                        offset=p['offset'], memory=p['memory'])
+        self.diteration(
+            self.embedding.x,
+            self.embedding.y,
+            z,
+            alpha=p["alpha"],
+            n_iter=p["n_iter"],
+            offset=p["offset"],
+            memory=p["memory"],
+        )
         return success
 
     def get_documents_by_rank(self, k=None, **kwargs):
@@ -205,12 +219,16 @@ class Gismo(MixInIO):
         """
         p = self.parameters(**kwargs)
         if k is None:
-            k = auto_k(data=self.diteration.x_relevance,
-                       order=self.diteration.x_order,
-                       max_k=p['max_k'],
-                       target=p['target_k'])
-        if p['post']:
-            return [self.post_documents_item(self, i) for i in self.diteration.x_order[:k]]
+            k = auto_k(
+                data=self.diteration.x_relevance,
+                order=self.diteration.x_order,
+                max_k=p["max_k"],
+                target=p["target_k"],
+            )
+        if p["post"]:
+            return [
+                self.post_documents_item(self, i) for i in self.diteration.x_order[:k]
+            ]
         else:
             return self.diteration.x_order[:k]
 
@@ -233,12 +251,16 @@ class Gismo(MixInIO):
         """
         p = self.parameters(**kwargs)
         if k is None:
-            k = auto_k(data=self.diteration.y_relevance,
-                       order=self.diteration.y_order,
-                       max_k=p['max_k'],
-                       target=p['target_k'])
-        if p['post']:
-            return [self.post_features_item(self, i) for i in self.diteration.y_order[:k]]
+            k = auto_k(
+                data=self.diteration.y_relevance,
+                order=self.diteration.y_order,
+                max_k=p["max_k"],
+                target=p["target_k"],
+            )
+        if p["post"]:
+            return [
+                self.post_features_item(self, i) for i in self.diteration.y_order[:k]
+            ]
         else:
             return self.diteration.y_order[:k]
 
@@ -263,11 +285,15 @@ class Gismo(MixInIO):
         """
         p = self.parameters(**kwargs)
         subspace = vstack([self.embedding.x[i, :] for i in indices])
-        if p['distortion']>0:
-            subspace_distortion(indices=subspace.indices, data=subspace.data,
-                                relevance=self.diteration.y_relevance, distortion=p['distortion'])
-        cluster = subspace_clusterize(subspace, p['resolution'], indices)
-        if p['post']:
+        if p["distortion"] > 0:
+            subspace_distortion(
+                indices=subspace.indices,
+                data=subspace.data,
+                relevance=self.diteration.y_relevance,
+                distortion=p["distortion"],
+            )
+        cluster = subspace_clusterize(subspace, p["resolution"], indices)
+        if p["post"]:
             return self.post_documents_cluster(self, cluster)
         return cluster
 
@@ -291,11 +317,15 @@ class Gismo(MixInIO):
         """
         p = self.parameters(**kwargs)
         if k is None:
-            k = auto_k(data=self.diteration.x_relevance,
-                       order=self.diteration.x_order,
-                       max_k=p['max_k'],
-                       target=p['target_k'])
-        return self.get_documents_by_cluster_from_indices(self.diteration.x_order[:k], **kwargs)
+            k = auto_k(
+                data=self.diteration.x_relevance,
+                order=self.diteration.x_order,
+                max_k=p["max_k"],
+                target=p["target_k"],
+            )
+        return self.get_documents_by_cluster_from_indices(
+            self.diteration.x_order[:k], **kwargs
+        )
 
     def get_features_by_cluster_from_indices(self, indices, **kwargs):
         """
@@ -317,11 +347,15 @@ class Gismo(MixInIO):
         """
         p = self.parameters(**kwargs)
         subspace = vstack([self.embedding.y[i, :] for i in indices])
-        if p['distortion']>0:
-            subspace_distortion(indices=subspace.indices, data=subspace.data,
-                                relevance=self.diteration.x_relevance, distortion=p['distortion'])
-        cluster = subspace_clusterize(subspace, p['resolution'], indices)
-        if p['post']:
+        if p["distortion"] > 0:
+            subspace_distortion(
+                indices=subspace.indices,
+                data=subspace.data,
+                relevance=self.diteration.x_relevance,
+                distortion=p["distortion"],
+            )
+        cluster = subspace_clusterize(subspace, p["resolution"], indices)
+        if p["post"]:
             return self.post_features_cluster(self, cluster)
         return cluster
 
@@ -344,11 +378,15 @@ class Gismo(MixInIO):
         """
         p = self.parameters(**kwargs)
         if k is None:
-            k = auto_k(data=self.diteration.y_relevance,
-                       order=self.diteration.y_order,
-                       max_k=p['max_k'],
-                       target=p['target_k'])
-        return self.get_features_by_cluster_from_indices(self.diteration.y_order[:k], **kwargs)
+            k = auto_k(
+                data=self.diteration.y_relevance,
+                order=self.diteration.y_order,
+                max_k=p["max_k"],
+                target=p["target_k"],
+            )
+        return self.get_features_by_cluster_from_indices(
+            self.diteration.y_order[:k], **kwargs
+        )
 
     # Covering part
 
@@ -371,16 +409,17 @@ class Gismo(MixInIO):
 
         """
         p = self.parameters(**kwargs)
-        post = p['post']
+        post = p["post"]
         if k is None:
-            k = auto_k(data=self.diteration.x_relevance,
-                       order=self.diteration.x_order,
-                       max_k=p['max_k'],
-                       target=p['target_k'])
-        p['post'] = False
-        cluster = self.get_documents_by_cluster(k=int(k * p['stretch']),
-                                                **p)
-        indices = covering_order(cluster, wide=p['wide'])[:k]
+            k = auto_k(
+                data=self.diteration.x_relevance,
+                order=self.diteration.x_order,
+                max_k=p["max_k"],
+                target=p["target_k"],
+            )
+        p["post"] = False
+        cluster = self.get_documents_by_cluster(k=int(k * p["stretch"]), **p)
+        indices = covering_order(cluster, wide=p["wide"])[:k]
         if post:
             return [self.post_documents_item(self, i) for i in indices]
         else:
@@ -405,16 +444,17 @@ class Gismo(MixInIO):
 
         """
         p = self.parameters(**kwargs)
-        post = p['post']
+        post = p["post"]
         if k is None:
-            k = auto_k(data=self.diteration.y_relevance,
-                       order=self.diteration.y_order,
-                       max_k=p['max_k'],
-                       target=p['target_k'])
-        p['post'] = False
-        cluster = self.get_features_by_cluster(k=int(k * p['stretch']),
-                                               **p)
-        indices = covering_order(cluster, wide=p['wide'])[:k]
+            k = auto_k(
+                data=self.diteration.y_relevance,
+                order=self.diteration.y_order,
+                max_k=p["max_k"],
+                target=p["target_k"],
+            )
+        p["post"] = False
+        cluster = self.get_features_by_cluster(k=int(k * p["stretch"]), **p)
+        indices = covering_order(cluster, wide=p["wide"])[:k]
         if post:
             return [self.post_features_item(self, i) for i in indices]
         else:
@@ -486,7 +526,10 @@ class XGismo(Gismo):
     >>> xgismo.get_documents_by_rank()
     ['Anne Bouillard', 'Elie de Panafieu', 'Céline Comte', 'Philippe Sehier', 'Thomas Deiß', 'Dmitry Lebedev']
     """
-    def __init__(self, x_embedding=None, y_embedding=None, filename=None, path=".", **kwargs):
+
+    def __init__(
+        self, x_embedding=None, y_embedding=None, filename=None, path=".", **kwargs
+    ):
         if filename is not None:
             self.load(filename=filename, path=path)
         else:
@@ -497,7 +540,11 @@ class XGismo(Gismo):
             embedding.x = np.dot(x_embedding.y, y_embedding.x)
             embedding.y = np.dot(y_embedding.y, x_embedding.x)
             embedding.idf = y_embedding.idf
-            super().__init__(corpus=Corpus(x_embedding.features, to_text=lambda x: x), embedding=embedding, **kwargs)
+            super().__init__(
+                corpus=Corpus(x_embedding.features, to_text=lambda x: x),
+                embedding=embedding,
+                **kwargs,
+            )
 
             self.x_projection = x_embedding.query_projection
             self.y_projection = y_embedding.query_projection
@@ -531,7 +578,13 @@ class XGismo(Gismo):
             z = np.dot(z, self.embedding.x)
             offset = 0.0
         self.embedding._result_found = found
-        self.diteration(self.embedding.x, self.embedding.y, z,
-                        alpha=p['alpha'], n_iter=p['n_iter'],
-                        offset=offset, memory=p['memory'])
+        self.diteration(
+            self.embedding.x,
+            self.embedding.y,
+            z,
+            alpha=p["alpha"],
+            n_iter=p["n_iter"],
+            offset=offset,
+            memory=p["memory"],
+        )
         return found

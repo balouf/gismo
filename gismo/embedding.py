@@ -34,12 +34,13 @@ def l1_normalize(indptr, data):
     n = len(indptr) - 1
     l1 = 0.0
     for i in range(n):
-        l1 = np.sum(data[indptr[i]:indptr[i + 1]])
+        l1 = np.sum(data[indptr[i] : indptr[i + 1]])
         if l1 > 0:
-            data[indptr[i]:indptr[i + 1]] /= l1
+            data[indptr[i] : indptr[i + 1]] /= l1
 
 
 # Note: the use of external embedding breaks a symmetry between X and Y. IDF needs to be stored if one wants to switch.
+
 
 # ITF transformation
 @njit
@@ -59,7 +60,7 @@ def itf_fit_transform(indptr, data, m):
     n = len(indptr) - 1
     log_m = np.log(1 + m)
     for i in range(n):
-        data[indptr[i]:indptr[i + 1]] *= log_m - np.log(1 + indptr[i + 1] - indptr[i])
+        data[indptr[i] : indptr[i + 1]] *= log_m - np.log(1 + indptr[i + 1] - indptr[i])
 
 
 # IDF computation
@@ -104,7 +105,7 @@ def idf_transform(indptr, data, idf_vector):
     """
     m = len(indptr) - 1
     for i in range(m):
-        data[indptr[i]:indptr[i + 1]] *= idf_vector[i]
+        data[indptr[i] : indptr[i + 1]] *= idf_vector[i]
 
 
 @njit
@@ -165,13 +166,13 @@ def auto_vect(corpus=None):
         :class:`~gismo.embedding.Embedding` constructor.
     """
     n = len(corpus) if corpus is not None else 1
-    (min_df, max_df) = (3, .15) if n > 100 else (1, 1.0)
+    (min_df, max_df) = (3, 0.15) if n > 100 else (1, 1.0)
     return CountVectorizer(
         min_df=min_df,
         max_df=max_df,
         ngram_range=(1, 1),
         stop_words="english",
-        dtype=float
+        dtype=float,
     )
 
 
@@ -228,7 +229,7 @@ class Embedding(MixInIO):
         >>> embedding.fit_transform(corpus)
         >>> embedding.x  # doctest: +NORMALIZE_WHITESPACE
         <Compressed Sparse Row sparse matrix of dtype 'float64'
-    	with 25 stored elements and shape (5, 21)>
+        with 25 stored elements and shape (5, 21)>
         >>> list(embedding.features[:8])
         ['blade', 'chinese', 'comparing', 'demon', 'folklore', 'gizmo', 'gremlins', 'inside']
 
@@ -440,7 +441,7 @@ class Embedding(MixInIO):
             self._result_found = True
         return z, self._result_found
 
-    def compress(self, ratio=.8, min_degree=10, max_degree=None):
+    def compress(self, ratio=0.8, min_degree=10, max_degree=None):
         """
         Inplace lossy compression of x and y. Compression is performed row by row.
 

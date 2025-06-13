@@ -5,6 +5,7 @@ import io
 # URL = "https://archive.ics.uci.edu/ml/machine-learning-databases/00217/C50.zip"
 URL = "https://github.com/balouf/datasets/raw/main/C50.zip"
 
+
 def get_reuters_entry(name, z):
     """
     Read the Reuters news referenced by `name` in the zip archive `z` and returns it as a dict.
@@ -23,10 +24,12 @@ def get_reuters_entry(name, z):
     """
     with z.open(name) as f:
         description = name.split("/")
-        return {'set': description[0],
-                'author': description[1],
-                'id': description[2][:-4],
-                'content': f.read().decode()}
+        return {
+            "set": description[0],
+            "author": description[1],
+            "id": description[2][:-4],
+            "content": f.read().decode(),
+        }
 
 
 def get_reuters_news(url=URL):
@@ -55,6 +58,8 @@ def get_reuters_news(url=URL):
     ---------
     Cf :py:class:`~gismo.sentencizer.Sentencizer`
     """
-    r=requests.get(url)
+    r = requests.get(url)
     with ZipFile(io.BytesIO(r.content)) as z:
-        return [get_reuters_entry(name, z) for name in z.namelist() if name.endswith('.txt')]
+        return [
+            get_reuters_entry(name, z) for name in z.namelist() if name.endswith(".txt")
+        ]

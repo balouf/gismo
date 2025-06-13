@@ -6,7 +6,7 @@ from pathlib import Path
 from gismo.corpus import toy_source_dict
 
 
-def create_file_source(source=None, filename='mysource', path='.'):
+def create_file_source(source=None, filename="mysource", path="."):
     """
     Write a source (list of dict) to files in the same format used by FileSource. Only useful
     to transfer from a computer with a lot of RAM to a computer with less RAM. For more complex cases,
@@ -30,7 +30,7 @@ def create_file_source(source=None, filename='mysource', path='.'):
     cctx = zstd.ZstdCompressor(level=3)
     with open(data_file, "wb") as f:
         for item in source:
-            f.write(cctx.compress(json.dumps(item).encode('utf8')))
+            f.write(cctx.compress(json.dumps(item).encode("utf8")))
             # f.write(zlib.compress(json.dumps(item).encode('utf8')))
             indices.append(f.tell())
     with open(index_file, "wb") as f:
@@ -85,7 +85,8 @@ class FileSource:
     {'title': 'Third Document', 'content': 'This is another sentence about Shadoks.'},
     {'title': 'Fifth Document', 'content': 'In chinese folklore, a Mogwaï is a demon.'}]
     """
-    def __init__(self, filename="mysource", path='.', load_source=False):
+
+    def __init__(self, filename="mysource", path=".", load_source=False):
         path = Path(path)
         index = path / Path(f"{filename}.index")
         data = path / Path(f"{filename}.data")
@@ -102,7 +103,9 @@ class FileSource:
 
     def __getitem__(self, i):
         self.f.seek(self.index[i])
-        line = self.dctx.decompress(self.f.read(self.index[i + 1] - self.index[i])).decode('utf8')
+        line = self.dctx.decompress(
+            self.f.read(self.index[i + 1] - self.index[i])
+        ).decode("utf8")
         return json.loads(line)
 
     def __iter__(self):
@@ -113,7 +116,9 @@ class FileSource:
     def __next__(self):
         if self.i == self.n:
             raise StopIteration
-        line = self.dctx.decompress(self.f.read(self.index[self.i + 1] - self.index[self.i])).decode('utf8')
+        line = self.dctx.decompress(
+            self.f.read(self.index[self.i + 1] - self.index[self.i])
+        ).decode("utf8")
         self.i += 1
         return json.loads(line)
 

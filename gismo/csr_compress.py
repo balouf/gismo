@@ -2,7 +2,7 @@ import numpy as np
 from numba import njit
 
 
-def compress_csr(mat, ratio=.8, min_degree=10, max_degree=None):
+def compress_csr(mat, ratio=0.8, min_degree=10, max_degree=None):
     """
     Inplace lossy compression of CSR matrix. Compression is performed row by row.
 
@@ -150,7 +150,9 @@ def compress_csr(mat, ratio=.8, min_degree=10, max_degree=None):
     n, m = mat.shape
     if max_degree is None:
         max_degree = m
-    pt, ind, dat = jit_compress(mat.indptr, mat.indices, mat.data, n, ratio, min_degree, max_degree)
+    pt, ind, dat = jit_compress(
+        mat.indptr, mat.indices, mat.data, n, ratio, min_degree, max_degree
+    )
     mat.indptr, mat.indices, mat.data = pt, ind, dat
 
 
@@ -174,8 +176,8 @@ def jit_compress(ptrs, indices, datas, n, ratio, min_degree, m):
                     break
 
             out_end = out_start + j + 1
-            datas[out_start:out_end] = dat[order[:j + 1]] / cov
-            indices[out_start:out_end] = ind[order[:j + 1]]
+            datas[out_start:out_end] = dat[order[: j + 1]] / cov
+            indices[out_start:out_end] = ind[order[: j + 1]]
 
         ptrs[i + 1] = out_end
         in_start = in_end

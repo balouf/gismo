@@ -5,6 +5,10 @@
 * Rethink distortion on both vectors normalization and IDTF/query trade-off.
 * Accelerate similarity computation (currently sklearn-based) in clustering.
 
+## 0.5.2 (2025-06-13)
+
+* Update MixInIO so a tempfile is used on dump, avoiding reading a file while it's written.
+* A bit of Ruff (not 100% yet).
 
 ## 0.5.1 (2025-04-14)
 
