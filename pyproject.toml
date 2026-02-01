@@ -42,7 +42,7 @@ dependencies = [
 [project.optional-dependencies]
 spacy = [
     "en-core-web-sm",
-    "spacy>=3.8.6,<4.0",
+    "spacy>=3.8.11,<4.0",
 ]
 
 [project.urls]
