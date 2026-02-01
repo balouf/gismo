@@ -5,6 +5,14 @@
 * Rethink distortion on both vectors normalization and IDTF/query trade-off.
 * Accelerate similarity computation (currently sklearn-based) in clustering.
 
+## 0.5.3 (2026-01-30)
+
+* Python 3.13 and 3.14 support added
+* Dependency constraints updated (spacy >=3.8.6)
+* Documentation improvements: added missing tutorials to index, fixed links, clarified optional dependencies
+* Minor grammar and terminology fixes (corpi -> corpora)
+* Tutorials refreshed (DBLP access now managed with Gismap)
+
 ## 0.5.2 (2025-06-13)
 
 * Update MixInIO so a tempfile is used on dump, avoiding reading a file while it's written.

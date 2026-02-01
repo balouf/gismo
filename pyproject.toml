@@ -4,11 +4,11 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "gismo"
-version = "0.5.2"
+version = "0.5.3"
 description = "GISMO is a NLP tool to rank and organize a corpus of documents according to a query."
 keywords = ["NLP", "Random Walk", "D-Iteration", "TF-I[D]TF"]
 readme = "README.md"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10"
 authors = [
     {name = "Fabien Mathieu", email = "fabien.mathieu@normalesup.org"}
 ]
@@ -25,6 +25,8 @@ classifiers = [
 'Programming Language :: Python :: 3.10',
 'Programming Language :: Python :: 3.11',
 'Programming Language :: Python :: 3.12',
+'Programming Language :: Python :: 3.13',
+'Programming Language :: Python :: 3.14',
 ]
 
 dependencies = [
@@ -40,7 +42,7 @@ dependencies = [
 [project.optional-dependencies]
 spacy = [
     "en-core-web-sm",
-    "spacy>=3.8.5,<3.9",
+    "spacy>=3.8.6,<4.0",
 ]
 
 [project.urls]

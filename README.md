@@ -64,4 +64,4 @@ This package was created with [Cookiecutter] and the [francois-durand/package_he
 [francois-durand/package_helper]: https://github.com/francois-durand/package_helper
 [reference]: https://balouf.github.io/gismo/reference.html
 [toy example]: https://balouf.github.io/gismo/tutorials/tutorial_toy_example.html
-[tutorials]: https://balouf.github.io/gismo/tutorials/index.html#
+[tutorials]: https://balouf.github.io/gismo/tutorials/index.html

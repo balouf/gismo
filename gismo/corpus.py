@@ -139,13 +139,13 @@ class Corpus(MixInIO):
 
 class CorpusList(MixInIO):
     """
-    This class makes a list of corpi behave like one single virtual corpus. This is useful to glue together corpi with
+    This class makes a list of corpora behave like one single virtual corpus. This is useful to glue together corpora with
     distinct shapes and :py:meth:`to_text` methods.
 
     Parameters
     ----------
     corpus_list: list of :py:class:`.Corpus`
-        The list of corpi to glue.
+        The list of corpora to glue.
 
 
     Example
@@ -172,7 +172,7 @@ class CorpusList(MixInIO):
 
     def __init__(self, corpus_list=None, filename=None, path="."):
         if corpus_list is None or len(corpus_list) == 0:
-            print("Please provide a non-empty list of corpi!")
+            print("Please provide a non-empty list of corpora!")
         else:
             self.corpus_list = corpus_list
             self.cum_n = np.cumsum([len(corpus) for corpus in self.corpus_list])

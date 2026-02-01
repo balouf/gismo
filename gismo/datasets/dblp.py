@@ -149,11 +149,11 @@ def url2source(url, fields=None):
     Example
     -------
     >>> source = url2source("https://dblp.org/pers/xx/t/Tixeuil:S=eacute=bastien.xml", fields={'authors', 'title', 'year', 'venue', 'urls'})
-    >>> art = [s for s in source if s['title']=="Distributed Computing with Mobile Robots: An Introductory Survey."][0]
+    >>> art = [s for s in source if s['title']=="On time-travel planning in dynamic graphs."][0]
     >>> art['authors']
-    ['Maria Potop-Butucaru', 'Michel Raynal', 'Sébastien Tixeuil']
+    ['Quentin Bramas', 'Jean-Romain Luttringer', 'Sébastien Tixeuil']
     >>> art['urls']
-    ['https://doi.org/10.1109/NBiS.2011.55', 'https://doi.ieeecomputersociety.org/10.1109/NBiS.2011.55']
+    ['https://doi.org/10.1016/j.tcs.2025.115501']
     """
     if fields is None:
         fields = DEFAULT_FIELDS

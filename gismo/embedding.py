@@ -149,7 +149,7 @@ def auto_vect(corpus=None):
     Creates a default :class:`~sklearn.feature_extraction.text.CountVectorizer`
     compatible with the
     :class:`~gismo.embedding.Embedding` constructor.
-    For not-too-small corpi, a slight frequency-filter is applied.
+    For not-too-small corpora, a slight frequency-filter is applied.
 
     Parameters
     ----------

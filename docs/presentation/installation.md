@@ -13,6 +13,14 @@ $ pip install gismo
 
 This is the preferred method to install GISMO, as it will always install the most recent stable release.
 
+## Optional dependencies
+
+Some features (like advanced text processing) require spacy. To install with spacy support:
+
+```console
+$ pip install gismo[spacy]
+```
+
 If you don't have [pip] installed, this [Python installation guide] can guide
 you through the process.
 
