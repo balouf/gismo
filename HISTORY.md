@@ -7,7 +7,7 @@
 
 ## 0.5.3 (2026-01-30)
 
-* Python 3.13 and 3.14 support added
+* Python 3.13 support added (spacy issue prevents 3.14 support)
 * Dependency constraints updated (spacy >=3.8.6)
 * Documentation improvements: added missing tutorials to index, fixed links, clarified optional dependencies
 * Minor grammar and terminology fixes (corpi -> corpora)
