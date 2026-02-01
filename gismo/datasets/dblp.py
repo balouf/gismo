@@ -148,7 +148,10 @@ def url2source(url, fields=None):
 
     Example
     -------
-    >>> source = url2source("https://dblp.org/pers/xx/t/Tixeuil:S=eacute=bastien.xml", fields={'authors', 'title', 'year', 'venue', 'urls'})
+
+    >>> import time
+    >>> time.sleep(10)  # Bloody DBLP timeout
+    >>> source = url2source("https://dblp.org/pid/t/SebastienTixeuil.xml", fields={'authors', 'title', 'year', 'venue', 'urls'})
     >>> art = [s for s in source if s['title']=="On time-travel planning in dynamic graphs."][0]
     >>> art['authors']
     ['Quentin Bramas', 'Jean-Romain Luttringer', 'Sébastien Tixeuil']

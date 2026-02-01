@@ -491,7 +491,7 @@ class XGismo(Gismo):
     One the main use case for XGismo consists in transforming a list of articles into a Gismo that relates authors
     and the words they use. Let's start by retrieving a few articles.
 
-    >>> toy_url = "https://dblp.org/pers/xx/m/Mathieu:Fabien.xml"
+    >>> toy_url = "https://dblp.org/pid/66/2077.xml"
     >>> source = [a for a in url2source(toy_url) if int(a['year'])<2023]
 
     Then we build the embedding of words.
