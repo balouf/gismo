@@ -5,6 +5,10 @@
 * Rethink distortion on both vectors normalization and IDTF/query trade-off.
 * Accelerate similarity computation (currently sklearn-based) in clustering.
 
+## 0.5.4 (2026-02-02)
+
+Python 3.14 support added. Spacy will only be installed for Python < 3.14 until it is fixed.
+
 ## 0.5.3 (2026-01-30)
 
 * Python 3.13 support added (spacy issue prevents 3.14 support)
