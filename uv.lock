@@ -1,6 +1,6 @@
 version = 1
 revision = 3
-requires-python = ">=3.10"
+requires-python = ">=3.10, <3.15"
 resolution-markers = [
     "python_full_version >= '3.12'",
     "python_full_version == '3.11.*'",
@@ -634,7 +634,7 @@ wheels = [
 
 [[package]]
 name = "gismo"
-version = "0.5.3"
+version = "0.5.4"
 source = { editable = "." }
 dependencies = [
     { name = "dill" },
@@ -650,8 +650,8 @@ dependencies = [
 
 [package.optional-dependencies]
 spacy = [
-    { name = "en-core-web-sm" },
-    { name = "spacy" },
+    { name = "en-core-web-sm", marker = "python_full_version < '3.14'" },
+    { name = "spacy", marker = "python_full_version < '3.14'" },
 ]
 
 [package.dev-dependencies]
@@ -669,13 +669,13 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dill", specifier = ">=0.3.9" },
-    { name = "en-core-web-sm", marker = "extra == 'spacy'", url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0.tar.gz" },
+    { name = "en-core-web-sm", marker = "python_full_version < '3.14' and extra == 'spacy'", url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0.tar.gz" },
     { name = "lxml", specifier = ">=6.0.2" },
     { name = "numba", specifier = ">=0.63.0" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "scikit-learn", specifier = ">=1.6.1" },
     { name = "scipy", specifier = ">=1.15.2" },
-    { name = "spacy", marker = "extra == 'spacy'", specifier = ">=3.8.11,<4.0" },
+    { name = "spacy", marker = "python_full_version < '3.14' and extra == 'spacy'", specifier = ">=3.8.11,<4.0" },
     { name = "zstandard", specifier = ">=0.23.0" },
 ]
 provides-extras = ["spacy"]
